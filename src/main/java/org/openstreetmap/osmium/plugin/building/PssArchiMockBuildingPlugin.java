@@ -7,13 +7,13 @@ import org.openstreetmap.osmium.data.BuildingImport;
 import org.springframework.stereotype.Repository;
 
 @Repository ("PssArchiMockPlugin")
-public class PssArchiMockPlugin extends AbstractBuildingPlugin  {
+public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
 
     int counter;
     
     static List<BuildingImport> data;
     
-    public PssArchiMockPlugin() {
+    public PssArchiMockBuildingPlugin() {
         data = new ArrayList<BuildingImport>();
         BuildingImport b;
         
