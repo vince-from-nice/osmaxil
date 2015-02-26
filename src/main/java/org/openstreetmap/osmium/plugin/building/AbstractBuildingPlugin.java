@@ -67,9 +67,15 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
         }
         // Compare area between import and element
         int elementArea = this.osmPostgisService.getElementAreaById(imp.getElement().getOsmId());
+        // TODO cache it for next imports 
+        LOGGER.info("Element computed area is [" + elementArea + "]");
         if (elementArea > 0) {
-            // returns 1.0 if area are equivalent
-            return 1 - Math.abs(1 - ((float) imp.getArea() / elementArea));
+         // returns a float which tends to 1.0 when area tends are going closer (and tends to 0.0 when different)
+            if ( imp.getArea() < elementArea) {
+                return ((float) imp.getArea() / elementArea);
+            } else {
+                return ((float)  elementArea / imp.getArea());
+            }
         }
         // TODO Add other criteria such the centrality of the import coords into element area
         return 0f;

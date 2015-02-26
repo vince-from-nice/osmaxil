@@ -37,7 +37,7 @@ public abstract class AbstractPlugin<Element extends AbstractElement, Import ext
         boolean needToUpdate = false;
         AbstractImport best = element.getBestMatchingImport();
         sb = new StringBuilder("New import score is " + imp.getMatchingScore() + " and best matching import score is ");
-        sb.append(best != null ? best.getMatchingScore() + "(id=" + best.getId() + ")" : "null");
+        sb.append(best != null ? best.getMatchingScore() + " (id=" + best.getId() + ")" : "null");
         if (element.getBestMatchingImport() == null
                 || element.getBestMatchingImport().getMatchingScore() < imp.getMatchingScore()) {
             sb.append(" => We have a new winner !!");

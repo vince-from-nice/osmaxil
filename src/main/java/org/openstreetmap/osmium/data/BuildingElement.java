@@ -18,7 +18,7 @@ public class BuildingElement extends AbstractElement {
     @Override
     public String toString() {
         return "OSM building has id=[" + this.getOsmId() + "], levels=[" + this.getLevels() + "], height=["
-                + this.getHeight() + "], name=[" + this.getName() + "], part=[ " + this.isPart() + "]";
+                + this.getHeight() + "], name=[" + this.getName() + "], part=[" + this.isPart() + "]";
     }
     
     @Override

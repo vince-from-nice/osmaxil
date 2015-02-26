@@ -2,21 +2,30 @@
 <!DOCTYPE log4j:configuration PUBLIC "-//LOGGER" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
 <log4j:configuration>
 
-    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern"
-                value="Osmium %d{yyyy-MM-dd HH:mm:ss} %5p %m%n" />
-        </layout>
-    </appender>
-    
-    <logger name="org.openstreetmap.osmium" additivity="false">
-        <level value="info"/>
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="Osmium %d{yyyy-MM-dd HH:mm:ss} %5p %m%n" />
+		</layout>
+	</appender>
+
+    <appender name="file" class="org.apache.log4j.FileAppender">
+		<param name="File" value="log/osmium-last-run-log.txt" />
+		<param name="Append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="Osmium %d{yyyy-MM-dd HH:mm:ss} %5p %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="org.openstreetmap.osmium" additivity="false">
+		<level value="info" />
         <appender-ref ref="stdout" />
-    </logger>
-    
-    <root>
-        <level value="info" />
-        <appender-ref ref="stdout" />
-    </root>
-    
+        <appender-ref ref="file" />
+	</logger>
+
+	<root>
+		<level value="info" />
+		<appender-ref ref="stdout" />
+		<appender-ref ref="file" />
+	</root>
+
 </log4j:configuration>
