@@ -28,7 +28,17 @@ public class OsmApiService {
     
     private int currentChangesetCounter;
     
-    private int globalCounter;
+    private int counterForReadSuccess;
+    
+    private int counterForReadFailure;
+    
+    private int counterForWriteSuccess;
+    
+    private int counterForWriteFailure;
+    
+    private int counterForChangesetOpen;
+    
+    private int counterForChangesetClose;
     
     @Autowired
     private RestTemplate restTemplate;
@@ -47,8 +57,6 @@ public class OsmApiService {
 
     @PostConstruct
     public void init() throws RestClientException {
-        //this.restTemplate = new AuthentifiedRestClient(this.login, this.password);
-        this.globalCounter = 0;
         this.currentChangesetCounter = 0;
         this.currentChangesetID = this.createChangeset();
         LOGGER.info("Current changeset ID is " + this.currentChangesetID);
@@ -57,10 +65,12 @@ public class OsmApiService {
     @PreDestroy
     public void close() {
         LOGGER.info("Closing API services");
-        LOGGER.info("Total updates : " + this.globalCounter);
         if (this.currentChangesetID > 0) {
             this.closeChangeset(this.currentChangesetID);
         }
+        LOGGER.info("Total of read operations: success=" + this.counterForReadSuccess + " failure=" + this.counterForReadFailure);
+        LOGGER.info("Total of write operations: success=" + this.counterForWriteSuccess + " failure=" + this.counterForWriteFailure);
+        LOGGER.info("Total of changeset operations: open=" + this.counterForChangesetOpen + " close=" + this.counterForChangesetClose);
     }
     
     public OsmApiRoot readElement(long id) {
@@ -69,8 +79,10 @@ public class OsmApiService {
         try {
             //String str = this.restTemplate.getForObject(this.url + "way/" + id, String.class);
             result = this.restTemplate.getForObject(this.url + "way/" + id, OsmApiRoot.class);
+            this.counterForReadSuccess++;
         } catch (Exception e) {
             LOGGER.error("Unable to read element with id=" + id + " (" + e.getMessage() + ")");
+            this.counterForReadFailure++;
         }
         return result;
     }
@@ -88,8 +100,10 @@ public class OsmApiService {
         try {
             this.restTemplate.put(this.url + "way/" + element.getOsmId(), element.getApiData());
             this.currentChangesetCounter++;
+            this.counterForWriteSuccess++;
         } catch (Exception e) {
             LOGGER.error("Unable to write element with id=" + element.getOsmId() + " (" + e.getMessage() + ")");
+            this.counterForWriteFailure++;
         } 
         return true;
     }
@@ -114,6 +128,7 @@ public class OsmApiService {
             ResponseEntity<String> responseEntity = this.restTemplate.exchange(this.url + "changeset/create", HttpMethod.PUT, requestEntity, String.class);
             //this.restTemplate.put(this.url + "changeset/create", sb.toString());
             result = Long.parseLong(responseEntity.getBody().toString());
+            this.counterForChangesetOpen++;
         } catch (RestClientException e) {
             LOGGER.error("Unable to create a new changeset (" + e.getMessage() + ")");
             throw e;
@@ -126,6 +141,7 @@ public class OsmApiService {
         LOGGER.info("Close changeset with id=" + id);
         try {
             this.restTemplate.put(this.url +  "changeset/" + this.currentChangesetID + "/close", null);
+            this.counterForChangesetClose++;
         } catch (Exception e) {
             LOGGER.error("Unable to close the current changeset (" + e.getMessage() + ")");
         } 
