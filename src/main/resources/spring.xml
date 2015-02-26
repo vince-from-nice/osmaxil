@@ -21,7 +21,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="org.openstreetmap.osmium" scoped-proxy="targetClass" />
 
-    <context:property-placeholder location="classpath:osmapi.properties, postgis.properties, classpath:password.properties" />
+    <context:property-placeholder location="classpath:osmium.properties, classpath:password.properties" />
 
     <!-- ******************************************************************************** -->
 	<!-- Configuration the PostGIS service -->

@@ -6,13 +6,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import javax.annotation.PostConstruct;
+
 import org.openstreetmap.osmium.data.BuildingImport;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 @Repository ("OpenDataParisCsvPlugin")
-public class OpenDataParisCsvPlugin extends AbstractBuildingPlugin  {
+public class OpenDataParisPlugin extends AbstractBuildingPlugin  {
 
     private CSVReader reader;
     
@@ -22,13 +25,15 @@ public class OpenDataParisCsvPlugin extends AbstractBuildingPlugin  {
     
     boolean hasNext;
     
-    static private final String FILE_PATH = "/home/turman/Workspace/Eclipse/Osmium/data/TestOpenDataParis.csv";
+    @Value ("${plugins.openDataParis.filePath}")
+    private String csvFilePath;
     
-    public OpenDataParisCsvPlugin() throws FileNotFoundException {
+    @PostConstruct
+    public void init() throws FileNotFoundException {
         LOGGER.info("Init of OpenDataParisCsvFileLoader");
-        this.reader = new CSVReader(new BufferedReader(new InputStreamReader(new FileInputStream(FILE_PATH))), (char) ';', (char) '\'', 1);
+        this.reader = new CSVReader(new BufferedReader(new InputStreamReader(new FileInputStream(this.csvFilePath))), (char) ';', (char) '\'', 1);
         //this.rows = reader.readAll();
-        this.hasNext = true;
+        this.hasNext = true;        
     }
     
     public boolean hasNext() {
