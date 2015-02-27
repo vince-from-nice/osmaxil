@@ -22,7 +22,7 @@ public class ImportService {
 
     private Map<Long, AbstractElement> elements;
 
-    // I don't manage to autowire specialized plugin :(
+    // TODO Autowire specialized plugin
     //@Autowired (value="OpenDataParisCsvPlugin")
     private AbstractPlugin<AbstractElement, AbstractImport> plugin;
 
@@ -35,7 +35,7 @@ public class ImportService {
 
     static private final Logger LOGGER = Logger.getLogger(Application.class);
 
-    static private final String LOG_SEPARATOR = "============================================";
+    static private final String LOG_SEPARATOR = "==========================================================";
 
     public ImportService() throws Exception {
         this.elements = new Hashtable<Long, AbstractElement>();
@@ -56,7 +56,7 @@ public class ImportService {
                 LOGGER.info(LOG_SEPARATOR);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Import has failed: ", e);
         }
     }
 

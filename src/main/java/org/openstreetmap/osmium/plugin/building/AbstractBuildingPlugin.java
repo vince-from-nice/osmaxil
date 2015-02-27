@@ -42,7 +42,7 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     protected boolean updateApiData(BuildingImport imp, BuildingElement element) {
         boolean needToUpdate = false;
         // Update tags only if they don't exist
-        if (imp.getLevels() == null && imp.getLevels() != null) {
+        if (element.getLevels() == null && imp.getLevels() != null) {
             LOGGER.info("===> Updating levels to " + imp.getLevels());
             element.setLevels(imp.getLevels());
             needToUpdate = true;
