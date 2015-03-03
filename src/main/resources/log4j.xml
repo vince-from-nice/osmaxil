@@ -18,7 +18,7 @@
 
 	<logger name="org.openstreetmap.osmium" additivity="false">
 		<level value="info" />
-        <!--appender-ref ref="stdout" /-->
+        <appender-ref ref="stdout" />
         <appender-ref ref="file" />
 	</logger>
 

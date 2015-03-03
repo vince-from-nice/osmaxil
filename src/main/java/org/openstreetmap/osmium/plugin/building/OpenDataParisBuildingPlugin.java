@@ -60,10 +60,22 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
         BuildingImport result = new BuildingImport();
         result.setId(this.rowCount);
         String[] latlon = row[0].split(",");
-        result.setLon(this.parseDouble(latlon[0], "longitude"));
-        result.setLat(this.parseDouble(latlon[1], "latitude"));
-        result.setLevels(this.parseInt(row[19], "levels"));
-        result.setArea((int) this.parseFloat(row[6], "area"));
+        if (latlon.length == 2) {
+            result.setLat(this.parseDouble(latlon[0], "latitude"));
+            result.setLon(this.parseDouble(latlon[1], "longitude"));
+        }else {
+            LOGGER.warn("Unable to parse latlon");
+        }
+        if (row.length >= 19) {
+            result.setLevels(this.parseInt(row[19], "levels"));
+        } else {
+            LOGGER.warn("Unable to parse levels");
+        }
+        if (row.length >= 6) {
+            result.setArea((int) this.parseFloat(row[6], "area"));
+        } else {
+            LOGGER.warn("Unable to parse area");
+        }        
         return result;
     }
 
@@ -71,7 +83,7 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
         // TODO Auto-generated method stub
     }
     
-    // Stupid but useful methods for catching exception individually  (could be moved elsewhere)
+    // Stupid but useful methods for catching and logging exception individually 
     
     protected double parseDouble(String s, String name) {
         double result = 0;

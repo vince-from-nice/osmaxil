@@ -23,7 +23,7 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
         Long[] result = new Long[0];
         BuildingImport building = (BuildingImport) imp;
         if (building.getLat() != null && building.getLon() != null) {
-            result = this.findBuildingIDsByLatLon(building.getLat(), building.getLon());
+            result = this.findBuildingIDsByLatLon(building.getLon(), building.getLat());
         } else if (building.getGeometry() != null) {
             result = this.findBuildingIDsByGeometry(building.getGeometry());
             LOGGER.info("OSM IDs of buildings matching (" + building.getGeometry() + ") : ");
