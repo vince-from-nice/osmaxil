@@ -33,6 +33,11 @@ public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
         b.setName("Le Concorde");
         data.add(b);
     }
+    
+    @Override
+    public String getSourceLabel() {
+        return "PSS (http://www.pss-archi.eu)";
+    }
 
     public boolean hasNext() {
         return counter < data.size();

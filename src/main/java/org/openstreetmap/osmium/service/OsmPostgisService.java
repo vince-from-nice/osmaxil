@@ -20,6 +20,9 @@ public class OsmPostgisService {
 //  @Autowired
 //  @Qualifier("postgisJdbcTemplate")
 //  private DataSource dataSource;
+    
+    // TODO find the best SRS for area computing
+    private static int SRID_FOR_AREA_COMPUTATION = 32633;
 
     public Long[] findElementIdsByQuery(String query) {
         List<Long> result = this.getJdbcTemplate().query(
@@ -34,7 +37,7 @@ public class OsmPostgisService {
     
     public int getElementAreaById(long osmId) {
         int result = 0;
-        String query = "select ST_Area(way) from planet_osm_polygon where osm_id = ? ;";
+        String query = "select ST_Area(ST_Transform(way, " + SRID_FOR_AREA_COMPUTATION + ")) from planet_osm_polygon where osm_id = ? ;";
         result = this.getJdbcTemplate().queryForObject(query, Integer.class, osmId);
         return result;
     }

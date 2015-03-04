@@ -37,6 +37,11 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
         this.hasNext = true;
     }
 
+    @Override
+    public String getSourceLabel() {
+        return "ParisData (http://opendata.paris.fr)";
+    }
+    
     public boolean hasNext() {
         // return counter < rows.size() // we don't pre load all lines anymore
         // return this.reader.iterator().hasNext() // doesn't work ?
