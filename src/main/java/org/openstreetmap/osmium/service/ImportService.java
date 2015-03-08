@@ -22,14 +22,13 @@ public class ImportService {
 
     private Map<Long, AbstractElement> elements;
 
-    // TODO Autowire specialized plugin
-    //@Autowired (value="OpenDataParisCsvPlugin")
-    private AbstractPlugin<AbstractElement, AbstractImport> plugin;
-
     @Autowired
     @Qualifier (value="OpenDataParisCsvPlugin")
     private AbstractPlugin pluginAutowiredBySpring;
-    
+ 
+    //@Autowired (value="OpenDataParisCsvPlugin")
+    private AbstractPlugin<AbstractElement, AbstractImport> plugin;
+
     @Autowired
     private OsmApiService osmApiService;
 
@@ -43,10 +42,12 @@ public class ImportService {
     
     @PostConstruct
     public void init() {
+        //TODO Autowire specialized plugin
         this.plugin = this.pluginAutowiredBySpring;
     }
 
     public void importBuildings() {
+        this.osmApiService.init(this.plugin);
         LOGGER.info(LOG_SEPARATOR);
         try {
             while (this.plugin.hasNext()) {

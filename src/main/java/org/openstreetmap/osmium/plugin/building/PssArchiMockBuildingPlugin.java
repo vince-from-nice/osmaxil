@@ -35,7 +35,7 @@ public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
     }
     
     @Override
-    public String getSourceLabel() {
+    public String getChangesetSource() {
         return "PSS (http://www.pss-archi.eu)";
     }
 

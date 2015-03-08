@@ -1,12 +1,13 @@
 package org.openstreetmap.osmium.service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
 import org.openstreetmap.osmium.data.AbstractElement;
+import org.openstreetmap.osmium.data.AbstractImport;
 import org.openstreetmap.osmium.data.api.OsmApiRoot;
+import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -24,9 +25,13 @@ public class OsmApiService {
     // Instance attributes
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    private String changesetSource;
+    
+    private String changesetComment;
+    
     private long currentChangesetID;
     
-    private int currentChangesetCounter;
+    private int counterForChangeset;
     
     private int counterForReadSuccess;
     
@@ -55,9 +60,11 @@ public class OsmApiService {
     // Public methods
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @PostConstruct
-    public void init() throws RestClientException {
-        this.currentChangesetCounter = 0;
+    //@PostConstruct
+    public void init(AbstractPlugin<AbstractElement, AbstractImport> plugin) throws RestClientException {
+        this.counterForChangeset = 0;
+        this.changesetComment = plugin.getChangesetCommentl(); 
+        this.changesetSource = plugin.getChangesetSource();
         this.currentChangesetID = this.createChangeset();
         LOGGER.info("Current changeset ID is " + this.currentChangesetID);
     }
@@ -89,7 +96,7 @@ public class OsmApiService {
     
     public boolean writeElement(AbstractElement element) {
         LOGGER.info("Write element to OSM API with id=" + element.getOsmId() + " : ");
-        if (this.currentChangesetCounter >= MAX_UPDATES_BY_CHANGESET) {
+        if (this.counterForChangeset >= MAX_UPDATES_BY_CHANGESET) {
             this.closeChangeset(this.currentChangesetID);
             this.currentChangesetID = this.createChangeset();
         }
@@ -99,7 +106,7 @@ public class OsmApiService {
 //      String xml = out.toString();
         try {
             this.restTemplate.put(this.url + "way/" + element.getOsmId(), element.getApiData());
-            this.currentChangesetCounter++;
+            this.counterForChangeset++;
             this.counterForWriteSuccess++;
         } catch (Exception e) {
             LOGGER.error("Unable to write element with id=" + element.getOsmId() + " (" + e.getMessage() + ")");
@@ -114,11 +121,12 @@ public class OsmApiService {
     
     private long createChangeset() throws RestClientException {
         long result = 0;
-        LOGGER.info("Create a new changeset");
         try {
             StringBuffer sb = new StringBuffer("<osm><changeset>");
             sb.append("<tag k=\"created_by\" v=\"Osmium\"/>");
-            sb.append("<tag k=\"comment\" v=\"Updating height and levels of buildings\"/>");
+            sb.append("<tag k=\"bot\" v=\"yes\"/>");
+            sb.append("<tag k=\"comment\" v=\"" + this.changesetComment + "\"/>");
+            sb.append("<tag k=\"source\" v=\"" + this.changesetSource + "\"/>");
             sb.append("</changeset></osm>");
             // RestTemplate.put() returns void, using RestTemplate.exchange() instead
             HttpHeaders headers = new HttpHeaders();
@@ -138,7 +146,6 @@ public class OsmApiService {
     }
     
     private void closeChangeset(long id) {
-        LOGGER.info("Close changeset with id=" + id);
         try {
             this.restTemplate.put(this.url +  "changeset/" + this.currentChangesetID + "/close", null);
             this.counterForChangesetClose++;

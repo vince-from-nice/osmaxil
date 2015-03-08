@@ -12,7 +12,9 @@ import org.springframework.stereotype.Repository;
 public abstract class AbstractPlugin<Element extends AbstractElement, Import extends AbstractImport> implements
         Iterator<AbstractImport> {
     
-    abstract public String getSourceLabel();
+    abstract public String getChangesetSource();
+    
+    abstract public String getChangesetCommentl();
 
     abstract public Long[] findRelatedElementId(Import imp);
 

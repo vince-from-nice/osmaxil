@@ -38,7 +38,7 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
     }
 
     @Override
-    public String getSourceLabel() {
+    public String getChangesetSource() {
         return "ParisData (http://opendata.paris.fr)";
     }
     

@@ -14,6 +14,11 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     private OsmPostgisService osmPostgisService;
     
     @Override
+    public String getChangesetCommentl() {
+        return "Updating building heights and levels";
+    }
+    
+    @Override
     public BuildingElement createElement(long osmId) {
         return new BuildingElement(osmId);
     }
