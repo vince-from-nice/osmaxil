@@ -4,6 +4,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
@@ -18,10 +19,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImportService {
 
-    private long counter;
+    private long counterForImports;
 
     private Map<Long, AbstractElement> elements;
-
+    
+    private Map<Long, AbstractElement> updatedElements;
+    
     @Autowired
     @Qualifier (value="OpenDataParisCsvPlugin")
     private AbstractPlugin pluginAutowiredBySpring;
@@ -38,12 +41,21 @@ public class ImportService {
 
     public ImportService() throws Exception {
         this.elements = new Hashtable<Long, AbstractElement>();
+        this.updatedElements = new Hashtable<Long, AbstractElement>();
     }
     
     @PostConstruct
     public void init() {
         //TODO Autowire specialized plugin
         this.plugin = this.pluginAutowiredBySpring;
+    }
+    
+    @PreDestroy
+    public void close() {
+        LOGGER.info("Closing Import service");
+        LOGGER.info("Total of loaded imports: " + this.counterForImports);
+        LOGGER.info("Total of matched elements: " + this.elements.size());
+        LOGGER.info("Total of updated elements: " + this.updatedElements.size());
     }
 
     public void importBuildings() {
@@ -52,7 +64,7 @@ public class ImportService {
         try {
             while (this.plugin.hasNext()) {
                 AbstractImport imp = (AbstractImport) this.plugin.next();
-                this.counter++;
+                this.counterForImports++;
                 this.processImport(imp);
                 LOGGER.info(LOG_SEPARATOR);
             }
@@ -66,33 +78,33 @@ public class ImportService {
             LOGGER.warn("Element import is null, skipping import...");
             return;
         }
-        LOGGER.info("Importing element #" + counter + ": " +  imp);
+        LOGGER.info("Importing element #" + counterForImports + ": " +  imp);
+        // For each matching elements
         Long[] osmIds = this.plugin.findRelatedElementId(imp);
         for (Long osmId : osmIds) {
-            // Get related element from the map or create it
-            AbstractElement element = (AbstractElement) this.elements.get(osmId);
-            if (element == null) {
-                element = (AbstractElement) this.plugin.createElement(osmId);
-                this.elements.put(osmId, element);
-            }
-            // Refresh data from API even if element was already present
+            // Fetch data from OSM API
             OsmApiRoot apiData = this.osmApiService.readElement(osmId);
             if (apiData == null) {
                 LOGGER.info("Skipping element id=[+ " + osmId + "] since no data has been fetch from OSM API");
                 break;
             }
-            element.setApiData(apiData);
+            // Get related element from the map or create it
+            AbstractElement element = (AbstractElement) this.elements.get(osmId);
+            if (element == null) {
+                element = (AbstractElement) this.plugin.createElement(osmId, apiData);
+                this.elements.put(osmId, element);
+            } else {
+                // If element was already present refresh its data
+                element.setApiData(apiData);                
+            }
             LOGGER.info(element);
-            // If original XML has already some values we skip the import
-            /*if (!element.isVirgin()) {
-                LOGGER.info("Skipping element id=[" + osmId + "] since element is not virgin");
-                break;
-            }*/
             // Bind import to element
             boolean needToUpdate = this.plugin.bindImportToElement(element, imp);
-            // Write element only if needed
+            // Update element only if needed
             if (needToUpdate) {
-                this.osmApiService.writeElement(element);
+                if (this.osmApiService.writeElement(element)) {
+                    updatedElements.put(element.getOsmId(), element);
+                }
             }
         }
     }

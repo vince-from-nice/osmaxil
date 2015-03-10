@@ -84,8 +84,19 @@ public class OsmApiService {
         OsmApiRoot result = null;
         LOGGER.info("Read element from OSM API with id=" + id + " : ");
         try {
+            // Fetch a basic string 
             //String str = this.restTemplate.getForObject(this.url + "way/" + id, String.class);
-            result = this.restTemplate.getForObject(this.url + "way/" + id, OsmApiRoot.class);
+            
+            // WTF it doesn't work anymore : request is ok (400) but result is null !!
+            //result = this.restTemplate.getForObject(this.url + "way/" + id, OsmApiRoot.class);
+            
+            // But it still works with the generic exchange() method
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Accept-Encoding", "");
+            HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
+            ResponseEntity<OsmApiRoot> responseEntity = this.restTemplate.exchange(this.url + "way/" + id, HttpMethod.GET, requestEntity, OsmApiRoot.class);
+            result = responseEntity.getBody();
+            
             this.counterForReadSuccess++;
         } catch (Exception e) {
             LOGGER.error("Unable to read element with id=" + id + " (" + e.getMessage() + ")");
@@ -111,6 +122,7 @@ public class OsmApiService {
         } catch (Exception e) {
             LOGGER.error("Unable to write element with id=" + element.getOsmId() + " (" + e.getMessage() + ")");
             this.counterForWriteFailure++;
+            return false;
         } 
         return true;
     }
@@ -130,6 +142,7 @@ public class OsmApiService {
             sb.append("</changeset></osm>");
             // RestTemplate.put() returns void, using RestTemplate.exchange() instead
             HttpHeaders headers = new HttpHeaders();
+            headers.add("Accept-Encoding", "");
             headers.add("Content-Type", "application/xml");
             headers.add("Accept", "*/*");
             HttpEntity<String> requestEntity = new HttpEntity<String>(sb.toString(), headers);

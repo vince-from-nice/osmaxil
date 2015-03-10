@@ -2,6 +2,7 @@ package org.openstreetmap.osmium.plugin.building;
 
 import org.openstreetmap.osmium.data.BuildingElement;
 import org.openstreetmap.osmium.data.BuildingImport;
+import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.openstreetmap.osmium.service.OsmPostgisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,13 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
     
     @Override
-    public BuildingElement createElement(long osmId) {
-        return new BuildingElement(osmId);
+    public BuildingElement createElement(long osmId, OsmApiRoot data) {
+        BuildingElement element = new BuildingElement(osmId);
+        element.setApiData(data);
+        // Set original values
+        element.setOriginalHeight(element.getHeight());
+        element.setOriginalLevels(element.getLevels());
+        return element;
     }
 
     @Override
@@ -46,13 +52,13 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     @Override
     protected boolean updateApiData(BuildingImport imp, BuildingElement element) {
         boolean needToUpdate = false;
-        // Update tags only if they don't exist
-        if (element.getLevels() == null && imp.getLevels() != null) {
+        // Update tags only if original values don't exist
+        if (element.getOriginalLevels() == null && imp.getLevels() != null) {
             LOGGER.info("===> Updating levels to " + imp.getLevels());
             element.setLevels(imp.getLevels());
             needToUpdate = true;
         }
-        if (element.getHeight() == null && imp.getHeight() != null) {
+        if (element.getOriginalHeight() == null && imp.getHeight() != null) {
             LOGGER.info("===> Updating height to $building.height");
             element.setHeight(imp.getHeight());
             needToUpdate = true;

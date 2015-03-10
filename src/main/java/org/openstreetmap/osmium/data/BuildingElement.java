@@ -6,6 +6,10 @@ import org.openstreetmap.osmium.data.api.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
 
+    private Integer originalHeight;
+    
+    private Integer originalLevels;
+    
     public BuildingElement(long osmId) {
         super(osmId);
     }
@@ -55,6 +59,22 @@ public class BuildingElement extends AbstractElement {
 
     public boolean isPart() {
         return "yes".equals(this.getTagValue("building:part"));
+    }
+
+    public Integer getOriginalHeight() {
+        return originalHeight;
+    }
+
+    public void setOriginalHeight(Integer originalHeight) {
+        this.originalHeight = originalHeight;
+    }
+
+    public Integer getOriginalLevels() {
+        return originalLevels;
+    }
+
+    public void setOriginalLevels(Integer originalLevels) {
+        this.originalLevels = originalLevels;
     }
 
 }

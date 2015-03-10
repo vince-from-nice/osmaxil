@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.openstreetmap.osmium.data.BuildingImport;
 import org.springframework.beans.factory.annotation.Value;

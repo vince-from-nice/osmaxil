@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
+import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,7 +19,7 @@ public abstract class AbstractPlugin<Element extends AbstractElement, Import ext
 
     abstract public Long[] findRelatedElementId(Import imp);
 
-    abstract public Element createElement(long osmId);
+    abstract public Element createElement(long osmId, OsmApiRoot data);
 
     abstract protected boolean updateApiData(Import imp, Element element);
 
@@ -52,9 +53,9 @@ public abstract class AbstractPlugin<Element extends AbstractElement, Import ext
         }
         LOGGER.info(sb.toString());
         if (needToUpdate) {
-            LOGGER.info("Element need to be updated (" + ")");
+            LOGGER.info("Element has been modified");
         } else {
-            LOGGER.info("Element doesn't need to be updated");
+            LOGGER.info("Element has NOT been modified (because original values was existing in the element)");
         }
         return needToUpdate;
     }
