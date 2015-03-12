@@ -55,7 +55,8 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
         // Update tags only if original values don't exist
         if (element.getOriginalLevels() == null && imp.getLevels() != null) {
             LOGGER.info("===> Updating levels to " + imp.getLevels());
-            element.setLevels(imp.getLevels());
+            // Adding +1 because OSM use the US way to count levels
+            element.setLevels(imp.getLevels() + 1);
             needToUpdate = true;
         }
         if (element.getOriginalHeight() == null && imp.getHeight() != null) {
