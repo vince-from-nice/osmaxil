@@ -1,6 +1,7 @@
 package org.openstreetmap.osmium.service;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -10,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
+import org.openstreetmap.osmium.data.RelevantElementId;
 import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,7 @@ public class ImportService {
     
     @PreDestroy
     public void close() {
-        LOGGER.info("Closing Import service");
+        LOGGER.info("=== Closing Import service ===");
         LOGGER.info("Total of loaded imports: " + this.counterForImports);
         LOGGER.info("Total of matched elements: " + this.elements.size());
         LOGGER.info("Total of updated elements: " + this.updatedElements.size());
@@ -80,18 +82,24 @@ public class ImportService {
         }
         LOGGER.info("Importing element #" + counterForImports + ": " +  imp);
         // For each matching elements
-        Long[] osmIds = this.plugin.findRelatedElementId(imp);
-        for (Long osmId : osmIds) {
+        List<RelevantElementId> relevantElementIds = this.plugin.findRelevantElements(imp);
+        for (RelevantElementId relevantElementId : relevantElementIds) {
+            long osmId = relevantElementId.getOsmId();
+            long relationId = relevantElementId.getRelationId();
+            // Skip negative IDs (ie. multipolygon relations whose outer member has not been found)
+            if (osmId < 0) {
+                break;
+            }
             // Fetch data from OSM API
             OsmApiRoot apiData = this.osmApiService.readElement(osmId);
             if (apiData == null) {
                 LOGGER.info("Skipping element id=[+ " + osmId + "] since no data has been fetch from OSM API");
                 break;
             }
-            // Get related element from the map or create it
+            // Get related element from the private map (ie. cache) or create it
             AbstractElement element = (AbstractElement) this.elements.get(osmId);
             if (element == null) {
-                element = (AbstractElement) this.plugin.createElement(osmId, apiData);
+                element = (AbstractElement) this.plugin.createElement(osmId, relationId, apiData);
                 this.elements.put(osmId, element);
             } else {
                 // If element was already present refresh its data
@@ -99,7 +107,7 @@ public class ImportService {
             }
             LOGGER.info(element);
             // Bind import to element
-            boolean needToUpdate = this.plugin.bindImportToElement(element, imp);
+            boolean needToUpdate = this.bindImportToElement(element, imp);
             // Update element only if needed
             if (needToUpdate) {
                 if (this.osmApiService.writeElement(element)) {
@@ -107,6 +115,44 @@ public class ImportService {
                 }
             }
         }
+    }
+    
+    private boolean bindImportToElement(AbstractElement element, AbstractImport imp) {
+        // Attach import to the element
+        element.getMatchingImports().add(imp);
+        imp.setElement(element); 
+        StringBuilder sb = new StringBuilder("Matching imports are now : [ ");
+        for (AbstractImport i : element.getMatchingImports()) {
+            sb.append(i.getId() + " ");
+        }
+        LOGGER.info(sb.append("]").toString());
+        // Compute matching score for the import
+        imp.setMatchingScore(this.plugin.computeMatchingScore(imp));
+        // Check if that import is the new winner or a looser
+        boolean needToUpdate = false;
+        AbstractImport bestImport = element.getBestMatchingImport();
+        sb = new StringBuilder("New import score is " + imp.getMatchingScore() + " and best matching import score is ");
+        sb.append(bestImport != null ? bestImport.getMatchingScore() + " (id=" + bestImport.getId() + ")" : "null");
+        // If that import has better score (or it's the first import matching the element), it's a winner
+        if (element.getBestMatchingImport() == null
+                || element.getBestMatchingImport().getMatchingScore() < imp.getMatchingScore()) {
+            sb.append(" => We have a new winner !!");
+            LOGGER.info(sb.toString());
+            element.setBestMatchingImport(imp);
+            // Try to update the element data with it
+            needToUpdate = this.plugin.updateApiData(imp, element);
+        }
+        // Else it's a looser, nothing to do.. 
+        else {
+            sb.append(" => Loosing import");
+            LOGGER.info(sb.toString());
+        }
+        if (needToUpdate) {
+            LOGGER.info("Element has been modified");
+        } else {
+            LOGGER.info("Element has NOT been modified");
+        }
+        return needToUpdate;
     }
 
 }

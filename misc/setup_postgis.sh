@@ -2,6 +2,8 @@
 
 #FILE_PATH=/home/turman/Temporary/ile-de-france-latest.osm.pbf
 #FILE_PATH=/home/turman/Temporary/provence-alpes-cote-d-azur-latest.osm.pbf
+#FILE_PATH=/home/turman/Workspace/JOSM/bug-crash-with-too-big-id.osm
+#FILE_PATH=/home/turman/Workspace/JOSM/bug-failure-with-multipolygon.osm
 FILE_PATH=/home/turman/Workspace/JOSM/test-paris-12.osm
 
 #DB_NAME=osm_apidb_paca
@@ -25,4 +27,5 @@ psql --username=postgres --dbname=$DB_NAME --file=/usr/share/postgresql/9.1/cont
 #psql -d $DB_NAME < /usr/share/doc/osmosis/examples/pgsnapshot_schema_0.6.sql
 #osmosis --read-pbf file="$FILE_PATH" --write-apidb user="postgres" database="$DB_NAME"
 
-~/Software/osm2pgsql/bin/osm2pgsql -c -C 1000 --number-processes=3  -d $DB_NAME $FILE_PATH
+~/Software/osm2pgsql/bin/osm2pgsql -s -c -C 1000 --number-processes=3  -d $DB_NAME $FILE_PATH
+#osm2pgsql -s -G -c -C 1000 --number-processes=3  -d $DB_NAME $FILE_PATH

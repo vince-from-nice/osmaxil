@@ -1,62 +1,41 @@
 package org.openstreetmap.osmium.plugin;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
+import org.openstreetmap.osmium.data.RelevantElementId;
 import org.openstreetmap.osmium.data.api.OsmApiRoot;
-import org.springframework.stereotype.Repository;
+import org.openstreetmap.osmium.service.OsmApiService;
+import org.openstreetmap.osmium.service.OsmPostgisService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 public abstract class AbstractPlugin<Element extends AbstractElement, Import extends AbstractImport> implements
         Iterator<AbstractImport> {
+    
+    @Autowired
+    protected OsmPostgisService osmPostgisService;
+    
+    @Autowired
+    protected OsmApiService osmApiService;
     
     abstract public String getChangesetSource();
     
     abstract public String getChangesetCommentl();
 
-    abstract public Long[] findRelatedElementId(Import imp);
+    abstract public List<RelevantElementId> findRelevantElements(Import imp);
 
-    abstract public Element createElement(long osmId, OsmApiRoot data);
+    abstract public Element createElement(long osmId, long relationId, OsmApiRoot data);
 
-    abstract protected boolean updateApiData(Import imp, Element element);
+    abstract public boolean updateApiData(Import imp, Element element);
 
-    abstract protected float computeMatchingScore(Import imp);
+    abstract public float computeMatchingScore(Import imp);
 
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
 
-    public boolean bindImportToElement(Element element, Import imp) {
-        // Attach import to the element
-        element.getMatchingImports().add(imp);
-        imp.setElement(element); 
-        StringBuilder sb = new StringBuilder("Matching imports is now : [ ");
-        for (AbstractImport i : element.getMatchingImports()) {
-            sb.append(i.getId() + " ");
-        }
-        LOGGER.info(sb.append("]").toString());
-        // Compute matching score for the import
-        imp.setMatchingScore(this.computeMatchingScore(imp));
-        // Check if that import is the new winner
-        boolean needToUpdate = false;
-        AbstractImport best = element.getBestMatchingImport();
-        sb = new StringBuilder("New import score is " + imp.getMatchingScore() + " and best matching import score is ");
-        sb.append(best != null ? best.getMatchingScore() + " (id=" + best.getId() + ")" : "null");
-        if (element.getBestMatchingImport() == null
-                || element.getBestMatchingImport().getMatchingScore() < imp.getMatchingScore()) {
-            sb.append(" => We have a new winner !!");
-            element.setBestMatchingImport(imp);
-            needToUpdate = updateApiData(imp, element);
-        } else {
-            sb.append(" => Loosing import");
-        }
-        LOGGER.info(sb.toString());
-        if (needToUpdate) {
-            LOGGER.info("Element has been modified");
-        } else {
-            LOGGER.info("Element has NOT been modified (because original values was existing in the element)");
-        }
-        return needToUpdate;
-    }
 }

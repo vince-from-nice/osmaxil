@@ -1,27 +1,27 @@
 package org.openstreetmap.osmium.plugin.building;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openstreetmap.osmium.data.BuildingElement;
 import org.openstreetmap.osmium.data.BuildingImport;
+import org.openstreetmap.osmium.data.RelevantElementId;
 import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.openstreetmap.osmium.plugin.AbstractPlugin;
-import org.openstreetmap.osmium.service.OsmPostgisService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElement, BuildingImport> {
 
-    @Autowired
-    private OsmPostgisService osmPostgisService;
-    
     @Override
     public String getChangesetCommentl() {
         return "Updating building heights and levels";
     }
     
     @Override
-    public BuildingElement createElement(long osmId, OsmApiRoot data) {
+    public BuildingElement createElement(long osmId, long relationId, OsmApiRoot data) {
         BuildingElement element = new BuildingElement(osmId);
+        element.setRelationId(relationId);
         element.setApiData(data);
         // Set original values
         element.setOriginalHeight(element.getHeight());
@@ -30,32 +30,48 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
 
     @Override
-    public Long[] findRelatedElementId(BuildingImport imp) {
-        Long[] result = new Long[0];
+    public List<RelevantElementId> findRelevantElements(BuildingImport imp) {
+        List<RelevantElementId> result = new ArrayList<RelevantElementId>();
+        Long[] ids = new Long[0];
+        // Find in PostGIS all buildings matching (ie. containing) the coordinates of the import
         BuildingImport building = (BuildingImport) imp;
         if (building.getLat() != null && building.getLon() != null) {
-            result = this.findBuildingIDsByLatLon(building.getLon(), building.getLat());
+            ids = this.findBuildingIDsByLatLon(building.getLon(), building.getLat());
         } else if (building.getGeometry() != null) {
-            result = this.findBuildingIDsByGeometry(building.getGeometry());
+            ids = this.findBuildingIDsByGeometry(building.getGeometry());
             LOGGER.info("OSM IDs of buildings matching (" + building.getGeometry() + ") : ");
         } else {
             LOGGER.error("Unable to find building because there's no coordinates neither geometry");
         }
+        // Parsing the IDs to check if they refers to normal elements (ie. ways) or relations
         StringBuffer sb = new StringBuffer("OSM IDs of matching buildings : [ ");
-        for (Long id : result) {
-            sb.append(id + " ");
+        for (int i = 0; i < ids.length; i++) {
+            RelevantElementId relevantElement = new RelevantElementId();
+            // If ID is positive it means it's a normal element (ie. a way)
+            if (ids[i] > 0) {
+                relevantElement.setOsmId(ids[i]);
+                relevantElement.setRelationId(-1);
+            } 
+            // If ID is negative it means it's a multipolygon relations => need to find its relevant outer member
+            else {
+                LOGGER.debug("A multipolygon relation has been found (" + ids[i] + "), looking for its relevant outer member");
+                relevantElement.setOsmId(this.findRelevantOuterMemberId(- ids[i], imp));
+                relevantElement.setRelationId(- ids[i]);
+            }
+            result.add(relevantElement);
+            sb.append(ids[i] + " ");
         }
         LOGGER.info(sb.toString() + "]");
         return result;
     }
     
     @Override
-    protected boolean updateApiData(BuildingImport imp, BuildingElement element) {
+    public boolean updateApiData(BuildingImport imp, BuildingElement element) {
         boolean needToUpdate = false;
         // Update tags only if original values don't exist
         if (element.getOriginalLevels() == null && imp.getLevels() != null) {
             LOGGER.info("===> Updating levels to " + imp.getLevels());
-            // Adding +1 because OSM use the US way to count levels
+            // Adding +1 to levels because OSM use the US way to count building levels
             element.setLevels(imp.getLevels() + 1);
             needToUpdate = true;
         }
@@ -68,7 +84,8 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
     
     @Override
-    protected float computeMatchingScore(BuildingImport imp) {
+    public float computeMatchingScore(BuildingImport imp) {
+        float result = 0f;
         if (imp.getArea() == null) {
             LOGGER.warn("Unable to compute score because import has NO area");
             return 0f;
@@ -77,20 +94,56 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
             LOGGER.warn("Unable to compute score because import has NO element attached");
             return 0f;
         }
-        // Compare area between import and element
-        int elementArea = this.osmPostgisService.getElementAreaById(imp.getElement().getOsmId());
+        // If the related element belongs to a relation, consider it instead of the element itself (osm2pgsql doesn't store relation members) 
+        long elementId = imp.getElement().getOsmId();
+        if (imp.getElement().getRelationId() > 0) {
+            elementId = - imp.getElement().getRelationId(); // reinverse the ID because osm2pgsql stores relations like that
+        }
+        int elementArea = this.osmPostgisService.getPolygonAreaById(elementId);
         // TODO cache it for next imports 
         LOGGER.info("Element computed area is [" + elementArea + "]");
+        // Compare area between import and element
         if (elementArea > 0) {
-         // returns a float which tends to 1.0 when area tends are going closer (and tends to 0.0 when different)
+         // Returns a float which tends to 1.0 when areas are going closer (and tends to 0.0 if different)
             if ( imp.getArea() < elementArea) {
-                return ((float) imp.getArea() / elementArea);
+                result = ((float) imp.getArea() / elementArea);
             } else {
-                return ((float)  elementArea / imp.getArea());
+                result = ((float)  elementArea / imp.getArea());
             }
         }
-        // TODO Add other criteria such the centrality of the import coords into element area
-        return 0f;
+        // TODO Add other criteria such the "centrality" of the import into the element area
+        return result;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Private methods 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private long findRelevantOuterMemberId(long relationId, BuildingImport imp) {
+        long result = 0;
+        // Fetch members from PostGIS
+        String membersString = this.osmPostgisService.getRelationMembers(relationId);
+        // Parse members strings
+        membersString = membersString.substring(1, membersString.length() - 1);
+        String[] members = membersString.split(","); 
+        List<Long> outerMemberIds = new ArrayList<Long>();
+        for (int i = 0; i < members.length; i++) {
+            if ("outer".equals(members[i]) && members[i-1].startsWith("w")) {
+                outerMemberIds.add(Long.parseLong(members[i - 1].substring(1)));
+                //OsmApiRoot memberData = this.osmApiService.readElement(outerMemberId);
+            }
+        }
+        // For now support only relation with just one outer member
+        if (outerMemberIds.size() == 1) {
+            result = outerMemberIds.get(0);
+            LOGGER.info("For multipolygon relation with id=" + relationId + ", outer member with id=[" + result +"] has been found");
+        } 
+        // Else we just return the negative relation ID
+        else {
+            result = - relationId;
+            LOGGER.warn("For multipolygon relation with id=" + relationId + ", no outer member has been found (members are " + membersString + ")");
+        }
+        return result;
     }
     
     private Long[] findBuildingIDsByGeometry(String geometry) {

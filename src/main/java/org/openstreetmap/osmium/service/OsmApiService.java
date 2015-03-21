@@ -71,7 +71,7 @@ public class OsmApiService {
     
     @PreDestroy
     public void close() {
-        LOGGER.info("Closing OSM API service");
+        LOGGER.info("=== Closing OSM API service ===");
         if (this.currentChangesetID > 0) {
             this.closeChangeset(this.currentChangesetID);
         }

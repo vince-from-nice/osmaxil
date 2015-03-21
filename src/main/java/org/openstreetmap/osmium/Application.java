@@ -16,7 +16,7 @@ public class Application {
         LOGGER.info("Starting Osmium");
         Application app = new Application();
         app.run(args);
-        LOGGER.info("Ok, Osmium has finished its job");
+        LOGGER.info("=== Osmium has finished its job ===");
     }
     
     public Application() {

@@ -9,6 +9,8 @@ import org.openstreetmap.osmium.data.api.OsmApiTag;
 public abstract class AbstractElement {
 
     private long osmId;
+    
+    private long relationId;
 
     private OsmApiRoot apiData;
 
@@ -86,6 +88,14 @@ public abstract class AbstractElement {
 
     public void setBestMatchingImport(AbstractImport bestMatchingImport) {
         this.bestMatchingImport = bestMatchingImport;
+    }
+
+    public long getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(long relationId) {
+        this.relationId = relationId;
     }
 
 }

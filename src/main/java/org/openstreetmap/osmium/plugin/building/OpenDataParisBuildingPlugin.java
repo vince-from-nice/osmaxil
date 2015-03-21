@@ -7,15 +7,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.openstreetmap.osmium.data.BuildingImport;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-@Repository("OpenDataParisCsvPlugin")
+@Component("OpenDataParisCsvPlugin")
 public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
 
     private CSVReader reader;

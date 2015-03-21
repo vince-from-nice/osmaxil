@@ -35,7 +35,14 @@ public class OsmPostgisService {
         return result.toArray(new Long[result.size()]);
     }
     
-    public int getElementAreaById(long osmId) {
+    public String getRelationMembers(long relationId) {
+        String result = "";
+        String query = "select members from planet_osm_rels where id= ? ;";
+        result = this.getJdbcTemplate().queryForObject(query, String.class, relationId);
+        return result;
+    }
+    
+    public int getPolygonAreaById(long osmId) {
         int result = 0;
         String query = "select ST_Area(ST_Transform(way, " + SRID_FOR_AREA_COMPUTATION + ")) from planet_osm_polygon where osm_id = ? ;";
         result = this.getJdbcTemplate().queryForObject(query, Integer.class, osmId);
