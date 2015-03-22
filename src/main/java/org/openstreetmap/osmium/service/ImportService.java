@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImportService {
 
-    private long counterForImports;
+    private long counterForLoadedImports;
+    
+    private long counterForMatchedImports;
 
     private Map<Long, AbstractElement> elements;
     
@@ -55,7 +57,8 @@ public class ImportService {
     @PreDestroy
     public void close() {
         LOGGER.info("=== Closing Import service ===");
-        LOGGER.info("Total of loaded imports: " + this.counterForImports);
+        LOGGER.info("Total of loaded imports: " + this.counterForLoadedImports);
+        LOGGER.info("Total of matched imports: " + this.counterForMatchedImports);
         LOGGER.info("Total of matched elements: " + this.elements.size());
         LOGGER.info("Total of updated elements: " + this.updatedElements.size());
     }
@@ -66,7 +69,7 @@ public class ImportService {
         try {
             while (this.plugin.hasNext()) {
                 AbstractImport imp = (AbstractImport) this.plugin.next();
-                this.counterForImports++;
+                this.counterForLoadedImports++;
                 this.processImport(imp);
                 LOGGER.info(LOG_SEPARATOR);
             }
@@ -80,9 +83,13 @@ public class ImportService {
             LOGGER.warn("Element import is null, skipping import...");
             return;
         }
-        LOGGER.info("Importing element #" + counterForImports + ": " +  imp);
-        // For each matching elements
+        LOGGER.info("Importing element #" + counterForLoadedImports + ": " +  imp);
+        // Find relevant element
         List<RelevantElementId> relevantElementIds = this.plugin.findRelevantElements(imp);
+        if (relevantElementIds.size() > 0) {
+            this.counterForMatchedImports++;
+        }
+        // For each matching elements
         for (RelevantElementId relevantElementId : relevantElementIds) {
             long osmId = relevantElementId.getOsmId();
             long relationId = relevantElementId.getRelationId();
@@ -93,7 +100,7 @@ public class ImportService {
             // Fetch data from OSM API
             OsmApiRoot apiData = this.osmApiService.readElement(osmId);
             if (apiData == null) {
-                LOGGER.info("Skipping element id=[+ " + osmId + "] since no data has been fetch from OSM API");
+                LOGGER.info("Skipping element id=" + osmId + " since no data has been fetch from OSM API");
                 break;
             }
             // Get related element from the private map (ie. cache) or create it

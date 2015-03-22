@@ -28,4 +28,4 @@ psql --username=postgres --dbname=$DB_NAME --file=/usr/share/postgresql/9.1/cont
 #osmosis --read-pbf file="$FILE_PATH" --write-apidb user="postgres" database="$DB_NAME"
 
 ~/Software/osm2pgsql/bin/osm2pgsql -s -c -C 1000 --number-processes=3  -d $DB_NAME $FILE_PATH
-#osm2pgsql -s -G -c -C 1000 --number-processes=3  -d $DB_NAME $FILE_PATH
+#osm2pgsql -s -c -C 1000 --number-processes=3  -d $DB_NAME $FILE_PATH

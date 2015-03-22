@@ -1,4 +1,6 @@
-﻿select count(*) from planet_osm_line;
+﻿select osm_id,name,building,ST_Area(way),ST_AsEWKT(way) from planet_osm_polygon where osm_id = -4296652071;
+
+select count(*) from planet_osm_line;
 select count(*) from planet_osm_point;
 select count(*) from planet_osm_polygon;
 
@@ -47,4 +49,6 @@ select(ST_Area(ST_GeomFromText('POLYGON((
 265490.64 6248759.15,
 265490.39 6248770.86,
 265489.77 6248795.93))', 900913)));
+
+select ST_Area(ST_Transform(way, 32633)) from planet_osm_polygon where osm_id = -4296652071 ;
 

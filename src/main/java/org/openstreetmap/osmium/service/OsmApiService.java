@@ -110,6 +110,7 @@ public class OsmApiService {
         if (this.counterForChangeset >= MAX_UPDATES_BY_CHANGESET) {
             this.closeChangeset(this.currentChangesetID);
             this.currentChangesetID = this.createChangeset();
+            this.counterForChangeset = 0;
         }
         element.updateChangeset(this.currentChangesetID);
 //      StringWriter out = new StringWriter();
