@@ -66,7 +66,7 @@ public class ElementCache {
             // Fetch data from OSM API
             OsmApiRoot apiData = this.osmApiService.readElement(osmId);
             if (apiData == null) {
-                throw new OsmiumException("Unable to fetch data for element#" + osmId);
+                throw new OsmiumException("Unable to fetch data from OSM API for element#" + osmId);
             }
             element = (AbstractElement) this.plugin.createElement(osmId, relevantElementId.getRelationId(), apiData);
             this.elements.put(osmId, element);

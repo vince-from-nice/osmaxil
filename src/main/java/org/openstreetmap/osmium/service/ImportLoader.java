@@ -34,7 +34,7 @@ public class ImportLoader {
     private AbstractPlugin<AbstractElement, AbstractImport> plugin;
 
     @Autowired
-    private ElementCache elementCacheService;
+    private ElementCache elementCache;
     
     static private final Logger LOGGER = Logger.getLogger(Application.class);
 
@@ -87,12 +87,13 @@ public class ImportLoader {
             if (osmId < 0) {
                 break;
             }
-            // Get related element from the map or create it
+            // Get related element from the cache or create it
             AbstractElement element = null;
             try {
-                element = this.elementCacheService.getOrCreateElement(relevantElementId);
+                element = this.elementCache.getOrCreateElement(relevantElementId);
             } catch (OsmiumException e) {
-                LOGGER.error("Skipping element id=" + osmId + " since no data has been fetch from OSM API");
+                LOGGER.error("Skipping element id=" + osmId + " (" + e.getMessage() + ")");
+                break;
             }
             LOGGER.info(element);
             // Bind import to element
