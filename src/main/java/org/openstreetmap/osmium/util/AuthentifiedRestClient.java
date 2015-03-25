@@ -1,4 +1,4 @@
-package org.openstreetmap.osmium.service;
+package org.openstreetmap.osmium.util;
 
 import javax.annotation.PostConstruct;
 

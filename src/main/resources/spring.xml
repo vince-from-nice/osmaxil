@@ -52,7 +52,7 @@
 	</bean>
 
 	<!--bean id="restTemplate" class="org.springframework.web.client.RestTemplate" -->
-	<bean id="restTemplate" class="org.openstreetmap.osmium.service.AuthentifiedRestClient">
+	<bean id="restTemplate" class="org.openstreetmap.osmium.util.AuthentifiedRestClient">
 		<property name="messageConverters">
 			<list>
 				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />

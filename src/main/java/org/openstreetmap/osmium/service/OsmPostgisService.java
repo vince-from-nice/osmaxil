@@ -25,7 +25,7 @@ public class OsmPostgisService {
     private static int SRID_FOR_AREA_COMPUTATION = 32633;
 
     public Long[] findElementIdsByQuery(String query) {
-        List<Long> result = this.getJdbcTemplate().query(
+        List<Long> result = this.jdbcTemplate.query(
                 query,
                 new RowMapper<Long>() {
                     public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -38,22 +38,14 @@ public class OsmPostgisService {
     public String getRelationMembers(long relationId) {
         String result = "";
         String query = "select members from planet_osm_rels where id= ? ;";
-        result = this.getJdbcTemplate().queryForObject(query, String.class, relationId);
+        result = this.jdbcTemplate.queryForObject(query, String.class, relationId);
         return result;
     }
     
     public int getPolygonAreaById(long osmId) {
         int result = 0;
         String query = "select ST_Area(ST_Transform(way, " + SRID_FOR_AREA_COMPUTATION + ")) from planet_osm_polygon where osm_id = ? ;";
-        result = this.getJdbcTemplate().queryForObject(query, Integer.class, osmId);
+        result = this.jdbcTemplate.queryForObject(query, Integer.class, osmId);
         return result;
-    }
-
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
-    }
-
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
     }
 }

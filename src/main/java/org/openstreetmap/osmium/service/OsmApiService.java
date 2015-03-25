@@ -60,7 +60,6 @@ public class OsmApiService {
     // Public methods
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //@PostConstruct
     public void init(AbstractPlugin<AbstractElement, AbstractImport> plugin) throws RestClientException {
         this.counterForChangeset = 0;
         this.changesetComment = plugin.getChangesetCommentl(); 

@@ -32,9 +32,9 @@ public abstract class AbstractPlugin<Element extends AbstractElement, Import ext
 
     abstract public Element createElement(long osmId, long relationId, OsmApiRoot data);
 
-    abstract public boolean updateApiData(Import imp, Element element);
+    abstract public boolean updateElementData(Import imp, Element element);
 
-    abstract public float computeMatchingScore(Import imp);
+    abstract public float computeImportMatchingScore(Import imp);
 
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
 

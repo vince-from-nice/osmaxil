@@ -66,9 +66,9 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
     
     @Override
-    public boolean updateApiData(BuildingImport imp, BuildingElement element) {
+    public boolean updateElementData(BuildingImport imp, BuildingElement element) {
         boolean needToUpdate = false;
-        // Update tags only if original values don't exist
+        // Update tags only only if original value doesn't exist
         if (element.getOriginalLevels() == null && imp.getLevels() != null) {
             LOGGER.info("===> Updating levels to " + imp.getLevels());
             // Adding +1 to levels because OSM use the US way to count building levels
@@ -84,7 +84,7 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
     
     @Override
-    public float computeMatchingScore(BuildingImport imp) {
+    public float computeImportMatchingScore(BuildingImport imp) {
         float result = 0f;
         if (imp.getArea() == null) {
             LOGGER.warn("Unable to compute score because import has NO area");

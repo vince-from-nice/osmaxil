@@ -1,32 +1,33 @@
 package org.openstreetmap.osmium;
 
 import org.apache.log4j.Logger;
-import org.openstreetmap.osmium.service.ImportService;
+import org.openstreetmap.osmium.service.ElementCache;
+import org.openstreetmap.osmium.service.ImportLoader;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Application {
     
     private ClassPathXmlApplicationContext applicationContext;
     
-    private ImportService enhancerService;
+    private ImportLoader importLoader;
     
-    static private final Logger LOGGER = Logger.getLogger(ImportService.class);
+    private ElementCache elementCache;
+    
+    static private final Logger LOGGER = Logger.getLogger(ImportLoader.class);
 
     public static void main(String[] args) {
-        LOGGER.info("Starting Osmium");
         Application app = new Application();
         app.run(args);
-        LOGGER.info("=== Osmium has finished its job ===");
-    }
-    
-    public Application() {
-        //this.applicationContext = new AnnotationConfigApplicationContext(Application.class);
-        this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
-        this.enhancerService = this.applicationContext.getBean(ImportService.class);
     }
     
     public void run(String[] args) {
-        this.enhancerService.importBuildings();
+        LOGGER.info("=== Starting Osmium ===");
+        this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
+        this.importLoader = this.applicationContext.getBean(ImportLoader.class);
+        this.elementCache = this.applicationContext.getBean(ElementCache.class);
+        this.importLoader.loadImports();
+        this.elementCache.processElements();
         this.applicationContext.close();
+        LOGGER.info("=== Osmium has finished its job ===");
     }
 }
