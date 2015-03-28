@@ -1,19 +1,16 @@
 package org.openstreetmap.osmium.service;
 
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
-import org.openstreetmap.osmium.OsmiumException;
+import org.openstreetmap.osmium.Exception;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
 import org.openstreetmap.osmium.data.RelevantElementId;
-import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,7 +45,7 @@ public class ImportLoader {
     
     @PreDestroy
     public void close() {
-        LOGGER.info("=== Closing Import Loader ===");
+        LOGGER.info("=== Closing import loader ===");
         LOGGER.info("Total of loaded imports: " + this.counterForLoadedImports);
         LOGGER.info("Total of matched imports: " + this.counterForMatchedImports);
     }
@@ -63,7 +60,7 @@ public class ImportLoader {
                 this.loadImport(imp);
                 LOGGER.info(LOG_SEPARATOR);
             }
-        } catch (Exception e) {
+        } catch (java.lang.Exception e) {
             LOGGER.error("Import has failed: ", e);
         }
     }
@@ -91,7 +88,7 @@ public class ImportLoader {
             AbstractElement element = null;
             try {
                 element = this.elementCache.getOrCreateElement(relevantElementId);
-            } catch (OsmiumException e) {
+            } catch (Exception e) {
                 LOGGER.error("Skipping element id=" + osmId + " (" + e.getMessage() + ")");
                 break;
             }

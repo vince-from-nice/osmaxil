@@ -1,10 +1,10 @@
 package org.openstreetmap.osmium;
 
-public class OsmiumException extends Exception {
+public class Exception extends java.lang.Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public OsmiumException(String s) {
+    public Exception(String s) {
         super(s);
     }
 
