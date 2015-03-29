@@ -4,7 +4,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;

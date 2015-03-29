@@ -1,21 +1,10 @@
 package org.openstreetmap.osmium.service;
 
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
-import org.openstreetmap.osmium.Exception;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
-import org.openstreetmap.osmium.data.RelevantElementId;
-import org.openstreetmap.osmium.data.api.OsmApiRoot;
-import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service

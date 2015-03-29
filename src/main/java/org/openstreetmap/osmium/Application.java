@@ -15,7 +15,7 @@ public class Application {
     
     private ElementMatcher elementMatcher;
     
-    private ElementUpdater elementUpdater;
+    //private ElementUpdater elementUpdater;
     
     private StatsGenerator statsGenerator;
     
@@ -31,12 +31,12 @@ public class Application {
         this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
         this.importLoader = this.applicationContext.getBean(ImportLoader.class);
         this.elementMatcher = this.applicationContext.getBean(ElementMatcher.class);
-        this.elementUpdater = this.applicationContext.getBean(ElementUpdater.class);
+        //this.elementUpdater = this.applicationContext.getBean(ElementUpdater.class);
         this.statsGenerator = this.applicationContext.getBean(StatsGenerator.class);
         this.importLoader.loadImports();
         this.elementMatcher.processElements();
         //this.elementUpdater.updateElements();
-        this.statsGenerator.displayStats();
+        this.statsGenerator.makeStats();
         this.applicationContext.close();
         LOGGER.info("=== Osmium has finished its job ===");
     }

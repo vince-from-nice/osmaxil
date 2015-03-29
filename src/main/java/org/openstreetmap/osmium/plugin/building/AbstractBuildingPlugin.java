@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElement, BuildingImport> {
-
+ 
     @Override
     public String getChangesetCommentl() {
         return "Updating building heights and levels";
@@ -66,9 +66,22 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
     
     @Override
+    public boolean isElementUpdatable(BuildingImport imp, BuildingElement element) {
+        boolean isUpdatable = false;
+        // Element is updatable only only if it doesn't have a value for height or level but import has one
+        if (element.getOriginalLevels() == null && imp.getLevels() != null) {
+            isUpdatable = true; 
+        }
+        if (element.getOriginalHeight() == null && imp.getHeight() != null) {
+            isUpdatable = true;
+        }
+        return isUpdatable;
+    }
+    
+    @Override
     public boolean updateElementData(BuildingImport imp, BuildingElement element) {
         boolean needToUpdate = false;
-        // Update tags only only if original value doesn't exist
+        // Update elements only only if it doesn't have a value for height or level but import has one
         if (element.getOriginalLevels() == null && imp.getLevels() != null) {
             LOGGER.info("===> Updating levels to " + imp.getLevels());
             // Adding +1 to levels because OSM use the US way to count building levels

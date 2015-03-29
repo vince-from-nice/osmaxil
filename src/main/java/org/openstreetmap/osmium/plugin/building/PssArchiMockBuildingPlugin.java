@@ -13,6 +13,8 @@ public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
     
     static List<BuildingImport> data;
     
+    private float minimumMatchingScore;
+    
     public PssArchiMockBuildingPlugin() {
         data = new ArrayList<BuildingImport>();
         BuildingImport b;
@@ -38,7 +40,12 @@ public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
     public String getChangesetSource() {
         return "PSS (http://www.pss-archi.eu)";
     }
-
+    
+    @Override
+    public float getMinMatchingScoreForUpdate() {
+        return this.minimumMatchingScore;
+    }
+    
     public boolean hasNext() {
         return counter < data.size();
     }

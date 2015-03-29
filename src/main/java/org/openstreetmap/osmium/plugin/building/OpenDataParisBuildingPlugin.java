@@ -25,6 +25,9 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
 
     boolean hasNext;
 
+    @Value("${plugins.openDataParis.minimumMatchingScore}")
+    private float minimumMatchingScore;
+    
     @Value("${plugins.openDataParis.filePath}")
     private String csvFilePath;
 
@@ -37,6 +40,11 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
         this.hasNext = true;
     }
 
+    @Override
+    public float getMinMatchingScoreForUpdate() {
+        return this.minimumMatchingScore;
+    }
+    
     @Override
     public String getChangesetSource() {
         return "ParisData (http://opendata.paris.fr)";
@@ -119,4 +127,5 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
         }
         return result;
     }
+
 }

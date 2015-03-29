@@ -1,18 +1,12 @@
 package org.openstreetmap.osmium.service;
 
-import java.util.Hashtable;
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
-import org.openstreetmap.osmium.Exception;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
-import org.openstreetmap.osmium.data.RelevantElementId;
-import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -76,6 +70,13 @@ public class ElementUpdater {
             return;
         }
         LOGGER.info("Processing element #" + this.counterForMatchedElements + ": " +  element);
+        // Check if its best matching score is enough
+        if (element.getBestMatchingImport().getMatchingScore() < this.plugin.getMinMatchingScoreForUpdate()) {
+            LOGGER.info("Element cannot be updated because its best matching score is "
+                    + element.getBestMatchingImport().getMatchingScore() + " (min="
+                    + this.plugin.getMinMatchingScoreForUpdate() + ")");
+            return;
+        }
         // Try to update the element data with the best matching element
         boolean needToUpdate = this.plugin.updateElementData(element.getBestMatchingImport(), element);
         // Update element only if needed
@@ -85,7 +86,7 @@ public class ElementUpdater {
             }
             LOGGER.debug("Ok element has been updated with import #" + element.getBestMatchingImport().getId());
         } else {
-            LOGGER.info("Element cannot be modified (original values exist)");
+            LOGGER.info("Element cannot be modified because original values exist");
         }
     }
 
