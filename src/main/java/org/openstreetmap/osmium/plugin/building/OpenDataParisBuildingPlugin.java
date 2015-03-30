@@ -79,12 +79,12 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
         }else {
             LOGGER.warn("Unable to parse latlon");
         }
-        if (row.length >= 19) {
+        if (row.length > 19) {
             result.setLevels(this.parseInt(row[19], "levels"));
         } else {
             LOGGER.warn("Unable to parse levels");
         }
-        if (row.length >= 6) {
+        if (row.length > 6) {
             result.setArea((int) this.parseFloat(row[6], "area"));
         } else {
             LOGGER.warn("Unable to parse area");

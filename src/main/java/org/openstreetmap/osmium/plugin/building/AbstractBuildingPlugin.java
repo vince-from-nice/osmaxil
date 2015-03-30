@@ -80,20 +80,23 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     
     @Override
     public boolean updateElementData(BuildingImport imp, BuildingElement element) {
-        boolean needToUpdate = false;
+        boolean updated = false;
         // Update elements only only if it doesn't have a value for height or level but import has one
         if (element.getOriginalLevels() == null && imp.getLevels() != null) {
             LOGGER.info("===> Updating levels to " + imp.getLevels());
             // Adding +1 to levels because OSM use the US way to count building levels
             element.setLevels(imp.getLevels() + 1);
-            needToUpdate = true;
+            updated = true;
         }
         if (element.getOriginalHeight() == null && imp.getHeight() != null) {
             LOGGER.info("===> Updating height to $building.height");
             element.setHeight(imp.getHeight());
-            needToUpdate = true;
+            updated = true;
         }
-        return needToUpdate;
+        if (updated) {
+            element.setUpdated(updated);
+        }
+        return updated;
     }
     
     @Override

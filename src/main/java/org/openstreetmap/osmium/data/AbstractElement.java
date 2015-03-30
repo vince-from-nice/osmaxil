@@ -24,6 +24,10 @@ public abstract class AbstractElement {
 
     abstract public boolean isUpdatable();
     
+    abstract public boolean isUpdated();
+    
+    abstract public void setUpdated(boolean updated);
+    
     public AbstractElement(long osmId) {
         this.osmId = osmId;
         this.matchingImports = new ArrayList<AbstractImport>();

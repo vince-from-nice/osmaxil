@@ -10,15 +10,30 @@ public class BuildingElement extends AbstractElement {
     
     private Integer originalLevels;
     
+    private boolean updated = false;
+    
     public BuildingElement(long osmId) {
         super(osmId);
+        this.originalHeight = null;
+        this.originalLevels = null;
+        this.updated = false;
     }
 
     @Override
     public boolean isUpdatable() {
         return this.getHeight() == null || this.getLevels() == null;
     }
-
+    
+    @Override
+    public boolean isUpdated() {
+        return this.updated;
+    }
+    
+    @Override
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
+    }
+    
     @Override
     public String toString() {
         return "OSM building has id=[" + this.getOsmId() + "], levels=[" + this.getLevels() + "], height=["
