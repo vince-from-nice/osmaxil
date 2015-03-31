@@ -1,7 +1,9 @@
 package org.openstreetmap.osmium.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.openstreetmap.osmium.data.api.OsmApiTag;
@@ -11,12 +13,18 @@ public abstract class AbstractElement {
     private long osmId;
     
     private long relationId;
-
+    
     private OsmApiRoot apiData;
 
     private List<AbstractImport> matchingImports;
 
     private AbstractImport bestMatchingImport;
+    
+    private Map<String, Map<String, List<AbstractImport>>> importsByTagValueByTagNames;
+    
+    private Map<String, Map<String, Float>> totalScoresByTagValueByTagNames;
+    
+    abstract public List<String> getUpdatableTagNames();
 
     abstract public List<OsmApiTag> getTags();
     
@@ -31,6 +39,8 @@ public abstract class AbstractElement {
     public AbstractElement(long osmId) {
         this.osmId = osmId;
         this.matchingImports = new ArrayList<AbstractImport>();
+        this.importsByTagValueByTagNames = new HashMap<String, Map<String,List<AbstractImport>>>();
+        this.totalScoresByTagValueByTagNames = new HashMap<String, Map<String,Float>>();
     }
 
     @Override
@@ -38,8 +48,8 @@ public abstract class AbstractElement {
         return "OSM building has id=[" + this.getOsmId() + "]";
     }
     
-    public Object getTagValue(String key) {
-        Object value = null;
+    public String getTagValue(String key) {
+        String value = null;
         for (OsmApiTag tag : getTags()) {
             if (tag.k.equals(key)) {
                 value = tag.v;
@@ -61,6 +71,26 @@ public abstract class AbstractElement {
         this.getTags().add(tag);
         return false;
     }
+
+    public Map<String, List<AbstractImport>> getMatchingImportsByTagValueByTagName(String tagName) {
+        Map<String, List<AbstractImport>> result = this.importsByTagValueByTagNames.get(tagName);
+        if (result == null) {
+            result = new HashMap<String, List<AbstractImport>>();
+            this.importsByTagValueByTagNames.put(tagName, result);
+        }
+        return result;
+    }
+    
+    public Map<String, Float> getTotalScoresByTagValueByTagName(String tagName) {
+        Map<String, Float> result = this.totalScoresByTagValueByTagNames.get(tagName);
+        if (result == null) {
+            result = new HashMap<String, Float>();
+            this.totalScoresByTagValueByTagNames.put(tagName, result);
+        }
+        return result;
+    }
+    
+    // Getters & Setters
 
     public long getOsmId() {
         return osmId;

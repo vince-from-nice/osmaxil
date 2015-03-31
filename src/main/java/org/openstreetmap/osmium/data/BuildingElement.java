@@ -1,11 +1,14 @@
 package org.openstreetmap.osmium.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openstreetmap.osmium.data.api.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
 
+    List<String> updatableTagNames;
+    
     private Float originalHeight;
     
     private Integer originalLevels;
@@ -14,14 +17,30 @@ public class BuildingElement extends AbstractElement {
     
     public BuildingElement(long osmId) {
         super(osmId);
+        this.updatableTagNames = new ArrayList<String>();
+        //updatableTagNames.add("height");
+        updatableTagNames.add("building:levels");
         this.originalHeight = null;
         this.originalLevels = null;
         this.updated = false;
     }
+    
+    // Overrided methods
+    
+    @Override
+    public List<String> getUpdatableTagNames() {
+        return updatableTagNames;
+    }
 
     @Override
     public boolean isUpdatable() {
-        return this.getHeight() == null || this.getLevels() == null;
+        //return this.getHeight() == null || this.getLevels() == null;
+        for (String updatableTagName : this.updatableTagNames) {
+            if (this.getTagValue(updatableTagName) != null) {
+                return false;
+            }
+        }
+        return true;
     }
     
     @Override
@@ -49,6 +68,8 @@ public class BuildingElement extends AbstractElement {
     public List<OsmApiTag> getTags() {
         return this.getApiData().ways.get(0).tags;
     }
+    
+    // Convenient methods
 
     public Float getHeight() {
         String s = (String) this.getTagValue("height");

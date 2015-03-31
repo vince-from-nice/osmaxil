@@ -32,17 +32,17 @@ public class StatsGenerator {
 
     static private final Logger LOGGER = Logger.getLogger(Application.class);
 
-    public void makeStats() {
+    public void generateStats() {
         LOGGER.info("=== Statistics ===");
-        this.generateStats();
+        this.buildStats();
         displayStats();
     }
 
     private void displayStats() {
-        LOGGER.info("Number of matched elements: " + this.elementCache.getElements().size());
-        LOGGER.info("Number of updatable elements: " + this.updatableElementsNbr);
+        LOGGER.info("Number of matched elements: " + this.matchedElementsNbr);
         LOGGER.info("Number of updated elements: " + this.updatedElementsNbr);
-        LOGGER.info("Repartition by best matching scores:");
+        LOGGER.info("Number of updatable elements: " + this.updatableElementsNbr);
+        LOGGER.info("Repartition by best matching scores :");
         for (int i = 0; i < 10; i++) {
             LOGGER.info("- between " + i * 10 + "% and " + (i + 1) * 10 + "% : " + this.matchedElementsNbrByScore[i]
                     + " (" + 100 * this.matchedElementsNbrByScore[i] / this.elementCache.getElements().size()
@@ -51,12 +51,11 @@ public class StatsGenerator {
         }
     }
 
-    private void generateStats() {
+    private void buildStats() {
         this.matchedElementsNbrByScore = new int[10];
         this.updatedElementsNbrByScore = new int[10];
         this.updatableElementsNbrByScore = new int[10];
         for (AbstractElement element : this.elementCache.getElements().values()) {
-            boolean ranged = false;
             for (int i = 0; i < 10; i++) {
                 if (element.getBestMatchingImport().getMatchingScore() <= (i + 1) * 0.1) {
                     this.matchedElementsNbr++;
@@ -69,6 +68,7 @@ public class StatsGenerator {
                         this.updatableElementsNbr++;
                         this.updatableElementsNbrByScore[i]++;
                     }
+                    break;
                 }
             }
         }

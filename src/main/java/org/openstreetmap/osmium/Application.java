@@ -1,7 +1,7 @@
 package org.openstreetmap.osmium;
 
 import org.apache.log4j.Logger;
-import org.openstreetmap.osmium.service.ElementMatcher;
+import org.openstreetmap.osmium.service.ElementProcessor;
 import org.openstreetmap.osmium.service.ElementUpdater;
 import org.openstreetmap.osmium.service.ImportLoader;
 import org.openstreetmap.osmium.service.StatsGenerator;
@@ -13,7 +13,7 @@ public class Application {
     
     private ImportLoader importLoader;
     
-    private ElementMatcher elementMatcher;
+    private ElementProcessor elementProcessor;
     
     //private ElementUpdater elementUpdater;
     
@@ -30,13 +30,13 @@ public class Application {
         LOGGER.info("=== Starting Osmium ===");
         this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
         this.importLoader = this.applicationContext.getBean(ImportLoader.class);
-        this.elementMatcher = this.applicationContext.getBean(ElementMatcher.class);
+        this.elementProcessor = this.applicationContext.getBean(ElementProcessor.class);
         //this.elementUpdater = this.applicationContext.getBean(ElementUpdater.class);
         this.statsGenerator = this.applicationContext.getBean(StatsGenerator.class);
         this.importLoader.loadImports();
-        this.elementMatcher.processElements();
+        this.elementProcessor.processElements();
         //this.elementUpdater.updateElements();
-        this.statsGenerator.makeStats();
+        this.statsGenerator.generateStats();
         this.applicationContext.close();
         LOGGER.info("=== Osmium has finished its job ===");
     }

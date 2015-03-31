@@ -60,7 +60,7 @@ public class ElementUpdater {
                 LOGGER.info(LOG_SEPARATOR);
             }
         } catch (java.lang.Exception e) {
-            LOGGER.error("Import has failed: ", e);
+            LOGGER.error("Element update has failed: ", e);
         }
     }
     
