@@ -1,14 +1,12 @@
-package org.openstreetmap.osmium.data;
+package org.openstreetmap.osmium.data.building;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.api.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
 
-    List<String> updatableTagNames;
-    
     private Float originalHeight;
     
     private Integer originalLevels;
@@ -17,31 +15,12 @@ public class BuildingElement extends AbstractElement {
     
     public BuildingElement(long osmId) {
         super(osmId);
-        this.updatableTagNames = new ArrayList<String>();
-        //updatableTagNames.add("height");
-        updatableTagNames.add("building:levels");
         this.originalHeight = null;
         this.originalLevels = null;
         this.updated = false;
     }
     
     // Overrided methods
-    
-    @Override
-    public List<String> getUpdatableTagNames() {
-        return updatableTagNames;
-    }
-
-    @Override
-    public boolean isUpdatable() {
-        //return this.getHeight() == null || this.getLevels() == null;
-        for (String updatableTagName : this.updatableTagNames) {
-            if (this.getTagValue(updatableTagName) != null) {
-                return false;
-            }
-        }
-        return true;
-    }
     
     @Override
     public boolean isUpdated() {
@@ -54,12 +33,6 @@ public class BuildingElement extends AbstractElement {
     }
     
     @Override
-    public String toString() {
-        return "OSM building has id=[" + this.getOsmId() + "], levels=[" + this.getLevels() + "], height=["
-                + this.getHeight() + "], name=[" + this.getName() + "], part=[" + this.isPart() + "]";
-    }
-    
-    @Override
     public void updateChangeset(long changesetId) {
         this.getApiData().ways.get(0).changeset = changesetId;
     }
@@ -67,6 +40,23 @@ public class BuildingElement extends AbstractElement {
     @Override
     public List<OsmApiTag> getTags() {
         return this.getApiData().ways.get(0).tags;
+    }
+
+//    @Override
+//    public boolean isVirgin(List<String> updatableTagNames) {
+//        //return this.getHeight() == null || this.getLevels() == null;
+//        for (String updatableTagName : updatableTagNames) {
+//            if (this.getTagValue(updatableTagName) != null) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+
+    @Override
+    public String toString() {
+        return "OSM building has id=[" + this.getOsmId() + "], levels=[" + this.getLevels() + "], height=["
+                + this.getHeight() + "], name=[" + this.getName() + "], part=[" + this.isPart() + "]";
     }
     
     // Convenient methods

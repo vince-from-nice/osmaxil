@@ -10,7 +10,7 @@ import org.openstreetmap.osmium.Application;
 import org.openstreetmap.osmium.Exception;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
-import org.openstreetmap.osmium.data.RelevantElementId;
+import org.openstreetmap.osmium.data.MatchingElementId;
 import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class ElementCache {
         this.osmApiService.init(this.plugin);
     }
     
-    public AbstractElement getOrCreateElement(RelevantElementId relevantElementId) throws Exception {
+    public AbstractElement getOrCreateElement(MatchingElementId relevantElementId) throws Exception {
         long osmId  = relevantElementId.getOsmId();
         AbstractElement element = this.elements.get(osmId);
         if (element == null) {

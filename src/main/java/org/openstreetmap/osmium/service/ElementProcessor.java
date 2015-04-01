@@ -1,6 +1,7 @@
 package org.openstreetmap.osmium.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,6 @@ public class ElementProcessor {
     
     @PostConstruct
     public void init() {
-        //TODO Autowire specialized plugin
         this.plugin = this.pluginAutowiredBySpring;
         this.osmApiService.init(this.plugin);
     }
@@ -64,26 +64,27 @@ public class ElementProcessor {
             return;
         }
         LOGGER.info("Processing element #" + this.counter + ": " +  element);
-        // Basic processing
+        // Old matching method
         this.findBestMatchingImport(element);
-        // Better processing 
+        // New matching method
         this.dispatchMatchingImportsByTagValues(element);
-        this.computeMatchingScoresByTagValues(element);
+        this.computeTotalScoresByTagValues(element);
     }
     
     /**
-     * For each "updatable" tag of the element, dispatch matching imports by their tag value.
+     * For each "updatable" tag of the plugin, dispatch matching imports of the element by their tag value.
      * 
      * @param element
      */
     private void dispatchMatchingImportsByTagValues(AbstractElement element) {
         // For each updatable tag names..
-        for (String updatableTagName : element.getUpdatableTagNames()) {
+        for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
             Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValueByTagName(updatableTagName);
             // For each matching import..
             for (AbstractImport imp : element.getMatchingImports()) {
                 // Dispatch it by its tag value
-                String updatableTagValue = element.getTagValue(updatableTagName);
+                String updatableTagValue = imp.getTagValue(updatableTagName);
+                //String updatableTagValue = element.getTagValue(updatableTagName);
                 if (map.get(updatableTagValue) == null) {
                     map.put(updatableTagValue, new ArrayList<AbstractImport>());
                 }
@@ -93,13 +94,14 @@ public class ElementProcessor {
     }
     
     /**
-     * For each "updatable" tag of the element, compute matching scores for each tag value.
+     * For each "updatable" tag of the plugin, compute matching scores for each tag value.
+     * At the end the element stores accumulated scores of imports which have been aggregated by their tag value.
      * 
      * @param element
      */
-    private void computeMatchingScoresByTagValues(AbstractElement element) {
+    private void computeTotalScoresByTagValues(AbstractElement element) {
         // For each updatable tag names..
-        for (String updatableTagName : element.getUpdatableTagNames()) {
+        for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
             LOGGER.info("Computing total scores by values for the tag " + updatableTagName);
             Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValueByTagName(updatableTagName);
             // For each updatable tag value..
@@ -107,12 +109,16 @@ public class ElementProcessor {
                 // Compute matching score
                 Float score = new Float(0);
                 StringBuilder sb = new StringBuilder();
-                for(AbstractImport imp : map.get(updatableTagValue)) {
+                for (Iterator<AbstractImport> iterator = map.get(updatableTagValue).iterator(); iterator.hasNext();) {
+                    AbstractImport imp = (AbstractImport) iterator.next();
                     score += imp.getMatchingScore();
-                    sb.append("id=" + imp.getId() + " score=" + imp.getMatchingScore() + " ");
+                    sb.append("" + imp.getMatchingScore() + "(id=" + imp.getId() + ")");
+                    if (iterator.hasNext()) {
+                        sb.append(" + ");
+                    }
                 }
                 element.getTotalScoresByTagValueByTagName(updatableTagName).put(updatableTagValue, score);
-                LOGGER.info(" - for value=" + updatableTagValue + " total score is " + score + " (" + sb.toString() + ")");
+                LOGGER.info(" - for value=" + updatableTagValue + " total score is " + score + " = " + sb.toString());
             }
         }
     }

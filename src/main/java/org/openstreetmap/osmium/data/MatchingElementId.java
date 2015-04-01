@@ -1,6 +1,6 @@
 package org.openstreetmap.osmium.data;
 
-public class RelevantElementId {
+public class MatchingElementId {
     
     private long osmId;
     

@@ -1,23 +1,40 @@
-package org.openstreetmap.osmium.data;
+package org.openstreetmap.osmium.data.building;
+
+import org.openstreetmap.osmium.data.AbstractImport;
+import org.openstreetmap.osmium.data.ElementTagNames;
 
 public class BuildingImport extends AbstractImport {
 
-    Double lat;
+    protected Double lat;
 
-    Double lon;
+    protected Double lon;
 
-    Integer levels;
+    protected Integer levels;
 
-    Float height;
+    protected Float height;
 
-    Integer area;
+    protected Integer area;
 
     // TODO
-    String geometry;
+    protected String geometry;
+    
+    @Override
+    public String getTagValue(String tagName) {
+        if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
+            if (this.levels != null){
+                return this.levels.toString();
+            }
+        } else if (ElementTagNames.HEIGHT.equals(tagName)) {
+            if (this.height != null) {
+                return this.height.toString();
+            }
+        }
+        return null;
+    }
 
     @Override
     public String toString() {
-        return "Building with id=[" + this.id + "] and name=[" + this.name + "], lat=[" + this.lat + "], lon=["
+        return "Building import with id=[" + this.id + "] and name=[" + this.name + "], lat=[" + this.lat + "], lon=["
                 + this.lon + "], levels=[" + this.levels + "], height=[" + this.height + "], area=[" + this.area + "]";
     }
 

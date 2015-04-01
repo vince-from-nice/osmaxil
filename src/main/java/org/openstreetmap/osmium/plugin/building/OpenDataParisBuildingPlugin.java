@@ -5,10 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.openstreetmap.osmium.data.BuildingImport;
+import org.openstreetmap.osmium.data.building.BuildingImport;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -34,12 +36,14 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
     @PostConstruct
     public void init() throws FileNotFoundException {
         LOGGER.info("Init of OpenDataParisCsvFileLoader");
-        this.reader = new CSVReader(new BufferedReader(new InputStreamReader(new FileInputStream(this.csvFilePath))),
-                (char) ';', (char) '\'', 1);
+        //updatableTagNames.add("height");
+        updatableTagNames.add("building:levels");
+        InputStreamReader isr = new InputStreamReader(new FileInputStream(this.csvFilePath));
+        this.reader = new CSVReader(new BufferedReader(isr), (char) ';', (char) '\'', 1);
         // this.rows = reader.readAll();
         this.hasNext = true;
     }
-
+    
     @Override
     public float getMinMatchingScoreForUpdate() {
         return this.minimumMatchingScore;

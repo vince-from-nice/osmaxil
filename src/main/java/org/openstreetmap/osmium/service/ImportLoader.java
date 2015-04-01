@@ -10,7 +10,7 @@ import org.openstreetmap.osmium.Application;
 import org.openstreetmap.osmium.Exception;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
-import org.openstreetmap.osmium.data.RelevantElementId;
+import org.openstreetmap.osmium.data.MatchingElementId;
 import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -72,12 +72,12 @@ public class ImportLoader {
         }
         LOGGER.info("Loading import #" + this.counterForLoadedImports + ": " +  imp);
         // Find relevant element
-        List<RelevantElementId> relevantElementIds = this.plugin.findRelevantElements(imp);
+        List<MatchingElementId> relevantElementIds = this.plugin.findRelevantElements(imp);
         if (relevantElementIds.size() > 0) {
             this.counterForMatchedImports++;
         }
         // For each matching elements
-        for (RelevantElementId relevantElementId : relevantElementIds) {
+        for (MatchingElementId relevantElementId : relevantElementIds) {
             long osmId = relevantElementId.getOsmId();
             long relationId = relevantElementId.getRelationId();
             // Skip negative IDs (ie. multipolygon relations whose outer member has not been found)

@@ -2,13 +2,15 @@ package org.openstreetmap.osmium.data;
 
 public abstract class AbstractImport {
 
-    long id;
+    protected long id;
     
-    String name;
+    protected String name;
     
-    AbstractElement element;
+    protected AbstractElement element;
     
-    float matchingScore;
+    protected float matchingScore;
+    
+    abstract public String getTagValue(String tagName);
     
     @Override
     public String toString() {

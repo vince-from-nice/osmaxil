@@ -3,7 +3,9 @@ package org.openstreetmap.osmium.plugin.building;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmium.data.BuildingImport;
+import javax.annotation.PostConstruct;
+
+import org.openstreetmap.osmium.data.building.BuildingImport;
 import org.springframework.stereotype.Component;
 
 @Component ("PssArchiMockPlugin")
@@ -15,7 +17,12 @@ public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
     
     private float minimumMatchingScore;
     
-    public PssArchiMockBuildingPlugin() {
+    @PostConstruct
+    public void init() {
+        
+        updatableTagNames.add("height");
+        updatableTagNames.add("building:levels");
+        
         data = new ArrayList<BuildingImport>();
         BuildingImport b;
         

@@ -24,17 +24,15 @@ public abstract class AbstractElement {
     
     private Map<String, Map<String, Float>> totalScoresByTagValueByTagNames;
     
-    abstract public List<String> getUpdatableTagNames();
-
     abstract public List<OsmApiTag> getTags();
-    
-    abstract public void updateChangeset(long changesetId);
-
-    abstract public boolean isUpdatable();
     
     abstract public boolean isUpdated();
     
     abstract public void setUpdated(boolean updated);
+
+    abstract public void updateChangeset(long changesetId);
+    
+    //abstract public boolean isVirgin(List<String> updatableTagNames);
     
     public AbstractElement(long osmId) {
         this.osmId = osmId;
@@ -86,6 +84,16 @@ public abstract class AbstractElement {
         if (result == null) {
             result = new HashMap<String, Float>();
             this.totalScoresByTagValueByTagNames.put(tagName, result);
+        }
+        return result;
+    }
+    
+    public Float getBestTotalScoreByTagName(String tagName) {
+        Float result = null;
+        for (Float totalScore : this.getTotalScoresByTagValueByTagName(tagName).values()) {
+            if (result == null || result < totalScore) {
+                result = totalScore;
+            }
         }
         return result;
     }

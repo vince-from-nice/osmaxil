@@ -3,10 +3,10 @@ package org.openstreetmap.osmium.plugin.building;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmium.data.BuildingElement;
-import org.openstreetmap.osmium.data.BuildingImport;
-import org.openstreetmap.osmium.data.RelevantElementId;
+import org.openstreetmap.osmium.data.MatchingElementId;
 import org.openstreetmap.osmium.data.api.OsmApiRoot;
+import org.openstreetmap.osmium.data.building.BuildingElement;
+import org.openstreetmap.osmium.data.building.BuildingImport;
 import org.openstreetmap.osmium.plugin.AbstractPlugin;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +30,8 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
 
     @Override
-    public List<RelevantElementId> findRelevantElements(BuildingImport imp) {
-        List<RelevantElementId> result = new ArrayList<RelevantElementId>();
+    public List<MatchingElementId> findRelevantElements(BuildingImport imp) {
+        List<MatchingElementId> result = new ArrayList<MatchingElementId>();
         Long[] ids = new Long[0];
         // Find in PostGIS all buildings matching (ie. containing) the coordinates of the import
         BuildingImport building = (BuildingImport) imp;
@@ -46,7 +46,7 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
         // Parsing the IDs to check if they refers to normal elements (ie. ways) or relations
         StringBuffer sb = new StringBuffer("OSM IDs of matching buildings : [ ");
         for (int i = 0; i < ids.length; i++) {
-            RelevantElementId relevantElement = new RelevantElementId();
+            MatchingElementId relevantElement = new MatchingElementId();
             // If ID is positive it means it's a normal element (ie. a way)
             if (ids[i] > 0) {
                 relevantElement.setOsmId(ids[i]);

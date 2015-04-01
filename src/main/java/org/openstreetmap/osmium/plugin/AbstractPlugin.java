@@ -1,5 +1,6 @@
 package org.openstreetmap.osmium.plugin;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.openstreetmap.osmium.Application;
 import org.openstreetmap.osmium.data.AbstractElement;
 import org.openstreetmap.osmium.data.AbstractImport;
-import org.openstreetmap.osmium.data.RelevantElementId;
+import org.openstreetmap.osmium.data.MatchingElementId;
 import org.openstreetmap.osmium.data.api.OsmApiRoot;
 import org.openstreetmap.osmium.service.OsmApiService;
 import org.openstreetmap.osmium.service.OsmPostgisService;
@@ -24,11 +25,17 @@ public abstract class AbstractPlugin<Element extends AbstractElement, Import ext
     @Autowired
     protected OsmApiService osmApiService;
     
+    protected List<String> updatableTagNames = new ArrayList<String>();
+    
+    public List<String> getUpdatableTagNames() {
+        return updatableTagNames;
+    }
+    
     abstract public String getChangesetSource();
     
     abstract public String getChangesetCommentl();
 
-    abstract public List<RelevantElementId> findRelevantElements(Import imp);
+    abstract public List<MatchingElementId> findRelevantElements(Import imp);
 
     abstract public Element createElement(long osmId, long relationId, OsmApiRoot data);
 
