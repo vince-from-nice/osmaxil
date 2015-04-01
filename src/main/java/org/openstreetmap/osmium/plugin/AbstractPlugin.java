@@ -35,7 +35,7 @@ public abstract class AbstractPlugin<Element extends AbstractElement, Import ext
     
     abstract public String getChangesetCommentl();
 
-    abstract public List<MatchingElementId> findRelevantElements(Import imp);
+    abstract public List<MatchingElementId> findMatchingElements(Import imp);
 
     abstract public Element createElement(long osmId, long relationId, OsmApiRoot data);
 

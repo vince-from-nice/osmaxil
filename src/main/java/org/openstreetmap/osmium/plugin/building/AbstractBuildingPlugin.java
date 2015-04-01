@@ -30,7 +30,7 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
 
     @Override
-    public List<MatchingElementId> findRelevantElements(BuildingImport imp) {
+    public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
         List<MatchingElementId> result = new ArrayList<MatchingElementId>();
         Long[] ids = new Long[0];
         // Find in PostGIS all buildings matching (ie. containing) the coordinates of the import

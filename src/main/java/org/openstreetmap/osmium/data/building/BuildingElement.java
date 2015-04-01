@@ -3,6 +3,7 @@ package org.openstreetmap.osmium.data.building;
 import java.util.List;
 
 import org.openstreetmap.osmium.data.AbstractElement;
+import org.openstreetmap.osmium.data.ElementTagNames;
 import org.openstreetmap.osmium.data.api.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
@@ -62,29 +63,29 @@ public class BuildingElement extends AbstractElement {
     // Convenient methods
 
     public Float getHeight() {
-        String s = (String) this.getTagValue("height");
+        String s = (String) this.getTagValue(ElementTagNames.HEIGHT);
         return (s != null ? Float.parseFloat(s) : null);
     }
 
     public boolean setHeight(Float value) {
-        return this.setTagValue("height", value.toString());
+        return this.setTagValue(ElementTagNames.HEIGHT, value.toString());
     }
 
     public Integer getLevels() {
-        String s = (String) this.getTagValue("building:levels");
+        String s = (String) this.getTagValue(ElementTagNames.BUILDING_LEVELS);
         return (s != null ? Integer.parseInt(s) : null);
     }
 
     public boolean setLevels(Integer value) {
-        return this.setTagValue("building:levels", value.toString());
+        return this.setTagValue(ElementTagNames.BUILDING_LEVELS, value.toString());
     }
 
     public String getName() {
-        return (String) this.getTagValue("name");
+        return (String) this.getTagValue(ElementTagNames.NAME);
     }
 
     public boolean isPart() {
-        return "yes".equals(this.getTagValue("building:part"));
+        return "yes".equals(this.getTagValue(ElementTagNames.BUILDING_PART));
     }
 
     public Float getOriginalHeight() {

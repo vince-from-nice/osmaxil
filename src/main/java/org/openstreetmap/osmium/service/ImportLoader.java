@@ -72,7 +72,7 @@ public class ImportLoader {
         }
         LOGGER.info("Loading import #" + this.counterForLoadedImports + ": " +  imp);
         // Find relevant element
-        List<MatchingElementId> relevantElementIds = this.plugin.findRelevantElements(imp);
+        List<MatchingElementId> relevantElementIds = this.plugin.findMatchingElements(imp);
         if (relevantElementIds.size() > 0) {
             this.counterForMatchedImports++;
         }

@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.openstreetmap.osmium.data.ElementTagNames;
 import org.openstreetmap.osmium.data.building.BuildingImport;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,8 +37,8 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
     @PostConstruct
     public void init() throws FileNotFoundException {
         LOGGER.info("Init of OpenDataParisCsvFileLoader");
-        //updatableTagNames.add("height");
-        updatableTagNames.add("building:levels");
+        //updatableTagNames.add(ElementTagNames.HEIGHT);
+        updatableTagNames.add(ElementTagNames.BUILDING_LEVELS);
         InputStreamReader isr = new InputStreamReader(new FileInputStream(this.csvFilePath));
         this.reader = new CSVReader(new BufferedReader(isr), (char) ';', (char) '\'', 1);
         // this.rows = reader.readAll();

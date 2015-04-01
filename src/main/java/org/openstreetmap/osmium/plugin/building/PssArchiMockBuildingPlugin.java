@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.openstreetmap.osmium.data.ElementTagNames;
 import org.openstreetmap.osmium.data.building.BuildingImport;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,8 @@ public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
     @PostConstruct
     public void init() {
         
-        updatableTagNames.add("height");
-        updatableTagNames.add("building:levels");
+        updatableTagNames.add(ElementTagNames.HEIGHT);
+        updatableTagNames.add(ElementTagNames.BUILDING_LEVELS);
         
         data = new ArrayList<BuildingImport>();
         BuildingImport b;
