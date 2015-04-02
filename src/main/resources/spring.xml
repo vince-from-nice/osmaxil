@@ -19,9 +19,9 @@
     
 	<aop:config proxy-target-class="true" />
 	<context:annotation-config />
-	<context:component-scan base-package="org.openstreetmap.osmium" scoped-proxy="targetClass" />
+	<context:component-scan base-package="org.openstreetmap.osmaxil" scoped-proxy="targetClass" />
 
-    <context:property-placeholder location="classpath:osmium.properties, classpath:password.properties" />
+    <context:property-placeholder location="classpath:settings.properties, classpath:password.properties" />
 
     <!-- ******************************************************************************** -->
 	<!-- Configuration the PostGIS service -->
@@ -43,7 +43,7 @@
 	<!-- ******************************************************************************** -->
 
    	<oxm:jaxb2-marshaller id="marshaller">
-		<oxm:class-to-be-bound name="org.openstreetmap.osmium.data.api.OsmApiRoot" />
+		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.data.api.OsmApiRoot" />
 	</oxm:jaxb2-marshaller>
 
 	<bean id="marshallingHttpMessageConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
@@ -52,7 +52,7 @@
 	</bean>
 
 	<!--bean id="restTemplate" class="org.springframework.web.client.RestTemplate" -->
-	<bean id="restTemplate" class="org.openstreetmap.osmium.util.AuthentifiedRestClient">
+	<bean id="restTemplate" class="org.openstreetmap.osmaxil.util.AuthentifiedRestClient">
 		<property name="messageConverters">
 			<list>
 				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />

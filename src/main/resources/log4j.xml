@@ -9,14 +9,14 @@
 	</appender>
 
     <appender name="file" class="org.apache.log4j.FileAppender">
-		<param name="File" value="log/osmium-last-run-log.txt" />
+		<param name="File" value="log/osmaxil-last-run-log.txt" />
 		<param name="Append" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %5p %m%n" />
 		</layout>
 	</appender>
 
-	<logger name="org.openstreetmap.osmium" additivity="false">
+	<logger name="org.openstreetmap.osmaxil" additivity="false">
 		<level value="info" />
         <appender-ref ref="stdout" />
         <appender-ref ref="file" />

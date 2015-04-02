@@ -1,0 +1,93 @@
+package org.openstreetmap.osmaxil.service;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.apache.log4j.Logger;
+import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.data.AbstractElement;
+import org.openstreetmap.osmaxil.data.AbstractImport;
+import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ElementUpdater {
+    
+    private long counterForMatchedElements;
+    
+    private long counterForUpdatedElements;
+
+    @Autowired
+    private ElementCache elementCache;
+    
+    @Autowired
+    @Qualifier (value="OpenDataParisCsvPlugin")
+    private AbstractPlugin pluginAutowiredBySpring;
+ 
+    //@Autowired (value="OpenDataParisCsvPlugin")
+    private AbstractPlugin<AbstractElement, AbstractImport> plugin;
+
+    @Autowired
+    private OsmApiService osmApiService;
+
+    static private final Logger LOGGER = Logger.getLogger(Application.class);
+
+    static private final String LOG_SEPARATOR = "==========================================================";
+
+    @PostConstruct
+    public void init() {
+        //TODO Autowire specialized plugin
+        this.plugin = this.pluginAutowiredBySpring;
+        this.osmApiService.init(this.plugin);
+    }
+    
+    @PreDestroy
+    public void close() {
+        LOGGER.info("=== Closing element updater ===");
+        LOGGER.info("Total of matched elements: " + this.counterForMatchedElements);
+        LOGGER.info("Total of updated elements: " + this.counterForUpdatedElements);
+    }
+    
+    public void updateElements() {
+        LOGGER.info("=== Updating elements ===");
+        LOGGER.info(LOG_SEPARATOR);
+        try {
+            for (AbstractElement element : this.elementCache.getElements().values()) {
+                this.counterForMatchedElements++;
+                updateElement(element);
+                LOGGER.info(LOG_SEPARATOR);
+            }
+        } catch (java.lang.Exception e) {
+            LOGGER.error("Element update has failed: ", e);
+        }
+    }
+    
+    private void updateElement(AbstractElement element) {
+        if (element == null) {
+            LOGGER.warn("Element is null, skipping it...");
+            return;
+        }
+        LOGGER.info("Processing element #" + this.counterForMatchedElements + ": " +  element);
+        // Check if its best matching score is enough
+        if (element.getBestMatchingImport().getMatchingScore() < this.plugin.getMinMatchingScoreForUpdate()) {
+            LOGGER.info("Element cannot be updated because its best matching score is "
+                    + element.getBestMatchingImport().getMatchingScore() + " (min="
+                    + this.plugin.getMinMatchingScoreForUpdate() + ")");
+            return;
+        }
+        // Try to update the element data with the best matching element
+        boolean needToUpdate = this.plugin.updateElementData(element.getBestMatchingImport(), element);
+        // Update element only if needed
+        if (needToUpdate) {
+            if (this.osmApiService.writeElement(element)) {
+                this.counterForUpdatedElements++;
+            }
+            LOGGER.debug("Ok element has been updated with import #" + element.getBestMatchingImport().getId());
+        } else {
+            LOGGER.info("Element cannot be modified because original values exist");
+        }
+    }
+
+}
