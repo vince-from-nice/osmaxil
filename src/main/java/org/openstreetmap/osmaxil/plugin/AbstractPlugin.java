@@ -1,6 +1,5 @@
 package org.openstreetmap.osmaxil.plugin;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,15 +24,15 @@ public abstract class AbstractPlugin<Element extends AbstractElement, Import ext
     @Autowired
     protected OsmApiService osmApiService;
     
-    protected List<String> updatableTagNames = new ArrayList<String>();
+    static protected final Logger LOGGER = Logger.getLogger(Application.class);
     
-    public List<String> getUpdatableTagNames() {
-        return updatableTagNames;
-    }
+    abstract public String[] getUpdatableTagNames();
     
-    abstract public String getChangesetSource();
+    abstract public float getMinMatchingScoreForUpdate();
     
-    abstract public String getChangesetCommentl();
+    abstract public String getChangesetSourceLabel();
+    
+    abstract public String getChangesetComment();
 
     abstract public List<MatchingElementId> findMatchingElements(Import imp);
 
@@ -45,8 +44,4 @@ public abstract class AbstractPlugin<Element extends AbstractElement, Import ext
 
     abstract public float computeImportMatchingScore(Import imp);
     
-    abstract public float getMinMatchingScoreForUpdate();
-    
-    static protected final Logger LOGGER = Logger.getLogger(Application.class);
-
 }

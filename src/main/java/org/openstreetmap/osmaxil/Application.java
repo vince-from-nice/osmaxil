@@ -2,7 +2,6 @@ package org.openstreetmap.osmaxil;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.service.ElementProcessor;
-import org.openstreetmap.osmaxil.service.ElementUpdater;
 import org.openstreetmap.osmaxil.service.ImportLoader;
 import org.openstreetmap.osmaxil.service.StatsGenerator;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

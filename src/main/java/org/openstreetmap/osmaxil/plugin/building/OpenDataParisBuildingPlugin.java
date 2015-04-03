@@ -5,13 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.data.ElementTagNames;
 import org.openstreetmap.osmaxil.data.building.BuildingImport;
+import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,14 +21,21 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
 
     private CSVReader reader;
 
-    // List<String[]> rows;
-
     long rowCount;
 
     boolean hasNext;
 
-    @Value("${plugins.openDataParis.minimumMatchingScore}")
-    private float minimumMatchingScore;
+    @Value("${plugins.openDataParis.updatableTagNames}")
+    private String updatableTagNames;
+    
+    @Value("${plugins.openDataParis.changesetSourceLabel}")
+    private String changesetSourceLabel;
+    
+    @Value("${plugins.openDataParis.changesetComment}")
+    private String changesetComment;
+    
+    @Value("${plugins.openDataParis.minMatchingScore}")
+    private float minMatchingScore;
     
     @Value("${plugins.openDataParis.filePath}")
     private String csvFilePath;
@@ -37,8 +43,6 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
     @PostConstruct
     public void init() throws FileNotFoundException {
         LOGGER.info("Init of OpenDataParisCsvFileLoader");
-        //updatableTagNames.add(ElementTagNames.HEIGHT);
-        updatableTagNames.add(ElementTagNames.BUILDING_LEVELS);
         InputStreamReader isr = new InputStreamReader(new FileInputStream(this.csvFilePath));
         this.reader = new CSVReader(new BufferedReader(isr), (char) ';', (char) '\'', 1);
         // this.rows = reader.readAll();
@@ -46,24 +50,31 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
     }
     
     @Override
-    public float getMinMatchingScoreForUpdate() {
-        return this.minimumMatchingScore;
+    public String[] getUpdatableTagNames() {
+        return updatableTagNames.split(",");
     }
     
     @Override
-    public String getChangesetSource() {
-        return "ParisData (http://opendata.paris.fr)";
+    public float getMinMatchingScoreForUpdate() {
+        return this.minMatchingScore;
+    }
+    
+    @Override
+    public String getChangesetComment() {
+        return this.changesetComment ;
+    }
+    
+    @Override
+    public String getChangesetSourceLabel() {
+        return this.changesetSourceLabel;
     }
     
     public boolean hasNext() {
-        // return counter < rows.size() // we don't pre load all lines anymore
         // return this.reader.iterator().hasNext() // doesn't work ?
         return this.hasNext;
     }
 
     public BuildingImport next() {
-        // if (counter < rows.size()) return rows.get(counter++)
-        // return null;
         String[] row = null;
         try {
             row = this.reader.readNext();
@@ -79,18 +90,18 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
         result.setId(this.rowCount);
         String[] latlon = row[0].split(",");
         if (latlon.length == 2) {
-            result.setLat(this.parseDouble(latlon[0], "latitude"));
-            result.setLon(this.parseDouble(latlon[1], "longitude"));
+            result.setLat(StringParsingHelper.parseDouble(latlon[0], "latitude"));
+            result.setLon(StringParsingHelper.parseDouble(latlon[1], "longitude"));
         }else {
             LOGGER.warn("Unable to parse latlon");
         }
         if (row.length > 19) {
-            result.setLevels(this.parseInt(row[19], "levels"));
+            result.setLevels(StringParsingHelper.parseInt(row[19], "levels"));
         } else {
             LOGGER.warn("Unable to parse levels");
         }
         if (row.length > 6) {
-            result.setArea((int) this.parseFloat(row[6], "area"));
+            result.setArea((int) StringParsingHelper.parseFloat(row[6], "area"));
         } else {
             LOGGER.warn("Unable to parse area");
         }        
@@ -101,36 +112,4 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
         // TODO Auto-generated method stub
     }
     
-    // Stupid but useful methods for catching and logging exception individually 
-    
-    protected double parseDouble(String s, String name) {
-        double result = 0;
-        try {
-            result = Double.parseDouble(s);
-        } catch (Exception e) {
-            LOGGER.warn("Unable to parse " + name + ": " + e.getMessage());
-        }
-        return result;
-    }
-
-    protected int parseInt(String s, String name) {
-        int result = 0;
-        try {
-            result = Integer.parseInt(s);
-        } catch (Exception e) {
-            LOGGER.warn("Unable to parse " + name + ": " + e.getMessage());
-        }
-        return result;
-    }
-
-    protected double parseFloat(String s, String name) {
-        float result = 0;
-        try {
-            result = Float.parseFloat(s);
-        } catch (Exception e) {
-            LOGGER.warn("Unable to parse " + name + ": " + e.getMessage());
-        }
-        return result;
-    }
-
 }

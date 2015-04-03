@@ -62,8 +62,8 @@ public class OsmApiService {
 
     public void init(AbstractPlugin<AbstractElement, AbstractImport> plugin) throws RestClientException {
         this.counterForChangeset = 0;
-        this.changesetComment = plugin.getChangesetCommentl(); 
-        this.changesetSource = plugin.getChangesetSource();
+        this.changesetComment = plugin.getChangesetComment(); 
+        this.changesetSource = plugin.getChangesetSourceLabel();
         this.currentChangesetID = this.createChangeset();
         LOGGER.info("Current changeset ID is " + this.currentChangesetID);
     }

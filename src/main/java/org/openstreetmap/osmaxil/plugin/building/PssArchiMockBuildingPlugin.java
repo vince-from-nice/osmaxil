@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.data.ElementTagNames;
 import org.openstreetmap.osmaxil.data.building.BuildingImport;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component ("PssArchiMockPlugin")
@@ -16,14 +17,23 @@ public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
     
     static List<BuildingImport> data;
     
-    private float minimumMatchingScore;
+    @Value("${plugins.pssArchi.updatableTagNames}")
+    private String updatableTagNames;
+    
+    @Value("${plugins.pssArchi.changesetSourceLabel}")
+    private String changesetSourceLabel;
+    
+    @Value("${plugins.pssArchi.changesetComment}")
+    private String changesetComment;
+    
+    @Value("${plugins.pssArchi.minMatchingScore}")
+    private float minMatchingScore;
+    
+    @Value("${plugins.pssArchi.filePath}")
+    private String csvFilePath;
     
     @PostConstruct
     public void init() {
-        
-        updatableTagNames.add(ElementTagNames.HEIGHT);
-        updatableTagNames.add(ElementTagNames.BUILDING_LEVELS);
-        
         data = new ArrayList<BuildingImport>();
         BuildingImport b;
         
@@ -45,13 +55,23 @@ public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
     }
     
     @Override
-    public String getChangesetSource() {
-        return "PSS (http://www.pss-archi.eu)";
+    public String[] getUpdatableTagNames() {
+        return updatableTagNames.split(",");
+    }
+    
+    @Override
+    public String getChangesetSourceLabel() {
+        return changesetSourceLabel;
+    }
+
+    @Override
+    public String getChangesetComment() {
+        return changesetComment;
     }
     
     @Override
     public float getMinMatchingScoreForUpdate() {
-        return this.minimumMatchingScore;
+        return minMatchingScore;
     }
     
     public boolean hasNext() {

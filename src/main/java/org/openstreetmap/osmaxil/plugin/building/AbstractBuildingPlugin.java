@@ -14,11 +14,6 @@ import org.springframework.stereotype.Component;
 public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElement, BuildingImport> {
  
     @Override
-    public String getChangesetCommentl() {
-        return "Updating building heights and levels";
-    }
-    
-    @Override
     public BuildingElement createElement(long osmId, long relationId, OsmApiRoot data) {
         BuildingElement element = new BuildingElement(osmId);
         element.setRelationId(relationId);

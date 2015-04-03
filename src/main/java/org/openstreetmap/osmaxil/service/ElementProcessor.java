@@ -64,9 +64,9 @@ public class ElementProcessor {
             return;
         }
         LOGGER.info("Processing element #" + this.counter + ": " +  element);
-        // Old matching method
+        // Old basic matching method
         this.findBestMatchingImport(element);
-        // New matching method
+        // New extended matching method
         this.dispatchMatchingImportsByTagValues(element);
         this.computeTotalScoresByTagValues(element);
     }
@@ -112,7 +112,7 @@ public class ElementProcessor {
                 for (Iterator<AbstractImport> iterator = map.get(updatableTagValue).iterator(); iterator.hasNext();) {
                     AbstractImport imp = (AbstractImport) iterator.next();
                     score += imp.getMatchingScore();
-                    sb.append("" + imp.getMatchingScore() + "(id=" + imp.getId() + ")");
+                    sb.append("" + imp.getMatchingScore() + " (id=" + imp.getId() + ")");
                     if (iterator.hasNext()) {
                         sb.append(" + ");
                     }

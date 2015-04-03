@@ -45,12 +45,12 @@ public class StatsGenerator {
     
     public void generateStats() {
         LOGGER.info("=== Statistics ===");
-        // Old matching method
-        LOGGER.info("*** Statistics with the old matching method ***");
+        // Old basic matching method
+        LOGGER.info("*** Statistics with the basic matching method ***");
         this.buildStatsWithBestMatchingImports();
         displayStats();
-        // New matching method
-        LOGGER.info("*** Statistics with the new matching method ***");
+        // New extended matching method
+        LOGGER.info("*** Statistics with the extended matching method ***");
         for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
             LOGGER.info("* Statistics for the updatable tag " + updatableTagName);
             this.buildStatsWithBestAccumulatedImports(updatableTagName);
