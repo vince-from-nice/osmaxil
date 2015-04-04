@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.http.annotation.Obsolete;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.data.AbstractElement;
@@ -76,10 +77,11 @@ public class ElementProcessor {
      * 
      * @param element
      */
+    @Obsolete
     private void dispatchMatchingImportsByTagValues(AbstractElement element) {
         // For each updatable tag names..
         for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
-            Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValueByTagName(updatableTagName);
+            Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValuesByTagName(updatableTagName);
             // For each matching import..
             for (AbstractImport imp : element.getMatchingImports()) {
                 // Dispatch it by its tag value
@@ -103,7 +105,7 @@ public class ElementProcessor {
         // For each updatable tag names..
         for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
             LOGGER.info("Computing total scores by values for the tag " + updatableTagName);
-            Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValueByTagName(updatableTagName);
+            Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValuesByTagName(updatableTagName);
             // For each updatable tag value..
             for (String updatableTagValue : map.keySet()) {
                 // Compute matching score
@@ -117,7 +119,7 @@ public class ElementProcessor {
                         sb.append(" + ");
                     }
                 }
-                element.getTotalScoresByTagValueByTagName(updatableTagName).put(updatableTagValue, score);
+                element.getTotalScoresByTagValuesByTagName(updatableTagName).put(updatableTagValue, score);
                 LOGGER.info(" - for value=" + updatableTagValue + " total score is " + score + " = " + sb.toString());
             }
         }

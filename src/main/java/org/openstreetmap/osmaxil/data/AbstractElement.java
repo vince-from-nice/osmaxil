@@ -2,9 +2,11 @@ package org.openstreetmap.osmaxil.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
 import org.openstreetmap.osmaxil.data.api.OsmApiTag;
 
@@ -15,30 +17,33 @@ public abstract class AbstractElement {
     private long relationId;
     
     private OsmApiRoot apiData;
+    
+    private boolean updated;
 
     private List<AbstractImport> matchingImports;
 
+    @Obsolete
     private AbstractImport bestMatchingImport;
     
-    private Map<String, Map<String, List<AbstractImport>>> importsByTagValueByTagNames;
+    private Map<String, Map<String, List<AbstractImport>>> importsByTagValuesByTagNames;
     
-    private Map<String, Map<String, Float>> totalScoresByTagValueByTagNames;
+    private Map<String, Map<String, Float>> totalScoresByTagValuesByTagNames;
+    
+    private Map<String, String> orignalValuesByTagNames;
     
     abstract public List<OsmApiTag> getTags();
     
-    abstract public boolean isUpdated();
-    
-    abstract public void setUpdated(boolean updated);
-
     abstract public void updateChangeset(long changesetId);
     
     //abstract public boolean isVirgin(List<String> updatableTagNames);
     
     public AbstractElement(long osmId) {
         this.osmId = osmId;
+        this.updated = false;
         this.matchingImports = new ArrayList<AbstractImport>();
-        this.importsByTagValueByTagNames = new HashMap<String, Map<String,List<AbstractImport>>>();
-        this.totalScoresByTagValueByTagNames = new HashMap<String, Map<String,Float>>();
+        this.importsByTagValuesByTagNames = new HashMap<String, Map<String,List<AbstractImport>>>();
+        this.totalScoresByTagValuesByTagNames = new HashMap<String, Map<String,Float>>();
+        this.orignalValuesByTagNames = new HashMap<String, String>();
     }
 
     @Override
@@ -70,32 +75,51 @@ public abstract class AbstractElement {
         return false;
     }
 
-    public Map<String, List<AbstractImport>> getMatchingImportsByTagValueByTagName(String tagName) {
-        Map<String, List<AbstractImport>> result = this.importsByTagValueByTagNames.get(tagName);
+    public Map<String, List<AbstractImport>> getMatchingImportsByTagValuesByTagName(String tagName) {
+        Map<String, List<AbstractImport>> result = this.importsByTagValuesByTagNames.get(tagName);
         if (result == null) {
             result = new HashMap<String, List<AbstractImport>>();
-            this.importsByTagValueByTagNames.put(tagName, result);
+            this.importsByTagValuesByTagNames.put(tagName, result);
         }
         return result;
     }
     
-    public Map<String, Float> getTotalScoresByTagValueByTagName(String tagName) {
-        Map<String, Float> result = this.totalScoresByTagValueByTagNames.get(tagName);
+    public Map<String, Float> getTotalScoresByTagValuesByTagName(String tagName) {
+        Map<String, Float> result = this.totalScoresByTagValuesByTagNames.get(tagName);
         if (result == null) {
             result = new HashMap<String, Float>();
-            this.totalScoresByTagValueByTagNames.put(tagName, result);
+            this.totalScoresByTagValuesByTagNames.put(tagName, result);
         }
         return result;
     }
     
     public Float getBestTotalScoreByTagName(String tagName) {
-        Float result = null;
-        for (Float totalScore : this.getTotalScoresByTagValueByTagName(tagName).values()) {
-            if (result == null || result < totalScore) {
-                result = totalScore;
+        Float bestTotalScore = null;
+        for (Float totalScore : this.getTotalScoresByTagValuesByTagName(tagName).values()) {
+            if (bestTotalScore == null || bestTotalScore < totalScore) {
+                bestTotalScore = totalScore;
             }
         }
-        return result;
+        return bestTotalScore;
+    }
+    
+    public String getBestTagValueByTagName(String tagName) {
+        String bestTagValue = null;
+        Float bestTotalScore = null;
+        Map<String, List<AbstractImport>> map = this.getMatchingImportsByTagValuesByTagName(tagName);
+        for (String tagValue : map.keySet()) {
+            List<AbstractImport> importList = map.get(tagValue);
+            // TODO use precalculated total scores
+            float totalScore = 0;
+            for (AbstractImport imp : importList) {
+                totalScore += imp.getMatchingScore();
+            }
+            if (bestTotalScore == null || bestTotalScore < totalScore) {
+                bestTotalScore = totalScore;
+                bestTagValue = tagValue;
+            }
+        }
+        return bestTagValue;
     }
     
     // Getters & Setters
@@ -106,6 +130,14 @@ public abstract class AbstractElement {
 
     public void setOsmId(long osmId) {
         this.osmId = osmId;
+    }
+    
+    public boolean isUpdated() {
+        return this.updated;
+    }
+    
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
     }
 
     public OsmApiRoot getApiData() {
@@ -124,10 +156,12 @@ public abstract class AbstractElement {
         this.matchingImports = matchingImports;
     }
 
+    @Obsolete
     public AbstractImport getBestMatchingImport() {
         return bestMatchingImport;
     }
 
+    @Obsolete
     public void setBestMatchingImport(AbstractImport bestMatchingImport) {
         this.bestMatchingImport = bestMatchingImport;
     }
@@ -138,6 +172,14 @@ public abstract class AbstractElement {
 
     public void setRelationId(long relationId) {
         this.relationId = relationId;
+    }
+
+    public Map<String, String> getOrignalValuesByTagNames() {
+        return orignalValuesByTagNames;
+    }
+
+    public void setOrignalValuesByTagNames(Map<String, String> orignalValuesByTagNames) {
+        this.orignalValuesByTagNames = orignalValuesByTagNames;
     }
 
 }

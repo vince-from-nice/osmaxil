@@ -3,6 +3,7 @@ package org.openstreetmap.osmaxil.service;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.http.annotation.Obsolete;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.data.AbstractElement;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ElementUpdater {
+public class ElementSynchronizer {
     
     private long counterForMatchedElements;
     
@@ -50,13 +51,13 @@ public class ElementUpdater {
         LOGGER.info("Total of updated elements: " + this.counterForUpdatedElements);
     }
     
-    public void updateElements() {
+    public void synchronizeElements() {
         LOGGER.info("=== Updating elements ===");
         LOGGER.info(LOG_SEPARATOR);
         try {
             for (AbstractElement element : this.elementCache.getElements().values()) {
                 this.counterForMatchedElements++;
-                updateElement(element);
+                synchronizeElement(element);
                 LOGGER.info(LOG_SEPARATOR);
             }
         } catch (java.lang.Exception e) {
@@ -64,12 +65,58 @@ public class ElementUpdater {
         }
     }
     
-    private void updateElement(AbstractElement element) {
+    private void synchronizeElement(AbstractElement element) {
         if (element == null) {
             LOGGER.warn("Element is null, skipping it...");
             return;
         }
         LOGGER.info("Processing element #" + this.counterForMatchedElements + ": " +  element);
+        //synchronizeWithBestMatchingImport(element);
+        synchronizeWithBestAccumulatedImports(element);
+    }
+    
+    /**
+     * Synchronize element to OSM API with tag values which are coming from the import list which haves the best total matching score.
+     * This method is based on the new matching method where matching imports have been regrouped by their tag values.
+     *  
+     * @param element
+     */
+    private void synchronizeWithBestAccumulatedImports(AbstractElement element) {
+        boolean needToWrite = false;
+        for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
+            LOGGER.info("* Update data for the updatable tag " + updatableTagName);
+            // Check if its best matching score is enough
+            if (element.getBestTotalScoreByTagName(updatableTagName) < this.plugin.getMinMatchingScoreForUpdate()) {
+                LOGGER.info("Element cannot be updated because its best matching score is "
+                        + element.getBestTotalScoreByTagName(updatableTagName) + " (min="
+                        + this.plugin.getMinMatchingScoreForUpdate() + ")");
+                return;
+            }
+            // Update tag value only if it is updatable (ie. no original value)
+            if (this.plugin.isElementTagUpdatable(element, updatableTagName)) {
+                this.plugin.updateElementTag(element, updatableTagName);
+                needToWrite = true;
+            }
+        }
+        if (needToWrite) {
+            if (this.osmApiService.writeElement(element)) {
+                this.counterForUpdatedElements++;
+                element.setUpdated(true);
+                LOGGER.debug("Ok element has been updated");
+            }
+        } else {
+            LOGGER.info("Element cannot be updated (maybe original value(s) exist(s))");
+        }
+    }
+
+    /**
+     * Synchronize element to OSM API with tag values which are coming from the best matching imports.
+     * This method is now obsolete since the new matching method.
+     *  
+     * @param element
+     */
+    @Obsolete
+    private void synchronizeWithBestMatchingImport(AbstractElement element) {
         // Check if its best matching score is enough
         if (element.getBestMatchingImport().getMatchingScore() < this.plugin.getMinMatchingScoreForUpdate()) {
             LOGGER.info("Element cannot be updated because its best matching score is "
@@ -78,16 +125,16 @@ public class ElementUpdater {
             return;
         }
         // Try to update the element data with the best matching element
-        boolean needToUpdate = this.plugin.updateElementData(element.getBestMatchingImport(), element);
+        boolean needToUpdate = false;
+        //needToUpdate = this.plugin.updateElementData(element.getBestMatchingImport(), element);
         // Update element only if needed
         if (needToUpdate) {
             if (this.osmApiService.writeElement(element)) {
                 this.counterForUpdatedElements++;
+                LOGGER.debug("Ok element has been updated with import #" + element.getBestMatchingImport().getId());
             }
-            LOGGER.debug("Ok element has been updated with import #" + element.getBestMatchingImport().getId());
         } else {
             LOGGER.info("Element cannot be modified because original values exist");
         }
     }
-
 }

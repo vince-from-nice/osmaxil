@@ -3,6 +3,7 @@ package org.openstreetmap.osmaxil.plugin.building;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openstreetmap.osmaxil.data.ElementTagNames;
 import org.openstreetmap.osmaxil.data.MatchingElementId;
 import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
 import org.openstreetmap.osmaxil.data.building.BuildingElement;
@@ -16,11 +17,12 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     @Override
     public BuildingElement createElement(long osmId, long relationId, OsmApiRoot data) {
         BuildingElement element = new BuildingElement(osmId);
+        // TODO move below code in AbstractPlugin or AbstractElement since it's generic
         element.setRelationId(relationId);
         element.setApiData(data);
-        // Set original values
-        element.setOriginalHeight(element.getHeight());
-        element.setOriginalLevels(element.getLevels());
+        for(String tagName : this.getUpdatableTagNames()) {
+            element.getOrignalValuesByTagNames().put(tagName, element.getTagValue(tagName));
+        }
         return element;
     }
 
@@ -61,38 +63,65 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     }
     
     @Override
-    public boolean isElementUpdatable(BuildingImport imp, BuildingElement element) {
-        boolean isUpdatable = false;
-        // Element is updatable only only if it doesn't have a value for height or level but import has one
-        if (element.getOriginalLevels() == null && imp.getLevels() != null) {
-            isUpdatable = true; 
-        }
-        if (element.getOriginalHeight() == null && imp.getHeight() != null) {
-            isUpdatable = true;
-        }
-        return isUpdatable;
+    public boolean isElementTagUpdatable(BuildingElement element, String tagName) {
+        // For now all building tags are updatable if it doesn't have an original value
+        return element.getOrignalValuesByTagNames().get(tagName) == null;
     }
-    
+
     @Override
-    public boolean updateElementData(BuildingImport imp, BuildingElement element) {
+    public boolean updateElementTag(BuildingElement element, String tagName) {
+        String tagValue = element.getBestTagValueByTagName(tagName);
+        if (tagValue == null) {
+            LOGGER.warn("Cannot update tag because best tag value is null for " + tagName);
+            return false;
+        }
         boolean updated = false;
-        // Update elements only only if it doesn't have a value for height or level but import has one
-        if (element.getOriginalLevels() == null && imp.getLevels() != null) {
-            LOGGER.info("===> Updating levels to " + imp.getLevels());
-            // Adding +1 to levels because OSM use the US way to count building levels
-            element.setLevels(imp.getLevels() + 1);
+        if (ElementTagNames.HEIGHT.equals(tagName)) {
+            LOGGER.info("===> Updating height to " + tagValue);
+            element.setHeight(Float.parseFloat(tagValue));
             updated = true;
         }
-        if (element.getOriginalHeight() == null && imp.getHeight() != null) {
-            LOGGER.info("===> Updating height to $building.height");
-            element.setHeight(imp.getHeight());
+        if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
+            LOGGER.info("===> Updating levels to " + tagValue);
+            element.setLevels(Integer.parseInt(tagValue));
             updated = true;
-        }
-        if (updated) {
-            element.setUpdated(updated);
         }
         return updated;
     }
+    
+//    @Override
+//    public boolean isElementUpdatable(BuildingImport imp, BuildingElement element) {
+//        boolean isUpdatable = false;
+//        // Element is updatable only only if it doesn't have a value for height or level but import has one
+//        if (element.getOriginalLevels() == null && imp.getLevels() != null) {
+//            isUpdatable = true; 
+//        }
+//        if (element.getOriginalHeight() == null && imp.getHeight() != null) {
+//            isUpdatable = true;
+//        }
+//        return isUpdatable;
+//    }
+//    
+//    @Override
+//    public boolean updateElementData(BuildingImport imp, BuildingElement element) {
+//        boolean updated = false;
+//        // Update elements only only if it doesn't have a value for height or level but import has one
+//        if (element.getOriginalLevels() == null && imp.getLevels() != null) {
+//            LOGGER.info("===> Updating levels to " + imp.getLevels());
+//            // Adding +1 to levels because OSM use the US way to count building levels
+//            element.setLevels(imp.getLevels() + 1);
+//            updated = true;
+//        }
+//        if (element.getOriginalHeight() == null && imp.getHeight() != null) {
+//            LOGGER.info("===> Updating height to $building.height");
+//            element.setHeight(imp.getHeight());
+//            updated = true;
+//        }
+//        if (updated) {
+//            element.setUpdated(updated);
+//        }
+//        return updated;
+//    }
     
     @Override
     public float computeImportMatchingScore(BuildingImport imp) {

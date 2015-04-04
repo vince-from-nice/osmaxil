@@ -2,6 +2,7 @@ package org.openstreetmap.osmaxil;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.service.ElementProcessor;
+import org.openstreetmap.osmaxil.service.ElementSynchronizer;
 import org.openstreetmap.osmaxil.service.ImportLoader;
 import org.openstreetmap.osmaxil.service.StatsGenerator;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -14,7 +15,7 @@ public class Application {
     
     private ElementProcessor elementProcessor;
     
-    //private ElementUpdater elementUpdater;
+    private ElementSynchronizer elementSynchronizer;
     
     private StatsGenerator statsGenerator;
     
@@ -22,21 +23,27 @@ public class Application {
 
     public static void main(String[] args) {
         Application app = new Application();
-        app.run(args);
+        LOGGER.info("=== Starting Osmaxil ===");
+        app.init(args);
+        app.run();
+        LOGGER.info("=== Osmaxil has finished its job ===");
     }
     
-    public void run(String[] args) {
-        LOGGER.info("=== Starting Osmaxil ===");
+    public void init(String[] args) {
+        // TODO Bootstrap Spring beans correctly
         this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
         this.importLoader = this.applicationContext.getBean(ImportLoader.class);
         this.elementProcessor = this.applicationContext.getBean(ElementProcessor.class);
-        //this.elementUpdater = this.applicationContext.getBean(ElementUpdater.class);
+        this.elementSynchronizer = this.applicationContext.getBean(ElementSynchronizer.class);
         this.statsGenerator = this.applicationContext.getBean(StatsGenerator.class);
+    }
+    
+    public void run() {
         this.importLoader.loadImports();
         this.elementProcessor.processElements();
-        //this.elementUpdater.updateElements();
+        this.elementSynchronizer.synchronizeElements();
         this.statsGenerator.generateStats();
         this.applicationContext.close();
-        LOGGER.info("=== Osmaxil has finished its job ===");
+        
     }
 }

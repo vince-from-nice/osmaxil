@@ -8,31 +8,12 @@ import org.openstreetmap.osmaxil.data.api.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
 
-    private Float originalHeight;
-    
-    private Integer originalLevels;
-    
-    private boolean updated = false;
-    
     public BuildingElement(long osmId) {
         super(osmId);
-        this.originalHeight = null;
-        this.originalLevels = null;
-        this.updated = false;
     }
     
     // Overrided methods
-    
-    @Override
-    public boolean isUpdated() {
-        return this.updated;
-    }
-    
-    @Override
-    public void setUpdated(boolean updated) {
-        this.updated = updated;
-    }
-    
+        
     @Override
     public void updateChangeset(long changesetId) {
         this.getApiData().ways.get(0).changeset = changesetId;
@@ -86,22 +67,6 @@ public class BuildingElement extends AbstractElement {
 
     public boolean isPart() {
         return "yes".equals(this.getTagValue(ElementTagNames.BUILDING_PART));
-    }
-
-    public Float getOriginalHeight() {
-        return originalHeight;
-    }
-
-    public void setOriginalHeight(Float originalHeight) {
-        this.originalHeight = originalHeight;
-    }
-
-    public Integer getOriginalLevels() {
-        return originalLevels;
-    }
-
-    public void setOriginalLevels(Integer originalLevels) {
-        this.originalLevels = originalLevels;
     }
 
 }
