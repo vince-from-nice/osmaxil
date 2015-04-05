@@ -1,4 +1,4 @@
-= Osmaxil =
+# Osmaxil
 
 Osmaxil is program written in Java which allow automatic data imports to the OpenStreetMap database.
 
@@ -10,16 +10,16 @@ For now it's focused on building updates and there's currently 2 plugins availab
 
 These 2 plugins update existing buildings in the OSM database by setting their height and/or number of levels tag(s) value(s).
 
-== How to run ==
+## How to run
 
-=== Prerequesites ===
+### Prerequesites
 
 In order to run the program you need to have :
-* Java 6 or later
-* PostGIS
-* Osm2pgsql
+*Java 6 or later
+*PostGIS
+*Osm2pgsql
 
-=== Load local PostGIS ===
+### Load local PostGIS
 
 The program use a local PostGIS database in order to match imports with existing OSM elements.
 
@@ -27,7 +27,7 @@ So before to launch the program you need to populate your local PostGIS instance
 
 You can have a look to the file misc/setup_postgis.sh as example.
 
-=== Settings ===
+### Modify settings
 
 All the settings are located in src/main/resources/settings.properties.
 
@@ -37,38 +37,38 @@ Plugins settings include for example which changeset source label and comment to
 
 You also need to create you own password.properties file in src/main/resources which contains you private passwords (for OSM API and local PostGIS connection).
 
-=== Launch ===
+### Launch it !!
 
 Once you data are loaded into your local PostGIS and your settings are well defined, you just have to launch the main class org.openstreetmap.osmaxil.Application.java. 
 
 There's no special argument for now.
 
-== How it works ==
+## How it works
 
 The process is divided in separate phases :
-* Imports loading
-* Element processing
-* Element synchronization
+*Imports loading
+*Element processing
+*Element synchronization
 
-=== Imports loading ===
+### Imports loading
 
 That phase is implemented by the class named services.ImportLoader.
 
 TODO
 
-=== Element processing ===
+### Element processing
 
 That phase is implemented by the class named services.ElementProcessor.
 
 TODO
 
-=== Element synchronization ===
+### Element synchronization
 
 That phase is implemented by the class named services.ElementSyncrhonizer.
 
 TODO
 
-== How to contribute ==
+## How to contribute
 
 The source code is available on GitHub : https://github.com/vince-from-nice/osmaxil
 
