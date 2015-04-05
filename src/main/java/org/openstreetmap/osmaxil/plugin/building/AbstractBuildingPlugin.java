@@ -89,40 +89,6 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
         return updated;
     }
     
-//    @Override
-//    public boolean isElementUpdatable(BuildingImport imp, BuildingElement element) {
-//        boolean isUpdatable = false;
-//        // Element is updatable only only if it doesn't have a value for height or level but import has one
-//        if (element.getOriginalLevels() == null && imp.getLevels() != null) {
-//            isUpdatable = true; 
-//        }
-//        if (element.getOriginalHeight() == null && imp.getHeight() != null) {
-//            isUpdatable = true;
-//        }
-//        return isUpdatable;
-//    }
-//    
-//    @Override
-//    public boolean updateElementData(BuildingImport imp, BuildingElement element) {
-//        boolean updated = false;
-//        // Update elements only only if it doesn't have a value for height or level but import has one
-//        if (element.getOriginalLevels() == null && imp.getLevels() != null) {
-//            LOGGER.info("===> Updating levels to " + imp.getLevels());
-//            // Adding +1 to levels because OSM use the US way to count building levels
-//            element.setLevels(imp.getLevels() + 1);
-//            updated = true;
-//        }
-//        if (element.getOriginalHeight() == null && imp.getHeight() != null) {
-//            LOGGER.info("===> Updating height to $building.height");
-//            element.setHeight(imp.getHeight());
-//            updated = true;
-//        }
-//        if (updated) {
-//            element.setUpdated(updated);
-//        }
-//        return updated;
-//    }
-    
     @Override
     public float computeImportMatchingScore(BuildingImport imp) {
         float result = 0f;
