@@ -1,1 +1,76 @@
+= Osmaxil =
+
+Osmaxil is program written in Java which allow automatic data imports to the OpenStreetMap database.
+
+It is designed as an expandable framework with plugins which can handle different types of OSM elements.
+
+For now it's focused on building updates and there's currently 2 plugins available :
+* ParisData (http://opendata.paris.fr)
+* PSS database (http://www.pss-archi.eu)
+
+These 2 plugins update existing buildings in the OSM database by setting their height and/or number of levels tag(s) value(s).
+
+== How to run ==
+
+=== Prerequesites ===
+
+In order to run the program you need to have :
+* Java 6 or later
+* PostGIS
+* Osm2pgsql
+
+=== Load local PostGIS ===
+
+The program use a local PostGIS database in order to match imports with existing OSM elements.
+
+So before to launch the program you need to populate your local PostGIS instance with OSM data related to the area you wan to update.
+
+You can have a look to the file misc/setup_postgis.sh as example.
+
+=== Settings ===
+
+All the settings are located in src/main/resources/settings.properties.
+
+There's various settings such as local PostGIS or OSM API connection as well special settings for the plugins.
+
+Plugins settings include for example which changeset source label and comment to use, or minimal matching score (see the section "How it works"). 
+
+You also need to create you own password.properties file in src/main/resources which contains you private passwords (for OSM API and local PostGIS connection).
+
+=== Launch ===
+
+Once you data are loaded into your local PostGIS and your settings are well defined, you just have to launch the main class org.openstreetmap.osmaxil.Application.java. 
+
+There's no special argument for now.
+
+== How it works ==
+
+The process is divided in separate phases :
+* Imports loading
+* Element processing
+* Element synchronization
+
+=== Imports loading ===
+
+That phase is implemented by the class named services.ImportLoader.
+
 TODO
+
+=== Element processing ===
+
+That phase is implemented by the class named services.ElementProcessor.
+
+TODO
+
+=== Element synchronization ===
+
+That phase is implemented by the class named services.ElementSyncrhonizer.
+
+TODO
+
+== How to contribute ==
+
+The source code is available on GitHub : https://github.com/vince-from-nice/osmaxil
+
+Any suggestions or pull requests are welcome :)
+
