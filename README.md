@@ -19,15 +19,7 @@ In order to run the program you need to have :
 * PostGIS
 * Osm2pgsql
 
-### Load local PostGIS ###
-
-The program use a local PostGIS database in order to match imports with existing OSM elements.
-
-So before to launch the program you need to populate your local PostGIS instance with OSM data related to the area you wan to update.
-
-You can have a look to the file misc/setup_postgis.sh as example.
-
-### Modify settings ###
+### Customize settings ###
 
 All the settings are located in src/main/resources/settings.properties.
 
@@ -36,6 +28,14 @@ There's various settings such as local PostGIS or OSM API connection as well spe
 Plugins settings include for example which changeset source label and comment to use, or minimal matching score (see the section "How it works"). 
 
 You also need to create you own password.properties file in src/main/resources which contains you private passwords (for OSM API and local PostGIS connection).
+
+### Populate local PostGIS ###
+
+The program use a local PostGIS database in order to match imports with existing OSM elements.
+
+So before to launch the program you need to populate your local PostGIS instance with OSM data related to the area you wan to update.
+
+You can have a look to the file misc/setup_postgis.sh as example.
 
 ### Launch it !! ###
 
@@ -79,15 +79,15 @@ The new way is more complex : first all matching imports of the OSM element are 
 
 Why to do that ? 
 
-Let's consider a OSM building which is matched with 4 imported buildings :
-- import building A has 8 levels and a matching score of 0.42
-- import building B has 8 levels and a matching score of 0.35
-- import building C has 5 levels and a matching score of 0.15
-- import building C has 0 levels and a matching score of 0.08
+Let's consider an OSM building which have been matched with 4 imported buildings :
+- import building A has the tag building:levels=8 and a matching score of 0.42
+- import building B has the tag building:levels=8 and a matching score of 0.35
+- import building C has the tag building:levels=5 and a matching score of 0.15
+- import building C has the tag building:levels=0 and a matching score of 0.08
 
-With the old basic method the best matching score for the building is 0.42 (= score of the building A).
-With the new complex method the best matching score for the building is 0.77 (= score of A + score of B).
-
+The tag value (level = 8) is the same for both method, but :
+- with the old basic method the best matching score for the building is only 0.42 (score of the building A)
+- with the new complex method the best matching score for the building is 0.77 (score of A + score of B) which reflects more correctly the predominance of the tag value of 8 levels.
 
 ### Element synchronization ###
 
@@ -95,7 +95,7 @@ That phase is implemented by the class named services.ElementSyncrhonizer.
 
 It eventually writes OSM elements to the OSM API. For each matching OSM elements it checks if the matching score is enough (the minimum matching score is defined for each plugin in the settings.properties file).
 
-If the matching score is enough, it tries to updates one or more tag values only. Depending on the actived plugin, the tag update can be done only if the tag hasn't an original value yet (it's the case with the OpenDataParis plugin). That way, the program will not destroy tag value which has been already insterted by other OSM contributors, it update elements which were *virgin* only.
+If the matching score is enough, it tries to update one or more tag values. Depending on the plugin, update of the tag can be done only if the tag hasn't an original value yet. That way, the program will not destroy work which has been already done by other OSM contributors. That's the case with the OpenDataParis plugin.
 
 ### Statistics generation ###
 
