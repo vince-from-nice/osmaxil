@@ -8,5 +8,6 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 log/
+*~
 data/*~
 misc/*~
