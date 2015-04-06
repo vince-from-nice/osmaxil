@@ -23,10 +23,10 @@ public class ElementProcessor {
     private long counter;
 
     @Autowired
-    @Qualifier (value="OpenDataParisCsvPlugin")
+    @Qualifier (value="OpenDataParisBuildingPlugin")
     private AbstractPlugin pluginAutowiredBySpring;
  
-    //@Autowired (value="OpenDataParisCsvPlugin")
+    //@Autowired (value="OpenDataParisBuildingPlugin")
     private AbstractPlugin<AbstractElement, AbstractImport> plugin;
     
     @Autowired

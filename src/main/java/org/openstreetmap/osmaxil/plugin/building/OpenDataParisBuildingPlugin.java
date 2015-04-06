@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-@Component("OpenDataParisCsvPlugin")
+@Component("OpenDataParisBuildingPlugin")
 public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
 
     private CSVReader reader;

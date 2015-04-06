@@ -31,10 +31,10 @@ public class StatsGenerator {
     private ElementCache elementCache;
 
     @Autowired
-    @Qualifier(value = "OpenDataParisCsvPlugin")
+    @Qualifier(value = "OpenDataParisBuildingPlugin")
     private AbstractPlugin pluginAutowiredBySpring;
 
-    // @Autowired (value="OpenDataParisCsvPlugin")
+    // @Autowired (value="OpenDataParisBuildingPlugin")
     private AbstractPlugin<AbstractElement, AbstractImport> plugin;
 
     static private final Logger LOGGER = Logger.getLogger(Application.class);
