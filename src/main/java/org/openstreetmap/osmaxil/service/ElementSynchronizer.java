@@ -70,7 +70,7 @@ public class ElementSynchronizer {
             LOGGER.warn("Element is null, skipping it...");
             return;
         }
-        LOGGER.info("Processing element #" + this.counterForMatchedElements + ": " +  element);
+        LOGGER.info("Synchronizing element #" + this.counterForMatchedElements + ": " +  element);
         //synchronizeWithBestMatchingImport(element);
         synchronizeWithBestAccumulatedImports(element);
     }
@@ -84,7 +84,7 @@ public class ElementSynchronizer {
     private void synchronizeWithBestAccumulatedImports(AbstractElement element) {
         boolean needToWrite = false;
         for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
-            LOGGER.info("* Update data for the updatable tag " + updatableTagName);
+            LOGGER.info("* Updating data for the tag " + updatableTagName);
             // Check if its best matching score is enough
             if (element.getBestTotalScoreByTagName(updatableTagName) < this.plugin.getMinMatchingScoreForUpdate()) {
                 LOGGER.info("Element cannot be updated because its best matching score is "
