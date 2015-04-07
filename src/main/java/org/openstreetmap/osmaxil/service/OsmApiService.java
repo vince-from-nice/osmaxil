@@ -25,7 +25,7 @@ public class OsmApiService {
     // Instance attributes
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    private String changesetSource;
+    private String changesetSourceLabel;
     
     private String changesetComment;
     
@@ -60,12 +60,11 @@ public class OsmApiService {
     // Public methods
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void init(AbstractPlugin<AbstractElement, AbstractImport> plugin) throws RestClientException {
+    public void init(String changesetSourceLabel, String changesetComment) throws RestClientException {
         this.counterForChangeset = 0;
-        this.changesetComment = plugin.getChangesetComment(); 
-        this.changesetSource = plugin.getChangesetSourceLabel();
-        this.currentChangesetID = this.createChangeset();
-        LOGGER.info("Current changeset ID is " + this.currentChangesetID);
+        this.currentChangesetID = 0;
+        this.changesetComment = changesetComment; 
+        this.changesetSourceLabel = changesetSourceLabel;
     }
     
     @PreDestroy
@@ -106,11 +105,7 @@ public class OsmApiService {
     
     public boolean writeElement(AbstractElement element) {
         LOGGER.info("Write element to OSM API with id=" + element.getOsmId() + " : ");
-        if (this.counterForChangeset >= MAX_UPDATES_BY_CHANGESET) {
-            this.closeChangeset(this.currentChangesetID);
-            this.currentChangesetID = this.createChangeset();
-            this.counterForChangeset = 0;
-        }
+        this.checkCurrentChangeset();
         element.updateChangeset(this.currentChangesetID);
 //      StringWriter out = new StringWriter();
 //      this.marshaller.marshal(b.getData(), new StreamResult(out));
@@ -121,6 +116,7 @@ public class OsmApiService {
             this.counterForWriteSuccess++;
         } catch (Exception e) {
             LOGGER.error("Unable to write element with id=" + element.getOsmId() + " (" + e.getMessage() + ")");
+            this.counterForChangeset++; // Need to increment changeset counter even in case of failure 
             this.counterForWriteFailure++;
             return false;
         } 
@@ -131,6 +127,22 @@ public class OsmApiService {
     // Private methods
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    private void checkCurrentChangeset() {
+        // Check there's a current changeset
+        if (this.currentChangesetID == 0) {
+            this.createChangeset();
+            LOGGER.info("Current changeset ID is now " + this.currentChangesetID);
+        }
+        // Check that if current changeset has reached the limit 
+        if (this.counterForChangeset >= MAX_UPDATES_BY_CHANGESET) {
+            LOGGER.info("Changeset " + this.currentChangesetID + " has reached " + this.counterForChangeset);
+            this.closeChangeset(this.currentChangesetID);
+            this.currentChangesetID = this.createChangeset();
+            this.counterForChangeset = 0;
+            LOGGER.info("Current changeset ID is now " + this.currentChangesetID);
+        }
+    }
+    
     private long createChangeset() throws RestClientException {
         long result = 0;
         try {
@@ -138,7 +150,7 @@ public class OsmApiService {
             sb.append("<tag k=\"created_by\" v=\"Osmaxil\"/>");
             sb.append("<tag k=\"bot\" v=\"yes\"/>");
             sb.append("<tag k=\"comment\" v=\"" + this.changesetComment + "\"/>");
-            sb.append("<tag k=\"source\" v=\"" + this.changesetSource + "\"/>");
+            sb.append("<tag k=\"source\" v=\"" + this.changesetSourceLabel + "\"/>");
             sb.append("</changeset></osm>");
             // RestTemplate.put() returns void, using RestTemplate.exchange() instead
             HttpHeaders headers = new HttpHeaders();
