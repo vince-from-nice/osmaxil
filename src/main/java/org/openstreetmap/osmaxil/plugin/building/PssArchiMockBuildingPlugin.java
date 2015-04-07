@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.openstreetmap.osmaxil.data.ElementTagNames;
 import org.openstreetmap.osmaxil.data.building.BuildingImport;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

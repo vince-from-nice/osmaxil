@@ -3,13 +3,8 @@ package org.openstreetmap.osmaxil.service;
 import java.util.Hashtable;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.AbstractImport;
 import org.openstreetmap.osmaxil.data.MatchingElementId;
 import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
@@ -24,27 +19,15 @@ public class ElementCache {
     
     @Autowired
     @Qualifier (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin pluginAutowiredBySpring;
- 
-    //@Autowired (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin<AbstractElement, AbstractImport> plugin;
-
+    private AbstractPlugin plugin;
+    
     @Autowired
     private OsmApiService osmApiService;
-
-    static private final Logger LOGGER = Logger.getLogger(Application.class);
     
     public ElementCache() throws java.lang.Exception {
         this.elements = new Hashtable<Long, AbstractElement>();
     }
-    
-    @PostConstruct
-    public void init() {
-        //TODO Autowire specialized plugin
-        this.plugin = this.pluginAutowiredBySpring;
-        this.osmApiService.init(this.plugin);
-    }
-    
+
     public AbstractElement getOrCreateElement(MatchingElementId relevantElementId) throws Exception {
         long osmId  = relevantElementId.getOsmId();
         AbstractElement element = this.elements.get(osmId);
@@ -56,7 +39,7 @@ public class ElementCache {
             }
             element = (AbstractElement) this.plugin.createElement(osmId, relevantElementId.getRelationId(), apiData);
             this.elements.put(osmId, element);
-        }/* else {
+        } /*else {
             // If element was already present refresh its data
             element.setApiData(apiData);                
         }*/

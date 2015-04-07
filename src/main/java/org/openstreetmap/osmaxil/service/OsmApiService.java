@@ -5,9 +5,7 @@ import javax.annotation.PreDestroy;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.AbstractImport;
 import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -130,7 +128,7 @@ public class OsmApiService {
     private void checkCurrentChangeset() {
         // Check there's a current changeset
         if (this.currentChangesetID == 0) {
-            this.createChangeset();
+            this.currentChangesetID = this.createChangeset();
             LOGGER.info("Current changeset ID is now " + this.currentChangesetID);
         }
         // Check that if current changeset has reached the limit 

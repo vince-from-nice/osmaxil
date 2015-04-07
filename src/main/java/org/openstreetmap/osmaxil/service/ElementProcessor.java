@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.http.annotation.Obsolete;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
@@ -24,10 +22,7 @@ public class ElementProcessor {
 
     @Autowired
     @Qualifier (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin pluginAutowiredBySpring;
- 
-    //@Autowired (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin<AbstractElement, AbstractImport> plugin;
+    private AbstractPlugin plugin;
     
     @Autowired
     private ElementCache elementCache;
@@ -38,12 +33,6 @@ public class ElementProcessor {
     static private final Logger LOGGER = Logger.getLogger(Application.class);
 
     static private final String LOG_SEPARATOR = "==========================================================";
-    
-    @PostConstruct
-    public void init() {
-        this.plugin = this.pluginAutowiredBySpring;
-        this.osmApiService.init(this.plugin);
-    }
     
     public void processElements() {
         LOGGER.info("=== Processing elements ===");

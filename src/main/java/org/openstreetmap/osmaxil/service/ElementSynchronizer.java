@@ -1,13 +1,11 @@
 package org.openstreetmap.osmaxil.service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.http.annotation.Obsolete;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,24 +23,14 @@ public class ElementSynchronizer {
     
     @Autowired
     @Qualifier (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin pluginAutowiredBySpring;
- 
-    //@Autowired (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin<AbstractElement, AbstractImport> plugin;
-
+    private AbstractPlugin plugin;
+    
     @Autowired
     private OsmApiService osmApiService;
 
     static private final Logger LOGGER = Logger.getLogger(Application.class);
 
     static private final String LOG_SEPARATOR = "==========================================================";
-
-    @PostConstruct
-    public void init() {
-        //TODO Autowire specialized plugin
-        this.plugin = this.pluginAutowiredBySpring;
-        this.osmApiService.init(this.plugin);
-    }
     
     @PreDestroy
     public void close() {

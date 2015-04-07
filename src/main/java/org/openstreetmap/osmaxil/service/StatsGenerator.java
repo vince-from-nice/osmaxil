@@ -1,12 +1,9 @@
 package org.openstreetmap.osmaxil.service;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.http.annotation.Obsolete;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,26 +29,18 @@ public class StatsGenerator {
 
     @Autowired
     @Qualifier(value = "OpenDataParisBuildingPlugin")
-    private AbstractPlugin pluginAutowiredBySpring;
-
-    // @Autowired (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin<AbstractElement, AbstractImport> plugin;
-
+    private AbstractPlugin plugin;
+    
     static private final Logger LOGGER = Logger.getLogger(Application.class);
-
-    @PostConstruct
-    public void init() {
-        this.plugin = this.pluginAutowiredBySpring;
-    }
 
     public void generateStats() {
         LOGGER.info("=== Statistics ===");
         // Old basic matching method
-        LOGGER.info("*** Statistics with the basic matching method ***");
+        LOGGER.info("*** Statistics with the old matching method ***");
         this.buildStatsWithBestMatchingImports();
         displayStats();
         // New extended matching method
-        LOGGER.info("*** Statistics with the extended matching method ***");
+        LOGGER.info("*** Statistics with the new matching method ***");
         for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
             LOGGER.info("* Statistics for the updatable tag " + updatableTagName);
             this.buildStatsWithBestAccumulatedImports(updatableTagName);
@@ -80,6 +69,8 @@ public class StatsGenerator {
     @Obsolete
     private void buildStatsWithBestMatchingImports() {
         this.matchedElementsNbr = 0;
+        this.updatableElementsNbr = 0;
+        this.updatedElementsNbr = 0;
         this.matchedElementsNbrByScore = new int[10];
         this.updatedElementsNbrByScore = new int[10];
         this.updatableElementsNbrByScore = new int[10];
@@ -111,6 +102,7 @@ public class StatsGenerator {
     private void buildStatsWithBestAccumulatedImports(String updatableTagName) {
         this.matchedElementsNbr = 0;
         this.updatableElementsNbr = 0;
+        this.updatedElementsNbr = 0;
         this.matchedElementsNbrByScore = new int[10];
         this.updatedElementsNbrByScore = new int[10];
         this.updatableElementsNbrByScore = new int[10];

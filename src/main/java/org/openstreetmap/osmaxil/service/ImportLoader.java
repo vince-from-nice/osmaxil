@@ -2,7 +2,6 @@ package org.openstreetmap.osmaxil.service;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
@@ -25,10 +24,7 @@ public class ImportLoader {
     
     @Autowired
     @Qualifier (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin pluginAutowiredBySpring;
- 
-    //@Autowired (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin<AbstractElement, AbstractImport> plugin;
+    private AbstractPlugin plugin;
 
     @Autowired
     private ElementCache elementCache;
@@ -36,12 +32,6 @@ public class ImportLoader {
     static private final Logger LOGGER = Logger.getLogger(Application.class);
 
     static private final String LOG_SEPARATOR = "==========================================================";
-
-    @PostConstruct
-    public void init() {
-        //TODO Autowire specialized plugin
-        this.plugin = this.pluginAutowiredBySpring;
-    }
     
     @PreDestroy
     public void close() {
@@ -79,7 +69,6 @@ public class ImportLoader {
         // For each matching elements
         for (MatchingElementId relevantElementId : relevantElementIds) {
             long osmId = relevantElementId.getOsmId();
-            long relationId = relevantElementId.getRelationId();
             // Skip negative IDs (ie. multipolygon relations whose outer member has not been found)
             if (osmId < 0) {
                 break;
