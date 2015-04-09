@@ -31,7 +31,7 @@ public class StatsGenerator {
     @Qualifier(value = "OpenDataParisBuildingPlugin")
     private AbstractPlugin plugin;
     
-    static private final Logger LOGGER = Logger.getLogger(Application.class);
+    static private final Logger LOGGER = Logger.getLogger(StatsGenerator.class);
 
     public void generateStats() {
         LOGGER.info("=== Statistics ===");
