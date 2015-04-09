@@ -1,17 +1,17 @@
 #! /bin/bash
 
-#FILE_PATH=/home/turman/Temporary/ile-de-france-latest.osm.pbf
+FILE_PATH=/home/turman/Temporary/ile-de-france-latest.osm.pbf
 #FILE_PATH=/home/turman/Temporary/provence-alpes-cote-d-azur-latest.osm.pbf
 #FILE_PATH=/home/turman/Workspace/JOSM/bug-crash-with-too-big-id.osm
 #FILE_PATH=/home/turman/Workspace/JOSM/bug-failure-with-multipolygon.osm
-FILE_PATH=/home/turman/Workspace/JOSM/test-paris-12.osm
+#FILE_PATH=/home/turman/Workspace/JOSM/test-paris-12.osm
 #FILE_PATH=/home/turman/Workspace/JOSM/test-paris-12-parts.osm
 
 #DB_NAME=osm_apidb_paca
 #DB_NAME=osm_apidb_idf
 #DB_NAME=osm_osm2pgsql_paca
-#DB_NAME=osm_osm2pgsql_idf
-DB_NAME=osm_osm2pgsql_test
+DB_NAME=osm_osm2pgsql_idf
+#DB_NAME=osm_osm2pgsql_test
 
 dropdb  $DB_NAME;
 createdb $DB_NAME -E UTF-8

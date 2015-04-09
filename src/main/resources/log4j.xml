@@ -17,7 +17,7 @@
 	</appender>
 
 	<appender name="statsFile" class="org.apache.log4j.FileAppender">
-		<param name="File" value="log/osmaxil-last-run-stats.txt" />
+		<param name="File" value="stats/osmaxil-last-run-stats.txt" />
 		<param name="Append" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %5p %m%n" />
