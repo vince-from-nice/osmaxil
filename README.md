@@ -55,9 +55,9 @@ The process is divided in separate phases :
 
 That phase is implemented by the class named services.ImportLoader.
 
-It load all imports from the source whose type depends of the actived plugin (for example the OpenDataParis plugin use a CSV file).
+It loads all imports from a source whose type is depending on the actived plugin (for example the OpenDataParis plugin uses a CSV file).
 
-For each loaded import, the program looks for matching OSM element. The notion of "matching" depends on the plugins but typically it's based on the geographic location. For example, the OpenDataParis plugin looks for OSM buildings which *contains* (PostGIS function *ST_Contains()*) the coordinates of the imports.  
+For each loaded import, the program looks for matching OSM element. The notion of "matching" depends on the plugins but typically it's based on the geographic coordinates. For example, the OpenDataParis plugin looks for OSM buildings which *contains* (see the PostGIS function *ST_Contains()*) the coordinates of the imports.  
 
 At the end of that phase all matching OSM elements are loaded into a Map (see the ElementCache class) and they are linked to their matching imports.
 
@@ -65,17 +65,17 @@ At the end of that phase all matching OSM elements are loaded into a Map (see th
 
 That phase is implemented by the class named services.ElementProcessor.
 
-It process all matching OSM elements by setting matching score for all their relative imports. 
+It process all matching OSM elements by setting a matching score for all their relative imports. 
 
 The method to calculate a matching score for each import depend on the actived plugin. For example the OpenDataParis plugin defines scores by calculating the ratio between the OSM building surface and the import building surface (ratio is a float between 0.0 and 1.0).
 
 At the end the best matching import can be determined for each OSM element.
 
-There's 2 ways for that : the old basic one and the new one which is more complex but more efficient.
+There's 2 methods for that : the old basic one and the new one which is more complex but more efficient.
 
-The old way was just looking for each OSM element which matchint import was the best one, ie. the one with the best matching score.
+The old method was just looking for each OSM element which matching import was the best one, ie. the one with the best matching score.
 
-The new way is more complex : first all matching imports of the OSM element are regrouped by their tag value into import lists. Then for each tag value a *total* matching score is calculated by accumulating matching score of each import of the list. 
+The new method is more complex : first all matching imports of the OSM element are regrouped by their tag value into import lists. Then for each tag value a *total* matching score is calculated by accumulating matching score of all imports of the list. The relevant tag value is the one which corresponds to the import list which has the biggest total score.
 
 Why to do that ? 
 
@@ -85,7 +85,7 @@ Let's consider an OSM building which have been matched with 4 imported buildings
 - import building C has the tag building:levels=5 and a matching score of 0.15
 - import building C has the tag building:levels=0 and a matching score of 0.08
 
-The tag value (level = 8) is the same for both method, but :
+The tag value (level = 8) is the same for both method, BUT:
 - with the old basic method the best matching score for the building is only 0.42 (score of the building A)
 - with the new complex method the best matching score for the building is 0.77 (score of A + score of B) which reflects more correctly the predominance of the tag value of 8 levels.
 
