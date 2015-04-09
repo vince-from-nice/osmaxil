@@ -1,10 +1,10 @@
 # Osmaxil #
 
-Osmaxil is program written in Java which allow automatic data imports to the OpenStreetMap database.
+Osmaxil is a free software written in Java which allow automatic data imports to the OpenStreetMap database.
 
-It is designed as an expandable framework with plugins which can handle different types of OSM elements.
+It is designed as an expandable program with different plugins which can handle different types of OSM elements.
 
-For now it's focused on building updates and there's currently 2 plugins available :
+For now it's focused on building updates with 2 plugins available :
 * OpenDataParis (http://opendata.paris.fr)
 * PSS database (http://www.pss-archi.eu)
 
@@ -23,9 +23,9 @@ In order to run the program you need to have :
 
 All the settings are located in src/main/resources/settings.properties.
 
-There's various settings such as local PostGIS or OSM API connection as well special settings for the plugins.
+There's various settings such as parameters for OSM API or local PostGIS connection as well special settings for the plugins.
 
-Plugins settings include for example which changeset source label and comment to use, or minimal matching score (see the section "How it works"). 
+Plugins settings include for example which source label to set in the API changesets or the minimal matching score (see the section "How it works"). 
 
 You also need to create you own password.properties file in src/main/resources which contains you private passwords (for OSM API and local PostGIS connection).
 
@@ -65,17 +65,17 @@ At the end of that phase all matching OSM elements are loaded into a Map (see th
 
 That phase is implemented by the class named services.ElementProcessor.
 
-It process all matching OSM elements by setting a matching score for all their relative imports. 
+It process all matching OSM elements by setting a matching score for all their matching imports. 
 
-The method to calculate a matching score for each import depend on the actived plugin. For example the OpenDataParis plugin defines scores by calculating the ratio between the OSM building surface and the import building surface (ratio is a float between 0.0 and 1.0).
+The implemention of the method which calculate matching score depends on the actived plugin. For example the OpenDataParis plugin defines scores by calculating a ratio (a float between 0.0 and 1.0) of the OSM building surface to the imported building surface.
 
-At the end the best matching import can be determined for each OSM element.
+At the end the *best* matching import can be determined for each OSM element.
 
-There's 2 methods for that : the old basic one and the new one which is more complex but more efficient.
+There's 2 methods to do that, the old basic one and the new one which is a bit more complex but more efficient.
 
-The old method was just looking for each OSM element which matching import was the best one, ie. the one with the best matching score.
+The old method was just looking for each OSM element which the one with the biggest matching score.
 
-The new method is more complex : first all matching imports of the OSM element are regrouped by their tag value into import lists. Then for each tag value a *total* matching score is calculated by accumulating matching score of all imports of the list. The relevant tag value is the one which corresponds to the import list which has the biggest total score.
+The new method is more complex: first all matching imports of the OSM element are regrouped by their tag value into different lists. Then for each list (ie. for each tag value) a *total* matching score is calculated by accumulating matching score of all imports of the list. The relevant tag value is the one which corresponds to the import list which has the biggest total score.
 
 Why to do that ? 
 
@@ -95,7 +95,7 @@ That phase is implemented by the class named services.ElementSyncrhonizer.
 
 It eventually writes OSM elements to the OSM API. For each matching OSM elements it checks if the matching score is enough (the minimum matching score is defined for each plugin in the settings.properties file).
 
-If the matching score is enough, it tries to update one or more tag values. Depending on the plugin, update of the tag can be done only if the tag hasn't an original value yet. That way, the program will not destroy work which has been already done by other OSM contributors. That's the case with the OpenDataParis plugin.
+If the matching score is enough then it tries to update one or more tag values. Depending on the plugin, update of the tag can be done only if the tag hasn't an original value yet. That way, the program will not destroy work which has been already done by other OSM contributors. That's the case with the OpenDataParis plugin.
 
 ### Statistics generation ###
 
@@ -106,7 +106,7 @@ It crashes various statistics on the stdout such as :
 * Number of updatable elements
 * Number of updated elements
 
-It also displays these statistics by matching score ranges.
+It also displays all these statistics by matching score ranges.
 
 
 ## How to contribute ##

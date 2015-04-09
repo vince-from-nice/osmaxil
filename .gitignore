@@ -7,7 +7,8 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
 release.properties
-log/*
+log/
+stats/osmaxil-last-run-stats.txt
 *~
 data/*~
 misc/*~
