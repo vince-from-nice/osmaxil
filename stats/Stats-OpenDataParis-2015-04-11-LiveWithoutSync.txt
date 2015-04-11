@@ -1,0 +1,36 @@
+2015-04-11 23:46:29  INFO === Statistics ===
+2015-04-11 23:46:29  INFO *** Statistics with the old matching method ***
+2015-04-11 23:46:29  WARN Element 79511747 doesn't have any best matching import !!
+2015-04-11 23:46:29  WARN Element 79688187 doesn't have any best matching import !!
+2015-04-11 23:46:29  INFO Number of matched elements: 86728
+2015-04-11 23:46:29  INFO Number of updatable elements: 84907
+2015-04-11 23:46:29  INFO Number of updated elements: 0
+2015-04-11 23:46:29  INFO Repartition by matching scores:
+2015-04-11 23:46:29  INFO - between 0% and 10% : 1647 (1%) elements including 0 that have been updated (1597 were updatable)
+2015-04-11 23:46:29  INFO - between 10% and 20% : 1567 (1%) elements including 0 that have been updated (1512 were updatable)
+2015-04-11 23:46:29  INFO - between 20% and 30% : 3490 (4%) elements including 0 that have been updated (3374 were updatable)
+2015-04-11 23:46:29  INFO - between 30% and 40% : 5768 (6%) elements including 0 that have been updated (5630 were updatable)
+2015-04-11 23:46:29  INFO - between 40% and 50% : 8591 (9%) elements including 0 that have been updated (8426 were updatable)
+2015-04-11 23:46:29  INFO - between 50% and 60% : 8813 (10%) elements including 0 that have been updated (8635 were updatable)
+2015-04-11 23:46:29  INFO - between 60% and 70% : 7198 (8%) elements including 0 that have been updated (7071 were updatable)
+2015-04-11 23:46:29  INFO - between 70% and 80% : 7161 (8%) elements including 0 that have been updated (7033 were updatable)
+2015-04-11 23:46:29  INFO - between 80% and 90% : 10916 (12%) elements including 0 that have been updated (10719 were updatable)
+2015-04-11 23:46:29  INFO - between 90% and 100% : 31577 (36%) elements including 0 that have been updated (30910 were updatable)
+2015-04-11 23:46:29  INFO *** Statistics with the new matching method ***
+2015-04-11 23:46:29  INFO * Statistics for the updatable tag building:levels
+2015-04-11 23:46:29  WARN Element 79511747 doesn't have any best total matching score !!
+2015-04-11 23:46:29  WARN Element 79688187 doesn't have any best total matching score !!
+2015-04-11 23:46:29  INFO Number of matched elements: 86050
+2015-04-11 23:46:29  INFO Number of updatable elements: 84253
+2015-04-11 23:46:29  INFO Number of updated elements: 0
+2015-04-11 23:46:29  INFO Repartition by matching scores:
+2015-04-11 23:46:29  INFO - between 0% and 10% : 1482 (1%) elements including 0 that have been updated (1436 were updatable)
+2015-04-11 23:46:29  INFO - between 10% and 20% : 702 (0%) elements including 0 that have been updated (678 were updatable)
+2015-04-11 23:46:29  INFO - between 20% and 30% : 1368 (1%) elements including 0 that have been updated (1309 were updatable)
+2015-04-11 23:46:29  INFO - between 30% and 40% : 3561 (4%) elements including 0 that have been updated (3464 were updatable)
+2015-04-11 23:46:29  INFO - between 40% and 50% : 6755 (7%) elements including 0 that have been updated (6598 were updatable)
+2015-04-11 23:46:29  INFO - between 50% and 60% : 7819 (9%) elements including 0 that have been updated (7656 were updatable)
+2015-04-11 23:46:29  INFO - between 60% and 70% : 7064 (8%) elements including 0 that have been updated (6946 were updatable)
+2015-04-11 23:46:29  INFO - between 70% and 80% : 7952 (9%) elements including 0 that have been updated (7807 were updatable)
+2015-04-11 23:46:29  INFO - between 80% and 90% : 12900 (14%) elements including 0 that have been updated (12677 were updatable)
+2015-04-11 23:46:29  INFO - between 90% and 100% : 36447 (42%) elements including 0 that have been updated (35682 were updatable)
