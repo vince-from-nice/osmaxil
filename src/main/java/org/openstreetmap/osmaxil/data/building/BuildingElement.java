@@ -7,9 +7,12 @@ import org.openstreetmap.osmaxil.data.ElementTagNames;
 import org.openstreetmap.osmaxil.data.api.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
+    
+    private int computedArea;
 
     public BuildingElement(long osmId) {
         super(osmId);
+        this.computedArea = 0;
     }
     
     // Overrided methods
@@ -40,12 +43,19 @@ public class BuildingElement extends AbstractElement {
         return "OSM building has id=[" + this.getOsmId() + "], levels=[" + this.getLevels() + "], height=["
                 + this.getHeight() + "], name=[" + this.getName() + "], part=[" + this.isPart() + "]";
     }
-    
-    // Convenient methods
 
+    public boolean isPart() {
+        return "yes".equals(this.getTagValue(ElementTagNames.BUILDING_PART));
+    }
+    
     public Float getHeight() {
-        String s = (String) this.getTagValue(ElementTagNames.HEIGHT);
-        return (s != null ? Float.parseFloat(s) : null);
+        try {
+            String s = (String) this.getTagValue(ElementTagNames.HEIGHT);
+            return (s != null ? Float.parseFloat(s) : null);
+        } catch (Exception e) {
+            LOGGER.warn("Unable to get levels for building import " + this.getOsmId() + " (" + e.getMessage()+ ")");
+            return null;
+        }
     }
 
     public boolean setHeight(Float value) {
@@ -53,20 +63,25 @@ public class BuildingElement extends AbstractElement {
     }
 
     public Integer getLevels() {
-        String s = (String) this.getTagValue(ElementTagNames.BUILDING_LEVELS);
-        return (s != null ? Integer.parseInt(s) : null);
+        try {
+            String s = (String) this.getTagValue(ElementTagNames.BUILDING_LEVELS);
+            return (s != null ? Integer.parseInt(s) : null);
+        } catch (Exception e) {
+            LOGGER.warn("Unable to get levels for building import " + this.getOsmId() + " (" + e.getMessage()+ ")");
+            return null;
+        }
     }
 
     public boolean setLevels(Integer value) {
         return this.setTagValue(ElementTagNames.BUILDING_LEVELS, value.toString());
     }
 
-    public String getName() {
-        return (String) this.getTagValue(ElementTagNames.NAME);
+    public int getComputedArea() {
+        return computedArea;
     }
 
-    public boolean isPart() {
-        return "yes".equals(this.getTagValue(ElementTagNames.BUILDING_PART));
+    public void setComputedArea(int computedArea) {
+        this.computedArea = computedArea;
     }
 
 }

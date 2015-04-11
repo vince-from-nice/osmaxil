@@ -43,15 +43,16 @@ public class ImportLoader {
     public void loadImports() {
         LOGGER.info("=== Loading imports ===");
         LOGGER.info(LOG_SEPARATOR);
-        try {
-            while (this.plugin.hasNext()) {
-                AbstractImport imp = (AbstractImport) this.plugin.next();
-                this.counterForLoadedImports++;
-                this.loadImport(imp);
+        while (this.plugin.hasNext()) {
+            try {
+                    AbstractImport imp = (AbstractImport) this.plugin.next();
+                    this.counterForLoadedImports++;
+                    this.loadImport(imp);
+            } catch (java.lang.Exception e) {
+                LOGGER.error("An import has failed: ", e);
+            } finally {
                 LOGGER.info(LOG_SEPARATOR);
             }
-        } catch (java.lang.Exception e) {
-            LOGGER.error("Import has failed: ", e);
         }
     }
  
@@ -82,7 +83,7 @@ public class ImportLoader {
                 break;
             }
             LOGGER.info(element);
-            // Bind import to element
+            // And bind the import to it
             this.bindImportToElement(element, imp);
         }
     }
@@ -96,8 +97,6 @@ public class ImportLoader {
             sb.append(i.getId() + " ");
         }
         LOGGER.info(sb.append("]").toString());
-        // Compute matching score for the import
-        imp.setMatchingScore(this.plugin.computeImportMatchingScore(imp));
     }
 
 }

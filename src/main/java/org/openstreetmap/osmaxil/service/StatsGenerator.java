@@ -2,8 +2,8 @@ package org.openstreetmap.osmaxil.service;
 
 import org.apache.http.annotation.Obsolete;
 import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.data.AbstractElement;
+import org.openstreetmap.osmaxil.data.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -75,25 +75,30 @@ public class StatsGenerator {
         this.updatedElementsNbrByScore = new int[10];
         this.updatableElementsNbrByScore = new int[10];
         for (AbstractElement element : this.elementCache.getElements().values()) {
-            for (int i = 0; i < 10; i++) {
-                if (element.getBestMatchingImport().getMatchingScore() <= (i + 1) * 0.1) {
-                    this.matchedElementsNbr++;
-                    this.matchedElementsNbrByScore[i]++;
-                    if (element.isUpdated()) {
-                        this.updatedElementsNbr++;
-                        this.updatedElementsNbrByScore[i]++;
-                    }
-                    boolean updatable = false;
-                    for (String tagName : this.plugin.getUpdatableTagNames()) {
-                        if (this.plugin.isElementTagUpdatable(element, tagName)) {
-                            updatable = true;
+            AbstractImport best = element.getBestMatchingImport();
+            if (best == null) {
+                LOGGER.warn("Element " + element.getOsmId() + " doesn't have any best matching import !!");
+            } else {
+                for (int i = 0; i < 10; i++) {
+                    if (best.getMatchingScore() <= (i + 1) * 0.1) {
+                        this.matchedElementsNbr++;
+                        this.matchedElementsNbrByScore[i]++;
+                        if (element.isUpdated()) {
+                            this.updatedElementsNbr++;
+                            this.updatedElementsNbrByScore[i]++;
                         }
+                        boolean updatable = false;
+                        for (String tagName : this.plugin.getUpdatableTagNames()) {
+                            if (this.plugin.isElementTagUpdatable(element, tagName)) {
+                                updatable = true;
+                            }
+                        }
+                        if (updatable) {
+                            this.updatableElementsNbr++;
+                            this.updatableElementsNbrByScore[i]++;
+                        }
+                        break;
                     }
-                    if (updatable) {
-                        this.updatableElementsNbr++;
-                        this.updatableElementsNbrByScore[i]++;
-                    }
-                    break;
                 }
             }
         }
@@ -107,19 +112,24 @@ public class StatsGenerator {
         this.updatedElementsNbrByScore = new int[10];
         this.updatableElementsNbrByScore = new int[10];
         for (AbstractElement element : this.elementCache.getElements().values()) {
-            for (int i = 0; i < 10; i++) {
-                if (element.getBestTotalScoreByTagName(updatableTagName) <= (i + 1) * 0.1) {
-                    this.matchedElementsNbr++;
-                    this.matchedElementsNbrByScore[i]++;
-                    if (element.isUpdated()) {
-                        this.updatedElementsNbr++;
-                        this.updatedElementsNbrByScore[i]++;
+            Float bestTotalScore = element.getBestTotalScoreByTagName(updatableTagName);
+            if (bestTotalScore == null) {
+                LOGGER.warn("Element " + element.getOsmId() + " doesn't have any best total matching score !!");
+            } else {
+                for (int i = 0; i < 10; i++) {
+                    if (bestTotalScore <= (i + 1) * 0.1) {
+                        this.matchedElementsNbr++;
+                        this.matchedElementsNbrByScore[i]++;
+                        if (element.isUpdated()) {
+                            this.updatedElementsNbr++;
+                            this.updatedElementsNbrByScore[i]++;
+                        }
+                        if (this.plugin.isElementTagUpdatable(element, updatableTagName)) {
+                            this.updatableElementsNbr++;
+                            this.updatableElementsNbrByScore[i]++;
+                        }
+                        break;
                     }
-                    if (this.plugin.isElementTagUpdatable(element, updatableTagName)) {
-                        this.updatableElementsNbr++;
-                        this.updatableElementsNbrByScore[i]++;
-                    }
-                    break;
                 }
             }
         }

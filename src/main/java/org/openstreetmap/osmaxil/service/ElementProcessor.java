@@ -17,13 +17,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ElementProcessor {
-    
+
     private long counter;
 
     @Autowired
-    @Qualifier (value="OpenDataParisBuildingPlugin")
+    @Qualifier(value = "OpenDataParisBuildingPlugin")
     private AbstractPlugin plugin;
-    
+
     @Autowired
     private ElementCache elementCache;
 
@@ -33,30 +33,34 @@ public class ElementProcessor {
     static private final Logger LOGGER = Logger.getLogger(Application.class);
 
     static private final String LOG_SEPARATOR = "==========================================================";
-    
+
     public void processElements() {
         LOGGER.info("=== Processing elements ===");
         LOGGER.info(LOG_SEPARATOR);
-        try {
-            for (AbstractElement element : this.elementCache.getElements().values()) {
-                this.counter++;
+        for (AbstractElement element : this.elementCache.getElements().values()) {
+            this.counter++;
+            try {
                 processElement(element);
-                LOGGER.info(LOG_SEPARATOR);
+            } catch (java.lang.Exception e) {
+                LOGGER.error("Process of element " + element.getOsmId() + " has failed: ", e);
             }
-        } catch (java.lang.Exception e) {
-            LOGGER.error("Element process has failed: ", e);
+            LOGGER.info(LOG_SEPARATOR);
         }
     }
-    
+
     private void processElement(AbstractElement element) {
         if (element == null) {
             LOGGER.warn("Element is null, skipping it...");
             return;
         }
-        LOGGER.info("Processing element #" + this.counter + ": " +  element);
-        // Old basic matching method
+        LOGGER.info("Processing element #" + this.counter + ": " + element);
+        // Compute a matching score for each import matching the element
+        for (AbstractImport imp : element.getMatchingImports()) {
+            imp.setMatchingScore(this.plugin.computeImportMatchingScore(imp));
+        }
+        // For the old basic best matching method:
         this.findBestMatchingImport(element);
-        // New extended matching method
+        // For the new extended matching method:
         this.dispatchMatchingImportsByTagValues(element);
         this.computeTotalScoresByTagValues(element);
     }
@@ -75,7 +79,7 @@ public class ElementProcessor {
             for (AbstractImport imp : element.getMatchingImports()) {
                 // Dispatch it by its tag value
                 String updatableTagValue = imp.getTagValue(updatableTagName);
-                //String updatableTagValue = element.getTagValue(updatableTagName);
+                // String updatableTagValue = element.getTagValue(updatableTagName);
                 if (map.get(updatableTagValue) == null) {
                     map.put(updatableTagValue, new ArrayList<AbstractImport>());
                 }
@@ -83,10 +87,10 @@ public class ElementProcessor {
             }
         }
     }
-    
+
     /**
-     * For each "updatable" tag of the plugin, compute matching scores for each tag value.
-     * At the end the element stores accumulated scores of imports which have been aggregated by their tag value.
+     * For each "updatable" tag of the plugin, compute matching scores for each tag value. At the end the element stores
+     * accumulated scores of imports which have been aggregated by their tag value.
      * 
      * @param element
      */
@@ -113,17 +117,18 @@ public class ElementProcessor {
             }
         }
     }
-    
+
     /**
      * Find the matching import with the best matching score
      * 
      * @param element
      */
-    private void findBestMatchingImport(AbstractElement element) { 
-        for(AbstractImport imp : element.getMatchingImports()) {
+    private void findBestMatchingImport(AbstractElement element) {
+        for (AbstractImport imp : element.getMatchingImports()) {
             // Check if that import is the new winner or a looser
             AbstractImport bestImport = element.getBestMatchingImport();
-            StringBuilder sb = new StringBuilder("Import #" + imp.getId() + " has a score of " + imp.getMatchingScore() + " and best matching import score is ");
+            StringBuilder sb = new StringBuilder("Import #" + imp.getId() + " has a score of " + imp.getMatchingScore()
+                    + " and best matching import score is ");
             sb.append(bestImport != null ? bestImport.getMatchingScore() + " (id=" + bestImport.getId() + ")" : "null");
             // If that import has better score (or it's the first import matching the element), it's a winner
             if (element.getBestMatchingImport() == null
@@ -132,7 +137,7 @@ public class ElementProcessor {
                 LOGGER.info(sb.toString());
                 element.setBestMatchingImport(imp);
             }
-            // Else it's a looser, nothing to do.. 
+            // Else it's a looser, nothing to do..
             else {
                 sb.append(" => Loosing import");
                 LOGGER.info(sb.toString());

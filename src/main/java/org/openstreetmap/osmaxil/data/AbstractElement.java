@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.annotation.Obsolete;
+import org.apache.log4j.Logger;
+import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
 import org.openstreetmap.osmaxil.data.api.OsmApiTag;
 
@@ -28,13 +30,13 @@ public abstract class AbstractElement {
     
     private Map<String, Map<String, Float>> totalScoresByTagValuesByTagNames;
     
-    private Map<String, String> orignalValuesByTagNames;
+    private Map<String, String> originalValuesByTagNames;
     
     abstract public List<OsmApiTag> getTags();
     
     abstract public void updateChangeset(long changesetId);
     
-    //abstract public boolean isVirgin(List<String> updatableTagNames);
+    static protected final Logger LOGGER = Logger.getLogger(Application.class);
     
     public AbstractElement(long osmId) {
         this.osmId = osmId;
@@ -42,7 +44,7 @@ public abstract class AbstractElement {
         this.matchingImports = new ArrayList<AbstractImport>();
         this.importsByTagValuesByTagNames = new HashMap<String, Map<String,List<AbstractImport>>>();
         this.totalScoresByTagValuesByTagNames = new HashMap<String, Map<String,Float>>();
-        this.orignalValuesByTagNames = new HashMap<String, String>();
+        this.originalValuesByTagNames = new HashMap<String, String>();
     }
 
     @Override
@@ -51,13 +53,17 @@ public abstract class AbstractElement {
     }
     
     public String getTagValue(String key) {
-        String value = null;
-        for (OsmApiTag tag : getTags()) {
+        List<OsmApiTag> tags = this.getTags();
+        if (tags == null) {
+            //LOGGER.warn("Unable to get tag value of " + key + " for element " + this.getOsmId() + " because its tag list is null !!");
+            return null;
+        }
+        for (OsmApiTag tag : tags) {
             if (tag.k.equals(key)) {
-                value = tag.v;
+                return tag.v;
             }
         }
-        return value;
+        return null;
     }
 
     public boolean setTagValue(String key, String value) {
@@ -73,7 +79,7 @@ public abstract class AbstractElement {
         this.getTags().add(tag);
         return false;
     }
-
+    
     public Map<String, List<AbstractImport>> getMatchingImportsByTagValuesByTagName(String tagName) {
         Map<String, List<AbstractImport>> result = this.importsByTagValuesByTagNames.get(tagName);
         if (result == null) {
@@ -119,6 +125,12 @@ public abstract class AbstractElement {
             }
         }
         return bestTagValue;
+    }
+    
+    // Convenient methods
+
+    public String getName() {
+        return (String) this.getTagValue(ElementTagNames.NAME);
     }
     
     // Getters & Setters
@@ -173,12 +185,12 @@ public abstract class AbstractElement {
         this.relationId = relationId;
     }
 
-    public Map<String, String> getOrignalValuesByTagNames() {
-        return orignalValuesByTagNames;
+    public Map<String, String> getOriginalValuesByTagNames() {
+        return originalValuesByTagNames;
     }
 
-    public void setOrignalValuesByTagNames(Map<String, String> orignalValuesByTagNames) {
-        this.orignalValuesByTagNames = orignalValuesByTagNames;
+    public void setOriginalValuesByTagNames(Map<String, String> orignalValuesByTagNames) {
+        this.originalValuesByTagNames = orignalValuesByTagNames;
     }
 
 }

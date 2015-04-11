@@ -39,7 +39,7 @@
 	<root>
 		<level value="info" />
 		<appender-ref ref="stdout" />
-		<appender-ref ref="file" />
+		<appender-ref ref="logFile" />
 	</root>
 
 </log4j:configuration>

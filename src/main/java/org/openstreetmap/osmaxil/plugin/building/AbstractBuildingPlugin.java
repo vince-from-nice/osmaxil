@@ -21,7 +21,7 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
         element.setRelationId(relationId);
         element.setApiData(data);
         for(String tagName : this.getUpdatableTagNames()) {
-            element.getOrignalValuesByTagNames().put(tagName, element.getTagValue(tagName));
+            element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
         }
         return element;
     }
@@ -65,7 +65,7 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     @Override
     public boolean isElementTagUpdatable(BuildingElement element, String tagName) {
         // For now all building tags are updatable if it doesn't have an original value
-        return element.getOrignalValuesByTagNames().get(tagName) == null;
+        return element.getOriginalValuesByTagNames().get(tagName) == null;
     }
 
     @Override
@@ -91,23 +91,23 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     
     @Override
     public float computeImportMatchingScore(BuildingImport imp) {
+        BuildingElement element = (BuildingElement) imp.getElement();
         float result = 0f;
         if (imp.getArea() == null) {
-            LOGGER.warn("Unable to compute score because import has NO area");
+            LOGGER.warn("Unable to compute score because building import has NO area");
             return 0f;
         }
         if (imp.getElement() == null) {
-            LOGGER.warn("Unable to compute score because import has NO element attached");
+            LOGGER.warn("Unable to compute score because building import has NO element attached");
             return 0f;
         }
-        // If the related element belongs to a relation, consider it instead of the element itself (osm2pgsql doesn't store relation members) 
-        long elementId = imp.getElement().getOsmId();
-        if (imp.getElement().getRelationId() > 0) {
-            elementId = - imp.getElement().getRelationId(); // reinverse the ID because osm2pgsql stores relations like that
+        // Get element area
+        int elementArea = element.getComputedArea();
+        // If not yet computed do it and store the result for further matching imports
+        if (elementArea == 0) {
+            elementArea = computeElementArea(element);
+            element.setComputedArea(elementArea);
         }
-        int elementArea = this.osmPostgisService.getPolygonAreaById(elementId);
-        // TODO cache it for next imports 
-        LOGGER.info("Element computed area is [" + elementArea + "]");
         // Compare area between import and element
         if (elementArea > 0) {
          // Returns a float which tends to 1.0 when areas are going closer (and tends to 0.0 if different)
@@ -124,6 +124,18 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Private methods 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private int computeElementArea(BuildingElement element) {
+        // If the related element belongs to a relation, consider it instead of the element itself (osm2pgsql doesn't store relation members) 
+        long elementId = element.getOsmId();
+        if (element.getRelationId() > 0) {
+            elementId = - element.getRelationId(); // reinverse the ID because osm2pgsql stores relations like that
+        }
+        int elementArea = this.osmPostgisService.getPolygonAreaById(elementId);
+        // TODO cache it for next imports 
+        LOGGER.info("OSM building " + element.getOsmId() + " area has been computed: " + elementArea);
+        return elementArea;
+    }
     
     private long findRelevantOuterMemberId(long relationId, BuildingImport imp) {
         long result = 0;

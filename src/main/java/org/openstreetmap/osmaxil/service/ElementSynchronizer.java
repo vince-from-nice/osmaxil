@@ -13,60 +13,61 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ElementSynchronizer {
-    
+
     private long counterForMatchedElements;
-    
+
     private long counterForUpdatedElements;
 
     @Autowired
     private ElementCache elementCache;
-    
+
     @Autowired
-    @Qualifier (value="OpenDataParisBuildingPlugin")
+    @Qualifier(value = "OpenDataParisBuildingPlugin")
     private AbstractPlugin plugin;
-    
+
     @Autowired
     private OsmApiService osmApiService;
 
     static private final Logger LOGGER = Logger.getLogger(Application.class);
 
     static private final String LOG_SEPARATOR = "==========================================================";
-    
+
     @PreDestroy
     public void close() {
-        LOGGER.info("=== Closing element updater ===");
+        LOGGER.info("=== Closing element synchronizer ===");
         LOGGER.info("Total of matched elements: " + this.counterForMatchedElements);
         LOGGER.info("Total of updated elements: " + this.counterForUpdatedElements);
     }
-    
+
     public void synchronizeElements() {
         LOGGER.info("=== Updating elements ===");
         LOGGER.info(LOG_SEPARATOR);
-        try {
-            for (AbstractElement element : this.elementCache.getElements().values()) {
-                this.counterForMatchedElements++;
+        for (AbstractElement element : this.elementCache.getElements().values()) {
+            this.counterForMatchedElements++;
+            try {
                 synchronizeElement(element);
-                LOGGER.info(LOG_SEPARATOR);
+            } catch (java.lang.Exception e) {
+                LOGGER.error("Synchronization of element " + element.getOsmId() + " has failed: ", e);
             }
-        } catch (java.lang.Exception e) {
-            LOGGER.error("Element update has failed: ", e);
+            LOGGER.info(LOG_SEPARATOR);
         }
     }
-    
+
     private void synchronizeElement(AbstractElement element) {
         if (element == null) {
             LOGGER.warn("Element is null, skipping it...");
             return;
         }
-        LOGGER.info("Synchronizing element #" + this.counterForMatchedElements + ": " +  element);
-        //synchronizeWithBestMatchingImport(element);
+        LOGGER.info("Synchronizing element #" + this.counterForMatchedElements + ": " + element);
+        // synchronizeWithBestMatchingImport(element);
         synchronizeWithBestAccumulatedImports(element);
     }
-    
+
     /**
-     * Synchronize element to OSM API with tag values which are coming from the import list which haves the best total matching score.
-     * This method is based on the new matching method where matching imports have been regrouped by their tag values.
-     *  
+     * Synchronize element to OSM API with tag values which are coming from the import list which haves the best total
+     * matching score. This method is based on the new matching method where matching imports have been regrouped by
+     * their tag values.
+     * 
      * @param element
      */
     private void synchronizeWithBestAccumulatedImports(AbstractElement element) {
@@ -98,9 +99,9 @@ public class ElementSynchronizer {
     }
 
     /**
-     * Synchronize element to OSM API with tag values which are coming from the best matching imports.
-     * This method is now obsolete since the new matching method.
-     *  
+     * Synchronize element to OSM API with tag values which are coming from the best matching imports. This method is
+     * now obsolete since the new matching method.
+     * 
      * @param element
      */
     @Obsolete
@@ -114,7 +115,7 @@ public class ElementSynchronizer {
         }
         // Try to update the element data with the best matching element
         boolean needToUpdate = false;
-        //needToUpdate = this.plugin.updateElementData(element.getBestMatchingImport(), element);
+        // needToUpdate = this.plugin.updateElementData(element.getBestMatchingImport(), element);
         // Update element only if needed
         if (needToUpdate) {
             if (this.osmApiService.writeElement(element)) {
