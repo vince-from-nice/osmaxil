@@ -1,5 +1,6 @@
 package org.openstreetmap.osmaxil.service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.http.annotation.Obsolete;
@@ -32,6 +33,11 @@ public class ElementSynchronizer {
 
     static private final String LOG_SEPARATOR = "==========================================================";
 
+    @PostConstruct
+    public void init() {
+        this.osmApiService.initForWriting(this.plugin.getChangesetSourceLabel(), this.plugin.getChangesetComment());
+    }
+    
     @PreDestroy
     public void close() {
         LOGGER.info("=== Closing element synchronizer ===");

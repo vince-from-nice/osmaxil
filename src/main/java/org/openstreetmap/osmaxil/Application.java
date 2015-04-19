@@ -41,7 +41,7 @@ public class Application {
     public void run() {
         this.importLoader.loadImports();
         this.elementProcessor.processElements();
-        //this.elementSynchronizer.synchronizeElements();
+        this.elementSynchronizer.synchronizeElements();
         this.statsGenerator.generateStats();
         this.applicationContext.close();
         

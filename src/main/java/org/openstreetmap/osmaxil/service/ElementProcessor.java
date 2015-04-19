@@ -134,13 +134,13 @@ public class ElementProcessor {
             if (element.getBestMatchingImport() == null
                     || element.getBestMatchingImport().getMatchingScore() < imp.getMatchingScore()) {
                 sb.append(" => We have a new winner !!");
-                LOGGER.info(sb.toString());
+                //LOGGER.info(sb.toString());
                 element.setBestMatchingImport(imp);
             }
             // Else it's a looser, nothing to do..
             else {
                 sb.append(" => Loosing import");
-                LOGGER.info(sb.toString());
+                //LOGGER.info(sb.toString());
             }
         }
     }

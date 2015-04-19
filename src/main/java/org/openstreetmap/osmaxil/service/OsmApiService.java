@@ -1,5 +1,6 @@
 package org.openstreetmap.osmaxil.service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
@@ -58,7 +59,7 @@ public class OsmApiService {
     // Public methods
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void init(String changesetSourceLabel, String changesetComment) throws RestClientException {
+    public void initForWriting(String changesetSourceLabel, String changesetComment) throws RestClientException {
         this.counterForChangeset = 0;
         this.currentChangesetID = 0;
         this.changesetComment = changesetComment; 
