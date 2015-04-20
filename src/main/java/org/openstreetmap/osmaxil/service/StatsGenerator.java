@@ -58,9 +58,9 @@ public class StatsGenerator {
             sb.append("- between " + i * 10 + "% and " + (i + 1) * 10 + "% : ");
             sb.append(this.matchedElementsNbrByScore[i]);
             if (this.elementCache.getElements().size()  > 0) {
-                sb.append(" (" + 100 * this.matchedElementsNbrByScore[i] / this.elementCache.getElements().size() + "%) ");
+                sb.append(" (" + 100 * this.matchedElementsNbrByScore[i] / this.elementCache.getElements().size() + "%)");
             }
-            sb.append("elements including " + this.updatedElementsNbrByScore[i] + " that have been updated");
+            sb.append(" elements including " + this.updatedElementsNbrByScore[i] + " that have been updated");
             sb.append(" (" + this.updatableElementsNbrByScore[i] + " were updatable)");
             LOGGER.info(sb);
         }
