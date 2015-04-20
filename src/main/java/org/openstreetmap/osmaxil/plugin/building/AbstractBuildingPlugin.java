@@ -82,8 +82,9 @@ public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElem
             updated = true;
         }
         if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
-            LOGGER.info("===> Updating levels to " + tagValue);
-            element.setLevels(Integer.parseInt(tagValue));
+            LOGGER.info("===> Updating levels to " + (tagValue + 1));
+            // Adding +1 to levels because OSM use the US way to count building levels
+            element.setLevels(Integer.parseInt(tagValue) + 1);
             updated = true;
         }
         return updated;
