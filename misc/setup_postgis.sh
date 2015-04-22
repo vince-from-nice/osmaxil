@@ -4,7 +4,7 @@
 #FILE_PATH=/home/turman/Temporary/provence-alpes-cote-d-azur-latest.osm.pbf
 #FILE_PATH=/home/turman/Workspace/JOSM/bug-crash-with-too-big-id.osm
 #FILE_PATH=/home/turman/Workspace/JOSM/bug-failure-with-multipolygon.osm
-FILE_PATH=/home/turman/Workspace/JOSM/test-paris-12.osm
+FILE_PATH=/home/turman/Workspace/JOSM/test-paris-12-before-osmaxil.osm
 #FILE_PATH=/home/turman/Workspace/JOSM/test-paris-12-parts.osm
 
 #DB_NAME=osm_apidb_paca

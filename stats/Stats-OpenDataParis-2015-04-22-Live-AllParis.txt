@@ -1,0 +1,50 @@
+ 
+2015-04-22 08:16:42  INFO === Statistics ===
+2015-04-22 08:16:42  INFO *** Statistics with the old matching method ***
+2015-04-22 08:16:42  WARN Element 79511747 doesn't have any best matching import !!
+2015-04-22 08:16:42  WARN Element 79688187 doesn't have any best matching import !!
+2015-04-22 08:16:42  INFO Number of matched elements: 86721
+2015-04-22 08:16:42  INFO Number of updatable elements: 84894
+2015-04-22 08:16:42  INFO Number of updated elements: 49004
+2015-04-22 08:16:42  INFO Repartition by matching scores:
+2015-04-22 08:16:42  INFO - between 0% and 10% : 1646 (1%) elements including 2 that have been updated (1596 were updatable)
+2015-04-22 08:16:42  INFO - between 10% and 20% : 1567 (1%) elements including 23 that have been updated (1512 were updatable)
+2015-04-22 08:16:42  INFO - between 20% and 30% : 3489 (4%) elements including 114 that have been updated (3373 were updatable)
+2015-04-22 08:16:42  INFO - between 30% and 40% : 5768 (6%) elements including 367 that have been updated (5630 were updatable)
+2015-04-22 08:16:42  INFO - between 40% and 50% : 8590 (9%) elements including 1728 that have been updated (8425 were updatable)
+2015-04-22 08:16:42  INFO - between 50% and 60% : 8812 (10%) elements including 2287 that have been updated (8634 were updatable)
+2015-04-22 08:16:42  INFO - between 60% and 70% : 7197 (8%) elements including 1608 that have been updated (7070 were updatable)
+2015-04-22 08:16:42  INFO - between 70% and 80% : 7160 (8%) elements including 1253 that have been updated (7031 were updatable)
+2015-04-22 08:16:42  INFO - between 80% and 90% : 10916 (12%) elements including 10716 that have been updated (10717 were updatable)
+2015-04-22 08:16:42  INFO - between 90% and 100% : 31576 (36%) elements including 30906 that have been updated (30906 were updatable)
+2015-04-22 08:16:42  INFO *** Statistics with the new matching method ***
+2015-04-22 08:16:42  INFO * Statistics for the updatable tag building:levels
+2015-04-22 08:16:42  WARN Element 79511747 doesn't have any best total matching score !!
+2015-04-22 08:16:42  WARN Element 79688187 doesn't have any best total matching score !!
+2015-04-22 08:16:42  INFO Number of matched elements: 86043
+2015-04-22 08:16:42  INFO Number of updatable elements: 84242
+2015-04-22 08:16:42  INFO Number of updated elements: 48353
+2015-04-22 08:16:42  INFO Repartition by matching scores:
+2015-04-22 08:16:42  INFO - between 0% and 10% : 1482 (1%) elements including 0 that have been updated (1436 were updatable)
+2015-04-22 08:16:42  INFO - between 10% and 20% : 701 (0%) elements including 0 that have been updated (677 were updatable)
+2015-04-22 08:16:42  INFO - between 20% and 30% : 1368 (1%) elements including 0 that have been updated (1309 were updatable)
+2015-04-22 08:16:42  INFO - between 30% and 40% : 3560 (4%) elements including 0 that have been updated (3463 were updatable)
+2015-04-22 08:16:42  INFO - between 40% and 50% : 6754 (7%) elements including 0 that have been updated (6597 were updatable)
+2015-04-22 08:16:42  INFO - between 50% and 60% : 7819 (9%) elements including 0 that have been updated (7656 were updatable)
+2015-04-22 08:16:42  INFO - between 60% and 70% : 7064 (8%) elements including 0 that have been updated (6946 were updatable)
+2015-04-22 08:16:42  INFO - between 70% and 80% : 7949 (9%) elements including 0 that have been updated (7803 were updatable)
+2015-04-22 08:16:42  INFO - between 80% and 90% : 12900 (14%) elements including 12674 that have been updated (12676 were updatable)
+2015-04-22 08:16:42  INFO - between 90% and 100% : 36446 (42%) elements including 35679 that have been updated (35679 were updatable)
+2015-04-22 08:16:42  INFO Closing org.springframework.context.support.ClassPathXmlApplicationContext@cded763: startup date [Wed Apr 22 00:01:10 CEST 2015]; root of context hierarchy
+2015-04-22 08:16:42  INFO === Closing element synchronizer ===
+2015-04-22 08:16:42  INFO Total of matched elements: 86723
+2015-04-22 08:16:42  INFO Total of updated elements: 49004
+2015-04-22 08:16:42  INFO === Closing import loader ===
+2015-04-22 08:16:42  INFO Total of loaded imports: 352293
+2015-04-22 08:16:42  INFO Total of matched imports: 293527
+2015-04-22 08:16:42  INFO === Closing OSM API service ===
+2015-04-22 08:16:43  INFO Changeset with id=30396038 has been closed
+2015-04-22 08:16:43  INFO Total of read operations: success=86723 failure=42
+2015-04-22 08:16:43  INFO Total of write operations: success=49004 failure=0
+2015-04-22 08:16:43  INFO Total of changeset operations: open=50 close=50
+2015-04-22 08:16:43  INFO === Osmaxil has finished its job ===

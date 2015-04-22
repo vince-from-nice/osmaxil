@@ -1,0 +1,45 @@
+2015-04-20 22:37:26  INFO === Statistics ===
+2015-04-20 22:37:26  INFO *** Statistics with the old matching method ***
+2015-04-20 22:37:26  INFO Number of matched elements: 2694
+2015-04-20 22:37:26  INFO Number of updatable elements: 2520
+2015-04-20 22:37:26  INFO Number of updated elements: 1350
+2015-04-20 22:37:26  INFO Repartition by matching scores:
+2015-04-20 22:37:26  INFO - between 0% and 10% : 40 (1%) elements including 0 that have been updated (38 were updatable)
+2015-04-20 22:37:26  INFO - between 10% and 20% : 64 (2%) elements including 0 that have been updated (59 were updatable)
+2015-04-20 22:37:26  INFO - between 20% and 30% : 141 (5%) elements including 1 that have been updated (130 were updatable)
+2015-04-20 22:37:26  INFO - between 30% and 40% : 228 (8%) elements including 8 that have been updated (208 were updatable)
+2015-04-20 22:37:26  INFO - between 40% and 50% : 284 (10%) elements including 41 that have been updated (272 were updatable)
+2015-04-20 22:37:26  INFO - between 50% and 60% : 284 (10%) elements including 53 that have been updated (260 were updatable)
+2015-04-20 22:37:26  INFO - between 60% and 70% : 186 (6%) elements including 32 that have been updated (174 were updatable)
+2015-04-20 22:37:26  INFO - between 70% and 80% : 214 (7%) elements including 40 that have been updated (204 were updatable)
+2015-04-20 22:37:26  INFO - between 80% and 90% : 316 (11%) elements including 295 that have been updated (295 were updatable)
+2015-04-20 22:37:26  INFO - between 90% and 100% : 937 (34%) elements including 880 that have been updated (880 were updatable)
+2015-04-20 22:37:26  INFO *** Statistics with the new matching method ***
+2015-04-20 22:37:26  INFO * Statistics for the updatable tag building:levels
+2015-04-20 22:37:26  INFO Number of matched elements: 2676
+2015-04-20 22:37:26  INFO Number of updatable elements: 2503
+2015-04-20 22:37:26  INFO Number of updated elements: 1333
+2015-04-20 22:37:26  INFO Repartition by matching scores:
+2015-04-20 22:37:26  INFO - between 0% and 10% : 33 (1%) elements including 0 that have been updated (33 were updatable)
+2015-04-20 22:37:26  INFO - between 10% and 20% : 25 (0%) elements including 0 that have been updated (21 were updatable)
+2015-04-20 22:37:26  INFO - between 20% and 30% : 49 (1%) elements including 0 that have been updated (45 were updatable)
+2015-04-20 22:37:26  INFO - between 30% and 40% : 152 (5%) elements including 0 that have been updated (139 were updatable)
+2015-04-20 22:37:26  INFO - between 40% and 50% : 274 (10%) elements including 0 that have been updated (256 were updatable)
+2015-04-20 22:37:26  INFO - between 50% and 60% : 276 (10%) elements including 0 that have been updated (257 were updatable)
+2015-04-20 22:37:26  INFO - between 60% and 70% : 217 (8%) elements including 0 that have been updated (206 were updatable)
+2015-04-20 22:37:26  INFO - between 70% and 80% : 223 (8%) elements including 0 that have been updated (213 were updatable)
+2015-04-20 22:37:26  INFO - between 80% and 90% : 352 (13%) elements including 328 that have been updated (328 were updatable)
+2015-04-20 22:37:26  INFO - between 90% and 100% : 1075 (39%) elements including 1005 that have been updated (1005 were updatable)
+2015-04-20 22:37:26  INFO Closing org.springframework.context.support.ClassPathXmlApplicationContext@4b8e282c: startup date [Mon Apr 20 20:20:23 CEST 2015]; root of context hierarchy
+2015-04-20 22:37:26  INFO === Closing element synchronizer ===
+2015-04-20 22:37:26  INFO Total of matched elements: 2694
+2015-04-20 22:37:26  INFO Total of updated elements: 1350
+2015-04-20 22:37:26  INFO === Closing import loader ===
+2015-04-20 22:37:26  INFO Total of loaded imports: 352293
+2015-04-20 22:37:26  INFO Total of matched imports: 10587
+2015-04-20 22:37:26  INFO === Closing OSM API service ===
+2015-04-20 22:37:27  INFO Changeset with id=60487 has been closed
+2015-04-20 22:37:27  INFO Total of read operations: success=2694 failure=0
+2015-04-20 22:37:27  INFO Total of write operations: success=1350 failure=0
+2015-04-20 22:37:27  INFO Total of changeset operations: open=2 close=2
+2015-04-20 22:37:27  INFO === Osmaxil has finished its job ===
