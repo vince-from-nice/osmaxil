@@ -12,7 +12,7 @@ import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.stereotype.Component;
 
 @Component
-public abstract class AbstractBuildingPlugin extends AbstractPlugin<BuildingElement, BuildingImport> {
+public abstract class AbstractBuildingUpdaterPlugin extends AbstractPlugin<BuildingElement, BuildingImport> {
  
     @Override
     public BuildingElement createElement(long osmId, long relationId, OsmApiRoot data) {

@@ -44,6 +44,5 @@ public class Application {
         this.elementSynchronizer.synchronizeElements();
         this.statsGenerator.generateStats();
         this.applicationContext.close();
-        
     }
 }

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-@Component("OpenDataParisBuildingPlugin")
-public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
+@Component("ParisBuildingUpdaterPlugin")
+public class ParisBuildingUpdaterPlugin extends AbstractBuildingUpdaterPlugin {
 
     private CSVReader reader;
 
@@ -24,19 +24,19 @@ public class OpenDataParisBuildingPlugin extends AbstractBuildingPlugin {
 
     boolean hasNext;
 
-    @Value("${plugins.openDataParis.updatableTagNames}")
+    @Value("${plugins.parisBuildingUpdater.updatableTagNames}")
     private String updatableTagNames;
     
-    @Value("${plugins.openDataParis.changesetSourceLabel}")
+    @Value("${plugins.parisBuildingUpdater.changesetSourceLabel}")
     private String changesetSourceLabel;
     
-    @Value("${plugins.openDataParis.changesetComment}")
+    @Value("${plugins.parisBuildingUpdater.changesetComment}")
     private String changesetComment;
     
-    @Value("${plugins.openDataParis.minMatchingScore}")
+    @Value("${plugins.parisBuildingUpdater.minMatchingScore}")
     private float minMatchingScore;
     
-    @Value("${plugins.openDataParis.filePath}")
+    @Value("${plugins.parisBuildingUpdater.filePath}")
     private String csvFilePath;
 
     @PostConstruct

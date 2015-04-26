@@ -9,7 +9,6 @@ import org.openstreetmap.osmaxil.data.MatchingElementId;
 import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +16,8 @@ public class ElementCache {
 
     private Map<Long, AbstractElement> elements;
     
-    @Autowired
-    @Qualifier (value="OpenDataParisBuildingPlugin")
+//    @Autowired
+//    @Qualifier (value="OpenDataParisBuildingPlugin")
     private AbstractPlugin plugin;
     
     @Autowired
@@ -48,5 +47,13 @@ public class ElementCache {
 
     public Map<Long, AbstractElement> getElements() {
         return elements;
+    }
+
+    public AbstractPlugin getPlugin() {
+        return plugin;
+    }
+
+    public void setPlugin(AbstractPlugin plugin) {
+        this.plugin = plugin;
     }
 }

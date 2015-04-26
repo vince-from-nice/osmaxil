@@ -9,7 +9,6 @@ import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.data.AbstractElement;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,8 +21,8 @@ public class ElementSynchronizer {
     @Autowired
     private ElementCache elementCache;
 
-    @Autowired
-    @Qualifier(value = "OpenDataParisBuildingPlugin")
+//    @Autowired
+//    @Qualifier(value = "OpenDataParisBuildingPlugin")
     private AbstractPlugin plugin;
 
     @Autowired
@@ -131,5 +130,13 @@ public class ElementSynchronizer {
         } else {
             LOGGER.info("Element cannot be modified because original values exist");
         }
+    }
+    
+    public AbstractPlugin getPlugin() {
+        return plugin;
+    }
+
+    public void setPlugin(AbstractPlugin plugin) {
+        this.plugin = plugin;
     }
 }

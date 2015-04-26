@@ -9,26 +9,26 @@ import org.openstreetmap.osmaxil.data.building.BuildingImport;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Component ("PssArchiMockPlugin")
-public class PssArchiMockBuildingPlugin extends AbstractBuildingPlugin  {
+@Component ("PssBuildingUpdaterPlugin")
+public class PssBuildingUpdaterPlugin extends AbstractBuildingUpdaterPlugin  {
 
     int counter;
     
     static List<BuildingImport> data;
     
-    @Value("${plugins.pssArchi.updatableTagNames}")
+    @Value("${plugins.pssBuildingUpdater.updatableTagNames}")
     private String updatableTagNames;
     
-    @Value("${plugins.pssArchi.changesetSourceLabel}")
+    @Value("${plugins.pssBuildingUpdater.changesetSourceLabel}")
     private String changesetSourceLabel;
     
-    @Value("${plugins.pssArchi.changesetComment}")
+    @Value("${plugins.pssBuildingUpdater.changesetComment}")
     private String changesetComment;
     
-    @Value("${plugins.pssArchi.minMatchingScore}")
+    @Value("${plugins.pssBuildingUpdater.minMatchingScore}")
     private float minMatchingScore;
     
-    @Value("${plugins.pssArchi.filePath}")
+    @Value("${plugins.pssBuildingUpdater.filePath}")
     private String csvFilePath;
     
     @PostConstruct

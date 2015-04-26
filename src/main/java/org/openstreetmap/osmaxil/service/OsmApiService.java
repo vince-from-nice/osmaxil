@@ -1,6 +1,5 @@
 package org.openstreetmap.osmaxil.service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;

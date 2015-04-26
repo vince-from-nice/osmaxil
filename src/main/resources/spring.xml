@@ -13,19 +13,43 @@
     http://www.springframework.org/schema/aop/spring-aop.xsd
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- ******************************************************************************** -->
-    <!-- Common configuration -->
-    <!-- ******************************************************************************** -->
-    
+	<!-- ******************************************************************************** -->
+	<!-- Common configuration -->
+	<!-- ******************************************************************************** -->
+
 	<aop:config proxy-target-class="true" />
 	<context:annotation-config />
 	<context:component-scan base-package="org.openstreetmap.osmaxil" scoped-proxy="targetClass" />
 
-    <context:property-placeholder location="classpath:settings.properties, classpath:password.properties" />
+	<context:property-placeholder location="classpath:settings.properties, classpath:password.properties" />
 
-    <!-- ******************************************************************************** -->
+	<bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.ParisBuildingUpdaterPlugin">
+	</bean>
+
+	<bean id="importLoader" class="org.openstreetmap.osmaxil.service.ImportLoader">
+		<property name="plugin" ref="activePlugin" />
+	</bean>
+
+	<bean id="elementCache" class="org.openstreetmap.osmaxil.service.ElementCache">
+		<property name="plugin" ref="activePlugin" />
+	</bean>
+
+	<bean id="elementProcessor" class="org.openstreetmap.osmaxil.service.ElementProcessor">
+		<property name="plugin" ref="activePlugin" />
+	</bean>
+
+	<bean id="elementSynchronizer" class="org.openstreetmap.osmaxil.service.ElementSynchronizer">
+		<property name="plugin" ref="activePlugin" />
+	</bean>
+
+	<bean id="statsGenerator" class="org.openstreetmap.osmaxil.service.StatsGenerator">
+		<property name="plugin" ref="activePlugin" />
+	</bean>
+
+
+	<!-- ******************************************************************************** -->
 	<!-- Configuration the PostGIS service -->
-    <!-- ******************************************************************************** -->
+	<!-- ******************************************************************************** -->
 
 	<bean id="postgisDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver" />
@@ -38,11 +62,11 @@
 		<property name="dataSource" ref="postgisDataSource" />
 	</bean>
 
-    <!-- ******************************************************************************** -->
+	<!-- ******************************************************************************** -->
 	<!-- Configuration for the OSM API service -->
 	<!-- ******************************************************************************** -->
 
-   	<oxm:jaxb2-marshaller id="marshaller">
+	<oxm:jaxb2-marshaller id="marshaller">
 		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.data.api.OsmApiRoot" />
 	</oxm:jaxb2-marshaller>
 

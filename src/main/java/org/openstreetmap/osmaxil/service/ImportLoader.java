@@ -12,7 +12,6 @@ import org.openstreetmap.osmaxil.data.AbstractImport;
 import org.openstreetmap.osmaxil.data.MatchingElementId;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,8 +21,8 @@ public class ImportLoader {
     
     private long counterForMatchedImports;
     
-    @Autowired
-    @Qualifier (value="OpenDataParisBuildingPlugin")
+//    @Autowired
+//    @Qualifier (value="OpenDataParisBuildingPlugin")
     private AbstractPlugin plugin;
 
     @Autowired
@@ -99,4 +98,12 @@ public class ImportLoader {
         LOGGER.info(sb.append("]").toString());
     }
 
+    public AbstractPlugin getPlugin() {
+        return plugin;
+    }
+
+    public void setPlugin(AbstractPlugin plugin) {
+        this.plugin = plugin;
+    }
+    
 }

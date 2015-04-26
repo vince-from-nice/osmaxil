@@ -12,7 +12,6 @@ import org.openstreetmap.osmaxil.data.AbstractElement;
 import org.openstreetmap.osmaxil.data.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +19,8 @@ public class ElementProcessor {
 
     private long counter;
 
-    @Autowired
-    @Qualifier(value = "OpenDataParisBuildingPlugin")
+//    @Autowired
+//    @Qualifier(value = "OpenDataParisBuildingPlugin")
     private AbstractPlugin plugin;
 
     @Autowired
@@ -143,6 +142,14 @@ public class ElementProcessor {
                 //LOGGER.info(sb.toString());
             }
         }
+    }
+    
+    public AbstractPlugin getPlugin() {
+        return plugin;
+    }
+
+    public void setPlugin(AbstractPlugin plugin) {
+        this.plugin = plugin;
     }
 
 }
