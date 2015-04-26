@@ -6,32 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.annotation.Obsolete;
-import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ElementProcessor {
+public class ElementProcessor extends AbstractService {
 
     private long counter;
 
-//    @Autowired
-//    @Qualifier(value = "OpenDataParisBuildingPlugin")
-    private AbstractPlugin plugin;
-
     @Autowired
     private ElementCache elementCache;
-
-    @Autowired
-    private OsmApiService osmApiService;
-
-    static private final Logger LOGGER = Logger.getLogger(Application.class);
-
-    static private final String LOG_SEPARATOR = "==========================================================";
 
     public void processElements() {
         LOGGER.info("=== Processing elements ===");
@@ -55,13 +42,16 @@ public class ElementProcessor {
         LOGGER.info("Processing element #" + this.counter + ": " + element);
         // Compute a matching score for each import matching the element
         for (AbstractImport imp : element.getMatchingImports()) {
-            imp.setMatchingScore(this.plugin.computeImportMatchingScore(imp));
+            imp.setMatchingScore(this.plugin.computeMatchingScore(imp));
         }
-        // For the old basic best matching method:
-        this.findBestMatchingImport(element);
-        // For the new extended matching method:
-        this.dispatchMatchingImportsByTagValues(element);
-        this.computeTotalScoresByTagValues(element);
+        // If the plugin is an updater, need to do additional stuff
+        if (this.plugin instanceof AbstractElementUpdaterPlugin) {
+            // For the old basic best matching method:
+            this.findBestMatchingImport(element);
+            // For the new extended matching method:
+            this.dispatchMatchingImportsByTagValues(element);
+            this.computeTotalScoresByTagValues(element);            
+        }
     }
     
     /**
@@ -72,7 +62,7 @@ public class ElementProcessor {
     @Obsolete
     private void dispatchMatchingImportsByTagValues(AbstractElement element) {
         // For each updatable tag names..
-        for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
+        for (String updatableTagName : ((AbstractElementUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
             Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValuesByTagName(updatableTagName);
             // For each matching import..
             for (AbstractImport imp : element.getMatchingImports()) {
@@ -95,7 +85,7 @@ public class ElementProcessor {
      */
     private void computeTotalScoresByTagValues(AbstractElement element) {
         // For each updatable tag names..
-        for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
+        for (String updatableTagName : ((AbstractElementUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
             LOGGER.info("Computing total scores by values for the tag " + updatableTagName);
             Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValuesByTagName(updatableTagName);
             // For each updatable tag value..
@@ -142,14 +132,6 @@ public class ElementProcessor {
                 //LOGGER.info(sb.toString());
             }
         }
-    }
-    
-    public AbstractPlugin getPlugin() {
-        return plugin;
-    }
-
-    public void setPlugin(AbstractPlugin plugin) {
-        this.plugin = plugin;
     }
 
 }

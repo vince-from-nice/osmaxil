@@ -3,19 +3,17 @@ package org.openstreetmap.osmaxil.plugin.building;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.data.ElementTagNames;
-import org.openstreetmap.osmaxil.data.MatchingElementId;
-import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
-import org.openstreetmap.osmaxil.data.building.BuildingElement;
-import org.openstreetmap.osmaxil.data.building.BuildingImport;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.springframework.stereotype.Component;
+import org.openstreetmap.osmaxil.model.ElementTagNames;
+import org.openstreetmap.osmaxil.model.MatchingElementId;
+import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.building.BuildingElement;
+import org.openstreetmap.osmaxil.model.building.BuildingImport;
+import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
 
-@Component
-public abstract class AbstractBuildingUpdaterPlugin extends AbstractPlugin<BuildingElement, BuildingImport> {
+public abstract class AbstractBuildingUpdaterPlugin extends AbstractElementUpdaterPlugin<BuildingElement, BuildingImport> {
  
     @Override
-    public BuildingElement createElement(long osmId, long relationId, OsmApiRoot data) {
+    public BuildingElement createElementInCache(long osmId, long relationId, OsmApiRoot data) {
         BuildingElement element = new BuildingElement(osmId);
         // TODO move below code in AbstractPlugin or AbstractElement since it's generic
         element.setRelationId(relationId);
@@ -91,7 +89,7 @@ public abstract class AbstractBuildingUpdaterPlugin extends AbstractPlugin<Build
     }
     
     @Override
-    public float computeImportMatchingScore(BuildingImport imp) {
+    public float computeMatchingScore(BuildingImport imp) {
         BuildingElement element = (BuildingElement) imp.getElement();
         float result = 0f;
         if (imp.getArea() == null) {

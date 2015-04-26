@@ -67,7 +67,7 @@
 	<!-- ******************************************************************************** -->
 
 	<oxm:jaxb2-marshaller id="marshaller">
-		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.data.api.OsmApiRoot" />
+		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.model.api.OsmApiRoot" />
 	</oxm:jaxb2-marshaller>
 
 	<bean id="marshallingHttpMessageConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">

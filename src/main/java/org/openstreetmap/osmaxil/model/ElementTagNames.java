@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.data;
+package org.openstreetmap.osmaxil.model;
 
 public class ElementTagNames {
     

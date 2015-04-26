@@ -1,7 +1,7 @@
-package org.openstreetmap.osmaxil.data.building;
+package org.openstreetmap.osmaxil.model.building;
 
-import org.openstreetmap.osmaxil.data.AbstractImport;
-import org.openstreetmap.osmaxil.data.ElementTagNames;
+import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.model.ElementTagNames;
 
 public class BuildingImport extends AbstractImport {
 

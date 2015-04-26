@@ -1,10 +1,10 @@
-package org.openstreetmap.osmaxil.data.building;
+package org.openstreetmap.osmaxil.model.building;
 
 import java.util.List;
 
-import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.ElementTagNames;
-import org.openstreetmap.osmaxil.data.api.OsmApiTag;
+import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.ElementTagNames;
+import org.openstreetmap.osmaxil.model.api.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
     

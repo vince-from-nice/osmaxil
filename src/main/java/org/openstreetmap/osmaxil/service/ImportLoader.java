@@ -4,34 +4,23 @@ import java.util.List;
 
 import javax.annotation.PreDestroy;
 
-import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.Exception;
-import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.AbstractImport;
-import org.openstreetmap.osmaxil.data.MatchingElementId;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ImportLoader {
+public class ImportLoader  extends AbstractService {
 
     private long counterForLoadedImports;
     
     private long counterForMatchedImports;
     
-//    @Autowired
-//    @Qualifier (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin plugin;
-
     @Autowired
     private ElementCache elementCache;
-    
-    static private final Logger LOGGER = Logger.getLogger(Application.class);
-
-    static private final String LOG_SEPARATOR = "==========================================================";
-    
+        
     @PreDestroy
     public void close() {
         LOGGER.info("=== Closing import loader ===");
@@ -96,14 +85,6 @@ public class ImportLoader {
             sb.append(i.getId() + " ");
         }
         LOGGER.info(sb.append("]").toString());
-    }
-
-    public AbstractPlugin getPlugin() {
-        return plugin;
-    }
-
-    public void setPlugin(AbstractPlugin plugin) {
-        this.plugin = plugin;
     }
     
 }

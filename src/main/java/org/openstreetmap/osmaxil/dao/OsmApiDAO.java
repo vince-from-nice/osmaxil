@@ -1,11 +1,11 @@
-package org.openstreetmap.osmaxil.service;
+package org.openstreetmap.osmaxil.dao;
 
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,7 +17,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class OsmApiService {
+public class OsmApiDAO {
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Instance attributes

@@ -4,24 +4,15 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.openstreetmap.osmaxil.Exception;
-import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.MatchingElementId;
-import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.MatchingElementId;
+import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ElementCache {
-
+public class ElementCache extends AbstractService {
+    
     private Map<Long, AbstractElement> elements;
-    
-//    @Autowired
-//    @Qualifier (value="OpenDataParisBuildingPlugin")
-    private AbstractPlugin plugin;
-    
-    @Autowired
-    private OsmApiService osmApiService;
     
     public ElementCache() throws java.lang.Exception {
         this.elements = new Hashtable<Long, AbstractElement>();
@@ -36,7 +27,7 @@ public class ElementCache {
             if (apiData == null) {
                 throw new Exception("Unable to fetch data from OSM API for element#" + osmId);
             }
-            element = (AbstractElement) this.plugin.createElement(osmId, relevantElementId.getRelationId(), apiData);
+            element = (AbstractElement) this.plugin.createElementInCache(osmId, relevantElementId.getRelationId(), apiData);
             this.elements.put(osmId, element);
         } /*else {
             // If element was already present refresh its data
@@ -49,11 +40,4 @@ public class ElementCache {
         return elements;
     }
 
-    public AbstractPlugin getPlugin() {
-        return plugin;
-    }
-
-    public void setPlugin(AbstractPlugin plugin) {
-        this.plugin = plugin;
-    }
 }

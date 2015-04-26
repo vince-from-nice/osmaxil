@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service;
+package org.openstreetmap.osmaxil.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OsmPostgisService {
+public class OsmPostgisDAO {
     
     @Autowired
     @Qualifier("postgisJdbcTemplate")

@@ -4,15 +4,15 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.http.annotation.Obsolete;
-import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.plugin.AbstractElementMakerPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ElementSynchronizer {
+public class ElementSynchronizer extends AbstractService {
 
     private long counterForMatchedElements;
 
@@ -20,17 +20,6 @@ public class ElementSynchronizer {
 
     @Autowired
     private ElementCache elementCache;
-
-//    @Autowired
-//    @Qualifier(value = "OpenDataParisBuildingPlugin")
-    private AbstractPlugin plugin;
-
-    @Autowired
-    private OsmApiService osmApiService;
-
-    static private final Logger LOGGER = Logger.getLogger(Application.class);
-
-    static private final String LOG_SEPARATOR = "==========================================================";
 
     @PostConstruct
     public void init() {
@@ -64,31 +53,40 @@ public class ElementSynchronizer {
             return;
         }
         LOGGER.info("Synchronizing element #" + this.counterForMatchedElements + ": " + element);
-        // synchronizeWithBestMatchingImport(element);
-        synchronizeWithBestAccumulatedImports(element);
+        // The synchronization process depends on the nature of the plugin
+        if (this.plugin instanceof AbstractElementUpdaterPlugin) {
+            
+        } else if (this.plugin instanceof AbstractElementMakerPlugin) {
+            
+        } else {
+            LOGGER.warn("Unable to synchronize with plugin " + this.plugin); 
+        }
+        // updateElementWithBestMatchingImport(element);
+        updateElementWithBestAccumulatedImports(element);
     }
 
     /**
-     * Synchronize element to OSM API with tag values which are coming from the import list which haves the best total
+     * Update element into OSM database with tag values which are coming from the import list which haves the best total
      * matching score. This method is based on the new matching method where matching imports have been regrouped by
      * their tag values.
      * 
      * @param element
      */
-    private void synchronizeWithBestAccumulatedImports(AbstractElement element) {
+    private void updateElementWithBestAccumulatedImports(AbstractElement element) {
         boolean needToWrite = false;
-        for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
+        AbstractElementUpdaterPlugin updaterPlugin = (AbstractElementUpdaterPlugin) this.plugin;
+        for (String updatableTagName : updaterPlugin.getUpdatableTagNames()) {
             LOGGER.info("* Updating data for the tag " + updatableTagName);
             // Check if its best matching score is enough
-            if (element.getBestTotalScoreByTagName(updatableTagName) < this.plugin.getMinMatchingScoreForUpdate()) {
+            if (element.getBestTotalScoreByTagName(updatableTagName) < updaterPlugin.getMinMatchingScoreForUpdate()) {
                 LOGGER.info("Element cannot be updated because its best matching score is "
                         + element.getBestTotalScoreByTagName(updatableTagName) + " (min="
-                        + this.plugin.getMinMatchingScoreForUpdate() + ")");
+                        + updaterPlugin.getMinMatchingScoreForUpdate() + ")");
                 return;
             }
             // Update tag value only if it is updatable (ie. no original value)
-            if (this.plugin.isElementTagUpdatable(element, updatableTagName)) {
-                this.plugin.updateElementTag(element, updatableTagName);
+            if (updaterPlugin.isElementTagUpdatable(element, updatableTagName)) {
+                updaterPlugin.updateElementTag(element, updatableTagName);
                 needToWrite = true;
             }
         }
@@ -104,18 +102,19 @@ public class ElementSynchronizer {
     }
 
     /**
-     * Synchronize element to OSM API with tag values which are coming from the best matching imports. This method is
+     * Update element to OSM database with tag values which are coming from the best matching imports. This method is
      * now obsolete since the new matching method.
      * 
      * @param element
      */
     @Obsolete
-    private void synchronizeWithBestMatchingImport(AbstractElement element) {
+    private void updateElementWithBestMatchingImport(AbstractElement element) {
+        AbstractElementUpdaterPlugin updaterPlugin = (AbstractElementUpdaterPlugin) this.plugin;
         // Check if its best matching score is enough
-        if (element.getBestMatchingImport().getMatchingScore() < this.plugin.getMinMatchingScoreForUpdate()) {
+        if (element.getBestMatchingImport().getMatchingScore() < updaterPlugin.getMinMatchingScoreForUpdate()) {
             LOGGER.info("Element cannot be updated because its best matching score is "
                     + element.getBestMatchingImport().getMatchingScore() + " (min="
-                    + this.plugin.getMinMatchingScoreForUpdate() + ")");
+                    + updaterPlugin.getMinMatchingScoreForUpdate() + ")");
             return;
         }
         // Try to update the element data with the best matching element
@@ -131,12 +130,5 @@ public class ElementSynchronizer {
             LOGGER.info("Element cannot be modified because original values exist");
         }
     }
-    
-    public AbstractPlugin getPlugin() {
-        return plugin;
-    }
 
-    public void setPlugin(AbstractPlugin plugin) {
-        this.plugin = plugin;
-    }
 }

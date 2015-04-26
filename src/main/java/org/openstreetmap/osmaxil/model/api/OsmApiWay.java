@@ -1,11 +1,11 @@
-package org.openstreetmap.osmaxil.data.api;
+package org.openstreetmap.osmaxil.model.api;
 
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-public class OsmApiNode {
+public class OsmApiWay {
     
     @XmlAttribute
     public Long id;
@@ -29,14 +29,11 @@ public class OsmApiNode {
     public String timestamp;
     
     // Specific attributes
+
+    @XmlElement (name="nd")
+    public List<OsmApiNd> nds;
     
-    @XmlAttribute
-    public float lat;
-    
-    @XmlAttribute
-    public float lon;
     
     @XmlElement (name="tag")
     public List<OsmApiTag> tags;
-
 }

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.data;
+package org.openstreetmap.osmaxil.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.Map;
 import org.apache.http.annotation.Obsolete;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.data.api.OsmApiRoot;
-import org.openstreetmap.osmaxil.data.api.OsmApiTag;
+import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.api.OsmApiTag;
 
 public abstract class AbstractElement {
 

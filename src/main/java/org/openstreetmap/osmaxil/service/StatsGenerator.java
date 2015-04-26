@@ -1,15 +1,14 @@
 package org.openstreetmap.osmaxil.service;
 
 import org.apache.http.annotation.Obsolete;
-import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.data.AbstractElement;
-import org.openstreetmap.osmaxil.data.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StatsGenerator {
+public class StatsGenerator extends AbstractService {
 
     private int matchedElementsNbr;
 
@@ -26,28 +25,33 @@ public class StatsGenerator {
     @Autowired
     private ElementCache elementCache;
 
-//    @Autowired
-//    @Qualifier(value = "OpenDataParisBuildingPlugin")
-    private AbstractPlugin plugin;
-    
-    static private final Logger LOGGER = Logger.getLogger(StatsGenerator.class);
-
     public void generateStats() {
         LOGGER.info("=== Statistics ===");
-        // Old basic matching method
-        LOGGER.info("*** Statistics with the old matching method ***");
-        this.buildStatsWithBestMatchingImports();
-        displayStats();
-        // New extended matching method
-        LOGGER.info("*** Statistics with the new matching method ***");
-        for (String updatableTagName : this.plugin.getUpdatableTagNames()) {
-            LOGGER.info("* Statistics for the updatable tag " + updatableTagName);
-            this.buildStatsWithBestAccumulatedImports(updatableTagName);
-            displayStats();
-        }
+        if (this.plugin instanceof AbstractElementUpdaterPlugin) {
+            generateUpdatingStats();
+        } else if (this.plugin instanceof AbstractElementUpdaterPlugin) {
+            generateMakingStats();
+        } 
     }
 
-    private void displayStats() {
+    private void generateUpdatingStats() {
+        // Old basic matching method
+        LOGGER.info("*** Statistics with the old matching method ***");
+        this.buildUpdatingStatsWithBestMatchingImports();
+        displayUpdatingStats();
+        // New extended matching method
+        LOGGER.info("*** Statistics with the new matching method ***");
+        for (String updatableTagName : ((AbstractElementUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
+            LOGGER.info("* Statistics for the updatable tag " + updatableTagName);
+            this.buildUpdatingStatsWithBestAccumulatedImports(updatableTagName);
+            displayUpdatingStats();
+        }
+    }
+    
+    private void generateMakingStats() {
+    }
+    
+    private void displayUpdatingStats() {
         LOGGER.info("Number of matched elements: " + this.matchedElementsNbr);
         LOGGER.info("Number of updatable elements: " + this.updatableElementsNbr);
         LOGGER.info("Number of updated elements: " + this.updatedElementsNbr);
@@ -66,7 +70,7 @@ public class StatsGenerator {
     }
 
     @Obsolete
-    private void buildStatsWithBestMatchingImports() {
+    private void buildUpdatingStatsWithBestMatchingImports() {
         this.matchedElementsNbr = 0;
         this.updatableElementsNbr = 0;
         this.updatedElementsNbr = 0;
@@ -87,8 +91,8 @@ public class StatsGenerator {
                             this.updatedElementsNbrByScore[i]++;
                         }
                         boolean updatable = false;
-                        for (String tagName : this.plugin.getUpdatableTagNames()) {
-                            if (this.plugin.isElementTagUpdatable(element, tagName)) {
+                        for (String tagName : ((AbstractElementUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
+                            if (((AbstractElementUpdaterPlugin) this.plugin).isElementTagUpdatable(element, tagName)) {
                                 updatable = true;
                             }
                         }
@@ -103,7 +107,7 @@ public class StatsGenerator {
         }
     }
 
-    private void buildStatsWithBestAccumulatedImports(String updatableTagName) {
+    private void buildUpdatingStatsWithBestAccumulatedImports(String updatableTagName) {
         this.matchedElementsNbr = 0;
         this.updatableElementsNbr = 0;
         this.updatedElementsNbr = 0;
@@ -123,7 +127,7 @@ public class StatsGenerator {
                             this.updatedElementsNbr++;
                             this.updatedElementsNbrByScore[i]++;
                         }
-                        if (this.plugin.isElementTagUpdatable(element, updatableTagName)) {
+                        if (((AbstractElementUpdaterPlugin) this.plugin).isElementTagUpdatable(element, updatableTagName)) {
                             this.updatableElementsNbr++;
                             this.updatableElementsNbrByScore[i]++;
                         }
@@ -132,14 +136,6 @@ public class StatsGenerator {
                 }
             }
         }
-    }
-    
-    public AbstractPlugin getPlugin() {
-        return plugin;
-    }
-
-    public void setPlugin(AbstractPlugin plugin) {
-        this.plugin = plugin;
     }
 
 }
