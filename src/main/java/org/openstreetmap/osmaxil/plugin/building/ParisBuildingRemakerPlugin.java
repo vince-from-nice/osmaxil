@@ -5,12 +5,12 @@ import java.util.List;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.openstreetmap.osmaxil.plugin.AbstracMakerPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
 import org.openstreetmap.osmaxil.plugin.loader.ParisDataCsvBuildingLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-public class ParisBuildingMakerPlugin extends AbstracMakerPlugin<BuildingElement, BuildingImport> {
+public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingElement, BuildingImport> {
     
     @Autowired
     private ParisDataCsvBuildingLoader loader;
@@ -18,6 +18,9 @@ public class ParisBuildingMakerPlugin extends AbstracMakerPlugin<BuildingElement
     @Autowired
     private BuildingHelper helper;
 
+    @Value("${plugins.parisBuildingMaker.minMatchingScore}")
+    private float minMatchingScore;
+    
     @Value("${plugins.parisBuildingMaker.changesetSourceLabel}")
     private String changesetSourceLabel;
     
@@ -38,7 +41,12 @@ public class ParisBuildingMakerPlugin extends AbstracMakerPlugin<BuildingElement
     public BuildingElement instanciateElement(long osmId) {
         return new BuildingElement(osmId);
     }
-
+    
+    @Override
+    public float getMinMatchingScore() {
+        return minMatchingScore;
+    }
+    
     public ParisDataCsvBuildingLoader getLoader() {
         return loader;
     }
@@ -62,5 +70,4 @@ public class ParisBuildingMakerPlugin extends AbstracMakerPlugin<BuildingElement
     public void setChangesetComment(String changesetComment) {
         this.changesetComment = changesetComment;
     }
-    
 }

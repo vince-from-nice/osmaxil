@@ -16,14 +16,23 @@ public abstract class AbstractPlugin <Element extends AbstractElement, Import ex
     
     abstract public List<MatchingElementId> findMatchingElements(Import imp);
 
-    abstract public Element instanciateElement(long osmId, long relationId, OsmApiRoot data);
-
+    abstract public Element instanciateElement(long osmId);
+    
     abstract public float computeMatchingScore(Import imp);
     
+    abstract public float getMinMatchingScore();
+
     abstract public String getChangesetComment();
     
     abstract public String getChangesetSourceLabel();
     
     abstract public AbstractImportLoader getLoader();
+    
+    public Element instanciateElement(long osmId, long relationId, OsmApiRoot data) {
+        Element element = instanciateElement(osmId);
+        element.setRelationId(relationId);
+        element.setApiData(data);
+        return element;
+    }
 
 }

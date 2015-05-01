@@ -6,7 +6,7 @@ import javax.annotation.PreDestroy;
 import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.plugin.AbstracMakerPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
 import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,14 +58,23 @@ public class SynchronizingStep extends AbstractStep {
         LOGGER.info("Synchronizing element #" + this.counterForMatchedElements + ": " + element);
         // The synchronization process depends on the nature of the plugin
         if (this.plugin instanceof AbstractUpdaterPlugin) {
-            
-        } else if (this.plugin instanceof AbstracMakerPlugin) {
-            
+            // updateElementWithBestMatchingImport(element);
+            updateElementWithBestAccumulatedImports(element);            
+        } else if (this.plugin instanceof AbstracRemakerPlugin) {
+            remakeElement(element);
         } else {
             LOGGER.warn("Unable to synchronize with plugin " + this.plugin); 
         }
-        // updateElementWithBestMatchingImport(element);
-        updateElementWithBestAccumulatedImports(element);
+
+    }
+    
+    private void remakeElement(AbstractElement element) {
+        // TODO
+        // Retrieve tags from the existing element
+        // Create new element
+        //   Create relation of type building
+        //   Create building:part
+        // Delete old element
     }
 
     /**
@@ -81,10 +90,10 @@ public class SynchronizingStep extends AbstractStep {
         for (String updatableTagName : updaterPlugin.getUpdatableTagNames()) {
             LOGGER.info("* Updating data for the tag " + updatableTagName);
             // Check if its best matching score is enough
-            if (element.getBestTotalScoreByTagName(updatableTagName) < updaterPlugin.getMinMatchingScoreForUpdate()) {
+            if (element.getBestTotalScoreByTagName(updatableTagName) < updaterPlugin.getMinMatchingScore()) {
                 LOGGER.info("Element cannot be updated because its best matching score is "
                         + element.getBestTotalScoreByTagName(updatableTagName) + " (min="
-                        + updaterPlugin.getMinMatchingScoreForUpdate() + ")");
+                        + updaterPlugin.getMinMatchingScore() + ")");
                 return;
             }
             // Update tag value only if it is updatable (ie. no original value)
@@ -114,10 +123,10 @@ public class SynchronizingStep extends AbstractStep {
     private void updateElementWithBestMatchingImport(AbstractElement element) {
         AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
         // Check if its best matching score is enough
-        if (element.getBestMatchingImport().getMatchingScore() < updaterPlugin.getMinMatchingScoreForUpdate()) {
+        if (element.getBestMatchingImport().getMatchingScore() < updaterPlugin.getMinMatchingScore()) {
             LOGGER.info("Element cannot be updated because its best matching score is "
                     + element.getBestMatchingImport().getMatchingScore() + " (min="
-                    + updaterPlugin.getMinMatchingScoreForUpdate() + ")");
+                    + updaterPlugin.getMinMatchingScore() + ")");
             return;
         }
         // Try to update the element data with the best matching element

@@ -9,6 +9,7 @@ import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
 import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,8 @@ public class ProcessingStep extends AbstractStep {
             // For the new extended matching method:
             this.dispatchMatchingImportsByTagValues(element);
             this.computeTotalScoresByTagValues(element);            
+        } else if (this.plugin instanceof AbstracRemakerPlugin) {
+            // TODO processing stuff for creation ?
         }
     }
     

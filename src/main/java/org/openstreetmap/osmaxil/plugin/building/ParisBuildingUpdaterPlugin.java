@@ -25,7 +25,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     private String updatableTagNames;
     
     @Value("${plugins.parisBuildingUpdater.minMatchingScore}")
-    private float minMatchingScoreForUpdate;
+    private float minMatchingScore;
 
     @Value("${plugins.parisBuildingUpdater.changesetSourceLabel}")
     private String changesetSourceLabel;
@@ -97,8 +97,8 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     }
 
     @Override
-    public float getMinMatchingScoreForUpdate() {
-        return this.minMatchingScoreForUpdate;
+    public float getMinMatchingScore() {
+        return this.minMatchingScore;
     }
     
 }
