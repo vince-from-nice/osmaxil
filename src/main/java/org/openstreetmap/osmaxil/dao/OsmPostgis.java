@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OsmPostgisDAO {
+public class OsmPostgis {
     
     @Autowired
     @Qualifier("postgisJdbcTemplate")

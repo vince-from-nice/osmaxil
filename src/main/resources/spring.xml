@@ -26,26 +26,21 @@
 	<bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.ParisBuildingUpdaterPlugin">
 	</bean>
 
-	<bean id="importLoader" class="org.openstreetmap.osmaxil.service.ImportLoader">
+	<bean id="loadingStep" class="org.openstreetmap.osmaxil.step.LoadingStep">
 		<property name="plugin" ref="activePlugin" />
 	</bean>
 
-	<bean id="elementCache" class="org.openstreetmap.osmaxil.service.ElementCache">
+	<bean id="processingStep" class="org.openstreetmap.osmaxil.step.ProcessingStep">
 		<property name="plugin" ref="activePlugin" />
 	</bean>
 
-	<bean id="elementProcessor" class="org.openstreetmap.osmaxil.service.ElementProcessor">
+	<bean id="synchronizingStep" class="org.openstreetmap.osmaxil.step.SynchronizingStep">
 		<property name="plugin" ref="activePlugin" />
 	</bean>
 
-	<bean id="elementSynchronizer" class="org.openstreetmap.osmaxil.service.ElementSynchronizer">
+	<bean id="statisticsStep" class="org.openstreetmap.osmaxil.step.StatisticsStep">
 		<property name="plugin" ref="activePlugin" />
 	</bean>
-
-	<bean id="statsGenerator" class="org.openstreetmap.osmaxil.service.StatsGenerator">
-		<property name="plugin" ref="activePlugin" />
-	</bean>
-
 
 	<!-- ******************************************************************************** -->
 	<!-- Configuration the PostGIS service -->

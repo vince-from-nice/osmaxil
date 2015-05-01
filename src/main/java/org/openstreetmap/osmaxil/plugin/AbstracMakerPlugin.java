@@ -4,7 +4,7 @@ import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
 
-public abstract class AbstractElementMakerPlugin <Element extends AbstractElement, Import extends AbstractImport>  
+public abstract class AbstracMakerPlugin <Element extends AbstractElement, Import extends AbstractImport>  
     extends AbstractPlugin<Element, Import>  {
 
     abstract public Element instanciateElement(long osmId);

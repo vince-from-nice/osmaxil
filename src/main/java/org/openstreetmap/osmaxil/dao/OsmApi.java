@@ -17,7 +17,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class OsmApiDAO {
+public class OsmApi {
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Instance attributes

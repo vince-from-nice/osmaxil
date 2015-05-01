@@ -1,25 +1,27 @@
-package org.openstreetmap.osmaxil.service;
+package org.openstreetmap.osmaxil.step;
 
 import java.util.List;
 
 import javax.annotation.PreDestroy;
 
 import org.openstreetmap.osmaxil.Exception;
+import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
+import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ImportLoader  extends AbstractService {
+public class LoadingStep  extends AbstractStep {
 
     private long counterForLoadedImports;
     
     private long counterForMatchedImports;
     
     @Autowired
-    private ElementCache elementCache;
+    private ElementStore elementCache;
         
     @PreDestroy
     public void close() {
@@ -65,7 +67,7 @@ public class ImportLoader  extends AbstractService {
             // Get related element from the cache or create it
             AbstractElement element = null;
             try {
-                element = this.elementCache.getOrCreateElement(relevantElementId);
+                element = this.getOrCreateElement(relevantElementId);
             } catch (Exception e) {
                 LOGGER.error("Skipping element id=" + osmId + " (" + e.getMessage() + ")");
                 break;
@@ -74,6 +76,24 @@ public class ImportLoader  extends AbstractService {
             // And bind the import to it
             this.bindImportToElement(element, imp);
         }
+    }
+    
+    private AbstractElement getOrCreateElement(MatchingElementId relevantElementId) throws Exception {
+        long osmId  = relevantElementId.getOsmId();
+        AbstractElement element = this.elementCache.getElements().get(osmId);
+        if (element == null) {
+            // Fetch data from OSM API
+            OsmApiRoot apiData = this.osmApiService.readElement(osmId);
+            if (apiData == null) {
+                throw new Exception("Unable to fetch data from OSM API for element#" + osmId);
+            }
+            element = (AbstractElement) this.plugin.instanciateElement(osmId, relevantElementId.getRelationId(), apiData);
+            this.elementCache.getElements().put(osmId, element);
+        } /*else {
+            // If element was already present refresh its data
+            element.setApiData(apiData);                
+        }*/
+        return element;
     }
     
     private void bindImportToElement(AbstractElement element, AbstractImport imp) {

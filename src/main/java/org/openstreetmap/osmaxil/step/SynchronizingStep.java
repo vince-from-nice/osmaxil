@@ -1,26 +1,27 @@
-package org.openstreetmap.osmaxil.service;
+package org.openstreetmap.osmaxil.step;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.http.annotation.Obsolete;
+import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.plugin.AbstractElementMakerPlugin;
-import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstracMakerPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ElementSynchronizer extends AbstractService {
+public class SynchronizingStep extends AbstractStep {
 
     private long counterForMatchedElements;
 
     private long counterForUpdatedElements;
 
     @Autowired
-    private ElementCache elementCache;
+    private ElementStore elementCache;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         // Need to do here, when the synchronization phase is going to start to write elements.
         // If it would have been done on the Spring context initialization the first changeset could have become obsolete 
@@ -56,9 +57,9 @@ public class ElementSynchronizer extends AbstractService {
         }
         LOGGER.info("Synchronizing element #" + this.counterForMatchedElements + ": " + element);
         // The synchronization process depends on the nature of the plugin
-        if (this.plugin instanceof AbstractElementUpdaterPlugin) {
+        if (this.plugin instanceof AbstractUpdaterPlugin) {
             
-        } else if (this.plugin instanceof AbstractElementMakerPlugin) {
+        } else if (this.plugin instanceof AbstracMakerPlugin) {
             
         } else {
             LOGGER.warn("Unable to synchronize with plugin " + this.plugin); 
@@ -76,7 +77,7 @@ public class ElementSynchronizer extends AbstractService {
      */
     private void updateElementWithBestAccumulatedImports(AbstractElement element) {
         boolean needToWrite = false;
-        AbstractElementUpdaterPlugin updaterPlugin = (AbstractElementUpdaterPlugin) this.plugin;
+        AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
         for (String updatableTagName : updaterPlugin.getUpdatableTagNames()) {
             LOGGER.info("* Updating data for the tag " + updatableTagName);
             // Check if its best matching score is enough
@@ -111,7 +112,7 @@ public class ElementSynchronizer extends AbstractService {
      */
     @Obsolete
     private void updateElementWithBestMatchingImport(AbstractElement element) {
-        AbstractElementUpdaterPlugin updaterPlugin = (AbstractElementUpdaterPlugin) this.plugin;
+        AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
         // Check if its best matching score is enough
         if (element.getBestMatchingImport().getMatchingScore() < updaterPlugin.getMinMatchingScoreForUpdate()) {
             LOGGER.info("Element cannot be updated because its best matching score is "

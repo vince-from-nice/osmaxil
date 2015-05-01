@@ -1,14 +1,15 @@
-package org.openstreetmap.osmaxil.service;
+package org.openstreetmap.osmaxil.step;
 
 import org.apache.http.annotation.Obsolete;
+import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StatsGenerator extends AbstractService {
+public class StatisticsStep extends AbstractStep {
 
     private int matchedElementsNbr;
 
@@ -23,13 +24,13 @@ public class StatsGenerator extends AbstractService {
     private int[] updatedElementsNbrByScore;
 
     @Autowired
-    private ElementCache elementCache;
+    private ElementStore elementCache;
 
     public void generateStats() {
         LOGGER.info("=== Statistics ===");
-        if (this.plugin instanceof AbstractElementUpdaterPlugin) {
+        if (this.plugin instanceof AbstractUpdaterPlugin) {
             generateUpdatingStats();
-        } else if (this.plugin instanceof AbstractElementUpdaterPlugin) {
+        } else if (this.plugin instanceof AbstractUpdaterPlugin) {
             generateMakingStats();
         } 
     }
@@ -41,7 +42,7 @@ public class StatsGenerator extends AbstractService {
         displayUpdatingStats();
         // New extended matching method
         LOGGER.info("*** Statistics with the new matching method ***");
-        for (String updatableTagName : ((AbstractElementUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
+        for (String updatableTagName : ((AbstractUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
             LOGGER.info("* Statistics for the updatable tag " + updatableTagName);
             this.buildUpdatingStatsWithBestAccumulatedImports(updatableTagName);
             displayUpdatingStats();
@@ -91,8 +92,8 @@ public class StatsGenerator extends AbstractService {
                             this.updatedElementsNbrByScore[i]++;
                         }
                         boolean updatable = false;
-                        for (String tagName : ((AbstractElementUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
-                            if (((AbstractElementUpdaterPlugin) this.plugin).isElementTagUpdatable(element, tagName)) {
+                        for (String tagName : ((AbstractUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
+                            if (((AbstractUpdaterPlugin) this.plugin).isElementTagUpdatable(element, tagName)) {
                                 updatable = true;
                             }
                         }
@@ -127,7 +128,7 @@ public class StatsGenerator extends AbstractService {
                             this.updatedElementsNbr++;
                             this.updatedElementsNbrByScore[i]++;
                         }
-                        if (((AbstractElementUpdaterPlugin) this.plugin).isElementTagUpdatable(element, updatableTagName)) {
+                        if (((AbstractUpdaterPlugin) this.plugin).isElementTagUpdatable(element, updatableTagName)) {
                             this.updatableElementsNbr++;
                             this.updatableElementsNbrByScore[i]++;
                         }

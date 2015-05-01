@@ -1,25 +1,25 @@
 package org.openstreetmap.osmaxil;
 
 import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.service.ElementProcessor;
-import org.openstreetmap.osmaxil.service.ElementSynchronizer;
-import org.openstreetmap.osmaxil.service.ImportLoader;
-import org.openstreetmap.osmaxil.service.StatsGenerator;
+import org.openstreetmap.osmaxil.step.LoadingStep;
+import org.openstreetmap.osmaxil.step.ProcessingStep;
+import org.openstreetmap.osmaxil.step.StatisticsStep;
+import org.openstreetmap.osmaxil.step.SynchronizingStep;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Application {
     
     private ClassPathXmlApplicationContext applicationContext;
     
-    private ImportLoader importLoader;
+    private LoadingStep loadingStep;
     
-    private ElementProcessor elementProcessor;
+    private ProcessingStep processingStep;
     
-    private ElementSynchronizer elementSynchronizer;
+    private SynchronizingStep synchronizingStep;
     
-    private StatsGenerator statsGenerator;
+    private StatisticsStep statisticsStep;
     
-    static private final Logger LOGGER = Logger.getLogger(ImportLoader.class);
+    static private final Logger LOGGER = Logger.getLogger(LoadingStep.class);
 
     public static void main(String[] args) {
         Application app = new Application();
@@ -32,17 +32,17 @@ public class Application {
     public void init(String[] args) {
         // TODO Bootstrap Spring beans correctly
         this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
-        this.importLoader = this.applicationContext.getBean(ImportLoader.class);
-        this.elementProcessor = this.applicationContext.getBean(ElementProcessor.class);
-        this.elementSynchronizer = this.applicationContext.getBean(ElementSynchronizer.class);
-        this.statsGenerator = this.applicationContext.getBean(StatsGenerator.class);
+        this.loadingStep = this.applicationContext.getBean(LoadingStep.class);
+        this.processingStep = this.applicationContext.getBean(ProcessingStep.class);
+        this.synchronizingStep = this.applicationContext.getBean(SynchronizingStep.class);
+        this.statisticsStep = this.applicationContext.getBean(StatisticsStep.class);
     }
     
     public void run() {
-        this.importLoader.loadImports();
-        this.elementProcessor.processElements();
-        this.elementSynchronizer.synchronizeElements();
-        this.statsGenerator.generateStats();
+        this.loadingStep.loadImports();
+        this.processingStep.processElements();
+        this.synchronizingStep.synchronizeElements();
+        this.statisticsStep.generateStats();
         this.applicationContext.close();
     }
 }

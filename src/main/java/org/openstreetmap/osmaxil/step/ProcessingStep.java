@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service;
+package org.openstreetmap.osmaxil.step;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,19 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.annotation.Obsolete;
+import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ElementProcessor extends AbstractService {
+public class ProcessingStep extends AbstractStep {
 
     private long counter;
 
     @Autowired
-    private ElementCache elementCache;
+    private ElementStore elementCache;
 
     public void processElements() {
         LOGGER.info("=== Processing elements ===");
@@ -45,7 +46,7 @@ public class ElementProcessor extends AbstractService {
             imp.setMatchingScore(this.plugin.computeMatchingScore(imp));
         }
         // If the plugin is an updater, need to do additional stuff
-        if (this.plugin instanceof AbstractElementUpdaterPlugin) {
+        if (this.plugin instanceof AbstractUpdaterPlugin) {
             // For the old basic best matching method:
             this.findBestMatchingImport(element);
             // For the new extended matching method:
@@ -62,7 +63,7 @@ public class ElementProcessor extends AbstractService {
     @Obsolete
     private void dispatchMatchingImportsByTagValues(AbstractElement element) {
         // For each updatable tag names..
-        for (String updatableTagName : ((AbstractElementUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
+        for (String updatableTagName : ((AbstractUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
             Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValuesByTagName(updatableTagName);
             // For each matching import..
             for (AbstractImport imp : element.getMatchingImports()) {
@@ -85,7 +86,7 @@ public class ElementProcessor extends AbstractService {
      */
     private void computeTotalScoresByTagValues(AbstractElement element) {
         // For each updatable tag names..
-        for (String updatableTagName : ((AbstractElementUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
+        for (String updatableTagName : ((AbstractUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
             LOGGER.info("Computing total scores by values for the tag " + updatableTagName);
             Map<String, List<AbstractImport>> map = element.getMatchingImportsByTagValuesByTagName(updatableTagName);
             // For each updatable tag value..

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.dao.OsmPostgisDAO;
+import org.openstreetmap.osmaxil.dao.OsmPostgis;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class BuildingHelper {
  
     @Autowired
-    protected OsmPostgisDAO osmPostgisService;
+    protected OsmPostgis osmPostgisService;
     
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
     
