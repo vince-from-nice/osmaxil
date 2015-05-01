@@ -1,114 +1,104 @@
 package org.openstreetmap.osmaxil.plugin.building;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.List;
 
-import javax.annotation.PostConstruct;
-
+import org.openstreetmap.osmaxil.model.ElementTagNames;
+import org.openstreetmap.osmaxil.model.MatchingElementId;
+import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.openstreetmap.osmaxil.util.StringParsingHelper;
+import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
+import org.openstreetmap.osmaxil.plugin.loader.ParisDataCsvBuildingLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 @Component("ParisBuildingUpdaterPlugin")
-public class ParisBuildingUpdaterPlugin extends AbstractBuildingUpdaterPlugin {
+public class ParisBuildingUpdaterPlugin extends AbstractElementUpdaterPlugin<BuildingElement, BuildingImport> {
 
-    private CSVReader reader;
-
-    long rowCount;
-
-    boolean hasNext;
-
+    @Autowired
+    private ParisDataCsvBuildingLoader loader;
+    
+    @Autowired
+    private BuildingHelper helper;
+    
     @Value("${plugins.parisBuildingUpdater.updatableTagNames}")
     private String updatableTagNames;
     
+    @Value("${plugins.parisBuildingUpdater.minMatchingScore}")
+    private float minMatchingScoreForUpdate;
+
     @Value("${plugins.parisBuildingUpdater.changesetSourceLabel}")
     private String changesetSourceLabel;
     
     @Value("${plugins.parisBuildingUpdater.changesetComment}")
     private String changesetComment;
-    
-    @Value("${plugins.parisBuildingUpdater.minMatchingScore}")
-    private float minMatchingScore;
-    
-    @Value("${plugins.parisBuildingUpdater.filePath}")
-    private String csvFilePath;
 
-    @PostConstruct
-    public void init() throws FileNotFoundException {
-        LOGGER.info("Init of OpenDataParisCsvFileLoader");
-        InputStreamReader isr = new InputStreamReader(new FileInputStream(this.csvFilePath));
-        this.reader = new CSVReader(new BufferedReader(isr), (char) ';', (char) '\'', 1);
-        // this.rows = reader.readAll();
-        this.hasNext = true;
+    @Override
+    public boolean isElementTagUpdatable(BuildingElement element, String tagName) {
+        // For now all building tags are updatable if it doesn't have an original value
+        return element.getOriginalValuesByTagNames().get(tagName) == null;
+    }
+
+    @Override
+    public boolean updateElementTag(BuildingElement element, String tagName) {
+        String tagValue = element.getBestTagValueByTagName(tagName);
+        if (tagValue == null) {
+            LOGGER.warn("Cannot update tag because best tag value is null for " + tagName);
+            return false;
+        }
+        boolean updated = false;
+        if (ElementTagNames.HEIGHT.equals(tagName)) {
+            LOGGER.info("===> Updating height to " + tagValue);
+            element.setHeight(Float.parseFloat(tagValue));
+            updated = true;
+        }
+        if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
+            LOGGER.info("===> Updating levels to " + (tagValue + 1));
+            // Adding +1 to levels because OSM use the US way to count building levels
+            element.setLevels(Integer.parseInt(tagValue) + 1);
+            updated = true;
+        }
+        return updated;
+    }
+
+    @Override
+    public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
+       return this.helper.findMatchingBuildings(imp);
+    }
+
+    @Override
+    public float computeMatchingScore(BuildingImport imp) {
+        return this.helper.computeMatchingScore(imp);
+    }
+
+    @Override
+    public BuildingElement instanciateElement(long osmId) {
+        return new BuildingElement(osmId);
     }
     
     @Override
     public String[] getUpdatableTagNames() {
         return updatableTagNames.split(",");
     }
-    
+
     @Override
-    public float getMinMatchingScoreForUpdate() {
-        return this.minMatchingScore;
+    public ParisDataCsvBuildingLoader getLoader() {
+        return loader;
     }
-    
-    @Override
-    public String getChangesetComment() {
-        return this.changesetComment ;
-    }
-    
+
     @Override
     public String getChangesetSourceLabel() {
-        return this.changesetSourceLabel;
-    }
-    
-    public boolean hasNext() {
-        // return this.reader.iterator().hasNext() // doesn't work ?
-        return this.hasNext;
+        return changesetSourceLabel;
     }
 
-    public BuildingImport next() {
-        String[] row = null;
-        try {
-            row = this.reader.readNext();
-        } catch (IOException e) {
-            LOGGER.info("An error has occured while reading CSV: " + e.getMessage());
-        }
-        if (row == null || row[0] == null) {
-            this.hasNext = false;
-            return null;
-        }
-        this.rowCount++;
-        BuildingImport result = new BuildingImport();
-        result.setId(this.rowCount);
-        String[] latlon = row[0].split(",");
-        if (latlon.length == 2) {
-            result.setLat(StringParsingHelper.parseDouble(latlon[0], "latitude"));
-            result.setLon(StringParsingHelper.parseDouble(latlon[1], "longitude"));
-        }else {
-            LOGGER.warn("Unable to parse latlon");
-        }
-        if (row.length > 19) {
-            result.setLevels(StringParsingHelper.parseInt(row[19], "levels"));
-        } else {
-            LOGGER.warn("Unable to parse levels");
-        }
-        if (row.length > 6) {
-            result.setArea((int) StringParsingHelper.parseFloat(row[6], "area"));
-        } else {
-            LOGGER.warn("Unable to parse area");
-        }        
-        return result;
+    @Override
+    public String getChangesetComment() {
+        return changesetComment;
     }
 
-    public void remove() {
-        // TODO Auto-generated method stub
+    @Override
+    public float getMinMatchingScoreForUpdate() {
+        return this.minMatchingScoreForUpdate;
     }
     
 }

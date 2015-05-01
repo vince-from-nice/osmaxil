@@ -27,7 +27,7 @@ public class ElementCache extends AbstractService {
             if (apiData == null) {
                 throw new Exception("Unable to fetch data from OSM API for element#" + osmId);
             }
-            element = (AbstractElement) this.plugin.createElementInCache(osmId, relevantElementId.getRelationId(), apiData);
+            element = (AbstractElement) this.plugin.instanciateElement(osmId, relevantElementId.getRelationId(), apiData);
             this.elements.put(osmId, element);
         } /*else {
             // If element was already present refresh its data
@@ -35,6 +35,8 @@ public class ElementCache extends AbstractService {
         }*/
         return element;
     }
+    
+
 
     public Map<Long, AbstractElement> getElements() {
         return elements;

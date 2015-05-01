@@ -23,7 +23,7 @@ public class ImportLoader  extends AbstractService {
         
     @PreDestroy
     public void close() {
-        LOGGER.info("=== Closing import loader ===");
+        LOGGER.info("=== Closing import org.openstreetmap.osmaxil.plugin.loader ===");
         LOGGER.info("Total of loaded imports: " + this.counterForLoadedImports);
         LOGGER.info("Total of matched imports: " + this.counterForMatchedImports);
     }
@@ -31,9 +31,9 @@ public class ImportLoader  extends AbstractService {
     public void loadImports() {
         LOGGER.info("=== Loading imports ===");
         LOGGER.info(LOG_SEPARATOR);
-        while (this.plugin.hasNext()) {
+        while (this.plugin.getLoader().hasNext()) {
             try {
-                    AbstractImport imp = (AbstractImport) this.plugin.next();
+                    AbstractImport imp = (AbstractImport) this.plugin.getLoader().next();
                     this.counterForLoadedImports++;
                     this.loadImport(imp);
             } catch (java.lang.Exception e) {

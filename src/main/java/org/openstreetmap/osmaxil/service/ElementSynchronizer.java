@@ -5,7 +5,6 @@ import javax.annotation.PreDestroy;
 
 import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.AbstractElementMakerPlugin;
 import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,9 @@ public class ElementSynchronizer extends AbstractService {
 
     @PostConstruct
     public void init() {
+        // Need to do here, when the synchronization phase is going to start to write elements.
+        // If it would have been done on the Spring context initialization the first changeset could have become obsolete 
+        // because changeset has an idle timeout of 1h and the previous phase (imports loading) could have taken more time.
         this.osmApiService.initForWriting(this.plugin.getChangesetSourceLabel(), this.plugin.getChangesetComment());
     }
     

@@ -34,7 +34,7 @@
 2015-04-20 22:37:26  INFO === Closing element synchronizer ===
 2015-04-20 22:37:26  INFO Total of matched elements: 2694
 2015-04-20 22:37:26  INFO Total of updated elements: 1350
-2015-04-20 22:37:26  INFO === Closing import loader ===
+2015-04-20 22:37:26  INFO === Closing import org.openstreetmap.osmaxil.plugin.loader ===
 2015-04-20 22:37:26  INFO Total of loaded imports: 352293
 2015-04-20 22:37:26  INFO Total of matched imports: 10587
 2015-04-20 22:37:26  INFO === Closing OSM API service ===

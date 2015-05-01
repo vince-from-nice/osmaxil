@@ -3,29 +3,24 @@ package org.openstreetmap.osmaxil.plugin.building;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.model.ElementTagNames;
+import org.apache.log4j.Logger;
+import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.dao.OsmPostgisDAO;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
-import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.openstreetmap.osmaxil.plugin.AbstractElementUpdaterPlugin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public abstract class AbstractBuildingUpdaterPlugin extends AbstractElementUpdaterPlugin<BuildingElement, BuildingImport> {
+@Component
+public class BuildingHelper {
  
-    @Override
-    public BuildingElement createElementInCache(long osmId, long relationId, OsmApiRoot data) {
-        BuildingElement element = new BuildingElement(osmId);
-        // TODO move below code in AbstractPlugin or AbstractElement since it's generic
-        element.setRelationId(relationId);
-        element.setApiData(data);
-        for(String tagName : this.getUpdatableTagNames()) {
-            element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
-        }
-        return element;
-    }
-
-    @Override
-    public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
+    @Autowired
+    protected OsmPostgisDAO osmPostgisService;
+    
+    static protected final Logger LOGGER = Logger.getLogger(Application.class);
+    
+    public List<MatchingElementId> findMatchingBuildings(BuildingImport imp) {
         List<MatchingElementId> result = new ArrayList<MatchingElementId>();
         Long[] ids = new Long[0];
         // Find in PostGIS all buildings matching (ie. containing) the coordinates of the import
@@ -60,35 +55,6 @@ public abstract class AbstractBuildingUpdaterPlugin extends AbstractElementUpdat
         return result;
     }
     
-    @Override
-    public boolean isElementTagUpdatable(BuildingElement element, String tagName) {
-        // For now all building tags are updatable if it doesn't have an original value
-        return element.getOriginalValuesByTagNames().get(tagName) == null;
-    }
-
-    @Override
-    public boolean updateElementTag(BuildingElement element, String tagName) {
-        String tagValue = element.getBestTagValueByTagName(tagName);
-        if (tagValue == null) {
-            LOGGER.warn("Cannot update tag because best tag value is null for " + tagName);
-            return false;
-        }
-        boolean updated = false;
-        if (ElementTagNames.HEIGHT.equals(tagName)) {
-            LOGGER.info("===> Updating height to " + tagValue);
-            element.setHeight(Float.parseFloat(tagValue));
-            updated = true;
-        }
-        if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
-            LOGGER.info("===> Updating levels to " + (tagValue + 1));
-            // Adding +1 to levels because OSM use the US way to count building levels
-            element.setLevels(Integer.parseInt(tagValue) + 1);
-            updated = true;
-        }
-        return updated;
-    }
-    
-    @Override
     public float computeMatchingScore(BuildingImport imp) {
         BuildingElement element = (BuildingElement) imp.getElement();
         float result = 0f;
@@ -104,7 +70,7 @@ public abstract class AbstractBuildingUpdaterPlugin extends AbstractElementUpdat
         int elementArea = element.getComputedArea();
         // If not yet computed do it and store the result for further matching imports
         if (elementArea == 0) {
-            elementArea = computeElementArea(element);
+            elementArea = computeBuildingArea(element);
             element.setComputedArea(elementArea);
         }
         // Compare area between import and element
@@ -124,7 +90,7 @@ public abstract class AbstractBuildingUpdaterPlugin extends AbstractElementUpdat
     // Private methods 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    private int computeElementArea(BuildingElement element) {
+    private int computeBuildingArea(BuildingElement element) {
         // If the related element belongs to a relation, consider it instead of the element itself (osm2pgsql doesn't store relation members) 
         long elementId = element.getOsmId();
         if (element.getRelationId() > 0) {
