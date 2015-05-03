@@ -20,5 +20,8 @@ public class OsmApiRoot {
     
     @XmlElement (name="way")
     public List<OsmApiWay> ways;
+    
+    @XmlElement (name="relations")
+    public List<OsmApiRelation> relations;
 
 }

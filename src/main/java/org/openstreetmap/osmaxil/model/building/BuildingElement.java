@@ -3,13 +3,14 @@ package org.openstreetmap.osmaxil.model.building;
 import java.util.List;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTagNames;
 import org.openstreetmap.osmaxil.model.api.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
     
     private int computedArea;
-
+    
     public BuildingElement(long osmId) {
         super(osmId);
         this.computedArea = 0;

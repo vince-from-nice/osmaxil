@@ -46,7 +46,7 @@ public class ProcessingStep extends AbstractStep {
         for (AbstractImport imp : element.getMatchingImports()) {
             imp.setMatchingScore(this.plugin.computeMatchingScore(imp));
         }
-        // If the plugin is an updater, need to do additional stuff
+        // Do specific stuff depending on the plugin
         if (this.plugin instanceof AbstractUpdaterPlugin) {
             // For the old basic best matching method:
             this.findBestMatchingImport(element);
@@ -54,7 +54,8 @@ public class ProcessingStep extends AbstractStep {
             this.dispatchMatchingImportsByTagValues(element);
             this.computeTotalScoresByTagValues(element);            
         } else if (this.plugin instanceof AbstracRemakerPlugin) {
-            // TODO processing stuff for creation ?
+            // Create remaked elements
+            ((AbstracRemakerPlugin) this.plugin).buildRemakedElements(element);
         }
     }
     

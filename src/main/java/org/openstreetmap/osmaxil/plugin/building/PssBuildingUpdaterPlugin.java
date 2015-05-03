@@ -1,19 +1,14 @@
-//package org.openstreetmap.osmaxil.plugin.building;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import javax.annotation.PostConstruct;
-//
-//import org.openstreetmap.osmaxil.model.building.BuildingImport;
-//import org.openstreetmap.osmaxil.plugin.loader.AbstractImportLoader;
-//import org.openstreetmap.osmaxil.plugin.loader.ParisDataCsvBuildingLoader;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Component;
-//
+package org.openstreetmap.osmaxil.plugin.building;
+
+import org.springframework.stereotype.Component;
+
+@Component ("PssBuildingUpdaterPlugin")
+public class PssBuildingUpdaterPlugin {
+    
+}
+
 //@Component ("PssBuildingUpdaterPlugin")
 //public class PssBuildingUpdaterPlugin extends BuildingHelper  {
-//
 //    
 //    @Value("${plugins.pssBuildingUpdater.updatableTagNames}")
 //    private String updatableTagNames;

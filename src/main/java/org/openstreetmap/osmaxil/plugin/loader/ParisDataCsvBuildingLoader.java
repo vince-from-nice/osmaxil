@@ -27,6 +27,8 @@ public class ParisDataCsvBuildingLoader extends AbstractImportLoader {
     @Value("${plugins.parisBuildingLoader.filePath}")
     private String csvFilePath;
     
+    static private final String GEOM_TOKEN = "\"\"coordinates\"\": ";
+    
     @PostConstruct
     public void init() throws FileNotFoundException {
         LOGGER.info("Init of OpenDataParisCsvFileLoader");
@@ -61,6 +63,9 @@ public class ParisDataCsvBuildingLoader extends AbstractImportLoader {
             result.setLon(StringParsingHelper.parseDouble(latlon[1], "longitude"));
         }else {
             LOGGER.warn("Unable to parse latlon");
+        }
+        if (row.length > 1) {
+            result.setGeometry(row[1].substring(row[1].indexOf(GEOM_TOKEN) + GEOM_TOKEN.length()));
         }
         if (row.length > 19) {
             result.setLevels(StringParsingHelper.parseInt(row[19], "levels"));

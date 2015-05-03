@@ -86,6 +86,27 @@ public class BuildingHelper {
         return result;
     }
     
+//    public BuildingPart createBuildingPart(BuildingImport imp) {
+//        BuildingPart bp = new BuildingPart();
+//        OsmApiRoot root = new OsmApiRoot();
+//        bp.setApiData(root);
+//        // TODO create nodes
+//        return bp;
+//    }
+//    
+//    public BuildingRelation createBuildingRelation(BuildingElement element) {
+//        BuildingRelation br = new BuildingRelation();
+//        OsmApiRoot root = new OsmApiRoot();
+//        br.setApiData(root);
+//        OsmApiRelation relation = new OsmApiRelation();
+//        // Reuse tags from orignal element
+//        relation.tags = element.getTags();
+//        root.relations.add(relation);
+//        // Set a negative ID based on the original element ID
+//        br.getApiData().ways.get(0).id = - element.getOsmId();
+//        return br;
+//    }
+    
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Private methods 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -13,43 +13,41 @@ import org.openstreetmap.osmaxil.model.api.OsmApiTag;
 
 public abstract class AbstractElement {
 
-    private long osmId;
+    protected long osmId;
+
+    protected OsmApiRoot apiData;
+    
+    abstract public List<OsmApiTag> getTags();
     
     private long relationId;
-    
-    private OsmApiRoot apiData;
-    
+        
     private boolean updated;
+    
+    private boolean remaked;
 
     private List<AbstractImport> matchingImports;
 
-    @Obsolete
-    private AbstractImport bestMatchingImport;
+    // Used by remaker plugins
+    
+    private OsmApiRoot remakingData;
+
+    // Used by updater plugins
     
     private Map<String, Map<String, List<AbstractImport>>> importsByTagValuesByTagNames;
     
     private Map<String, Map<String, Float>> totalScoresByTagValuesByTagNames;
     
     private Map<String, String> originalValuesByTagNames;
-    
-    abstract public List<OsmApiTag> getTags();
-    
-    abstract public void updateChangeset(long changesetId);
+
+    @Obsolete
+    private AbstractImport bestMatchingImport;
     
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
     
-    public AbstractElement(long osmId) {
-        this.osmId = osmId;
-        this.updated = false;
-        this.matchingImports = new ArrayList<AbstractImport>();
-        this.importsByTagValuesByTagNames = new HashMap<String, Map<String,List<AbstractImport>>>();
-        this.totalScoresByTagValuesByTagNames = new HashMap<String, Map<String,Float>>();
-        this.originalValuesByTagNames = new HashMap<String, String>();
-    }
+    abstract public void updateChangeset(long changesetId);
 
-    @Override
-    public String toString() {
-        return "OSM building has id=[" + this.getOsmId() + "]";
+    public List<AbstractImport> getMatchingImports() {
+        return this.matchingImports;
     }
     
     public String getTagValue(String key) {
@@ -80,6 +78,15 @@ public abstract class AbstractElement {
         return false;
     }
     
+    public AbstractElement(long osmId) {
+        this.osmId = osmId;
+        this.updated = false;
+        this.matchingImports = new ArrayList<AbstractImport>();
+        this.importsByTagValuesByTagNames = new HashMap<String, Map<String,List<AbstractImport>>>();
+        this.totalScoresByTagValuesByTagNames = new HashMap<String, Map<String,Float>>();
+        this.originalValuesByTagNames = new HashMap<String, String>();
+    }
+
     public Map<String, List<AbstractImport>> getMatchingImportsByTagValuesByTagName(String tagName) {
         Map<String, List<AbstractImport>> result = this.importsByTagValuesByTagNames.get(tagName);
         if (result == null) {
@@ -127,7 +134,10 @@ public abstract class AbstractElement {
         return bestTagValue;
     }
     
-    // Convenient methods
+    @Override
+    public String toString() {
+        return "OSM building has id=[" + this.getOsmId() + "]";
+    }
 
     public String getName() {
         return (String) this.getTagValue(ElementTagNames.NAME);
@@ -142,6 +152,14 @@ public abstract class AbstractElement {
     public void setOsmId(long osmId) {
         this.osmId = osmId;
     }
+
+    public OsmApiRoot getApiData() {
+        return apiData;
+    }
+
+    public void setApiData(OsmApiRoot apiData) {
+        this.apiData = apiData;
+    }
     
     public boolean isUpdated() {
         return this.updated;
@@ -151,28 +169,10 @@ public abstract class AbstractElement {
         this.updated = updated;
     }
 
-    public OsmApiRoot getApiData() {
-        return apiData;
-    }
-
-    public void setApiData(OsmApiRoot apiData) {
-        this.apiData = apiData;
-    }
-
-    public List<AbstractImport> getMatchingImports() {
-        return matchingImports;
-    }
-
-    public void setMatchingImports(List<AbstractImport> matchingImports) {
-        this.matchingImports = matchingImports;
-    }
-
-    @Obsolete
     public AbstractImport getBestMatchingImport() {
         return bestMatchingImport;
     }
 
-    @Obsolete
     public void setBestMatchingImport(AbstractImport bestMatchingImport) {
         this.bestMatchingImport = bestMatchingImport;
     }
@@ -191,6 +191,22 @@ public abstract class AbstractElement {
 
     public void setOriginalValuesByTagNames(Map<String, String> orignalValuesByTagNames) {
         this.originalValuesByTagNames = orignalValuesByTagNames;
+    }
+
+    public boolean isRemaked() {
+        return remaked;
+    }
+
+    public void setRemaked(boolean remaked) {
+        this.remaked = remaked;
+    }
+
+    public OsmApiRoot getRemakingData() {
+        return remakingData;
+    }
+
+    public void setRemakingData(OsmApiRoot remakingData) {
+        this.remakingData = remakingData;
     }
 
 }

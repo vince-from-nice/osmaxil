@@ -70,11 +70,6 @@ public class SynchronizingStep extends AbstractStep {
     
     private void remakeElement(AbstractElement element) {
         // TODO
-        // Retrieve tags from the existing element
-        // Create new element
-        //   Create relation of type building
-        //   Create building:part
-        // Delete old element
     }
 
     /**
