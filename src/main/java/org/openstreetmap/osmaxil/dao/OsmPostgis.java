@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,11 @@ public class OsmPostgis {
     @Autowired
     @Qualifier("postgisJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
-
-//  @Autowired
-//  @Qualifier("postgisJdbcTemplate")
-//  private DataSource dataSource;
     
-    // TODO find the best SRS for area computing
+    @Value("${postGis.srid}")
+    private int srid;
+    
+    // TODO Value the SRID in settings.xml
     private static int SRID_FOR_AREA_COMPUTATION = 32633;
     
     static private final Logger LOGGER = Logger.getLogger(Application.class);
@@ -53,4 +53,13 @@ public class OsmPostgis {
         result = this.jdbcTemplate.queryForObject(query, Integer.class, osmId);
         return result;
     }
+    
+    public String tranformGeometry(String wkt, int originalSrid) {
+        String result = "";
+        String query = "select ST_AsText(ST_Transform(ST_GeomFromText('" + wkt + "', ?), ?))";
+        //LOGGER.debug("Transforming geometry with query: " + query);
+        result = this.jdbcTemplate.queryForObject(query, String.class, originalSrid, this.srid);
+        return result;
+    }
+    
 }
