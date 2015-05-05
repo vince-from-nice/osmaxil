@@ -63,6 +63,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
         // Instanciate sublists
         root.relations = new ArrayList<OsmApiRelation>();
         root.nodes = new ArrayList<OsmApiNode>();
+        root.ways = new ArrayList<OsmApiWay>();
         
         // Create relation
         OsmApiRelation relation = new OsmApiRelation();
@@ -81,6 +82,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
             
             // Create a new building part
             OsmApiWay part = new OsmApiWay();
+            root.ways.add(part);
             // Set a negative ID based on the original element ID + index
             part.id = - idGen.getId();
             LOGGER.debug("\tBuilding part id=" + part.id);
@@ -92,6 +94,12 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
             tag.k = "building:part";
             tag.v = "yes";
             part.tags.add(tag);
+            // Add the building:level tag
+            tag = new OsmApiTag();
+            tag.k = "building:level";
+            Integer levels = bi.getLevels() + 1; // US way of levels counting
+            tag.v = levels.toString();
+            part.tags.add(tag);
             
             // Add member into the relation
             OsmApiMember member = new OsmApiMember();
@@ -99,11 +107,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
             member.role = "part";
             member.type = "way";
             relation.members.add(member);
-            
-            // Add part into the root way list
-            root.ways = new ArrayList<OsmApiWay>();
-            root.ways.add(part);
-            
+                        
             // For each point of the import:
             List<Point> points = computeBuildingPartGeometry(bi);
             for (Point point : points) {

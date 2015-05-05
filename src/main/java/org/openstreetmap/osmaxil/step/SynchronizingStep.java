@@ -1,14 +1,15 @@
 package org.openstreetmap.osmaxil.step;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.ElementStore;
+import org.openstreetmap.osmaxil.dao.OsmXmlFile;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
 import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,16 +18,25 @@ public class SynchronizingStep extends AbstractStep {
     private long counterForMatchedElements;
 
     private long counterForUpdatedElements;
+    
+    private long counterForRemakedElements;
 
     @Autowired
     private ElementStore elementCache;
+    
+    @Value("${osmaxil.sync}")
+    private String synchronizationMode;
+    
+    @Autowired
+    private OsmXmlFile osmXmlFile;
 
     //@PostConstruct
     public void init() {
-        // Need to do here, when the synchronization phase is going to start to write elements.
+        // Need to do an init on demand, when the synchronization phase is going to start to write elements.
         // If it would have been done on the Spring context initialization the first changeset could have become obsolete 
         // because changeset has an idle timeout of 1h and the previous phase (imports loading) could have taken more time.
         this.osmApiService.initForWriting(this.plugin.getChangesetSourceLabel(), this.plugin.getChangesetComment());
+        this.synchronizationMode = this.synchronizationMode.trim();
     }
     
     @PreDestroy
@@ -34,9 +44,11 @@ public class SynchronizingStep extends AbstractStep {
         LOGGER.info("=== Closing element synchronizer ===");
         LOGGER.info("Total of matched elements: " + this.counterForMatchedElements);
         LOGGER.info("Total of updated elements: " + this.counterForUpdatedElements);
+        LOGGER.info("Total of remaked elements: " + this.counterForRemakedElements);
     }
 
     public void synchronizeElements() {
+        this.init();
         LOGGER.info("=== Updating elements ===");
         LOGGER.info(LOG_SEPARATOR);
         for (AbstractElement element : this.elementCache.getElements().values()) {
@@ -69,7 +81,17 @@ public class SynchronizingStep extends AbstractStep {
     }
     
     private void remakeElement(AbstractElement element) {
-        // TODO
+        boolean success = false;
+        if ("api".equals(this.synchronizationMode)) {
+           // TODO api write for element remaking
+        } else if ("gen".equals(this.synchronizationMode)) {
+            success = this.osmXmlFile.write("id" + element.getOsmId(), element.getRemakingData());
+        }
+        if (success) {
+            this.counterForRemakedElements++;
+            element.setUpdated(true);
+            LOGGER.debug("Ok element has been remaked");
+        }
     }
 
     /**
@@ -98,7 +120,13 @@ public class SynchronizingStep extends AbstractStep {
             }
         }
         if (needToWrite) {
-            if (this.osmApiService.writeElement(element)) {
+            boolean success = false;
+            if ("api".equals(this.synchronizationMode)) {
+                success = this.osmApiService.writeElement(element);
+            } else if ("gen".equals(this.synchronizationMode)) {
+                // TODO file generation for element update
+            }
+            if (success) {
                 this.counterForUpdatedElements++;
                 element.setUpdated(true);
                 LOGGER.debug("Ok element has been updated");
