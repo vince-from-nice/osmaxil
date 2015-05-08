@@ -4,7 +4,7 @@ import javax.annotation.PreDestroy;
 
 import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.ElementStore;
-import org.openstreetmap.osmaxil.dao.OsmXmlFile;
+import org.openstreetmap.osmaxil.dao.OsmXml;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
 import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
@@ -28,7 +28,7 @@ public class SynchronizingStep extends AbstractStep {
     private String synchronizationMode;
     
     @Autowired
-    private OsmXmlFile osmXmlFile;
+    private OsmXml osmXmlFile;
 
     //@PostConstruct
     public void init() {
@@ -85,7 +85,7 @@ public class SynchronizingStep extends AbstractStep {
         if ("api".equals(this.synchronizationMode)) {
            // TODO api write for element remaking
         } else if ("gen".equals(this.synchronizationMode)) {
-            success = this.osmXmlFile.write("id" + element.getOsmId(), element.getRemakingData());
+            success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), element.getRemakingData());
         }
         if (success) {
             this.counterForRemakedElements++;

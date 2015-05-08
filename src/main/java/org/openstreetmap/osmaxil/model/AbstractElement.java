@@ -46,6 +46,15 @@ public abstract class AbstractElement {
     
     abstract public void updateChangeset(long changesetId);
 
+    public AbstractElement(long osmId) {
+        this.osmId = osmId;
+        this.updated = false;
+        this.matchingImports = new ArrayList<AbstractImport>();
+        this.importsByTagValuesByTagNames = new HashMap<String, Map<String,List<AbstractImport>>>();
+        this.totalScoresByTagValuesByTagNames = new HashMap<String, Map<String,Float>>();
+        this.originalValuesByTagNames = new HashMap<String, String>();
+    }
+    
     public List<AbstractImport> getMatchingImports() {
         return this.matchingImports;
     }
@@ -76,15 +85,6 @@ public abstract class AbstractElement {
         tag.v = value;
         this.getTags().add(tag);
         return false;
-    }
-    
-    public AbstractElement(long osmId) {
-        this.osmId = osmId;
-        this.updated = false;
-        this.matchingImports = new ArrayList<AbstractImport>();
-        this.importsByTagValuesByTagNames = new HashMap<String, Map<String,List<AbstractImport>>>();
-        this.totalScoresByTagValuesByTagNames = new HashMap<String, Map<String,Float>>();
-        this.originalValuesByTagNames = new HashMap<String, String>();
     }
 
     public Map<String, List<AbstractImport>> getMatchingImportsByTagValuesByTagName(String tagName) {
