@@ -4,18 +4,22 @@ Osmaxil is a free software written in Java which allows automatic data imports i
 
 It is designed as an expandable program with different plugins which can handle different types of OSM elements.
 
-For now it's focused on building with 2 plugins available :
-* OpenDataParis (http://opendata.paris.fr)
-* PSS database (http://www.pss-archi.eu)
+There's 2 types of plugins:
+* updater: the plugin add tag(s) to existing OSM elements
+* remaker: the plugin deletes existing elements and create new ones 
 
-These 2 plugins update existing buildings in the OSM database by setting their height and/or number of levels tag(s) value(s).
+For now available plugins are focused on buildings:
+* Paris building remaker: its data source is OpenDataParis (http://opendata.paris.fr). It aims to provide a better building shape cutting (352k elements instead of 86k currently), it's currently under development.
+* Paris building updater: its data source is OpenDataParis (http://opendata.paris.fr). It has already been applied on the live server on April 2015: 49k parisan buildings has been updated with their building:levels tag. More information are available on [the Wiki page](http://wiki.openstreetmap.org/wiki/Paris,_France/Buildings_Heights_Import) dedicated to the import.
+* PSS building updater: its data source is the database of the PSS association (http://www.pss-archi.eu). The last one should be applied soon, in fact it's depending on the way the PSS assocation will publish their database which contains informations (including height and floors) about 47k buildings all over France.
 
 ## How to run ##
 
 ### Prerequesites ###
 
 In order to run the program you need to have :
-* Java 6 or later
+* Java
+* Maven 
 * PostGIS
 * Osm2pgsql
 
@@ -35,7 +39,7 @@ The program use a local PostGIS database in order to match imports with existing
 
 So before to launch the program you need to populate your local PostGIS instance with OSM data related to the area you wan to update. 
 
-For the OpenDataParis plugin you should download the OSM data of the region named Ile-de-France (http://download.geofabrik.de/europe/france/ile-de-france-latest.osm.pbf).
+For Paris plugins you should download the OSM data of the Ile-de-France region (http://download.geofabrik.de/europe/france/ile-de-france-latest.osm.pbf).
 
 ### Launch it !! ###
 
@@ -65,11 +69,11 @@ At the end of that phase all matching OSM elements are loaded into a map (see th
 
 That phase is implemented by the class named services.ElementProcessor.
 
-The goal of that phase is to determine which imports are relevants.
+The goal of that phase is depending on the type of the plugin.
 
-First, for all matching OSM elements a matching score is set for all their matching imports. 
+If it's an updater plugin, the processing phase tries to determine which matching imports are relevants.
 
-The implemention of the method which calculates matching scores depends on the actived plugin. For example the OpenDataParis plugin defines scores by calculating a ratio (a float between 0.0 and 1.0) of the OSM building surface to the imported building surface.
+First, for all matching OSM elements a matching score is calculated. The implemention of the method which calculates matching scores depends on the actived plugin. For example the OpenDataParis plugin defines scores by calculating a ratio (a float between 0.0 and 1.0) of the OSM building surface to the imported building surface.
 
 At the end the *best* matching import must be determined for each OSM element. There's 2 methods to do that.
 
@@ -81,23 +85,28 @@ Why to do that ?
 
 Let's consider an OSM building which have been matched with 4 imported buildings :
 - import building A has the tag building:levels=8 and a matching score of 0.42
-- import building B has the tag building:levels=8 and a matching score of 0.35
+- import building B has the tag building:levels=8 and a matching score of 0.45
 - import building C has the tag building:levels=5 and a matching score of 0.15
 - import building C has the tag building:levels=0 and a matching score of 0.08
 
 The tag value (level=8) is the same for both method, BUT:
-- with the old basic method the best matching score for the building is only 0.42 (score of the building A)
-- with the new complex method the best matching score for the building is 0.77 (score of A + score of B) which reflects more correctly the predominance of the tag value of 8 levels.
+- with the old basic method the best matching score for the building is only 0.45 (score of the building B)
+- with the new complex method the best matching score for the building is 0.87 (score of A + score of B) which reflects more correctly the predominance of the tag value of 8 levels.
 
 ### Element synchronization ###
 
-That phase is implemented by the class named services.ElementSyncrhonizer.
+That phase is implemented by the class named services.ElementSynchronizer.
 
-It eventually writes OSM elements to the OSM API. 
+It eventually writes OSM elements. Depending on the type of the plugin (updater or remaker), *writing* means *updating* or *remaking*.
 
-For each plugin a minimum matching score is defined in the settings.properties file. OSM element can be updated only if it has a import whose matching score is bigger to that minimal score.
+Furthermore, *writing* can be done directly to the OSM database via the OSM API, or it can be done inderectly by generating a XML files. Theses generated files can be considered as changes proposals: after that manual merges must done by a real humans.
 
-If the matching score is enough then it tries to update one or more tag values. Depending on the plugin, update of the tag can be done only if the tag hasn't an original value yet. That way, the program will not destroy work which has been already done by other OSM contributors. That's the case with the OpenDataParis plugin.
+The parameter **osmaxil.syncMode** defined in settings.xml can have the following values:
+* no (no writings, but could be usefull for statistics) 
+* api (direct writing with the OSM API)
+* gen (indirect writing with generated XML files)
+
+Note also that in the case of updating, a minimum matching score is defined in the settings.properties file for each updater plugin. OSM element can be updated only if it has a import whose matching score is bigger to that minimal score. If the matching score is enough then it tries to update one or more tag values. Depending on the plugin, update of the tag can be done only if the tag hasn't an original value yet. That way, the program will not destroy work which has been already done by other OSM contributors. That's the case with the OpenDataParis plugin.
 
 ### Statistics generation ###
 
@@ -105,8 +114,8 @@ That phase is implemented by the class named services.StatsGenerator.
 
 It crashes various statistics on the stdout such as :
 * Number of matched elements
-* Number of updatable elements
-* Number of updated elements
+* Number of updatable/remakable elements
+* Number of updated/remaked elements
 
 It also displays all these statistics by matching score ranges.
 
