@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.model.api;
+package org.openstreetmap.osmaxil.model.xml.osm;
 
 import java.util.List;
 

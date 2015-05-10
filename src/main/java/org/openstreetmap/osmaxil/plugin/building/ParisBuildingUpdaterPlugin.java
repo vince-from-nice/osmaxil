@@ -7,7 +7,7 @@ import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
-import org.openstreetmap.osmaxil.plugin.loader.ParisDataCsvBuildingLoader;
+import org.openstreetmap.osmaxil.plugin.parser.ParisBuildingParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
-    private ParisDataCsvBuildingLoader loader;
+    private ParisBuildingParser loader;
     
     @Autowired
     private BuildingHelper helper;
@@ -82,7 +82,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     }
 
     @Override
-    public ParisDataCsvBuildingLoader getLoader() {
+    public ParisBuildingParser getParser() {
         return loader;
     }
 

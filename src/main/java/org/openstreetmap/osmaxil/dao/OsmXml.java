@@ -9,8 +9,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.oxm.Marshaller;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
 public class OsmXml {
 
     @Autowired
+    @Qualifier(value="osmMarshaller")
     private Marshaller marshaller;
 
     private int counterForWriteSuccess;

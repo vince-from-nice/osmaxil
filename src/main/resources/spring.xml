@@ -23,8 +23,11 @@
 
 	<context:property-placeholder location="classpath:settings.properties, classpath:password.properties" />
 
-	<bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.ParisBuildingRemakerPlugin">
+	<bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.PssBuildingUpdaterPlugin">
 	</bean>
+	
+	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.ParisBuildingRemakerPlugin">
+    </bean-->
 
 	<bean id="loadingStep" class="org.openstreetmap.osmaxil.step.LoadingStep">
 		<property name="plugin" ref="activePlugin" />
@@ -41,7 +44,7 @@
 	<bean id="statisticsStep" class="org.openstreetmap.osmaxil.step.StatisticsStep">
 		<property name="plugin" ref="activePlugin" />
 	</bean>
-
+	
 	<!-- ******************************************************************************** -->
 	<!-- Configuration the PostGIS service -->
 	<!-- ******************************************************************************** -->
@@ -61,13 +64,13 @@
 	<!-- Configuration for the OSM API service -->
 	<!-- ******************************************************************************** -->
 
-	<oxm:jaxb2-marshaller id="marshaller">
-		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.model.api.OsmApiRoot" />
+	<oxm:jaxb2-marshaller id="osmMarshaller">
+		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot" />
 	</oxm:jaxb2-marshaller>
 
 	<bean id="marshallingHttpMessageConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-		<property name="marshaller" ref="marshaller" />
-		<property name="unmarshaller" ref="marshaller" />
+		<property name="marshaller" ref="osmMarshaller" />
+		<property name="unmarshaller" ref="osmMarshaller" />
 	</bean>
 
 	<!--bean id="restTemplate" class="org.springframework.web.client.RestTemplate" -->
@@ -79,5 +82,13 @@
 			</list>
 		</property>
 	</bean>
+	
+    <!-- ******************************************************************************** -->
+    <!-- Configuration the PSS building plugin -->
+    <!-- ******************************************************************************** -->
+    
+    <oxm:jaxb2-marshaller id="pssMarshaller">
+        <oxm:class-to-be-bound name="org.openstreetmap.osmaxil.model.xml.pss.PssRoot" />
+    </oxm:jaxb2-marshaller>
 
 </beans>

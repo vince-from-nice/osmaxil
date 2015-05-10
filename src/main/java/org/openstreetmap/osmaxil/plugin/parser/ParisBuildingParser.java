@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.loader;
+package org.openstreetmap.osmaxil.plugin.parser;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Repository
-public class ParisDataCsvBuildingLoader extends AbstractImportLoader {
+public class ParisBuildingParser extends AbstractImportParser {
     
     private CSVReader reader;
 
@@ -24,10 +24,10 @@ public class ParisDataCsvBuildingLoader extends AbstractImportLoader {
 
     boolean hasNext;
     
-    @Value("${plugins.parisBuildingLoader.filePath}")
-    private String csvFilePath;
+    @Value("${plugins.parisBuildingParser.filePath}")
+    private String filePath;
     
-    @Value("${plugins.parisBuildingLoader.srid}")
+    @Value("${plugins.parisBuildingParser.srid}")
     private int srid;
     
     static private final String GEOM_TOKEN = "\"\"coordinates\"\": ";
@@ -35,7 +35,7 @@ public class ParisDataCsvBuildingLoader extends AbstractImportLoader {
     @PostConstruct
     public void init() throws FileNotFoundException {
         LOGGER.info("Init of OpenDataParisCsvFileLoader");
-        InputStreamReader isr = new InputStreamReader(new FileInputStream(this.csvFilePath));
+        InputStreamReader isr = new InputStreamReader(new FileInputStream(this.filePath));
         this.reader = new CSVReader(new BufferedReader(isr), (char) ';', (char) '\'', 1);
         // this.rows = reader.readAll();
         this.hasNext = true;

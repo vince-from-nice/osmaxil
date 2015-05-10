@@ -5,7 +5,7 @@ import java.util.List;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTagNames;
-import org.openstreetmap.osmaxil.model.api.OsmApiTag;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
 
 public class BuildingElement extends AbstractElement {
     

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.model.api;
+package org.openstreetmap.osmaxil.model.xml.osm;
 
 import javax.xml.bind.annotation.XmlAttribute;
 

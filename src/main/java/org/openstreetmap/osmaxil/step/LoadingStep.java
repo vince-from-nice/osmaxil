@@ -9,7 +9,8 @@ import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
-import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
+import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +34,9 @@ public class LoadingStep  extends AbstractStep {
     public void loadImports() {
         LOGGER.info("=== Loading imports ===");
         LOGGER.info(LOG_SEPARATOR);
-        while (this.plugin.getLoader().hasNext()) {
+        while (this.plugin.getParser().hasNext()) {
             try {
-                    AbstractImport imp = (AbstractImport) this.plugin.getLoader().next();
+                    AbstractImport imp = (AbstractImport) this.plugin.getParser().next();
                     this.counterForLoadedImports++;
                     this.loadImport(imp);
             } catch (java.lang.Exception e) {
@@ -87,8 +88,17 @@ public class LoadingStep  extends AbstractStep {
             if (apiData == null) {
                 throw new Exception("Unable to fetch data from OSM API for element#" + osmId);
             }
-            element = (AbstractElement) this.plugin.instanciateElement(osmId, relevantElementId.getRelationId(), apiData);
+            // Instanciate a new element
+            element = this.plugin.instanciateElement(osmId);
+            element.setRelationId(relevantElementId.getRelationId());
+            element.setApiData(apiData);
             this.elementCache.getElements().put(osmId, element);
+            // Need to do additional stuff if the current plugin is a updater
+            if (this.plugin instanceof AbstractUpdaterPlugin) {
+                for (String tagName : ((AbstractUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
+                    element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
+                }
+            }
         } /*else {
             // If element was already present refresh its data
             element.setApiData(apiData);                

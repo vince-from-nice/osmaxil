@@ -7,17 +7,17 @@ import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.Point;
-import org.openstreetmap.osmaxil.model.api.OsmApiMember;
-import org.openstreetmap.osmaxil.model.api.OsmApiNd;
-import org.openstreetmap.osmaxil.model.api.OsmApiNode;
-import org.openstreetmap.osmaxil.model.api.OsmApiRelation;
-import org.openstreetmap.osmaxil.model.api.OsmApiRoot;
-import org.openstreetmap.osmaxil.model.api.OsmApiTag;
-import org.openstreetmap.osmaxil.model.api.OsmApiWay;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiMember;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiNd;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiNode;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRelation;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiWay;
 import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
-import org.openstreetmap.osmaxil.plugin.loader.ParisDataCsvBuildingLoader;
+import org.openstreetmap.osmaxil.plugin.parser.ParisBuildingParser;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
-    private ParisDataCsvBuildingLoader loader;
+    private ParisBuildingParser loader;
 
     @Autowired
     private BuildingHelper helper;
@@ -148,7 +148,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
         }
         wkt.append("))");
         // Convert geometry coordinates to OSM SRID
-        int srid = ((ParisDataCsvBuildingLoader) this.getLoader()).getSrid();
+        int srid = ((ParisBuildingParser) this.getParser()).getSrid();
         String wktConverted = this.osmPostgis.tranformGeometry(wkt.toString(), srid);
         // Reparse transformed geometry to build a list of points
         wktConverted = wktConverted.replace("POLYGON((", "").replace("))", "");
@@ -190,11 +190,11 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
         return minMatchingScore;
     }
 
-    public ParisDataCsvBuildingLoader getLoader() {
+    public ParisBuildingParser getParser() {
         return loader;
     }
 
-    public void setLoader(ParisDataCsvBuildingLoader loader) {
+    public void setLoader(ParisBuildingParser loader) {
         this.loader = loader;
     }
 
