@@ -24,7 +24,7 @@ public class SynchronizingStep extends AbstractStep {
     @Autowired
     private ElementStore elementCache;
     
-    @Value("${osmaxil.sync}")
+    @Value("${osmaxil.syncMode}")
     private String synchronizationMode;
     
     @Autowired
