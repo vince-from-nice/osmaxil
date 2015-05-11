@@ -46,7 +46,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
 
     @Override
     public float computeMatchingScore(BuildingImport imp) {
-        return this.helper.computeMatchingScore(imp);
+        return this.helper.computeBuildingMatchingScore(imp);
     }
 
     @Override

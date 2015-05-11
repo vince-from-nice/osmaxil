@@ -80,6 +80,10 @@ public class SynchronizingStep extends AbstractStep {
 
     }
     
+    /**
+     * Perform the remaking process of an element:
+     * All required changed have been calculated previously, just need to write in way which depends on the sync mode.
+     */
     private void remakeElement(AbstractElement element) {
         boolean success = false;
         if ("api".equals(this.synchronizationMode)) {
@@ -98,8 +102,6 @@ public class SynchronizingStep extends AbstractStep {
      * Update element into OSM database with tag values which are coming from the import list which haves the best total
      * matching score. This method is based on the new matching method where matching imports have been regrouped by
      * their tag values.
-     * 
-     * @param element
      */
     private void updateElementWithBestAccumulatedImports(AbstractElement element) {
         boolean needToWrite = false;
@@ -124,7 +126,7 @@ public class SynchronizingStep extends AbstractStep {
             if ("api".equals(this.synchronizationMode)) {
                 success = this.osmApiService.writeElement(element);
             } else if ("gen".equals(this.synchronizationMode)) {
-                // TODO file generation for element update
+                success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), element.getApiData());
             }
             if (success) {
                 this.counterForUpdatedElements++;
@@ -139,8 +141,6 @@ public class SynchronizingStep extends AbstractStep {
     /**
      * Update element to OSM database with tag values which are coming from the best matching imports. This method is
      * now obsolete since the new matching method.
-     * 
-     * @param element
      */
     @Obsolete
     private void updateElementWithBestMatchingImport(AbstractElement element) {

@@ -35,7 +35,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
 
     @Override
     public boolean isElementTagUpdatable(BuildingElement element, String tagName) {
-        // For now all building tags are updatable if it doesn't have an original value
+        // Building tags are updatable only if it doesn't have an original value
         return element.getOriginalValuesByTagNames().get(tagName) == null;
     }
 
@@ -47,15 +47,10 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
             return false;
         }
         boolean updated = false;
-        if (ElementTagNames.HEIGHT.equals(tagName)) {
-            LOGGER.info("===> Updating height to " + tagValue);
-            element.setHeight(Float.parseFloat(tagValue));
-            updated = true;
-        }
         if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
-            LOGGER.info("===> Updating levels to " + (tagValue + 1));
             // Adding +1 to levels because OSM use the US way to count building levels
             element.setLevels(Integer.parseInt(tagValue) + 1);
+            LOGGER.info("===> Updating levels to " + (tagValue + 1));
             updated = true;
         }
         return updated;
@@ -68,7 +63,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
 
     @Override
     public float computeMatchingScore(BuildingImport imp) {
-        return this.helper.computeMatchingScore(imp);
+        return this.helper.computeBuildingMatchingScore(imp);
     }
 
     @Override

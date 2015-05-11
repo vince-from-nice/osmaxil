@@ -55,7 +55,7 @@ public class BuildingHelper {
         return result;
     }
     
-    public float computeMatchingScore(BuildingImport imp) {
+    public float computeBuildingMatchingScore(BuildingImport imp) {
         BuildingElement element = (BuildingElement) imp.getElement();
         float result = 0f;
         if (imp.getArea() == null) {

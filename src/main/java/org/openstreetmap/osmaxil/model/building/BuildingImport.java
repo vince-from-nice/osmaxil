@@ -12,6 +12,8 @@ public class BuildingImport extends AbstractImport {
     protected Integer levels;
 
     protected Float height;
+    
+    protected String url;
 
     protected Integer area;
 
@@ -84,6 +86,14 @@ public class BuildingImport extends AbstractImport {
 
     public void setArea(Integer area) {
         this.area = area;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 }

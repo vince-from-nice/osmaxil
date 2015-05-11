@@ -10,6 +10,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.model.xml.pss.PssBuilding;
 import org.openstreetmap.osmaxil.model.xml.pss.PssRoot;
+import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,8 +69,16 @@ public class PssBuildingParser extends AbstractImportParser {
     }
     
     private BuildingImport parse(PssBuilding building) {
-        BuildingImport result = null;
-        // TODO
+        BuildingImport result = new BuildingImport();
+        String[] latlon = building.coordinates.split(",");
+        if (latlon.length == 2) {
+            result.setLat(StringParsingHelper.parseDouble(latlon[0], "latitude"));
+            result.setLon(StringParsingHelper.parseDouble(latlon[1], "longitude"));
+        }else {
+            LOGGER.warn("Unable to parse latlon");
+        }
+        result.setHeight(StringParsingHelper.parseFloat(building.height, "height"));
+        result.setUrl(building.url);
         return result;
     }
     

@@ -29,7 +29,7 @@ public class StringParsingHelper {
         return result;
     }
 
-    static public double parseFloat(String s, String name) {
+    static public float parseFloat(String s, String name) {
         float result = 0;
         try {
             result = Float.parseFloat(s);
