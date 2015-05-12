@@ -12,4 +12,6 @@ public abstract class AbstractImportParser implements Iterator<AbstractImport> {
 
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
     
+    abstract public int getSrid();
+    
 }

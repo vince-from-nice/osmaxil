@@ -82,4 +82,8 @@ public class PssBuildingParser extends AbstractImportParser {
         return result;
     }
     
+    public int getSrid() {
+        return srid;
+    }
+    
 }

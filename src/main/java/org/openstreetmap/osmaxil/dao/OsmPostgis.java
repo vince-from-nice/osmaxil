@@ -61,5 +61,9 @@ public class OsmPostgis {
         result = this.jdbcTemplate.queryForObject(query, String.class, originalSrid, this.srid);
         return result;
     }
+
+    public int getSrid() {
+        return srid;
+    }
     
 }

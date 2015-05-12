@@ -20,15 +20,15 @@ public class BuildingHelper {
     
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
     
-    public List<MatchingElementId> findMatchingBuildings(BuildingImport imp) {
+    public List<MatchingElementId> findMatchingBuildings(BuildingImport imp, int srid) {
         List<MatchingElementId> result = new ArrayList<MatchingElementId>();
         Long[] ids = new Long[0];
         // Find in PostGIS all buildings matching (ie. containing) the coordinates of the import
         BuildingImport building = (BuildingImport) imp;
         if (building.getLat() != null && building.getLon() != null) {
-            ids = this.findBuildingIDsByLatLon(building.getLon(), building.getLat());
+            ids = this.findBuildingIDsByLatLon(building.getLon(), building.getLat(), srid);
         } else if (building.getGeometry() != null) {
-            ids = this.findBuildingIDsByGeometry(building.getGeometry());
+            ids = this.findBuildingIDsByGeometry(building.getGeometry(), srid);
             LOGGER.info("OSM IDs of buildings matching (" + building.getGeometry() + ") : ");
         } else {
             LOGGER.error("Unable to find building because there's no coordinates neither geometry");
@@ -150,7 +150,7 @@ public class BuildingHelper {
         return result;
     }
     
-    private Long[] findBuildingIDsByGeometry(String geometry) {
+    private Long[] findBuildingIDsByGeometry(String geometry, int srid) {
         LOGGER.info("Looking in PostGIS for buildings containing GEOMETRY=" + geometry + ":");
         // TODO Test PostGIS request with intersection operator
         String query = "select osm_id from planet_osm_polygon "
@@ -158,12 +158,12 @@ public class BuildingHelper {
         return this.osmPostgisService.findElementIdsByQuery(query);
     }
 
-    private Long[]  findBuildingIDsByLatLon(double lon, double lat) {
+    private Long[]  findBuildingIDsByLatLon(double lon, double lat, int srid) {
         //List<Long> result = new ArrayList<Long>();
         LOGGER.info("Looking in PostGIS for buildings containing POINT(" + lon + ", " + lat + "):");
         String query = "select osm_id from planet_osm_polygon "
                 + "where building <> '' and  ST_Contains(way, ST_Transform(ST_GeomFromText('POINT(" + lon + " " + lat
-                + ")', 4326), 900913));";
+                + ")', " + srid + "), " + this.osmPostgisService.getSrid() + "));";
         return this.osmPostgisService.findElementIdsByQuery(query);
     }
         

@@ -58,7 +58,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
 
     @Override
     public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
-       return this.helper.findMatchingBuildings(imp);
+       return this.helper.findMatchingBuildings(imp, this.getParser().getSrid());
     }
 
     @Override

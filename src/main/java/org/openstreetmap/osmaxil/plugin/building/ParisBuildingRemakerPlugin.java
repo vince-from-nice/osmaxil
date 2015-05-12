@@ -41,7 +41,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
 
     @Override
     public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
-        return this.helper.findMatchingBuildings(imp);
+        return this.helper.findMatchingBuildings(imp, this.getParser().getSrid());
     }
 
     @Override
