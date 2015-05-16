@@ -47,16 +47,14 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
             return false;
         }
         boolean updated = false;
-        if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
-            // Adding +1 to levels because OSM use the US way to count building levels
-            element.setLevels(Integer.parseInt(tagValue) + 1);
-            LOGGER.info("===> Updating levels to " + (tagValue + 1));
+        if (ElementTagNames.HEIGHT.equals(tagName)) {
+            element.setHeight(Float.parseFloat(tagValue));
+            LOGGER.info("===> Updating height to " + tagValue);
             updated = true;
         }
         if (ElementTagNames.URL.equals(tagName)) {
             element.setTagValue(ElementTagNames.URL, tagValue);
-            element.setLevels(Integer.parseInt(tagValue) + 1);
-            LOGGER.info("===> Updating levels to " + (tagValue + 1));
+            LOGGER.info("===> Updating URL to " + tagValue);
             updated = true;
         }
         return updated;
@@ -69,7 +67,8 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
 
     @Override
     public float computeMatchingScore(BuildingImport imp) {
-        return this.helper.computeBuildingMatchingScore(imp);
+        // There's no way to compute a matching score for now with PSS (building area is not available)
+        return 1.0f;
     }
 
     @Override

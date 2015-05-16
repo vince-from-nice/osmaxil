@@ -7,7 +7,7 @@ select osm_id,name,building,ST_AsEWKT(way) from planet_osm_polygon where osm_id 
 
 select count(*) from planet_osm_line;
 select count(*) from planet_osm_point;
-select count(*) from planet_osm_polygon;
+select count(*) from planet_osm_po lygon;
 
 select count(distinct osm_id) from planet_osm_polygon;
 select count(*) from planet_osm_polygon where building <> '';

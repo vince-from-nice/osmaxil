@@ -23,7 +23,7 @@ public class BuildingHelper {
     public List<MatchingElementId> findMatchingBuildings(BuildingImport imp, int srid) {
         List<MatchingElementId> result = new ArrayList<MatchingElementId>();
         Long[] ids = new Long[0];
-        // Find in PostGIS all buildings matching (ie. containing) the coordinates of the import
+        // Find in PostGIS all buildings matching (ie. containing) the import
         BuildingImport building = (BuildingImport) imp;
         if (building.getLat() != null && building.getLon() != null) {
             ids = this.findBuildingIDsByLatLon(building.getLon(), building.getLat(), srid);
@@ -55,7 +55,7 @@ public class BuildingHelper {
         return result;
     }
     
-    public float computeBuildingMatchingScore(BuildingImport imp) {
+    public float computeMatchingScoreBasedOnBuildingArea(BuildingImport imp) {
         BuildingElement element = (BuildingElement) imp.getElement();
         float result = 0f;
         if (imp.getArea() == null) {

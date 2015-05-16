@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<buildings>	
+	<!--Buildings in Ile-de-France -->
+	<building>
+		<url>http://www.pss-archi.eu/immeubles/FR-75056-28165.html</url>
+		<coordinates>48.88291364398775, 2.2967004776000976</coordinates>
+		<height>24.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<url>http://www.pss-archi.eu/immeubles/FR-75056-16313.html</url>
+		<coordinates>48.85259849773819, 2.404680848121643</coordinates>
+		<height>21.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+</buildings>

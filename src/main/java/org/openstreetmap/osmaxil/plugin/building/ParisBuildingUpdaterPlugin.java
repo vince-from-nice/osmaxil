@@ -63,7 +63,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
 
     @Override
     public float computeMatchingScore(BuildingImport imp) {
-        return this.helper.computeBuildingMatchingScore(imp);
+        return this.helper.computeMatchingScoreBasedOnBuildingArea(imp);
     }
 
     @Override

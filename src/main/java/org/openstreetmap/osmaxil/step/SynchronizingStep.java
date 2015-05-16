@@ -86,14 +86,18 @@ public class SynchronizingStep extends AbstractStep {
      */
     private void remakeElement(AbstractElement element) {
         boolean success = false;
+        if (element.getRemakingData() == null) {
+            LOGGER.warn("Unable to sync element since its remaking data is null");
+            return;
+        }
         if ("api".equals(this.synchronizationMode)) {
-           // TODO api write for element remaking
+           // TODO api writing for element remaking
         } else if ("gen".equals(this.synchronizationMode)) {
             success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), element.getRemakingData());
         }
         if (success) {
             this.counterForRemakedElements++;
-            element.setUpdated(true);
+            element.setRemaked(true);
             LOGGER.debug("Ok element has been remaked");
         }
     }
@@ -104,7 +108,7 @@ public class SynchronizingStep extends AbstractStep {
      * their tag values.
      */
     private void updateElementWithBestAccumulatedImports(AbstractElement element) {
-        boolean needToWrite = false;
+        boolean needToSync = false;
         AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
         for (String updatableTagName : updaterPlugin.getUpdatableTagNames()) {
             LOGGER.info("* Updating data for the tag " + updatableTagName);
@@ -115,13 +119,16 @@ public class SynchronizingStep extends AbstractStep {
                         + updaterPlugin.getMinMatchingScore() + ")");
                 return;
             }
-            // Update tag value only if it is updatable (ie. no original value)
+            // Update tag value only if it is updatable
             if (updaterPlugin.isElementTagUpdatable(element, updatableTagName)) {
-                updaterPlugin.updateElementTag(element, updatableTagName);
-                needToWrite = true;
+                boolean updated = updaterPlugin.updateElementTag(element, updatableTagName);
+                if (updated) {
+                    needToSync = true;
+                }
             }
         }
-        if (needToWrite) {
+        // Do the update sync only if needed
+        if (needToSync) {
             boolean success = false;
             if ("api".equals(this.synchronizationMode)) {
                 success = this.osmApiService.writeElement(element);
