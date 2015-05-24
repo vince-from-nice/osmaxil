@@ -106,8 +106,13 @@ public class ProcessingStep extends AbstractStep {
                         sb.append(" + ");
                     }
                 }
+                // Matching scores are always between 0.0 and 1.0 (ok It's not the most beautiful part of the program)  
+                if (score > AbstractImport.MAX_MATCHING_SCORE) {
+                    score = AbstractImport.MAX_MATCHING_SCORE;
+                    sb.append(" (total score has been rounded to " + AbstractImport.MAX_MATCHING_SCORE + ")");
+                }
                 element.getTotalScoresByTagValuesByTagName(updatableTagName).put(updatableTagValue, score);
-                LOGGER.info(" - for value=" + updatableTagValue + " total score is " + score + " = " + sb.toString());
+                LOGGER.info(" - for value=[" + updatableTagValue + "] total score is " + score + " (sum of  " + sb.toString()+ ")");
             }
         }
     }

@@ -33,7 +33,6 @@ psql --username=postgres --dbname=$DB_NAME --file=/usr/share/postgresql/9.1/cont
 #psql -d $DB_NAME < /usr/share/doc/osmosis/examples/pgsnapshot_schema_0.6.sql
 #osmosis --read-pbf file="$FILE_PATH" --write-apidb user="postgres" database="$DB_NAME"
 
-#$OSM2PGSQL -s -c -C 1000 --number-processes=3  -d $DB_NAME $FILE_PATH
-$OSM2PGSQL -s -c -C 1000 --number-processes=1  -d $DB_NAME $FILE_PATH
+#$OSM2PGSQL -s -c -C 2000 --number-processes=2 --flat-nodes -d $DB_NAME $FILE_PATH
 
 echo "Ok postgis setup is done"

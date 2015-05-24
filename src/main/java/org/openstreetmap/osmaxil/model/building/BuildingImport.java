@@ -23,13 +23,11 @@ public class BuildingImport extends AbstractImport {
     @Override
     public String getTagValue(String tagName) {
         if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
-            if (this.levels != null){
-                return this.levels.toString();
-            }
+            return this.levels.toString();
         } else if (ElementTagNames.HEIGHT.equals(tagName)) {
-            if (this.height != null) {
-                return this.height.toString();
-            }
+            return this.height.toString();
+        }else if (ElementTagNames.URL.equals(tagName)) {
+            return this.url.toString();
         }
         return null;
     }
@@ -37,7 +35,7 @@ public class BuildingImport extends AbstractImport {
     @Override
     public String toString() {
         return "Building import with id=[" + this.id + "] and name=[" + this.name + "], lat=[" + this.lat + "], lon=["
-                + this.lon + "], levels=[" + this.levels + "], height=[" + this.height + "], area=[" + this.area + "]";
+                + this.lon + "], levels=[" + this.levels + "], height=[" + this.height + "], area=[" + this.area + "], url=[" + this.url + "]";
     }
 
     public Double getLat() {

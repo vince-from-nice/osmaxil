@@ -2,6 +2,7 @@ package org.openstreetmap.osmaxil.plugin.building;
 
 import java.util.List;
 
+import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTagNames;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
@@ -68,7 +69,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     @Override
     public float computeMatchingScore(BuildingImport imp) {
         // There's no way to compute a matching score for now with PSS (building area is not available)
-        return 1.0f;
+        return AbstractImport.MAX_MATCHING_SCORE;
     }
 
     @Override

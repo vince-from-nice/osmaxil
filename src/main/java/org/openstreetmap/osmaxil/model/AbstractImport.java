@@ -10,6 +10,8 @@ public abstract class AbstractImport {
     
     protected float matchingScore;
     
+    static public final float MAX_MATCHING_SCORE = 1.0f; 
+    
     abstract public String getTagValue(String tagName);
     
     @Override

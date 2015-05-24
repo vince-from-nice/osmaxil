@@ -37,13 +37,13 @@ public class StatisticsStep extends AbstractStep {
 
     private void generateUpdatingStats() {
         // Old basic matching method
-        LOGGER.info("*** Statistics with the old matching method ***");
+        LOGGER.info("*** Statistics with the BASIC matching method ***");
         this.buildUpdatingStatsWithBestMatchingImports();
         displayUpdatingStats();
         // New extended matching method
-        LOGGER.info("*** Statistics with the new matching method ***");
+        LOGGER.info("*** Statistics with the EXTENDED matching method ***");
         for (String updatableTagName : ((AbstractUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
-            LOGGER.info("* Statistics for the updatable tag " + updatableTagName);
+            LOGGER.info("* Statistics for the updatable tag [" + updatableTagName + "]");
             this.buildUpdatingStatsWithBestAccumulatedImports(updatableTagName);
             displayUpdatingStats();
         }
@@ -59,12 +59,12 @@ public class StatisticsStep extends AbstractStep {
         LOGGER.info("Repartition by matching scores:");
         for (int i = 0; i < 10; i++) {
             StringBuilder sb = new StringBuilder();
-            sb.append("- between " + i * 10 + "% and " + (i + 1) * 10 + "% : ");
+            sb.append("- score between " + i * 10 + "% and " + (i + 1) * 10 + "% : ");
             sb.append(this.matchedElementsNbrByScore[i]);
             if (this.elementCache.getElements().size()  > 0) {
                 sb.append(" (" + 100 * this.matchedElementsNbrByScore[i] / this.elementCache.getElements().size() + "%)");
             }
-            sb.append(" elements including " + this.updatedElementsNbrByScore[i] + " that have been updated");
+            sb.append(" elements <= " + this.updatedElementsNbrByScore[i] + " updated");
             sb.append(" (" + this.updatableElementsNbrByScore[i] + " were updatable)");
             LOGGER.info(sb);
         }
@@ -120,8 +120,10 @@ public class StatisticsStep extends AbstractStep {
             if (bestTotalScore == null) {
                 LOGGER.warn("Element " + element.getOsmId() + " doesn't have any best total matching score !!");
             } else {
+                boolean ok = false;
                 for (int i = 0; i < 10; i++) {
                     if (bestTotalScore <= (i + 1) * 0.1) {
+                        ok = true;
                         this.matchedElementsNbr++;
                         this.matchedElementsNbrByScore[i]++;
                         if (element.isUpdated()) {
@@ -133,7 +135,10 @@ public class StatisticsStep extends AbstractStep {
                             this.updatableElementsNbrByScore[i]++;
                         }
                         break;
-                    }
+                    }                    
+                }
+                if (!ok) {
+                    LOGGER.error("Stats issue with element " + element.getOsmId());
                 }
             }
         }
