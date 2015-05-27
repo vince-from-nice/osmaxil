@@ -19,7 +19,7 @@ public class Application {
     
     private StatisticsStep statisticsStep;
     
-    static private final Logger LOGGER = Logger.getLogger(LoadingStep.class);
+    static private final Logger LOGGER = Logger.getLogger(Application.class);
 
     public static void main(String[] args) {
         Application app = new Application();

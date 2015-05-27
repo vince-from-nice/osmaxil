@@ -24,10 +24,7 @@ public class AuthentifiedRestClient extends RestTemplate {
     public void init(/*String username, String password*/) {
         CredentialsProvider credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(new AuthScope(null, -1),
-                // TODO login and password are not yet initialized by spring when spring init the template
-                // new UsernamePasswordCredentials(this.login, this.password));
-                //new UsernamePasswordCredentials("Vince", "gluar2osm"));
-                new UsernamePasswordCredentials(login, password));
+                new UsernamePasswordCredentials(this.login, this.password));
         HttpClient httpClient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
         setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
     }

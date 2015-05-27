@@ -2,11 +2,11 @@ package org.openstreetmap.osmaxil.plugin.building;
 
 import java.util.List;
 
-import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTagNames;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
+import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.openstreetmap.osmaxil.plugin.parser.PssBuildingParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,10 @@ import org.springframework.stereotype.Component;
 public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
-    private PssBuildingParser loader;
+    private PssBuildingParser parser;
     
     @Autowired
     private BuildingHelper helper;
-    
-    @Value("${plugins.pssBuildingUpdater.updatableTagNames}")
-    private String updatableTagNames;
     
     @Value("${plugins.pssBuildingUpdater.minMatchingScore}")
     private float minMatchingScore;
@@ -33,7 +30,26 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     
     @Value("${plugins.pssBuildingUpdater.changesetComment}")
     private String changesetComment;
+    
+    private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTagNames.HEIGHT, ElementTagNames.URL};
 
+    @Override
+    public float computeElementMatchingScore(BuildingElement building) {
+        // In case of PSS there's no way to have a good matching score for building imports (they don't have any surface). 
+        // That way all imports which are matching geographically an element have the maximal matching score.
+        // But we can consider that if there's more than 1 import which are matching the element it means that the OSM
+        // building shaping is not enough accurate so we should do nothing at all by setting the minimal score to the element.
+        if (building.getMatchingImports().size() == 1) {
+            return AbstractPlugin.MAX_MATCHING_SCORE;
+        }
+        return AbstractPlugin.MIN_MATCHING_SCORE;
+    }
+    
+    @Override
+    public String[] getUpdatableTagNames() {
+        return UPDATABLE_TAG_NAMES;
+    }
+    
     @Override
     public boolean isElementTagUpdatable(BuildingElement element, String tagName) {
         // Building tags are updatable only if it doesn't have an original value
@@ -42,7 +58,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
 
     @Override
     public boolean updateElementTag(BuildingElement element, String tagName) {
-        String tagValue = element.getBestTagValueByTagName(tagName);
+        String tagValue = element.getMatchingImports().get(0).getTagValue(tagName);
         if (tagValue == null) {
             LOGGER.warn("Cannot update tag because best tag value is null for " + tagName);
             return false;
@@ -67,24 +83,19 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     }
 
     @Override
-    public float computeMatchingScore(BuildingImport imp) {
+    public float computeImportMatchingScore(BuildingImport imp) {
         // There's no way to compute a matching score for now with PSS (building area is not available)
-        return AbstractImport.MAX_MATCHING_SCORE;
+        return AbstractPlugin.MAX_MATCHING_SCORE;
     }
 
     @Override
     public BuildingElement instanciateElement(long osmId) {
         return new BuildingElement(osmId);
     }
-    
-    @Override
-    public String[] getUpdatableTagNames() {
-        return updatableTagNames.split(",");
-    }
 
     @Override
     public PssBuildingParser getParser() {
-        return loader;
+        return parser;
     }
 
     @Override
@@ -98,7 +109,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     }
 
     @Override
-    public float getMinMatchingScore() {
+    public float getMinimalMatchingScore() {
         return this.minMatchingScore;
     }
     

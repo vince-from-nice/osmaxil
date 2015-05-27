@@ -1,9 +1,11 @@
 package org.openstreetmap.osmaxil.step;
 
+import java.util.Iterator;
+
 import org.apache.http.annotation.Obsolete;
+import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,31 +27,17 @@ public class StatisticsStep extends AbstractStep {
 
     @Autowired
     private ElementStore elementCache;
+    
+    static private final Logger LOGGER = Logger.getLogger(StatisticsStep.class);
 
     public void generateStats() {
         LOGGER.info("=== Statistics ===");
         if (this.plugin instanceof AbstractUpdaterPlugin) {
-            generateUpdatingStats();
+            this.buildUpdatingStats();
+            this.displayUpdatingStats();
         } else if (this.plugin instanceof AbstractUpdaterPlugin) {
-            generateMakingStats();
+            // TODO
         } 
-    }
-
-    private void generateUpdatingStats() {
-        // Old basic matching method
-        LOGGER.info("*** Statistics with the BASIC matching method ***");
-        this.buildUpdatingStatsWithBestMatchingImports();
-        displayUpdatingStats();
-        // New extended matching method
-        LOGGER.info("*** Statistics with the EXTENDED matching method ***");
-        for (String updatableTagName : ((AbstractUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
-            LOGGER.info("* Statistics for the updatable tag [" + updatableTagName + "]");
-            this.buildUpdatingStatsWithBestAccumulatedImports(updatableTagName);
-            displayUpdatingStats();
-        }
-    }
-    
-    private void generateMakingStats() {
     }
     
     private void displayUpdatingStats() {
@@ -70,8 +58,7 @@ public class StatisticsStep extends AbstractStep {
         }
     }
 
-    @Obsolete
-    private void buildUpdatingStatsWithBestMatchingImports() {
+    private void buildUpdatingStats() {
         this.matchedElementsNbr = 0;
         this.updatableElementsNbr = 0;
         this.updatedElementsNbr = 0;
@@ -79,50 +66,13 @@ public class StatisticsStep extends AbstractStep {
         this.updatedElementsNbrByScore = new int[10];
         this.updatableElementsNbrByScore = new int[10];
         for (AbstractElement element : this.elementCache.getElements().values()) {
-            AbstractImport best = element.getBestMatchingImport();
-            if (best == null) {
-                LOGGER.warn("Element " + element.getOsmId() + " doesn't have any best matching import !!");
-            } else {
-                for (int i = 0; i < 10; i++) {
-                    if (best.getMatchingScore() <= (i + 1) * 0.1) {
-                        this.matchedElementsNbr++;
-                        this.matchedElementsNbrByScore[i]++;
-                        if (element.isUpdated()) {
-                            this.updatedElementsNbr++;
-                            this.updatedElementsNbrByScore[i]++;
-                        }
-                        boolean updatable = false;
-                        for (String tagName : ((AbstractUpdaterPlugin) this.plugin).getUpdatableTagNames()) {
-                            if (((AbstractUpdaterPlugin) this.plugin).isElementTagUpdatable(element, tagName)) {
-                                updatable = true;
-                            }
-                        }
-                        if (updatable) {
-                            this.updatableElementsNbr++;
-                            this.updatableElementsNbrByScore[i]++;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private void buildUpdatingStatsWithBestAccumulatedImports(String updatableTagName) {
-        this.matchedElementsNbr = 0;
-        this.updatableElementsNbr = 0;
-        this.updatedElementsNbr = 0;
-        this.matchedElementsNbrByScore = new int[10];
-        this.updatedElementsNbrByScore = new int[10];
-        this.updatableElementsNbrByScore = new int[10];
-        for (AbstractElement element : this.elementCache.getElements().values()) {
-            Float bestTotalScore = element.getBestTotalScoreByTagName(updatableTagName);
-            if (bestTotalScore == null) {
-                LOGGER.warn("Element " + element.getOsmId() + " doesn't have any best total matching score !!");
+            Float score = element.getMatchingScore();
+            if (score == null) {
+                LOGGER.warn("Element " + element.getOsmId() + " doesn't have matching score !!");
             } else {
                 boolean ok = false;
                 for (int i = 0; i < 10; i++) {
-                    if (bestTotalScore <= (i + 1) * 0.1) {
+                    if (score <= (i + 1) * 0.1) {
                         ok = true;
                         this.matchedElementsNbr++;
                         this.matchedElementsNbrByScore[i]++;
@@ -130,7 +80,13 @@ public class StatisticsStep extends AbstractStep {
                             this.updatedElementsNbr++;
                             this.updatedElementsNbrByScore[i]++;
                         }
-                        if (((AbstractUpdaterPlugin) this.plugin).isElementTagUpdatable(element, updatableTagName)) {
+                        // TODO move it to UpdaterPlugin
+                        boolean updatable = false;
+                        AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
+                        for (int j = 0; j < updaterPlugin.getUpdatableTagNames().length; j++) {
+                            updatable = updaterPlugin.isElementTagUpdatable(element, updaterPlugin.getUpdatableTagNames()[j]);
+                        }
+                        if (updatable) {
                             this.updatableElementsNbr++;
                             this.updatableElementsNbrByScore[i]++;
                         }

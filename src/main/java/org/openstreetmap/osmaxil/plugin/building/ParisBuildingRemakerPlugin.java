@@ -3,10 +3,9 @@ package org.openstreetmap.osmaxil.plugin.building;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.model.Coordinates;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
-import org.openstreetmap.osmaxil.model.Point;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiMember;
@@ -17,6 +16,7 @@ import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiWay;
 import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.plugin.parser.ParisBuildingParser;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +38,20 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
 
     @Value("${plugins.parisBuildingMaker.changesetComment}")
     private String changesetComment;
-
+    
+    @Override
+    public float computeElementMatchingScore(BuildingElement building) {
+        // TODO
+        return AbstractPlugin.MAX_MATCHING_SCORE;
+    }
+    
     @Override
     public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
         return this.helper.findMatchingBuildings(imp, this.getParser().getSrid());
     }
 
     @Override
-    public float computeMatchingScore(BuildingImport imp) {
+    public float computeImportMatchingScore(BuildingImport imp) {
         return this.helper.computeMatchingScoreBasedOnBuildingArea(imp);
     }
 
@@ -55,7 +61,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
     }
 
     @Override
-    public void buildRemakedElements(BuildingElement element) {
+    public void buildXmlForRemaking(BuildingElement element) {
         LOGGER.debug("Building XML for remaking of element #" + element.getOsmId() + ":");
         OsmApiRoot root = new OsmApiRoot();
         IdIncrementor idGen = new IdIncrementor(1);
@@ -109,8 +115,8 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
             relation.members.add(member);
                         
             // For each point of the import:
-            List<Point> points = computeBuildingPartGeometry(bi);
-            for (Point point : points) {
+            List<Coordinates> points = computeBuildingPartGeometry(bi);
+            for (Coordinates point : points) {
                 // Create a new node (into the root)
                 OsmApiNode node = new OsmApiNode();
                 node.id = - idGen.getId();
@@ -126,13 +132,14 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
             }
         }
         
-        element.setRemakingData(root);
+        // Store result into the internal map
+        this.xmlForRemakingByElement.put(element.getOsmId(), root);
     }
     
 
     // TODO Eventually move that method into ParisData CSV loader
-    private List<Point> computeBuildingPartGeometry(BuildingImport imp) {
-        List<Point> result = new ArrayList<Point>();
+    private List<Coordinates> computeBuildingPartGeometry(BuildingImport imp) {
+        List<Coordinates> result = new ArrayList<Coordinates>();
         StringBuilder wkt = new StringBuilder("POLYGON(("); 
         String geom = imp.getGeometry();
         // Convert ODP format into WKT
@@ -157,7 +164,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
             String[] p = coords[i].split(" ");
             float x = Float.parseFloat(p[0]);
             float y = Float.parseFloat(p[1]);
-            Point point = new Point(x, y);
+            Coordinates point = new Coordinates(x, y, 0);
             result.add(point);
         }
         return result;
@@ -186,7 +193,7 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
     // }
 
     @Override
-    public float getMinMatchingScore() {
+    public float getMinimalMatchingScore() {
         return minMatchingScore;
     }
 

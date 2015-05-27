@@ -20,15 +20,21 @@ public abstract class AbstractPlugin <Element extends AbstractElement, Import ex
 
     abstract public Element instanciateElement(long osmId);
     
-    abstract public float computeMatchingScore(Import imp);
+    abstract public float computeImportMatchingScore(Import imp);
     
-    abstract public float getMinMatchingScore();
+    abstract public float computeElementMatchingScore(Element element);
+    
+    abstract public float getMinimalMatchingScore();
 
     abstract public String getChangesetComment();
     
     abstract public String getChangesetSourceLabel();
     
     abstract public AbstractImportParser getParser();
+    
+    static public final float MIN_MATCHING_SCORE = 0.0f; 
+    
+    static public final float MAX_MATCHING_SCORE = 1.0f; 
     
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
 

@@ -6,6 +6,7 @@ import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.dao.OsmXml;
 import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
 import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
 import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,12 @@ public class SynchronizingStep extends AbstractStep {
             return;
         }
         LOGGER.info("Synchronizing element #" + this.counterForMatchedElements + ": " + element);
+        // Check if its best matching score is enough
+        if (element.getMatchingScore() < this.plugin.getMinimalMatchingScore()) {
+            LOGGER.info("Element cannot be synchronized because its matching score is "
+                    + element.getMatchingScore() + " (min=" + this.plugin.getMinimalMatchingScore() + ")");
+            return;
+        }
         // The synchronization process depends on the nature of the plugin
         if (this.plugin instanceof AbstractUpdaterPlugin) {
             // updateElementWithBestMatchingImport(element);
@@ -86,14 +93,15 @@ public class SynchronizingStep extends AbstractStep {
      */
     private void remakeElement(AbstractElement element) {
         boolean success = false;
-        if (element.getRemakingData() == null) {
+        OsmApiRoot xml = ((AbstracRemakerPlugin) this.plugin).getXmlForRemaking(element.getOsmId());
+        if (xml == null) {
             LOGGER.warn("Unable to sync element since its remaking data is null");
             return;
         }
         if ("api".equals(this.synchronizationMode)) {
            // TODO api writing for element remaking
         } else if ("gen".equals(this.synchronizationMode)) {
-            success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), element.getRemakingData());
+            success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), xml);
         }
         if (success) {
             this.counterForRemakedElements++;
@@ -112,13 +120,6 @@ public class SynchronizingStep extends AbstractStep {
         AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
         for (String updatableTagName : updaterPlugin.getUpdatableTagNames()) {
             LOGGER.info("* Updating data for the tag " + updatableTagName);
-            // Check if its best matching score is enough
-            if (element.getBestTotalScoreByTagName(updatableTagName) < updaterPlugin.getMinMatchingScore()) {
-                LOGGER.info("Element cannot be updated because its best matching score is "
-                        + element.getBestTotalScoreByTagName(updatableTagName) + " (min="
-                        + updaterPlugin.getMinMatchingScore() + ")");
-                return;
-            }
             // Update tag value only if it is updatable
             if (updaterPlugin.isElementTagUpdatable(element, updatableTagName)) {
                 boolean updated = updaterPlugin.updateElementTag(element, updatableTagName);
@@ -142,34 +143,6 @@ public class SynchronizingStep extends AbstractStep {
             }
         } else {
             LOGGER.info("Element cannot be updated (maybe original value(s) exist(s))");
-        }
-    }
-
-    /**
-     * Update element to OSM database with tag values which are coming from the best matching imports. This method is
-     * now obsolete since the new matching method.
-     */
-    @Obsolete
-    private void updateElementWithBestMatchingImport(AbstractElement element) {
-        AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
-        // Check if its best matching score is enough
-        if (element.getBestMatchingImport().getMatchingScore() < updaterPlugin.getMinMatchingScore()) {
-            LOGGER.info("Element cannot be updated because its best matching score is "
-                    + element.getBestMatchingImport().getMatchingScore() + " (min="
-                    + updaterPlugin.getMinMatchingScore() + ")");
-            return;
-        }
-        // Try to update the element data with the best matching element
-        boolean needToUpdate = false;
-        // needToUpdate = this.plugin.updateElementData(element.getBestMatchingImport(), element);
-        // Update element only if needed
-        if (needToUpdate) {
-            if (this.osmApiService.writeElement(element)) {
-                this.counterForUpdatedElements++;
-                LOGGER.debug("Ok element has been updated with import #" + element.getBestMatchingImport().getId());
-            }
-        } else {
-            LOGGER.info("Element cannot be modified because original values exist");
         }
     }
 
