@@ -1,7 +1,8 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.plugin.updater;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 
 public abstract class AbstractUpdaterPlugin<Element extends AbstractElement, Import extends AbstractImport>
         extends AbstractPlugin<Element, Import> {

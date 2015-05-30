@@ -3,7 +3,7 @@ package org.openstreetmap.osmaxil.step;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
+import org.openstreetmap.osmaxil.plugin.remaker.AbstractRemakerPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +42,9 @@ public class ProcessingStep extends AbstractStep {
         // Compute a global matching score for the element
         element.setMatchingScore(this.plugin.computeElementMatchingScore(element));
         // Do specific stuff depending on the plugin
-        if (this.plugin instanceof AbstracRemakerPlugin) {
+        if (this.plugin instanceof AbstractRemakerPlugin) {
             // Create remaked elements
-            ((AbstracRemakerPlugin) this.plugin).buildXmlForRemaking(element);
+            ((AbstractRemakerPlugin) this.plugin).buildXmlForRemaking(element);
         }
     }
 

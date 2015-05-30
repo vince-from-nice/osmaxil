@@ -8,7 +8,7 @@ import org.openstreetmap.osmaxil.dao.OsmPostgis;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
-import org.openstreetmap.osmaxil.plugin.parser.AbstractImportParser;
+import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractPlugin <Element extends AbstractElement, Import extends AbstractImport> {
@@ -30,7 +30,7 @@ public abstract class AbstractPlugin <Element extends AbstractElement, Import ex
     
     abstract public String getChangesetSourceLabel();
     
-    abstract public AbstractImportParser getParser();
+    abstract public AbstractParser getParser();
     
     static public final float MIN_MATCHING_SCORE = 0.0f; 
     

@@ -23,9 +23,12 @@
 
 	<context:property-placeholder location="classpath:settings.properties, classpath:password.properties" />
 
-	<bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.PssBuildingUpdaterPlugin">
-	</bean>
+	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.PssBuildingUpdaterPlugin">
+	</bean-->
 	
+	<bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.ParisBuildingUpdaterPlugin">
+    </bean>
+    
 	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.building.ParisBuildingRemakerPlugin">
     </bean-->
 

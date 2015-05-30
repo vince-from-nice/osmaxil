@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.parser;
+package org.openstreetmap.osmaxil.plugin.common.parser;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Repository
-public class ParisBuildingParser extends AbstractImportParser {
+public class ParisBuildingParser extends AbstractParser {
     
     private CSVReader reader;
 

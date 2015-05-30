@@ -1,12 +1,10 @@
 package org.openstreetmap.osmaxil.step;
 
-import java.util.Iterator;
-
-import org.apache.http.annotation.Obsolete;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
+import org.openstreetmap.osmaxil.plugin.remaker.AbstractRemakerPlugin;
+import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +33,17 @@ public class StatisticsStep extends AbstractStep {
         if (this.plugin instanceof AbstractUpdaterPlugin) {
             this.buildUpdatingStats();
             this.displayUpdatingStats();
-        } else if (this.plugin instanceof AbstractUpdaterPlugin) {
+        } else if (this.plugin instanceof AbstractRemakerPlugin) {
             // TODO
         } 
+        //displayAllMatchingScore();
+    }
+    
+    private void displayAllMatchingScore() {
+        LOGGER.info("Here are all matching scores:");
+        for (AbstractElement element : elementCache.getElements().values()) {
+            LOGGER.info("- score for element " + element.getOsmId() + " is " + element.getMatchingScore());
+        }
     }
     
     private void displayUpdatingStats() {
@@ -94,7 +100,7 @@ public class StatisticsStep extends AbstractStep {
                     }                    
                 }
                 if (!ok) {
-                    LOGGER.error("Stats issue with element " + element.getOsmId());
+                    LOGGER.error("Stats issue with element " + element.getOsmId() + ", its matching score is " + element.getMatchingScore());
                 }
             }
         }

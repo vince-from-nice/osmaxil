@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.plugin.remaker;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,15 +6,16 @@ import java.util.Map;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
+import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 
-public abstract class AbstracRemakerPlugin <Element extends AbstractElement, Import extends AbstractImport>  
+public abstract class AbstractRemakerPlugin <Element extends AbstractElement, Import extends AbstractImport>  
     extends AbstractPlugin<Element, Import>  {
     
     protected Map<Long, OsmApiRoot> xmlForRemakingByElement;
     
     abstract public void buildXmlForRemaking(Element element);
     
-    public AbstracRemakerPlugin() {
+    public AbstractRemakerPlugin() {
         this.xmlForRemakingByElement = new HashMap<Long, OsmApiRoot>();
     }
     

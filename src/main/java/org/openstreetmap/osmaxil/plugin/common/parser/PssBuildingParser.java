@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.parser;
+package org.openstreetmap.osmaxil.plugin.common.parser;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -18,7 +18,7 @@ import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PssBuildingParser extends AbstractImportParser {
+public class PssBuildingParser extends AbstractParser {
 
     @Autowired
     @Qualifier(value = "pssMarshaller")

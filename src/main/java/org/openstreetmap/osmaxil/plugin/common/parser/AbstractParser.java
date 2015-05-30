@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.parser;
+package org.openstreetmap.osmaxil.plugin.common.parser;
 
 import java.util.Iterator;
 
@@ -8,7 +8,7 @@ import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public abstract class AbstractImportParser implements Iterator<AbstractImport> {
+public abstract class AbstractParser<Import extends AbstractImport> implements Iterator<Import> {
 
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
     

@@ -7,8 +7,8 @@ import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.dao.OsmXml;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
-import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
-import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
+import org.openstreetmap.osmaxil.plugin.remaker.AbstractRemakerPlugin;
+import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -79,7 +79,7 @@ public class SynchronizingStep extends AbstractStep {
         if (this.plugin instanceof AbstractUpdaterPlugin) {
             // updateElementWithBestMatchingImport(element);
             updateElementWithBestAccumulatedImports(element);            
-        } else if (this.plugin instanceof AbstracRemakerPlugin) {
+        } else if (this.plugin instanceof AbstractRemakerPlugin) {
             remakeElement(element);
         } else {
             LOGGER.warn("Unable to synchronize with plugin " + this.plugin); 
@@ -93,7 +93,7 @@ public class SynchronizingStep extends AbstractStep {
      */
     private void remakeElement(AbstractElement element) {
         boolean success = false;
-        OsmApiRoot xml = ((AbstracRemakerPlugin) this.plugin).getXmlForRemaking(element.getOsmId());
+        OsmApiRoot xml = ((AbstractRemakerPlugin) this.plugin).getXmlForRemaking(element.getOsmId());
         if (xml == null) {
             LOGGER.warn("Unable to sync element since its remaking data is null");
             return;

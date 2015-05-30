@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.building;
+package org.openstreetmap.osmaxil.plugin.updater;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
-import org.openstreetmap.osmaxil.plugin.parser.PssBuildingParser;
+import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
+import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     private PssBuildingParser parser;
     
     @Autowired
-    private BuildingHelper helper;
+    private BuildingMatcher helper;
     
     @Value("${plugins.pssBuildingUpdater.minMatchingScore}")
     private float minMatchingScore;
@@ -79,7 +79,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
 
     @Override
     public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
-       return this.helper.findMatchingBuildings(imp, this.getParser().getSrid());
+       return this.helper.findMatchingImport(imp, this.getParser().getSrid());
     }
 
     @Override

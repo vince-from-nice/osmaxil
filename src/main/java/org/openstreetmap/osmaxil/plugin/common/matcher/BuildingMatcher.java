@@ -1,26 +1,18 @@
-package org.openstreetmap.osmaxil.plugin.building;
+package org.openstreetmap.osmaxil.plugin.common.matcher;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.dao.OsmPostgis;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BuildingHelper {
+public class BuildingMatcher extends AbstractMatcher {
  
-    @Autowired
-    protected OsmPostgis osmPostgisService;
-    
-    static protected final Logger LOGGER = Logger.getLogger(Application.class);
-    
-    public List<MatchingElementId> findMatchingBuildings(BuildingImport imp, int srid) {
+   @Override
+    public List<MatchingElementId> findMatchingImport(BuildingImport imp, int srid) {
         List<MatchingElementId> result = new ArrayList<MatchingElementId>();
         Long[] ids = new Long[0];
         // Find in PostGIS all buildings matching (ie. containing) the import
@@ -55,7 +47,8 @@ public class BuildingHelper {
         return result;
     }
     
-    public float computeMatchingScoreBasedOnBuildingArea(BuildingImport imp) {
+   @Override
+    public float computeMatchingScore(BuildingImport imp) {
         BuildingElement element = (BuildingElement) imp.getElement();
         float result = 0f;
         if (imp.getArea() == null) {

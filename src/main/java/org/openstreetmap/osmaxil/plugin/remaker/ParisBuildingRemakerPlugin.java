@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.building;
+package org.openstreetmap.osmaxil.plugin.remaker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +15,20 @@ import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRelation;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiWay;
-import org.openstreetmap.osmaxil.plugin.AbstracRemakerPlugin;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.openstreetmap.osmaxil.plugin.parser.ParisBuildingParser;
+import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
+import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingParser;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingElement, BuildingImport> {
+public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
     private ParisBuildingParser loader;
 
     @Autowired
-    private BuildingHelper helper;
+    private BuildingMatcher helper;
 
     @Value("${plugins.parisBuildingMaker.minMatchingScore}")
     private float minMatchingScore;
@@ -47,12 +47,12 @@ public class ParisBuildingRemakerPlugin extends AbstracRemakerPlugin<BuildingEle
     
     @Override
     public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
-        return this.helper.findMatchingBuildings(imp, this.getParser().getSrid());
+        return this.helper.findMatchingImport(imp, this.getParser().getSrid());
     }
 
     @Override
     public float computeImportMatchingScore(BuildingImport imp) {
-        return this.helper.computeMatchingScoreBasedOnBuildingArea(imp);
+        return this.helper.computeMatchingScore(imp);
     }
 
     @Override
