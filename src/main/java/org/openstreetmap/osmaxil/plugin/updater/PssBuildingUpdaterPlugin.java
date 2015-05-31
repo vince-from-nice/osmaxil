@@ -7,6 +7,7 @@ import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.plugin.common.comparator.ExclusiveMatchingImportComparator;
 import org.openstreetmap.osmaxil.plugin.common.comparator.SimpleMatchingImportComparator;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingParser;
@@ -21,7 +22,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     private PssBuildingParser parser;
     
     @Autowired
-    private SimpleMatchingImportComparator comparator;
+    private ExclusiveMatchingImportComparator<BuildingElement> comparator;
     
     @Autowired
     private BuildingMatcher helper;
@@ -43,11 +44,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
         // That way all imports which are matching geographically an element have the maximal matching score.
         // But we can consider that if there's more than 1 import which are matching the element it means that the OSM
         // building shaping is not enough accurate so we should do nothing at all by setting the minimal score to the element.
-//        if (building.getMatchingImports().size() == 1) {
-//            return AbstractPlugin.MAX_MATCHING_SCORE;
-//        }
-//        return AbstractPlugin.MIN_MATCHING_SCORE;
-        // At the start a simple matching import comparator should be enough
+        // That's what the ExclusiveMatchingImportComparator class was designed for :)
         return this.comparator.computeElementMatchingScore(building);
     }
     
