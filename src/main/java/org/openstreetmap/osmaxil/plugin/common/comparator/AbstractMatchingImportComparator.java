@@ -5,7 +5,7 @@ import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 
-abstract class AbstractMatchingComparator<Element extends AbstractElement> {
+abstract class AbstractMatchingImportComparator<Element extends AbstractElement> {
 
     public abstract float computeElementMatchingScore(Element element);
 

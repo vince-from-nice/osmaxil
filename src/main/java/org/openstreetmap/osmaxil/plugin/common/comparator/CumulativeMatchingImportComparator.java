@@ -11,8 +11,15 @@ import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class is an implementation of AbstractMatchingComparator: 
+ * For each element it first dispatches all its matching imports by their tag value into maps.
+ * Note that the name of the relevant tag defined by the matchingTagName attribute. 
+ * Then for each tag value a total matching scores are calculated by accumulating matching scores of the related imports.
+ * At the end the global matching score of the element is the biggest total matching score.
+ */
 @Component
-public class TotalScoreMatchingComparator<Element extends AbstractElement> extends AbstractMatchingComparator<Element> {
+public class CumulativeMatchingImportComparator<Element extends AbstractElement> extends AbstractMatchingImportComparator<Element> {
 
     private Map<Long, Map<String, List<AbstractImport>>> importsByElementByTagValue;
     
@@ -20,7 +27,7 @@ public class TotalScoreMatchingComparator<Element extends AbstractElement> exten
     
     private String matchingTagName;
     
-    public TotalScoreMatchingComparator() {
+    public CumulativeMatchingImportComparator() {
         this.importsByElementByTagValue = new HashMap<Long, Map<String,List<AbstractImport>>>();
         this.totalScoresByElementByTagValue = new HashMap<Long, Map<String,Float>>();
     }    

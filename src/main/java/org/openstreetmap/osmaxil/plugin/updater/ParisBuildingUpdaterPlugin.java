@@ -9,7 +9,7 @@ import org.openstreetmap.osmaxil.model.ElementTagNames;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.openstreetmap.osmaxil.plugin.common.comparator.TotalScoreMatchingComparator;
+import org.openstreetmap.osmaxil.plugin.common.comparator.CumulativeMatchingImportComparator;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     private BuildingMatcher matcher;
     
     @Autowired
-    private TotalScoreMatchingComparator<BuildingElement> comparator;
+    private CumulativeMatchingImportComparator<BuildingElement> comparator;
     
     @Value("${plugins.parisBuildingUpdater.minMatchingScore}")
     private float minMatchingScore;
