@@ -18,7 +18,7 @@ import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PssBuildingParser extends AbstractParser {
+public class PssBuildingParser extends AbstractParser<BuildingImport> {
 
     @Autowired
     @Qualifier(value = "pssMarshaller")

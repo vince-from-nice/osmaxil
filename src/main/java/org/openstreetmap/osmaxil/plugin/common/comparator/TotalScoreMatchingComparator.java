@@ -8,32 +8,39 @@ import java.util.Map;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TotalScoreComparator<Element extends AbstractElement> extends AbstractComparator<Element> {
+public class TotalScoreMatchingComparator<Element extends AbstractElement> extends AbstractMatchingComparator<Element> {
 
     private Map<Long, Map<String, List<AbstractImport>>> importsByElementByTagValue;
     
     private Map<Long, Map<String, Float>> totalScoresByElementByTagValue;
     
-    public TotalScoreComparator() {
+    private String matchingTagName;
+    
+    public TotalScoreMatchingComparator() {
         this.importsByElementByTagValue = new HashMap<Long, Map<String,List<AbstractImport>>>();
         this.totalScoresByElementByTagValue = new HashMap<Long, Map<String,Float>>();
     }    
     
     @Override
-    public float computeElementMatchingScore(AbstractElement element, String matchingTagName) {
-        this.dispatchMatchingImportsByTagValues(element, matchingTagName);
+    public float computeElementMatchingScore(AbstractElement element) {
+        if (this.matchingTagName == null) {
+            LOGGER.error("Unable to compute element matching score since no matching tag name is defined.");
+            return AbstractPlugin.MIN_MATCHING_SCORE;
+        }
+        this.dispatchMatchingImportsByTagValues(element, this.matchingTagName);
         this.computeTotalScoresByTagValues(element);  
         return this.getBestTotalScoreByElement(element.getOsmId());
     }
     
     @Override
-    public String getBestTagValueByElement(long osmId) {
-        String bestTagValue = null;
+    public AbstractImport getBestMatchingImportByElement(AbstractElement element) {
         Float bestTotalScore = null;
-        Map<String, List<AbstractImport>> map = this.getMatchingImportsByElementByTagValue(osmId);
+        AbstractImport bestImport = null;
+        Map<String, List<AbstractImport>> map = this.getMatchingImportsByElementByTagValue(element.getOsmId());
         for (String tagValue : map.keySet()) {
             List<AbstractImport> importList = map.get(tagValue);
             // TODO use precalculated total scores
@@ -43,10 +50,12 @@ public class TotalScoreComparator<Element extends AbstractElement> extends Abstr
             }
             if (bestTotalScore == null || bestTotalScore < totalScore) {
                 bestTotalScore = totalScore;
-                bestTagValue = tagValue;
+                // The first import of the current list is a valid candidate, anyway they all have the same value for the  
+                // matching tag (but note that values could differ for other tags)
+                bestImport = importList.get(0); 
             }
         }
-        return bestTagValue;
+        return bestImport;
     }
     
     private Map<String, List<AbstractImport>> getMatchingImportsByElementByTagValue(long osmId) {
@@ -111,6 +120,14 @@ public class TotalScoreComparator<Element extends AbstractElement> extends Abstr
             }
         }
         return bestTotalScore;
+    }
+
+    public String getMatchingTagName() {
+        return matchingTagName;
+    }
+
+    public void setMatchingTagName(String matchingTagName) {
+        this.matchingTagName = matchingTagName;
     }
     
 }

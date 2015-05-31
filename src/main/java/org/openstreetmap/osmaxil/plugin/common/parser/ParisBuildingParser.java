@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Repository
-public class ParisBuildingParser extends AbstractParser {
+public class ParisBuildingParser extends AbstractParser<BuildingImport> {
     
     private CSVReader reader;
 

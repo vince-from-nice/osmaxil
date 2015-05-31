@@ -7,6 +7,7 @@ import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.plugin.common.comparator.SimpleMatchingComparator;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
 
     @Autowired
     private PssBuildingParser parser;
+    
+    @Autowired
+    private SimpleMatchingComparator comparator;
     
     @Autowired
     private BuildingMatcher helper;
@@ -43,6 +47,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
             return AbstractPlugin.MAX_MATCHING_SCORE;
         }
         return AbstractPlugin.MIN_MATCHING_SCORE;
+        //return this.comparator.computeElementMatchingScore(buiding);
     }
     
     @Override
