@@ -18,10 +18,13 @@ public class ExclusiveMatchingImportComparator<Element extends AbstractElement> 
         if (best == null) {
             return AbstractPlugin.MIN_MATCHING_SCORE;
         }
+        float score = best.getMatchingScore();
         if (element.getMatchingImports().size() > 1) {
-            return AbstractPlugin.MIN_MATCHING_SCORE;
+            // TEMP for having fun stats divide the score by the number of matching imports
+            score = score / element.getMatchingImports().size();
+            //return AbstractPlugin.MIN_MATCHING_SCORE;
         }
-        return best.getMatchingScore();
+        return score;
     }
 
     @Override

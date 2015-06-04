@@ -5,10 +5,6 @@ import org.openstreetmap.osmaxil.model.ElementTagNames;
 
 public class BuildingImport extends AbstractImport {
 
-    protected Double lat;
-
-    protected Double lon;
-
     protected Integer levels;
 
     protected Float height;
@@ -36,22 +32,6 @@ public class BuildingImport extends AbstractImport {
     public String toString() {
         return "Building import with id=[" + this.id + "] and name=[" + this.name + "], lat=[" + this.lat + "], lon=["
                 + this.lon + "], levels=[" + this.levels + "], height=[" + this.height + "], area=[" + this.area + "], url=[" + this.url + "]";
-    }
-
-    public Double getLat() {
-        return lat;
-    }
-
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    public Double getLon() {
-        return lon;
-    }
-
-    public void setLon(Double lon) {
-        this.lon = lon;
     }
 
     public Integer getLevels() {

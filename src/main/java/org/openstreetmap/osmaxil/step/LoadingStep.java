@@ -2,6 +2,7 @@ package org.openstreetmap.osmaxil.step;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.openstreetmap.osmaxil.Exception;
@@ -12,7 +13,15 @@ import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
 import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.IntersectionMatrix;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
 
 @Service
 public class LoadingStep  extends AbstractStep {
@@ -23,6 +32,27 @@ public class LoadingStep  extends AbstractStep {
     
     @Autowired
     private ElementStore elementCache;
+    
+    private GeometryFactory geometryFactory;
+    
+    private Geometry includingArea;
+    
+    private Geometry excludingArea;
+    
+    @Value("${osmaxil.filteringArea.including}")
+    private String includingAreaString;
+    
+    @Value("${osmaxil.filteringArea.excluding}")
+    private String excludingAreaString;
+    
+    @PostConstruct
+    private void init() throws ParseException {
+        this.geometryFactory = new GeometryFactory();
+        WKTReader wktReader = new WKTReader();
+        // Build the including and excluding area
+        this.includingArea = wktReader.read(this.includingAreaString);
+        this.excludingArea = wktReader.read(this.excludingAreaString);
+    }
         
     @PreDestroy
     public void close() {
@@ -53,6 +83,11 @@ public class LoadingStep  extends AbstractStep {
             return;
         }
         LOGGER.info("Loading import #" + this.counterForLoadedImports + ": " +  imp);
+        // Check if the import coordinates are fine with the bounding boxes
+        if (!this.checkCoordinatesWithFilteringArea(imp.getLon(), imp.getLat())) {
+            LOGGER.warn("Import has invalid coordinates, skipping it...");
+            return;
+        }
         // Find relevant element
         List<MatchingElementId> relevantElementIds = this.plugin.findMatchingElements(imp);
         if (relevantElementIds.size() > 0) {
@@ -77,6 +112,21 @@ public class LoadingStep  extends AbstractStep {
             // And bind the import to it
             this.bindImportToElement(element, imp);
         }
+    }
+    
+    private boolean checkCoordinatesWithFilteringArea(double  x, double y) {
+        Geometry geom = this.geometryFactory.createPoint(new Coordinate(x, y));
+        IntersectionMatrix includingMatrix = geom.relate(this.includingArea);
+        if (!includingMatrix.isWithin()) {
+            LOGGER.info("Coordinates (" + x + ", " + y + ") are outside the including area " + this.includingAreaString);
+            return false;
+        }
+        IntersectionMatrix excludingMatrix = geom.relate(this.excludingArea);
+        if (excludingMatrix.isWithin()) {
+            LOGGER.info("Coordinates (" + x + ", " + y + ") are inside the excluding area " + this.excludingAreaString);
+            return false;
+        }
+        return true;
     }
     
     private AbstractElement getOrCreateElement(MatchingElementId relevantElementId) throws Exception {

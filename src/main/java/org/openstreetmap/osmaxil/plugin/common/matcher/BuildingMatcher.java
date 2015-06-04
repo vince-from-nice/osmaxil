@@ -63,7 +63,7 @@ public class BuildingMatcher extends AbstractMatcher {
         int elementArea = element.getComputedArea();
         // If not yet computed do it and store the result for further matching imports
         if (elementArea == 0) {
-            elementArea = computeBuildingArea(element);
+            elementArea = this.computeBuildingArea(element);
             element.setComputedArea(elementArea);
         }
         // Compare area between import and element
@@ -110,6 +110,7 @@ public class BuildingMatcher extends AbstractMatcher {
         if (element.getRelationId() > 0) {
             elementId = - element.getRelationId(); // reinverse the ID because osm2pgsql stores relations like that
         }
+        // TODO use JTS instead of PostGIS ?
         int elementArea = this.osmPostgisService.getPolygonAreaById(elementId);
         // TODO cache it for next imports 
         LOGGER.info("OSM building " + element.getOsmId() + " area has been computed: " + elementArea);

@@ -10,6 +10,10 @@ public abstract class AbstractImport {
     
     protected float matchingScore;
     
+    protected Double lat;
+
+    protected Double lon;
+    
     abstract public String getTagValue(String tagName);
     
     @Override
@@ -47,6 +51,22 @@ public abstract class AbstractImport {
 
     public void setMatchingScore(float matchingScore) {
         this.matchingScore = matchingScore;
+    }
+    
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLon() {
+        return lon;
+    }
+
+    public void setLon(Double lon) {
+        this.lon = lon;
     }
     
 }

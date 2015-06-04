@@ -1,5 +1,4 @@
  
-2015-05-21 13:42:05  INFO ==========================================================
 2015-05-21 13:42:05  INFO === Statistics ===
 2015-05-21 13:42:05  INFO *** Statistics with the old matching method ***
 2015-05-21 13:42:05  INFO Number of matched elements: 31794
