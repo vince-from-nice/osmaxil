@@ -28,6 +28,8 @@ public class LoadingStep  extends AbstractStep {
 
     private long counterForLoadedImports;
     
+    private long counterForFilterededImports;
+    
     private long counterForMatchedImports;
     
     @Autowired
@@ -58,6 +60,7 @@ public class LoadingStep  extends AbstractStep {
     public void close() {
         LOGGER.info("=== Closing import org.openstreetmap.osmaxil.plugin.loader ===");
         LOGGER.info("Total of loaded imports: " + this.counterForLoadedImports);
+        LOGGER.info("Total of filtered imports: " + this.counterForFilterededImports);
         LOGGER.info("Total of matched imports: " + this.counterForMatchedImports);
     }
 
@@ -85,6 +88,7 @@ public class LoadingStep  extends AbstractStep {
         LOGGER.info("Loading import #" + this.counterForLoadedImports + ": " +  imp);
         // Check if the import coordinates are fine with the bounding boxes
         if (!this.checkCoordinatesWithFilteringArea(imp.getLon(), imp.getLat())) {
+            this.counterForFilterededImports++;
             LOGGER.warn("Import has invalid coordinates, skipping it...");
             return;
         }
