@@ -13,15 +13,15 @@ public class StatisticsStep extends AbstractStep {
 
     private int matchedElementsNbr;
 
-    private int updatableElementsNbr;
+    private int alterableElementsNbr;
 
-    private int updatedElementsNbr;
+    private int alteratedElementsNbr;
 
     private int[] matchedElementsNbrByScore;
 
-    private int[] updatableElementsNbrByScore;
+    private int[] alterableElementsNbrByScore;
 
-    private int[] updatedElementsNbrByScore;
+    private int[] alteredElementsNbrByScore;
 
     @Autowired
     private ElementStore elementCache;
@@ -30,12 +30,8 @@ public class StatisticsStep extends AbstractStep {
 
     public void generateStats() {
         LOGGER.info("=== Statistics ===");
-        if (this.plugin instanceof AbstractUpdaterPlugin) {
-            this.buildUpdatingStats();
-            this.displayUpdatingStats();
-        } else if (this.plugin instanceof AbstractRemakerPlugin) {
-            // TODO
-        } 
+        this.buildStats();
+        this.displayStats();
         //displayAllMatchingScore();
     }
     
@@ -46,10 +42,10 @@ public class StatisticsStep extends AbstractStep {
         }
     }
     
-    private void displayUpdatingStats() {
+    private void displayStats() {
         LOGGER.info("Number of matched elements: " + this.matchedElementsNbr);
-        LOGGER.info("Number of updatable elements: " + this.updatableElementsNbr);
-        LOGGER.info("Number of updated elements: " + this.updatedElementsNbr);
+        LOGGER.info("Number of updatable elements: " + this.alterableElementsNbr);
+        LOGGER.info("Number of updated elements: " + this.alteratedElementsNbr);
         LOGGER.info("Repartition by matching scores:");
         for (int i = 0; i < 10; i++) {
             StringBuilder sb = new StringBuilder();
@@ -58,19 +54,19 @@ public class StatisticsStep extends AbstractStep {
             if (this.elementCache.getElements().size()  > 0) {
                 sb.append(" (" + 100 * this.matchedElementsNbrByScore[i] / this.elementCache.getElements().size() + "%)");
             }
-            sb.append(" elements <= " + this.updatedElementsNbrByScore[i] + " updated");
-            sb.append(" (" + this.updatableElementsNbrByScore[i] + " were updatable)");
+            sb.append(" elements <= " + this.alteredElementsNbrByScore[i] + " updated");
+            sb.append(" (" + this.alterableElementsNbrByScore[i] + " were updatable)");
             LOGGER.info(sb);
         }
     }
 
-    private void buildUpdatingStats() {
+    private void buildStats() {
         this.matchedElementsNbr = 0;
-        this.updatableElementsNbr = 0;
-        this.updatedElementsNbr = 0;
+        this.alterableElementsNbr = 0;
+        this.alteratedElementsNbr = 0;
         this.matchedElementsNbrByScore = new int[10];
-        this.updatedElementsNbrByScore = new int[10];
-        this.updatableElementsNbrByScore = new int[10];
+        this.alteredElementsNbrByScore = new int[10];
+        this.alterableElementsNbrByScore = new int[10];
         for (AbstractElement element : this.elementCache.getElements().values()) {
             Float score = element.getMatchingScore();
             if (score == null) {
@@ -82,19 +78,13 @@ public class StatisticsStep extends AbstractStep {
                         ok = true;
                         this.matchedElementsNbr++;
                         this.matchedElementsNbrByScore[i]++;
-                        if (element.isUpdated()) {
-                            this.updatedElementsNbr++;
-                            this.updatedElementsNbrByScore[i]++;
+                        if (element.isAltered()) {
+                            this.alteratedElementsNbr++;
+                            this.alteredElementsNbrByScore[i]++;
                         }
-                        // TODO move it to UpdaterPlugin
-                        boolean updatable = false;
-                        AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
-                        for (int j = 0; j < updaterPlugin.getUpdatableTagNames().length; j++) {
-                            updatable = updaterPlugin.isElementTagUpdatable(element, updaterPlugin.getUpdatableTagNames()[j]);
-                        }
-                        if (updatable) {
-                            this.updatableElementsNbr++;
-                            this.updatableElementsNbrByScore[i]++;
+                        if (this.plugin.isElementAlterable(element)) {
+                            this.alterableElementsNbr++;
+                            this.alterableElementsNbrByScore[i]++;
                         }
                         break;
                     }                    

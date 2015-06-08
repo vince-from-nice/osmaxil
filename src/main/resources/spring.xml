@@ -26,11 +26,11 @@
 	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.updater.PssBuildingUpdaterPlugin">
 	</bean-->
 	
-	<bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.updater.ParisBuildingUpdaterPlugin">
-    </bean>
-    
-	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.remaker.ParisBuildingRemakerPlugin">
+	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.updater.ParisBuildingUpdaterPlugin">
     </bean-->
+    
+	<bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.remaker.ParisBuildingRemakerPlugin">
+    </bean>
 
 	<bean id="loadingStep" class="org.openstreetmap.osmaxil.step.LoadingStep">
 		<property name="plugin" ref="activePlugin" />

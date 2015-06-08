@@ -1,17 +1,16 @@
 package org.openstreetmap.osmaxil.plugin.updater;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTagNames;
-import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.openstreetmap.osmaxil.plugin.common.comparator.CumulativeMatchingImportComparator;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingParser;
+import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
+import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnSameValueMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     private BuildingMatcher matcher;
     
     @Autowired
-    private CumulativeMatchingImportComparator<BuildingElement> comparator;
+    private CumulativeOnSameValueMatchingScorer<BuildingElement> scorer;
     
     @Value("${plugins.parisBuildingUpdater.minMatchingScore}")
     private float minMatchingScore;
@@ -43,17 +42,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     
     @PostConstruct
     public void init() {
-        this.comparator.setMatchingTagName(MATCHING_TAG_NAME);
-    }
-    
-    @Override
-    public String[] getUpdatableTagNames() {
-        return UPDATABLE_TAG_NAMES;
-    }
-
-    @Override
-    public float computeElementMatchingScore(BuildingElement building) {
-        return this.comparator.computeElementMatchingScore(building);
+        this.scorer.setMatchingTagName(MATCHING_TAG_NAME);
     }
     
     @Override
@@ -64,7 +53,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     
     @Override
     public boolean updateElementTag(BuildingElement element, String tagName) {
-        AbstractImport bestImport = this.comparator.getBestMatchingImportByElement(element);
+        AbstractImport bestImport = this.scorer.getBestMatchingImportByElement(element);
         String tagValue = bestImport.getTagValue(tagName);
         if (tagValue == null) {
             LOGGER.warn("Cannot update tag because best import tag value is null for " + tagName);
@@ -81,13 +70,8 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     }
     
     @Override
-    public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
-       return this.matcher.findMatchingImport(imp, this.getParser().getSrid());
-    }
-
-    @Override
-    public float computeImportMatchingScore(BuildingImport imp) {
-        return this.matcher.computeMatchingScore(imp);
+    public String[] getUpdatableTagNames() {
+        return UPDATABLE_TAG_NAMES;
     }
 
     @Override
@@ -98,6 +82,16 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     @Override
     public ParisBuildingParser getParser() {
         return parser;
+    }
+    
+    @Override
+    public AbstractMatcher<BuildingImport> getMatcher() {
+        return this.matcher;
+    }
+
+    @Override
+    public AbstractMatchingScorer<BuildingElement> getScorer() {
+      return this.scorer;
     }
 
     @Override

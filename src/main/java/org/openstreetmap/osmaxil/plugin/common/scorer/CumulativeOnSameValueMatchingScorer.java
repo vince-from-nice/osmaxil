@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.comparator;
+package org.openstreetmap.osmaxil.plugin.common.scorer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,14 +12,14 @@ import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.stereotype.Component;
 
 /**
- * This class is an implementation of AbstractMatchingComparator: 
+ * This class is an implementation of AbstractMatchingScorer which is a more complex than other implementations.
  * For each element it first dispatches all its matching imports by their tag value into maps.
  * Note that the name of the relevant tag defined by the matchingTagName attribute. 
  * Then for each tag value a total matching scores are calculated by accumulating matching scores of the related imports.
- * At the end the global matching score of the element is the biggest total matching score.
+ * The global matching score of the element is the biggest total matching score.
  */
 @Component
-public class CumulativeMatchingImportComparator<Element extends AbstractElement> extends AbstractMatchingImportComparator<Element> {
+public class CumulativeOnSameValueMatchingScorer<Element extends AbstractElement> extends AbstractMatchingScorer<Element> {
 
     private Map<Long, Map<String, List<AbstractImport>>> importsByElementByTagValue;
     
@@ -27,7 +27,7 @@ public class CumulativeMatchingImportComparator<Element extends AbstractElement>
     
     private String matchingTagName;
     
-    public CumulativeMatchingImportComparator() {
+    public CumulativeOnSameValueMatchingScorer() {
         this.importsByElementByTagValue = new HashMap<Long, Map<String,List<AbstractImport>>>();
         this.totalScoresByElementByTagValue = new HashMap<Long, Map<String,Float>>();
     }    
@@ -47,6 +47,7 @@ public class CumulativeMatchingImportComparator<Element extends AbstractElement>
     public AbstractImport getBestMatchingImportByElement(AbstractElement element) {
         Float bestTotalScore = null;
         AbstractImport bestImport = null;
+        // Find the import list with the best total score
         Map<String, List<AbstractImport>> map = this.getMatchingImportsByElementByTagValue(element.getOsmId());
         for (String tagValue : map.keySet()) {
             List<AbstractImport> importList = map.get(tagValue);

@@ -2,7 +2,6 @@ package org.openstreetmap.osmaxil.step;
 
 import javax.annotation.PreDestroy;
 
-import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.dao.OsmXml;
 import org.openstreetmap.osmaxil.model.AbstractElement;
@@ -18,9 +17,7 @@ public class SynchronizingStep extends AbstractStep {
 
     private long counterForMatchedElements;
 
-    private long counterForUpdatedElements;
-    
-    private long counterForRemakedElements;
+    private long counterForAlteredElements;
 
     @Autowired
     private ElementStore elementCache;
@@ -44,8 +41,7 @@ public class SynchronizingStep extends AbstractStep {
     public void close() {
         LOGGER.info("=== Closing element synchronizer ===");
         LOGGER.info("Total of matched elements: " + this.counterForMatchedElements);
-        LOGGER.info("Total of updated elements: " + this.counterForUpdatedElements);
-        LOGGER.info("Total of remaked elements: " + this.counterForRemakedElements);
+        LOGGER.info("Total of altered elements: " + this.counterForAlteredElements);
     }
 
     public void synchronizeElements() {
@@ -104,8 +100,8 @@ public class SynchronizingStep extends AbstractStep {
             success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), xml);
         }
         if (success) {
-            this.counterForRemakedElements++;
-            element.setRemaked(true);
+            this.counterForAlteredElements++;
+            element.setAltered(true);
             LOGGER.debug("Ok element has been remaked");
         }
     }
@@ -137,8 +133,8 @@ public class SynchronizingStep extends AbstractStep {
                 success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), element.getApiData());
             }
             if (success) {
-                this.counterForUpdatedElements++;
-                element.setUpdated(true);
+                this.counterForAlteredElements++;
+                element.setAltered(true);
                 LOGGER.debug("Ok element has been updated");
             }
         } else {

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.Coordinates;
-import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiMember;
@@ -15,9 +14,11 @@ import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRelation;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiWay;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingParser;
+import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
+import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnAnyValueMatchingScorer;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,10 +26,13 @@ import org.springframework.beans.factory.annotation.Value;
 public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
-    private ParisBuildingParser loader;
+    private ParisBuildingParser parser;
 
     @Autowired
-    private BuildingMatcher helper;
+    private BuildingMatcher matcher;
+    
+    @Autowired
+    private CumulativeOnAnyValueMatchingScorer<BuildingElement> scorer;
 
     @Value("${plugins.parisBuildingMaker.minMatchingScore}")
     private float minMatchingScore;
@@ -40,24 +44,14 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     private String changesetComment;
     
     @Override
-    public float computeElementMatchingScore(BuildingElement building) {
-        // TODO
-        return AbstractPlugin.MAX_MATCHING_SCORE;
-    }
-    
-    @Override
-    public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
-        return this.helper.findMatchingImport(imp, this.getParser().getSrid());
-    }
-
-    @Override
-    public float computeImportMatchingScore(BuildingImport imp) {
-        return this.helper.computeMatchingScore(imp);
-    }
-
-    @Override
     public BuildingElement instanciateElement(long osmId) {
         return new BuildingElement(osmId);
+    }
+
+    @Override
+    public boolean isElementAlterable(BuildingElement element) {
+        // TODO Check if element has only common tags for the Cadastre import or if it's complex structure ?
+        return false;
     }
 
     @Override
@@ -193,31 +187,33 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     // }
 
     @Override
+    public ParisBuildingParser getParser() {
+        return parser;
+    }
+    
+    @Override
+    public AbstractMatcher<BuildingImport> getMatcher() {
+        return this.matcher;
+    }
+
+    @Override
+    public AbstractMatchingScorer<BuildingElement> getScorer() {
+      return this.scorer;
+    }
+
+    @Override
     public float getMinimalMatchingScore() {
         return minMatchingScore;
     }
 
-    public ParisBuildingParser getParser() {
-        return loader;
-    }
-
-    public void setLoader(ParisBuildingParser loader) {
-        this.loader = loader;
-    }
-
+    @Override
     public String getChangesetSourceLabel() {
         return changesetSourceLabel;
     }
 
-    public void setChangesetSourceLabel(String changesetSourceLabel) {
-        this.changesetSourceLabel = changesetSourceLabel;
-    }
-
+    @Override
     public String getChangesetComment() {
         return changesetComment;
     }
 
-    public void setChangesetComment(String changesetComment) {
-        this.changesetComment = changesetComment;
-    }
 }

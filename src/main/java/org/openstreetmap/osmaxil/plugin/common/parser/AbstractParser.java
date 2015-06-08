@@ -8,7 +8,7 @@ import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public abstract class AbstractParser<Import extends AbstractImport> implements Iterator<Import> {
+public abstract class AbstractParser<IMPORT extends AbstractImport> implements Iterator<IMPORT> {
 
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
     

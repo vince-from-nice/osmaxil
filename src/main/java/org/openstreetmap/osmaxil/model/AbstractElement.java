@@ -18,9 +18,7 @@ public abstract class AbstractElement {
 
     private long relationId;
     
-    private boolean updated;
-    
-    private boolean remaked;
+    private boolean altered;
     
     private float matchingScore;
     
@@ -36,7 +34,7 @@ public abstract class AbstractElement {
 
     public AbstractElement(long osmId) {
         this.osmId = osmId;
-        this.updated = false;
+        this.altered = false;
         this.matchingImports = new ArrayList<AbstractImport>();
         this.originalValuesByTagNames = new HashMap<String, String>();
     }
@@ -100,12 +98,12 @@ public abstract class AbstractElement {
         this.apiData = apiData;
     }
     
-    public boolean isUpdated() {
-        return this.updated;
+    public boolean isAltered() {
+        return this.altered;
     }
     
-    public void setUpdated(boolean updated) {
-        this.updated = updated;
+    public void setAltered(boolean altered) {
+        this.altered = altered;
     }
 
     public long getRelationId() {
@@ -114,14 +112,6 @@ public abstract class AbstractElement {
 
     public void setRelationId(long relationId) {
         this.relationId = relationId;
-    }
-
-    public boolean isRemaked() {
-        return remaked;
-    }
-
-    public void setRemaked(boolean remaked) {
-        this.remaked = remaked;
     }
 
     public float getMatchingScore() {

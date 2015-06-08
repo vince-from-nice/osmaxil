@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.comparator;
+package org.openstreetmap.osmaxil.plugin.common.scorer;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
@@ -6,11 +6,11 @@ import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.stereotype.Component;
 
 /**
- * This class is an implementation of AbstractMatchingComparator: 
- * It works exactly like the SimpleMatchingImportComparator but elements with more than one matching import has the minimal global score.
+ * This class is an implementation of AbstractMatchingScorer: 
+ * It works exactly like the SimpleMatchingImportComparator except that elements with more than one matching import has the minimal global score.
  */
 @Component
-public class ExclusiveMatchingImportComparator<Element extends AbstractElement> extends AbstractMatchingImportComparator<Element> {
+public class ExclusiveMatchingScorer<Element extends AbstractElement> extends AbstractMatchingScorer<Element> {
     
     @Override
     public float computeElementMatchingScore(AbstractElement element) {
@@ -25,17 +25,6 @@ public class ExclusiveMatchingImportComparator<Element extends AbstractElement> 
             //return AbstractPlugin.MIN_MATCHING_SCORE;
         }
         return score;
-    }
-
-    @Override
-    public AbstractImport getBestMatchingImportByElement(AbstractElement element) {
-        AbstractImport best = null;
-        for (AbstractImport imp : element.getMatchingImports()) {
-            if (best == null || best.getMatchingScore() < imp.getMatchingScore()) {
-                best = imp;
-            }
-        }
-        return best;
     }
 
 }

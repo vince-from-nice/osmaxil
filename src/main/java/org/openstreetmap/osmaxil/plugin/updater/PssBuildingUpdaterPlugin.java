@@ -1,16 +1,14 @@
 package org.openstreetmap.osmaxil.plugin.updater;
 
-import java.util.List;
-
 import org.openstreetmap.osmaxil.model.ElementTagNames;
-import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.openstreetmap.osmaxil.plugin.common.comparator.ExclusiveMatchingImportComparator;
-import org.openstreetmap.osmaxil.plugin.common.comparator.SimpleMatchingImportComparator;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingParser;
+import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
+import org.openstreetmap.osmaxil.plugin.common.scorer.ExclusiveMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,12 +18,11 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
 
     @Autowired
     private PssBuildingParser parser;
-    
+
     @Autowired
-    private ExclusiveMatchingImportComparator<BuildingElement> comparator;
-    
+    private BuildingMatcher matcher;
     @Autowired
-    private BuildingMatcher helper;
+    private ExclusiveMatchingScorer<BuildingElement> scorer;
     
     @Value("${plugins.pssBuildingUpdater.minMatchingScore}")
     private float minMatchingScore;
@@ -39,18 +36,9 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTagNames.HEIGHT, ElementTagNames.URL};
 
     @Override
-    public float computeElementMatchingScore(BuildingElement building) {
-        // In case of PSS there's no way to have a good matching score for building imports (they don't have any surface). 
-        // That way all imports which are matching geographically an element have the maximal matching score.
-        // But we can consider that if there's more than 1 import which are matching the element it means that the OSM
-        // building shaping is not enough accurate so we should do nothing at all by setting the minimal score to the element.
-        // That's what the ExclusiveMatchingImportComparator class was designed for :)
-        return this.comparator.computeElementMatchingScore(building);
-    }
-    
-    @Override
-    public String[] getUpdatableTagNames() {
-        return UPDATABLE_TAG_NAMES;
+    public float computeImportMatchingScore(BuildingImport imp) {
+        // There's no way to compute a matching score for now with PSS (building area is not available)
+        return AbstractPlugin.MAX_MATCHING_SCORE;
     }
     
     @Override
@@ -79,16 +67,10 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
         }
         return updated;
     }
-
+    
     @Override
-    public List<MatchingElementId> findMatchingElements(BuildingImport imp) {
-       return this.helper.findMatchingImport(imp, this.getParser().getSrid());
-    }
-
-    @Override
-    public float computeImportMatchingScore(BuildingImport imp) {
-        // There's no way to compute a matching score for now with PSS (building area is not available)
-        return AbstractPlugin.MAX_MATCHING_SCORE;
+    public String[] getUpdatableTagNames() {
+        return UPDATABLE_TAG_NAMES;
     }
 
     @Override
@@ -99,6 +81,16 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     @Override
     public PssBuildingParser getParser() {
         return parser;
+    }
+    
+    @Override
+    public AbstractMatcher<BuildingImport> getMatcher() {
+        return this.matcher;
+    }
+
+    @Override
+    public AbstractMatchingScorer<BuildingElement> getScorer() {
+      return this.scorer;
     }
 
     @Override
