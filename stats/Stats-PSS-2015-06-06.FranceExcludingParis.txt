@@ -1,0 +1,33 @@
+2015-06-06 01:24:04  INFO === Statistics ===
+2015-06-06 01:24:04  INFO Number of matched elements: 27225
+2015-06-06 01:24:04  INFO Number of updatable elements: 27194
+2015-06-06 01:24:04  INFO Number of updated elements: 0
+2015-06-06 01:24:04  INFO Repartition by matching scores:
+2015-06-06 01:24:04  INFO - score between 0% and 10% : 0 (0%) elements <= 0 updated (0 were updatable)
+2015-06-06 01:24:04  INFO - score between 10% and 20% : 7 (0%) elements <= 0 updated (7 were updatable)
+2015-06-06 01:24:04  INFO - score between 20% and 30% : 37 (0%) elements <= 0 updated (37 were updatable)
+2015-06-06 01:24:04  INFO - score between 30% and 40% : 108 (0%) elements <= 0 updated (108 were updatable)
+2015-06-06 01:24:04  INFO - score between 40% and 50% : 655 (2%) elements <= 0 updated (653 were updatable)
+2015-06-06 01:24:04  INFO - score between 50% and 60% : 0 (0%) elements <= 0 updated (0 were updatable)
+2015-06-06 01:24:04  INFO - score between 60% and 70% : 0 (0%) elements <= 0 updated (0 were updatable)
+2015-06-06 01:24:04  INFO - score between 70% and 80% : 0 (0%) elements <= 0 updated (0 were updatable)
+2015-06-06 01:24:04  INFO - score between 80% and 90% : 0 (0%) elements <= 0 updated (0 were updatable)
+2015-06-06 01:24:04  INFO - score between 90% and 100% : 26418 (97%) elements <= 0 updated (26389 were updatable)
+2015-06-06 01:24:04  INFO Closing org.springframework.context.support.ClassPathXmlApplicationContext@796f6496: startup date [Sat Jun 06 00:21:18 CEST 2015]; root of context hierarchy
+2015-06-06 01:24:04  INFO === Closing import org.openstreetmap.osmaxil.plugin.loader ===
+2015-06-06 01:24:04  INFO Total of loaded imports: 43188
+2015-06-06 01:24:04  INFO Total of filtered imports: 5749
+2015-06-06 01:24:04  INFO Total of matched imports: 28292
+2015-06-06 01:24:04  INFO === Closing element synchronizer ===
+2015-06-06 01:24:04  INFO Total of matched elements: 27225
+2015-06-06 01:24:04  INFO Total of updated elements: 0
+2015-06-06 01:24:04  INFO Total of remaked elements: 0
+2015-06-06 01:24:04  INFO === Closing OSM XML service ===
+2015-06-06 01:24:04  INFO Total of writing successes: 0
+2015-06-06 01:24:04  INFO Total of writing failures: 0
+2015-06-06 01:24:04  INFO === Closing OSM API service ===
+2015-06-06 01:24:04  INFO Total of read operations: success=27225 failure=20
+2015-06-06 01:24:04  INFO Total of write operations: success=0 failure=0
+2015-06-06 01:24:04  INFO Total of changeset operations: open=0 close=0
+2015-06-06 01:24:04  INFO === Osmaxil has finished its job ===
+
