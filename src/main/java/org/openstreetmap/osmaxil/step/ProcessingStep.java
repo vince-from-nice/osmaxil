@@ -44,7 +44,7 @@ public class ProcessingStep extends AbstractStep {
         // Do specific stuff depending on the plugin
         if (this.plugin instanceof AbstractRemakerPlugin) {
             // Create remaked elements
-            ((AbstractRemakerPlugin) this.plugin).buildXmlForRemaking(element);
+            ((AbstractRemakerPlugin) this.plugin).prepareRemaking(element);
         }
     }
 

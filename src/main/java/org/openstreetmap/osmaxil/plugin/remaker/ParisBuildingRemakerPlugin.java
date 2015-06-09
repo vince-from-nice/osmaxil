@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.Coordinates;
+import org.openstreetmap.osmaxil.model.ElementType;
+import org.openstreetmap.osmaxil.model.ElementWithParentFlags;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmApiMember;
@@ -55,8 +57,34 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     }
 
     @Override
-    public void buildXmlForRemaking(BuildingElement element) {
+    public void prepareRemaking(BuildingElement element) {
         LOGGER.debug("Building XML for remaking of element #" + element.getOsmId() + ":");
+        this.newElementsCreationByElement.put(element.getOsmId(), this.buildXmlForNewElementsCreation(element));
+        this.elementsToDelete.addAll(this.buildElementToDelete(element));
+    }
+    
+    private List<ElementWithParentFlags> buildElementToDelete(BuildingElement element) {
+        ArrayList<ElementWithParentFlags> result = new ArrayList<>();
+        ElementWithParentFlags way = new ElementWithParentFlags();
+        way.setOsmId(element.getOsmId());
+        way.setType(ElementType.Way);
+        for (OsmApiNode n : element.getApiData().nodes) {
+            ElementWithParentFlags node = new ElementWithParentFlags();
+            node.setOsmId(element.getOsmId());
+            node.setType(ElementType.Node);
+            // TODO use overpass API to request all ways referencing current point
+            List<Long> relatedWayIds = null;
+            for (Long relatedWayId: relatedWayIds) {
+                ElementWithParentFlags.Parent parent = node.new Parent();
+                parent.setOsmId(relatedWayId);
+                parent.setFlag(false);
+                node.getParents().add(parent);    
+            }
+        }
+        return result;
+    }
+    
+    private OsmApiRoot buildXmlForNewElementsCreation(BuildingElement element) {
         OsmApiRoot root = new OsmApiRoot();
         IdIncrementor idGen = new IdIncrementor(1);
         
@@ -126,10 +154,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             }
         }
         
-        // Store result into the internal map
-        this.xmlForRemakingByElement.put(element.getOsmId(), root);
+        return root;
     }
-    
 
     // TODO Eventually move that method into ParisData CSV loader
     private List<Coordinates> computeBuildingPartGeometry(BuildingImport imp) {

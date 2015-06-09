@@ -12,7 +12,7 @@ import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
 
 public abstract class AbstractElement {
 
-    protected long osmId;
+    protected Long osmId;
 
     protected OsmApiRoot apiData;
 
@@ -82,11 +82,11 @@ public abstract class AbstractElement {
     
     // Getters & Setters
 
-    public long getOsmId() {
+    public Long getOsmId() {
         return osmId;
     }
 
-    public void setOsmId(long osmId) {
+    public void setOsmId(Long osmId) {
         this.osmId = osmId;
     }
 

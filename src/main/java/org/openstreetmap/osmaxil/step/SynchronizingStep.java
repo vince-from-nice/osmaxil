@@ -73,8 +73,7 @@ public class SynchronizingStep extends AbstractStep {
         }
         // The synchronization process depends on the nature of the plugin
         if (this.plugin instanceof AbstractUpdaterPlugin) {
-            // updateElementWithBestMatchingImport(element);
-            updateElementWithBestAccumulatedImports(element);            
+            updateElement(element);            
         } else if (this.plugin instanceof AbstractRemakerPlugin) {
             remakeElement(element);
         } else {
@@ -82,14 +81,10 @@ public class SynchronizingStep extends AbstractStep {
         }
 
     }
-    
-    /**
-     * Perform the remaking process of an element:
-     * All required changed have been calculated previously, just need to write in way which depends on the sync mode.
-     */
+
     private void remakeElement(AbstractElement element) {
         boolean success = false;
-        OsmApiRoot xml = ((AbstractRemakerPlugin) this.plugin).getXmlForRemaking(element.getOsmId());
+        OsmApiRoot xml = ((AbstractRemakerPlugin) this.plugin).getNewElementsCreation(element.getOsmId());
         if (xml == null) {
             LOGGER.warn("Unable to sync element since its remaking data is null");
             return;
@@ -97,7 +92,7 @@ public class SynchronizingStep extends AbstractStep {
         if ("api".equals(this.synchronizationMode)) {
            // TODO api writing for element remaking
         } else if ("gen".equals(this.synchronizationMode)) {
-            success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), xml);
+            success = this.osmXmlFile.writeToFile("" + element.getOsmId(), xml);
         }
         if (success) {
             this.counterForAlteredElements++;
@@ -106,12 +101,7 @@ public class SynchronizingStep extends AbstractStep {
         }
     }
 
-    /**
-     * Update element into OSM database with tag values which are coming from the import list which haves the best total
-     * matching score. This method is based on the new matching method where matching imports have been regrouped by
-     * their tag values.
-     */
-    private void updateElementWithBestAccumulatedImports(AbstractElement element) {
+    private void updateElement(AbstractElement element) {
         boolean needToSync = false;
         AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
         for (String updatableTagName : updaterPlugin.getUpdatableTagNames()) {
@@ -130,7 +120,7 @@ public class SynchronizingStep extends AbstractStep {
             if ("api".equals(this.synchronizationMode)) {
                 success = this.osmApiService.writeElement(element);
             } else if ("gen".equals(this.synchronizationMode)) {
-                success = this.osmXmlFile.writeToFile("id" + element.getOsmId(), element.getApiData());
+                success = this.osmXmlFile.writeToFile("" + element.getOsmId(), element.getApiData());
             }
             if (success) {
                 this.counterForAlteredElements++;

@@ -1,5 +1,6 @@
 package org.openstreetmap.osmaxil.model;
 
+// TODO use an Enum !!
 public class ElementTagNames {
     
     public static final String NAME = "name";
