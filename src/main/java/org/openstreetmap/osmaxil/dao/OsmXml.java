@@ -67,7 +67,7 @@ public class OsmXml {
 
     private String getFileName(String name) {
         // TODO use subdirectories (based on an execution context ?)
-        return GEN_DIR + File.separator + "genfile-" + name + ".osm.xml";
+        return GEN_DIR + File.separator + name + ".osm.xml";
     }
 
 }

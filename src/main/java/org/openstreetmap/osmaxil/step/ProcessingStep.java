@@ -43,8 +43,12 @@ public class ProcessingStep extends AbstractStep {
         element.setMatchingScore(this.plugin.computeElementMatchingScore(element));
         // Do specific stuff depending on the plugin
         if (this.plugin instanceof AbstractRemakerPlugin) {
-            // Create remaked elements
-            ((AbstractRemakerPlugin) this.plugin).prepareRemaking(element);
+            AbstractRemakerPlugin abstractPlugin = (AbstractRemakerPlugin) this.plugin;
+            // Prepare remaking data for this element only if it is alterable
+            if (abstractPlugin.isElementAlterable(element)) {
+                abstractPlugin.prepareRemakingDataByElement(element);
+            }
+            abstractPlugin.finalizeRemakingData();
         }
     }
 

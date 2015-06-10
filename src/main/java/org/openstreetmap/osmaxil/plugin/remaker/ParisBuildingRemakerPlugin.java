@@ -1,7 +1,9 @@
 package org.openstreetmap.osmaxil.plugin.remaker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.Coordinates;
@@ -45,6 +47,10 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     @Value("${plugins.parisBuildingMaker.changesetComment}")
     private String changesetComment;
     
+    protected Map<Long, OsmApiRoot> newBuildingsByRemakableBuilding = new HashMap<Long, OsmApiRoot>();
+
+    protected List<ElementWithParentFlags> oldNodesToDelete = new ArrayList<>();
+    
     @Override
     public BuildingElement instanciateElement(long osmId) {
         return new BuildingElement(osmId);
@@ -53,26 +59,58 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     @Override
     public boolean isElementAlterable(BuildingElement element) {
         // TODO Check if element has only common tags for the Cadastre import or if it's complex structure ?
-        return false;
+        return true;
     }
 
     @Override
-    public void prepareRemaking(BuildingElement element) {
+    public void prepareRemakingDataByElement(BuildingElement element) {
         LOGGER.debug("Building XML for remaking of element #" + element.getOsmId() + ":");
-        this.newElementsCreationByElement.put(element.getOsmId(), this.buildXmlForNewElementsCreation(element));
-        this.elementsToDelete.addAll(this.buildElementToDelete(element));
+        this.remakableElements.add(element);
+        this.newBuildingsByRemakableBuilding.put(element.getOsmId(), this.buildXmlForNewElementsCreation(element));
+        this.oldNodesToDelete.addAll(this.buildElementToDelete(element));
+        LOGGER.info("Remaking data has been prepared: remakableBuildings=" + this.remakableElements.size()
+                + " newBuildings=" + this.newBuildingsByRemakableBuilding.size() + " oldNodes="
+                + this.oldNodesToDelete.size());
+    }
+    
+    @Override
+    public void finalizeRemakingData() {
+        OsmApiRoot root = new OsmApiRoot();
+        // Merge all new buildings (with their new nodes)
+        for (Long id : this.newBuildingsByRemakableBuilding.keySet()) {
+            OsmApiRoot data = this.newBuildingsByRemakableBuilding.get(id);
+            root.nodes.addAll(data.nodes);
+            root.ways.addAll(data.ways);
+            root.relations.addAll(data.relations);
+        }
+        // Merge deletions of all remakable buildings
+        for (BuildingElement element : this.remakableElements) {
+            OsmApiWay way = new OsmApiWay();
+            way.id = element.getOsmId();
+            way.action = "delete";
+            root.ways.add(way);
+        }
+        // Merge deletions of nodes of all remakable buildings
+        for (ElementWithParentFlags e : this.oldNodesToDelete) {
+            // TODO Check if they can be deleted
+            if (true) {
+                OsmApiNode node = new OsmApiNode();
+                node.id = e.getOsmId();
+                node.action = "delete";
+                root.nodes.add(node);
+            }
+        }
+        LOGGER.info("Remaking data has been finalized: nodes=" + root.nodes.size() + " ways=" + root.ways.size() + " relations=" + root.relations.size());
+        this.remakingData = root;
     }
     
     private List<ElementWithParentFlags> buildElementToDelete(BuildingElement element) {
         ArrayList<ElementWithParentFlags> result = new ArrayList<>();
-        ElementWithParentFlags way = new ElementWithParentFlags();
-        way.setOsmId(element.getOsmId());
-        way.setType(ElementType.Way);
         for (OsmApiNode n : element.getApiData().nodes) {
             ElementWithParentFlags node = new ElementWithParentFlags();
             node.setOsmId(element.getOsmId());
             node.setType(ElementType.Node);
-            // TODO use overpass API to request all ways referencing current point
+            // TODO use OverPass API to request all ways referencing current point ?
             List<Long> relatedWayIds = null;
             for (Long relatedWayId: relatedWayIds) {
                 ElementWithParentFlags.Parent parent = node.new Parent();
@@ -80,6 +118,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
                 parent.setFlag(false);
                 node.getParents().add(parent);    
             }
+            result.add(node);
         }
         return result;
     }
@@ -89,9 +128,9 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         IdIncrementor idGen = new IdIncrementor(1);
         
         // Instanciate sublists
-        root.relations = new ArrayList<OsmApiRelation>();
-        root.nodes = new ArrayList<OsmApiNode>();
-        root.ways = new ArrayList<OsmApiWay>();
+//        root.relations = new ArrayList<OsmApiRelation>();
+//        root.nodes = new ArrayList<OsmApiNode>();
+//        root.ways = new ArrayList<OsmApiWay>();
         
         // Create relation
         OsmApiRelation relation = new OsmApiRelation();
@@ -100,7 +139,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         // Set a negative ID based on the original element ID
         relation.id = -element.getOsmId();
         // Instanciate sublists
-        relation.members = new ArrayList<OsmApiMember>();
+        //relation.members = new ArrayList<OsmApiMember>();
         // Add it into the root relation list
         root.relations.add(relation);
         
@@ -115,8 +154,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             part.id = - idGen.getId();
             LOGGER.debug("\tBuilding part id=" + part.id);
             // Instanciate sublists
-            part.nds = new ArrayList<OsmApiNd>();
-            part.tags = new ArrayList<OsmApiTag>();
+            //part.nds = new ArrayList<OsmApiNd>();
+            //part.tags = new ArrayList<OsmApiTag>();
             // Add the building:part tag
             OsmApiTag tag = new OsmApiTag();
             tag.k = "building:part";
@@ -189,28 +228,6 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         }
         return result;
     }
-
-    // @Override
-    // public void buildRemakedElements(BuildingElement element) {
-    // // For each matching import, create a new building part
-    // List<BuildingPart> parts = new ArrayList<>();
-    // for (AbstractImport imp : element.getMatchingImports()) {
-    // BuildingPart bp = this.helper.createBuildingPart((BuildingImport) imp);
-    // parts.add(bp);
-    // }
-    // // Create a global relation of type building
-    // BuildingRelation br = this.helper.createBuildingRelation(element);
-    // // For each building part, add a member into the relation
-    // for (BuildingPart bp : parts) {
-    // OsmApiMember member = new OsmApiMember();
-    // member.ref = 0; // TODO
-    // member.role = "part";
-    // member.type = "way";
-    // }
-    // // Store building relation and parts
-    // element.getNewElementsForRemaking().add(br);
-    // element.getNewElementsForRemaking().addAll(parts);
-    // }
 
     @Override
     public ParisBuildingParser getParser() {

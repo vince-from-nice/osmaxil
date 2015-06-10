@@ -1,5 +1,6 @@
 package org.openstreetmap.osmaxil.model.xml.osm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -28,12 +29,15 @@ public class OsmApiWay {
     @XmlAttribute
     public String timestamp;
     
+    @XmlAttribute
+    public String action;
+    
     // Specific attributes
 
     @XmlElement (name="nd")
-    public List<OsmApiNd> nds;
+    public List<OsmApiNd> nds = new ArrayList<>();;
     
     
     @XmlElement (name="tag")
-    public List<OsmApiTag> tags;
+    public List<OsmApiTag> tags = new ArrayList<>();;
 }

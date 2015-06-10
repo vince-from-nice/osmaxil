@@ -1,5 +1,6 @@
 package org.openstreetmap.osmaxil.model.xml.osm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -16,12 +17,12 @@ public class OsmApiRoot {
     public String generator;
     
     @XmlElement (name="node")
-    public List<OsmApiNode> nodes;
+    public List<OsmApiNode> nodes = new ArrayList<>();;
     
     @XmlElement (name="way")
-    public List<OsmApiWay> ways;
+    public List<OsmApiWay> ways = new ArrayList<>();;
     
     @XmlElement (name="relations")
-    public List<OsmApiRelation> relations;
+    public List<OsmApiRelation> relations = new ArrayList<>();
 
 }
