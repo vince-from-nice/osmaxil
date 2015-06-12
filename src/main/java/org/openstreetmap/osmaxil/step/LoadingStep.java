@@ -10,7 +10,7 @@ import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -138,7 +138,7 @@ public class LoadingStep  extends AbstractStep {
         AbstractElement element = this.elementCache.getElements().get(osmId);
         if (element == null) {
             // Fetch data from OSM API
-            OsmApiRoot apiData = this.osmApiService.readElement(osmId);
+            OsmXmlRoot apiData = this.osmApiService.readElement(osmId);
             if (apiData == null) {
                 throw new Exception("Unable to fetch data from OSM API for element#" + osmId);
             }

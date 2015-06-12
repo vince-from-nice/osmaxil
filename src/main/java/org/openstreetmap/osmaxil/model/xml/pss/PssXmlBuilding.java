@@ -2,7 +2,7 @@ package org.openstreetmap.osmaxil.model.xml.pss;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class PssBuilding {
+public class PssXmlBuilding {
     
     @XmlElement
     public String url;

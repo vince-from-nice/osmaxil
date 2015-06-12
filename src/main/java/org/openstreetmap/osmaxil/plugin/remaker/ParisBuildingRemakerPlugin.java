@@ -11,13 +11,13 @@ import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.ElementWithParentFlags;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiMember;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiNd;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiNode;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRelation;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiWay;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlMember;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNd;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRelation;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlWay;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingParser;
@@ -47,7 +47,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     @Value("${plugins.parisBuildingMaker.changesetComment}")
     private String changesetComment;
     
-    protected Map<Long, OsmApiRoot> newBuildingsByRemakableBuilding = new HashMap<Long, OsmApiRoot>();
+    protected Map<Long, OsmXmlRoot> newBuildingsByRemakableBuilding = new HashMap<Long, OsmXmlRoot>();
 
     protected List<ElementWithParentFlags> oldNodesToDelete = new ArrayList<>();
     
@@ -75,17 +75,17 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     
     @Override
     public void finalizeRemakingData() {
-        OsmApiRoot root = new OsmApiRoot();
+        OsmXmlRoot root = new OsmXmlRoot();
         // Merge all new buildings (with their new nodes)
         for (Long id : this.newBuildingsByRemakableBuilding.keySet()) {
-            OsmApiRoot data = this.newBuildingsByRemakableBuilding.get(id);
+            OsmXmlRoot data = this.newBuildingsByRemakableBuilding.get(id);
             root.nodes.addAll(data.nodes);
             root.ways.addAll(data.ways);
             root.relations.addAll(data.relations);
         }
         // Merge deletions of all remakable buildings
         for (BuildingElement element : this.remakableElements) {
-            OsmApiWay way = new OsmApiWay();
+            OsmXmlWay way = new OsmXmlWay();
             way.id = element.getOsmId();
             way.action = "delete";
             root.ways.add(way);
@@ -94,7 +94,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         for (ElementWithParentFlags e : this.oldNodesToDelete) {
             // TODO Check if they can be deleted
             if (true) {
-                OsmApiNode node = new OsmApiNode();
+                OsmXmlNode node = new OsmXmlNode();
                 node.id = e.getOsmId();
                 node.action = "delete";
                 root.nodes.add(node);
@@ -106,7 +106,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     
     private List<ElementWithParentFlags> buildElementToDelete(BuildingElement element) {
         ArrayList<ElementWithParentFlags> result = new ArrayList<>();
-        for (OsmApiNd nd : element.getApiData().ways.get(0).nds) {
+        for (OsmXmlNd nd : element.getApiData().ways.get(0).nds) {
             ElementWithParentFlags node = new ElementWithParentFlags();
             node.setOsmId(nd.ref);
             node.setType(ElementType.Node);
@@ -123,8 +123,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         return result;
     }
     
-    private OsmApiRoot buildXmlForNewElementsCreation(BuildingElement element) {
-        OsmApiRoot root = new OsmApiRoot();
+    private OsmXmlRoot buildXmlForNewElementsCreation(BuildingElement element) {
+        OsmXmlRoot root = new OsmXmlRoot();
         IdIncrementor idGen = new IdIncrementor(1);
         
         // Instanciate sublists
@@ -133,7 +133,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
 //        root.ways = new ArrayList<OsmApiWay>();
         
         // Create relation
-        OsmApiRelation relation = new OsmApiRelation();
+        OsmXmlRelation relation = new OsmXmlRelation();
         // Reuse all tags from original element
         relation.tags = element.getTags();
         // Set a negative ID based on the original element ID
@@ -148,7 +148,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             BuildingImport bi = (BuildingImport) imp;
             
             // Create a new building part
-            OsmApiWay part = new OsmApiWay();
+            OsmXmlWay part = new OsmXmlWay();
             root.ways.add(part);
             // Set a negative ID based on the original element ID + index
             part.id = - idGen.getId();
@@ -157,19 +157,19 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             //part.nds = new ArrayList<OsmApiNd>();
             //part.tags = new ArrayList<OsmApiTag>();
             // Add the building:part tag
-            OsmApiTag tag = new OsmApiTag();
+            OsmXmlTag tag = new OsmXmlTag();
             tag.k = "building:part";
             tag.v = "yes";
             part.tags.add(tag);
             // Add the building:level tag
-            tag = new OsmApiTag();
+            tag = new OsmXmlTag();
             tag.k = "building:level";
             Integer levels = bi.getLevels() + 1; // US way of levels counting
             tag.v = levels.toString();
             part.tags.add(tag);
             
             // Add member into the relation
-            OsmApiMember member = new OsmApiMember();
+            OsmXmlMember member = new OsmXmlMember();
             member.ref = part.id;
             member.role = "part";
             member.type = "way";
@@ -179,7 +179,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             List<Coordinates> points = computeBuildingPartGeometry(bi);
             for (Coordinates point : points) {
                 // Create a new node (into the root)
-                OsmApiNode node = new OsmApiNode();
+                OsmXmlNode node = new OsmXmlNode();
                 node.id = - idGen.getId();
                 node.lon = point.x;
                 node.lat = point.y;
@@ -187,7 +187,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
                 LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.x + " y=" + point.y);
                 
                 // Create new node reference (into the building part)
-                OsmApiNd nd = new OsmApiNd();
+                OsmXmlNd nd = new OsmXmlNd();
                 nd.ref = node.id;
                 part.nds.add(nd);
             }

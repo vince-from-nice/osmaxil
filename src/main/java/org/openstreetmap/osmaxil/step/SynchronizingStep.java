@@ -6,7 +6,7 @@ import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.dao.OsmXml;
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.remaker.AbstractRemakerPlugin;
 import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +114,7 @@ public class SynchronizingStep extends AbstractStep {
     
     private void remakeAllElements() {
         boolean success = false;
-        OsmApiRoot xml = ((AbstractRemakerPlugin) this.plugin).getRemakingData();
+        OsmXmlRoot xml = ((AbstractRemakerPlugin) this.plugin).getRemakingData();
         if (xml == null) {
             LOGGER.warn("Unable to remake element since its remaking data is null");
             return;

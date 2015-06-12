@@ -7,14 +7,14 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
 public abstract class AbstractElement {
 
     protected Long osmId;
 
-    protected OsmApiRoot apiData;
+    protected OsmXmlRoot apiData;
 
     private long relationId;
     
@@ -22,7 +22,7 @@ public abstract class AbstractElement {
     
     private float matchingScore;
     
-    abstract public List<OsmApiTag> getTags();
+    abstract public List<OsmXmlTag> getTags();
     
     private List<AbstractImport> matchingImports;
     
@@ -44,12 +44,12 @@ public abstract class AbstractElement {
     }
     
     public String getTagValue(String key) {
-        List<OsmApiTag> tags = this.getTags();
+        List<OsmXmlTag> tags = this.getTags();
         if (tags == null) {
             //LOGGER.warn("Unable to get tag value of " + key + " for element " + this.getOsmId() + " because its tag list is null !!");
             return null;
         }
-        for (OsmApiTag tag : tags) {
+        for (OsmXmlTag tag : tags) {
             if (tag.k.equals(key)) {
                 return tag.v;
             }
@@ -58,13 +58,13 @@ public abstract class AbstractElement {
     }
 
     public boolean setTagValue(String key, String value) {
-        for (OsmApiTag tag : this.getTags()) {
+        for (OsmXmlTag tag : this.getTags()) {
             if (tag.k.equals(key)) {
                 tag.v = value;
                 return true;
             }
         }
-        OsmApiTag tag = new OsmApiTag();
+        OsmXmlTag tag = new OsmXmlTag();
         tag.k = key;
         tag.v = value;
         this.getTags().add(tag);
@@ -90,11 +90,11 @@ public abstract class AbstractElement {
         this.osmId = osmId;
     }
 
-    public OsmApiRoot getApiData() {
+    public OsmXmlRoot getApiData() {
         return apiData;
     }
 
-    public void setApiData(OsmApiRoot apiData) {
+    public void setApiData(OsmXmlRoot apiData) {
         this.apiData = apiData;
     }
     

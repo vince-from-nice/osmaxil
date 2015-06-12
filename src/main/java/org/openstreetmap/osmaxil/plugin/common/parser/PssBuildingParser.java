@@ -8,8 +8,8 @@ import javax.annotation.PostConstruct;
 import javax.xml.transform.stream.StreamSource;
 
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.openstreetmap.osmaxil.model.xml.pss.PssBuilding;
-import org.openstreetmap.osmaxil.model.xml.pss.PssRoot;
+import org.openstreetmap.osmaxil.model.xml.pss.PssXmlBuilding;
+import org.openstreetmap.osmaxil.model.xml.pss.PssXmlRoot;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +26,7 @@ public class PssBuildingParser extends AbstractParser<BuildingImport> {
 
     int counter;
     
-    PssRoot data;
+    PssXmlRoot data;
 
     @Value("${plugins.pssBuildingParser.filePath}")
     private String filePath;
@@ -41,7 +41,7 @@ public class PssBuildingParser extends AbstractParser<BuildingImport> {
         try {
             is = new FileInputStream(this.filePath);
             bis = new BufferedInputStream(is);
-            this.data = (PssRoot) this.unmarshaller.unmarshal(new StreamSource(bis));
+            this.data = (PssXmlRoot) this.unmarshaller.unmarshal(new StreamSource(bis));
         } finally {
             if (is != null) {
                 is.close();
@@ -59,7 +59,7 @@ public class PssBuildingParser extends AbstractParser<BuildingImport> {
         if (counter >= data.buildings.size()) {
             return null;
         }
-        PssBuilding building = data.buildings.get(counter++);
+        PssXmlBuilding building = data.buildings.get(counter++);
         result = parse(building);
         return result;
     }
@@ -68,7 +68,7 @@ public class PssBuildingParser extends AbstractParser<BuildingImport> {
         // TODO Auto-generated method stub
     }
     
-    private BuildingImport parse(PssBuilding building) {
+    private BuildingImport parse(PssXmlBuilding building) {
         BuildingImport result = new BuildingImport();
         result.setId(this.counter);
         String[] latlon = building.coordinates.split(",");

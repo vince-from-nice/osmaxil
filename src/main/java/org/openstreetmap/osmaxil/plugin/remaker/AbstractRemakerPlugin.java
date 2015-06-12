@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 
 public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
@@ -13,13 +13,13 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
 
     protected List<ELEMENT> remakableElements = new ArrayList<>();
     
-    protected OsmApiRoot remakingData;
+    protected OsmXmlRoot remakingData;
 
     abstract public void prepareRemakingDataByElement(ELEMENT element);
 
     abstract public void finalizeRemakingData();
 
-    public OsmApiRoot getRemakingData() {
+    public OsmXmlRoot getRemakingData() {
         return remakingData;
     }
 

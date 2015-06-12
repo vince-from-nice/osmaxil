@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.ElementTagNames;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiTag;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
 public class BuildingElement extends AbstractElement {
     
@@ -21,7 +21,7 @@ public class BuildingElement extends AbstractElement {
     }
 
     @Override
-    public List<OsmApiTag> getTags() {
+    public List<OsmXmlTag> getTags() {
         return this.getApiData().ways.get(0).tags;
     }
 

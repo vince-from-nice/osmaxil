@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement (name="osm")
-public class OsmApiRoot {
+public class OsmXmlRoot {
     
     @XmlAttribute
     public float version;
@@ -17,12 +17,12 @@ public class OsmApiRoot {
     public String generator;
     
     @XmlElement (name="node")
-    public List<OsmApiNode> nodes = new ArrayList<>();;
+    public List<OsmXmlNode> nodes = new ArrayList<>();;
     
     @XmlElement (name="way")
-    public List<OsmApiWay> ways = new ArrayList<>();;
+    public List<OsmXmlWay> ways = new ArrayList<>();;
     
     @XmlElement (name="relations")
-    public List<OsmApiRelation> relations = new ArrayList<>();
+    public List<OsmXmlRelation> relations = new ArrayList<>();
 
 }

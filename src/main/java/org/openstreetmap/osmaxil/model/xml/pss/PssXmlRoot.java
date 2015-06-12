@@ -6,9 +6,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement (name="buildings")
-public class PssRoot {
+public class PssXmlRoot {
 
     @XmlElement (name="building")
-    public List<PssBuilding> buildings;
+    public List<PssXmlBuilding> buildings;
     
 }

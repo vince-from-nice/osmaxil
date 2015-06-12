@@ -6,7 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-public class OsmApiWay {
+public class OsmXmlWay {
     
     @XmlAttribute
     public Long id;
@@ -35,9 +35,9 @@ public class OsmApiWay {
     // Specific attributes
 
     @XmlElement (name="nd")
-    public List<OsmApiNd> nds = new ArrayList<>();;
+    public List<OsmXmlNd> nds = new ArrayList<>();;
     
     
     @XmlElement (name="tag")
-    public List<OsmApiTag> tags = new ArrayList<>();;
+    public List<OsmXmlTag> tags = new ArrayList<>();;
 }

@@ -2,7 +2,7 @@ package org.openstreetmap.osmaxil.model.xml.osm;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class OsmApiTag {
+public class OsmXmlTag {
     
     @XmlAttribute
     public String v;

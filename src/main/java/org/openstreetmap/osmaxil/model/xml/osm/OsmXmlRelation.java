@@ -6,7 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-public class OsmApiRelation {
+public class OsmXmlRelation {
     
     @XmlAttribute
     public Long id;
@@ -35,9 +35,9 @@ public class OsmApiRelation {
     // Specific attributes
     
     @XmlElement (name="tag")
-    public List<OsmApiTag> tags = new ArrayList<>();
+    public List<OsmXmlTag> tags = new ArrayList<>();
     
     @XmlElement (name="members")
-    public List<OsmApiMember> members = new ArrayList<>();
+    public List<OsmXmlMember> members = new ArrayList<>();
     
 }

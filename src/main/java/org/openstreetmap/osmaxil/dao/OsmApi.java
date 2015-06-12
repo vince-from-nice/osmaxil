@@ -5,7 +5,7 @@ import javax.annotation.PreDestroy;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmApiRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -76,8 +76,8 @@ public class OsmApi {
         LOGGER.info("Total of changeset operations: open=" + this.counterForChangesetOpen + " close=" + this.counterForChangesetClose);
     }
     
-    public OsmApiRoot readElement(long id) {
-        OsmApiRoot result = null;
+    public OsmXmlRoot readElement(long id) {
+        OsmXmlRoot result = null;
         LOGGER.info("Read element from OSM API with id=" + id + " : ");
         try {
             // Fetch a basic string 
@@ -90,7 +90,7 @@ public class OsmApi {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Accept-Encoding", "");
             HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
-            ResponseEntity<OsmApiRoot> responseEntity = this.restTemplate.exchange(this.url + "way/" + id, HttpMethod.GET, requestEntity, OsmApiRoot.class);
+            ResponseEntity<OsmXmlRoot> responseEntity = this.restTemplate.exchange(this.url + "way/" + id, HttpMethod.GET, requestEntity, OsmXmlRoot.class);
             result = responseEntity.getBody();
             
             this.counterForReadSuccess++;

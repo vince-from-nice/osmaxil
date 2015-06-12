@@ -6,7 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-public class OsmApiNode {
+public class OsmXmlNode {
     
     @XmlAttribute
     public Long id;
@@ -41,6 +41,6 @@ public class OsmApiNode {
     public float lon;
     
     @XmlElement (name="tag")
-    public List<OsmApiTag> tags = new ArrayList<>();;
+    public List<OsmXmlTag> tags = new ArrayList<>();;
 
 }
