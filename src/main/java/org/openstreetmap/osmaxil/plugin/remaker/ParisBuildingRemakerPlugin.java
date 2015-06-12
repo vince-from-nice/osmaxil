@@ -106,12 +106,12 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     
     private List<ElementWithParentFlags> buildElementToDelete(BuildingElement element) {
         ArrayList<ElementWithParentFlags> result = new ArrayList<>();
-        for (OsmApiNode n : element.getApiData().nodes) {
+        for (OsmApiNd nd : element.getApiData().ways.get(0).nds) {
             ElementWithParentFlags node = new ElementWithParentFlags();
-            node.setOsmId(element.getOsmId());
+            node.setOsmId(nd.ref);
             node.setType(ElementType.Node);
             // TODO use OverPass API to request all ways referencing current point ?
-            List<Long> relatedWayIds = null;
+            List<Long> relatedWayIds = new ArrayList<>();
             for (Long relatedWayId: relatedWayIds) {
                 ElementWithParentFlags.Parent parent = node.new Parent();
                 parent.setOsmId(relatedWayId);
