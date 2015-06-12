@@ -145,7 +145,7 @@ public class OsmApi {
         long result = 0;
         try {
             StringBuffer sb = new StringBuffer("<osm><changeset>");
-            sb.append("<tag k=\"created_by\" v=\"Osmaxil\"/>");
+            sb.append("<tag k=\"created_by\" v=\"" + Application.NAME + "\"/>");
             sb.append("<tag k=\"bot\" v=\"yes\"/>");
             sb.append("<tag k=\"comment\" v=\"" + this.changesetComment + "\"/>");
             sb.append("<tag k=\"source\" v=\"" + this.changesetSourceLabel + "\"/>");

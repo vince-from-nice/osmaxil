@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.Coordinates;
 import org.openstreetmap.osmaxil.model.ElementType;
@@ -76,6 +77,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     @Override
     public void finalizeRemakingData() {
         OsmXmlRoot root = new OsmXmlRoot();
+        root.version = 0.6f;
+        root.generator= Application.NAME;
         // Merge all new buildings (with their new nodes)
         for (Long id : this.newBuildingsByRemakableBuilding.keySet()) {
             OsmXmlRoot data = this.newBuildingsByRemakableBuilding.get(id);
@@ -84,22 +87,24 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             root.relations.addAll(data.relations);
         }
         // Merge deletions of all remakable buildings
-        for (BuildingElement element : this.remakableElements) {
-            OsmXmlWay way = new OsmXmlWay();
-            way.id = element.getOsmId();
-            way.action = "delete";
-            root.ways.add(way);
-        }
+//        for (BuildingElement element : this.remakableElements) {
+//            OsmXmlWay way = new OsmXmlWay();
+//            way.id = element.getOsmId();
+//            way.action = "delete";
+//            way.version = element.getApiData().ways.get(0).version;
+//            way.changeset = element.getApiData().ways.get(0).changeset;
+//            root.ways.add(way);
+//        }
         // Merge deletions of nodes of all remakable buildings
-        for (ElementWithParentFlags e : this.oldNodesToDelete) {
-            // TODO Check if they can be deleted
-            if (true) {
-                OsmXmlNode node = new OsmXmlNode();
-                node.id = e.getOsmId();
-                node.action = "delete";
-                root.nodes.add(node);
-            }
-        }
+//        for (ElementWithParentFlags e : this.oldNodesToDelete) {
+//            // TODO Check if they can be deleted
+//            if (true) {
+//                OsmXmlNode node = new OsmXmlNode();
+//                node.id = e.getOsmId();
+//                node.action = "delete";
+//                root.nodes.add(node);
+//            }
+//        }
         LOGGER.info("Remaking data has been finalized: nodes=" + root.nodes.size() + " ways=" + root.ways.size() + " relations=" + root.relations.size());
         this.remakingData = root;
     }
@@ -153,6 +158,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             // Set a negative ID based on the original element ID + index
             part.id = - idGen.getId();
             LOGGER.debug("\tBuilding part id=" + part.id);
+            part.visible = "true";
+            //part.action = "modify";
             // Instanciate sublists
             //part.nds = new ArrayList<OsmApiNd>();
             //part.tags = new ArrayList<OsmApiTag>();
@@ -181,6 +188,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
                 // Create a new node (into the root)
                 OsmXmlNode node = new OsmXmlNode();
                 node.id = - idGen.getId();
+                node.visible = "true";
+                //node.action = "modify";
                 node.lon = point.x;
                 node.lat = point.y;
                 root.nodes.add(node);
@@ -215,12 +224,14 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         wkt.append("))");
         // Convert geometry coordinates to OSM SRID
         int srid = ((ParisBuildingParser) this.getParser()).getSrid();
-        String wktConverted = this.osmPostgis.tranformGeometry(wkt.toString(), srid);
+        // TODO No need to convert, OSM XML use 4326 (instead of 900913 for the OSM API) ? 
+        String wktConverted = wkt.toString();
+        //String wktConverted = this.osmPostgis.tranformGeometry(wkt.toString(), srid);
         // Reparse transformed geometry to build a list of points
         wktConverted = wktConverted.replace("POLYGON((", "").replace("))", "");
         coords = wktConverted.split(",");
         for (int i = 0; i < coords.length; i++) {
-            String[] p = coords[i].split(" ");
+            String[] p = coords[i].trim().split(" ");
             float x = Float.parseFloat(p[0]);
             float y = Float.parseFloat(p[1]);
             Coordinates point = new Coordinates(x, y, 0);

@@ -54,6 +54,7 @@ public class OsmPostgis {
         return result;
     }
     
+    // TODO replace it by STS
     public String tranformGeometry(String wkt, int originalSrid) {
         String result = "";
         String query = "select ST_AsText(ST_Transform(ST_GeomFromText('" + wkt + "', ?), ?))";

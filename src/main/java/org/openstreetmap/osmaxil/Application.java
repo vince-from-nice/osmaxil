@@ -9,6 +9,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Application {
     
+    public static final String NAME = "Osmaxil";
+    
     private ClassPathXmlApplicationContext applicationContext;
     
     private LoadingStep loadingStep;
