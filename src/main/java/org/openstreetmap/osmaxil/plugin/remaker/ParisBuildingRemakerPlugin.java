@@ -132,19 +132,12 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         OsmXmlRoot root = new OsmXmlRoot();
         IdIncrementor idGen = new IdIncrementor(1);
         
-        // Instanciate sublists
-//        root.relations = new ArrayList<OsmApiRelation>();
-//        root.nodes = new ArrayList<OsmApiNode>();
-//        root.ways = new ArrayList<OsmApiWay>();
-        
-        // Create relation
+        // Create the relation
         OsmXmlRelation relation = new OsmXmlRelation();
         // Reuse all tags from original element
         relation.tags = element.getTags();
         // Set a negative ID based on the original element ID
         relation.id = -element.getOsmId();
-        // Instanciate sublists
-        //relation.members = new ArrayList<OsmApiMember>();
         // Add it into the root relation list
         root.relations.add(relation);
         
@@ -159,10 +152,6 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             part.id = - idGen.getId();
             LOGGER.debug("\tBuilding part id=" + part.id);
             part.visible = "true";
-            //part.action = "modify";
-            // Instanciate sublists
-            //part.nds = new ArrayList<OsmApiNd>();
-            //part.tags = new ArrayList<OsmApiTag>();
             // Add the building:part tag
             OsmXmlTag tag = new OsmXmlTag();
             tag.k = "building:part";
@@ -184,22 +173,31 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
                         
             // For each point of the import:
             List<Coordinates> points = computeBuildingPartGeometry(bi);
-            for (Coordinates point : points) {
+            long firstNodeId = 0;
+            // For each point except for the last one
+            for (int i = 0; i < points.size() - 1; i++) {
+                Coordinates point = points.get(i);
                 // Create a new node (into the root)
                 OsmXmlNode node = new OsmXmlNode();
                 node.id = - idGen.getId();
                 node.visible = "true";
-                //node.action = "modify";
                 node.lon = point.x;
                 node.lat = point.y;
                 root.nodes.add(node);
                 LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.x + " y=" + point.y);
-                
                 // Create new node reference (into the building part)
                 OsmXmlNd nd = new OsmXmlNd();
                 nd.ref = node.id;
                 part.nds.add(nd);
+                // Keep id of the first node
+                if (firstNodeId == 0) {
+                    firstNodeId = node.id;
+                }
             }
+            // Don't forget to close the way with the first node
+            OsmXmlNd nd = new OsmXmlNd();
+            nd.ref = firstNodeId;
+            part.nds.add(nd);
         }
         
         return root;
@@ -232,9 +230,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         coords = wktConverted.split(",");
         for (int i = 0; i < coords.length; i++) {
             String[] p = coords[i].trim().split(" ");
-            float x = Float.parseFloat(p[0]);
-            float y = Float.parseFloat(p[1]);
-            Coordinates point = new Coordinates(x, y, 0);
+            Coordinates point = new Coordinates(p[0], p[1], "");
             result.add(point);
         }
         return result;

@@ -5,16 +5,16 @@ public class Coordinates {
     public Coordinates() {
     }
     
-    public Coordinates(float x, float y, float z) {
+    public Coordinates(String x, String y, String z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
     
-    public float x;
+    public String x;
     
-    public float y;
+    public String y;
     
-    public float z;
+    public String z;
 
 }

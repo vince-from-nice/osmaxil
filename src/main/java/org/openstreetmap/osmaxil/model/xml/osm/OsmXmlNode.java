@@ -35,10 +35,10 @@ public class OsmXmlNode {
     // Specific attributes
     
     @XmlAttribute
-    public float lat;
+    public String lat;
     
     @XmlAttribute
-    public float lon;
+    public String lon;
     
     @XmlElement (name="tag")
     public List<OsmXmlTag> tags = new ArrayList<>();;
