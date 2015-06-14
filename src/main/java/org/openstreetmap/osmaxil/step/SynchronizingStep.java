@@ -47,7 +47,7 @@ public class SynchronizingStep extends AbstractStep {
 
     public void synchronize() {
         this.init();
-        LOGGER.info("=== Updating elements ===");
+        LOGGER.info("=== Synchronizing elements ===");
         if (this.plugin instanceof AbstractUpdaterPlugin) {
             this.updateAllElements();
         } else if (this.plugin instanceof AbstractRemakerPlugin) {

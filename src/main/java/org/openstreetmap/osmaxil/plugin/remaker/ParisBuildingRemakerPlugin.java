@@ -8,6 +8,7 @@ import java.util.Map;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.Coordinates;
+import org.openstreetmap.osmaxil.model.ElementTagNames;
 import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.ElementWithParentFlags;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
@@ -47,6 +48,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
 
     @Value("${plugins.parisBuildingMaker.changesetComment}")
     private String changesetComment;
+    
+    IdIncrementor idGenerator = new IdIncrementor(1);
     
     protected Map<Long, OsmXmlRoot> newBuildingsByRemakableBuilding = new HashMap<Long, OsmXmlRoot>();
 
@@ -130,7 +133,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     
     private OsmXmlRoot buildXmlForNewElementsCreation(BuildingElement element) {
         OsmXmlRoot root = new OsmXmlRoot();
-        IdIncrementor idGen = new IdIncrementor(1);
+        
         
         // Create the relation
         OsmXmlRelation relation = new OsmXmlRelation();
@@ -138,6 +141,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         relation.tags = element.getTags();
         // Set a negative ID based on the original element ID
         relation.id = -element.getOsmId();
+        LOGGER.debug("\tBuilding new relation#"  + relation.id);
         // Add it into the root relation list
         root.relations.add(relation);
         
@@ -149,7 +153,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             OsmXmlWay part = new OsmXmlWay();
             root.ways.add(part);
             // Set a negative ID based on the original element ID + index
-            part.id = - idGen.getId();
+            part.id = - this.idGenerator.getId();
             LOGGER.debug("\tBuilding part id=" + part.id);
             part.visible = "true";
             // Add the building:part tag
@@ -159,7 +163,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             part.tags.add(tag);
             // Add the building:level tag
             tag = new OsmXmlTag();
-            tag.k = "building:level";
+            tag.k = ElementTagNames.BUILDING_LEVELS;
             Integer levels = bi.getLevels() + 1; // US way of levels counting
             tag.v = levels.toString();
             part.tags.add(tag);
@@ -179,7 +183,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
                 Coordinates point = points.get(i);
                 // Create a new node (into the root)
                 OsmXmlNode node = new OsmXmlNode();
-                node.id = - idGen.getId();
+                node.id = - this.idGenerator.getId();
                 node.visible = "true";
                 node.lon = point.x;
                 node.lat = point.y;

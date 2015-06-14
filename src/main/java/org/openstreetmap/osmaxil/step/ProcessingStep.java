@@ -27,6 +27,10 @@ public class ProcessingStep extends AbstractStep {
             }
             LOGGER.info(LOG_SEPARATOR);
         }
+        // Do specific stuff depending on the plugin
+        if (this.plugin instanceof AbstractRemakerPlugin) {
+            ((AbstractRemakerPlugin) this.plugin).finalizeRemakingData();
+        }
     }
 
     private void processElement(AbstractElement element) {
@@ -48,7 +52,6 @@ public class ProcessingStep extends AbstractStep {
             if (abstractPlugin.isElementAlterable(element)) {
                 abstractPlugin.prepareRemakingDataByElement(element);
             }
-            abstractPlugin.finalizeRemakingData();
         }
     }
 

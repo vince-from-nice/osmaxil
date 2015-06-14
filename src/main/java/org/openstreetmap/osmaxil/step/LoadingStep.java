@@ -1,5 +1,6 @@
 package org.openstreetmap.osmaxil.step;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -62,6 +63,7 @@ public class LoadingStep  extends AbstractStep {
         LOGGER.info("Total of loaded imports: " + this.counterForLoadedImports);
         LOGGER.info("Total of filtered imports: " + this.counterForFilterededImports);
         LOGGER.info("Total of matched imports: " + this.counterForMatchedImports);
+        LOGGER.info("Total of missed imports: " + (counterForLoadedImports - this.counterForFilterededImports - this.counterForMatchedImports));
     }
 
     public void loadImports() {

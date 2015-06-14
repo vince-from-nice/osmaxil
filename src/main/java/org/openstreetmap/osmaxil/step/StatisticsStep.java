@@ -3,8 +3,6 @@ package org.openstreetmap.osmaxil.step;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.plugin.remaker.AbstractRemakerPlugin;
-import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +42,8 @@ public class StatisticsStep extends AbstractStep {
     
     private void displayStats() {
         LOGGER.info("Number of matched elements: " + this.matchedElementsNbr);
-        LOGGER.info("Number of updatable elements: " + this.alterableElementsNbr);
-        LOGGER.info("Number of updated elements: " + this.alteratedElementsNbr);
+        LOGGER.info("Number of alterable elements: " + this.alterableElementsNbr);
+        LOGGER.info("Number of altered elements: " + this.alteratedElementsNbr);
         LOGGER.info("Repartition by matching scores:");
         for (int i = 0; i < 10; i++) {
             StringBuilder sb = new StringBuilder();
@@ -54,8 +52,8 @@ public class StatisticsStep extends AbstractStep {
             if (this.elementCache.getElements().size()  > 0) {
                 sb.append(" (" + 100 * this.matchedElementsNbrByScore[i] / this.elementCache.getElements().size() + "%)");
             }
-            sb.append(" elements <= " + this.alteredElementsNbrByScore[i] + " updated");
-            sb.append(" (" + this.alterableElementsNbrByScore[i] + " were updatable)");
+            sb.append(" elements <= " + this.alteredElementsNbrByScore[i] + " altered");
+            sb.append(" (" + this.alterableElementsNbrByScore[i] + " were alterable)");
             LOGGER.info(sb);
         }
     }

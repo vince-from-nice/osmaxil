@@ -19,6 +19,9 @@ public class CumulativeOnAnyValueMatchingScorer<Element extends AbstractElement>
         for (AbstractImport imp : element.getMatchingImports()) {
             score += imp.getMatchingScore();
         }
+        if (score > AbstractPlugin.MAX_MATCHING_SCORE) {
+            score = AbstractPlugin.MAX_MATCHING_SCORE;
+        }
         return score;
     }
     
