@@ -1,0 +1,37 @@
+2015-06-15 22:48:47  INFO ==========================================================
+2015-06-15 22:48:47  INFO Remaking data has been finalized: nodes=4899 ways=915 relations=303
+2015-06-15 22:48:47  INFO === Synchronizing elements ===
+2015-06-15 22:48:47  INFO File gen/genfile.osm.xml has been created
+2015-06-15 22:48:47  INFO Ok all elements has been remaked
+2015-06-15 22:48:47  INFO === Statistics ===
+2015-06-15 22:48:47  INFO Number of matched elements: 303
+2015-06-15 22:48:47  INFO Number of alterable elements: 303
+2015-06-15 22:48:47  INFO Number of altered elements: 0
+2015-06-15 22:48:47  INFO Repartition by matching scores:
+2015-06-15 22:48:47  INFO - score between 0% and 10% : 6 (1%) elements <= 0 altered (6 were alterable)
+2015-06-15 22:48:47  INFO - score between 10% and 20% : 5 (1%) elements <= 0 altered (5 were alterable)
+2015-06-15 22:48:47  INFO - score between 20% and 30% : 2 (0%) elements <= 0 altered (2 were alterable)
+2015-06-15 22:48:47  INFO - score between 30% and 40% : 1 (0%) elements <= 0 altered (1 were alterable)
+2015-06-15 22:48:47  INFO - score between 40% and 50% : 8 (2%) elements <= 0 altered (8 were alterable)
+2015-06-15 22:48:47  INFO - score between 50% and 60% : 6 (1%) elements <= 0 altered (6 were alterable)
+2015-06-15 22:48:47  INFO - score between 60% and 70% : 7 (2%) elements <= 0 altered (7 were alterable)
+2015-06-15 22:48:47  INFO - score between 70% and 80% : 6 (1%) elements <= 0 altered (6 were alterable)
+2015-06-15 22:48:47  INFO - score between 80% and 90% : 23 (7%) elements <= 0 altered (23 were alterable)
+2015-06-15 22:48:47  INFO - score between 90% and 100% : 239 (78%) elements <= 0 altered (239 were alterable)
+2015-06-15 22:48:47  INFO Closing org.springframework.context.support.ClassPathXmlApplicationContext@49fcd7d4: startup date [Mon Jun 15 22:45:33 CEST 2015]; root of context hierarchy
+2015-06-15 22:48:47  INFO === Closing import org.openstreetmap.osmaxil.plugin.loader ===
+2015-06-15 22:48:47  INFO Total of loaded imports: 352293
+2015-06-15 22:48:47  INFO Total of filtered imports: 351171
+2015-06-15 22:48:47  INFO Total of matched imports: 915
+2015-06-15 22:48:47  INFO Total of missed imports: 207
+2015-06-15 22:48:47  INFO === Closing element synchronizer ===
+2015-06-15 22:48:47  INFO Total of matched elements: 0
+2015-06-15 22:48:47  INFO Total of altered elements: 0
+2015-06-15 22:48:47  INFO === Closing OSM XML service ===
+2015-06-15 22:48:47  INFO Total of writing successes: 1
+2015-06-15 22:48:47  INFO Total of writing failures: 0
+2015-06-15 22:48:47  INFO === Closing OSM API service ===
+2015-06-15 22:48:47  INFO Total of read operations: success=303 failure=0
+2015-06-15 22:48:47  INFO Total of write operations: success=0 failure=0
+2015-06-15 22:48:47  INFO Total of changeset operations: open=0 close=0
+2015-06-15 22:48:47  INFO === Osmaxil has finished its job ===

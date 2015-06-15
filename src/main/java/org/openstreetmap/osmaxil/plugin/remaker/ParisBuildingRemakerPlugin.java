@@ -51,9 +51,11 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     
     IdIncrementor idGenerator = new IdIncrementor(1);
     
-    protected Map<Long, OsmXmlRoot> newBuildingsByRemakableBuilding = new HashMap<Long, OsmXmlRoot>();
+    private Map<Long, OsmXmlRoot> newBuildingsByRemakableBuilding = new HashMap<>();
 
-    protected List<ElementWithParentFlags> oldNodesToDelete = new ArrayList<>();
+    private List<ElementWithParentFlags> oldNodesToDelete = new ArrayList<>();
+    
+    private Map<String, OsmXmlNode> newNodesByCoordinates = new HashMap<>();
     
     @Override
     public BuildingElement instanciateElement(long osmId) {
@@ -73,8 +75,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         this.newBuildingsByRemakableBuilding.put(element.getOsmId(), this.buildXmlForNewElementsCreation(element));
         this.oldNodesToDelete.addAll(this.buildElementToDelete(element));
         LOGGER.info("Remaking data has been prepared: remakableBuildings=" + this.remakableElements.size()
-                + " newBuildings=" + this.newBuildingsByRemakableBuilding.size() + " oldNodes="
-                + this.oldNodesToDelete.size());
+                + " newBuildings=" + this.newBuildingsByRemakableBuilding.size() + " newNodes=" + this.newNodesByCoordinates.size()
+                + " oldNodes=" + this.oldNodesToDelete.size());
     }
     
     @Override
@@ -175,20 +177,28 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             member.type = "way";
             relation.members.add(member);
                         
-            // For each point of the import:
+            // Extract points from the geometry
             List<Coordinates> points = computeBuildingPartGeometry(bi);
             long firstNodeId = 0;
             // For each point except for the last one
             for (int i = 0; i < points.size() - 1; i++) {
                 Coordinates point = points.get(i);
-                // Create a new node (into the root)
-                OsmXmlNode node = new OsmXmlNode();
-                node.id = - this.idGenerator.getId();
-                node.visible = "true";
-                node.lon = point.x;
-                node.lat = point.y;
-                root.nodes.add(node);
-                LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.x + " y=" + point.y);
+                
+                // Try to get it from the internal cache
+                String key = point.x + "," + point.y;
+                OsmXmlNode node = this.newNodesByCoordinates.get(key);
+                if (node == null) {
+                    // Create a new node (into the root)
+                    node = new OsmXmlNode();
+                    node.id = - this.idGenerator.getId();
+                    node.visible = "true";
+                    node.lon = point.x;
+                    node.lat = point.y;
+                    root.nodes.add(node);
+                    this.newNodesByCoordinates.put(key, node);
+                    LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.x + " y=" + point.y);
+                }
+                
                 // Create new node reference (into the building part)
                 OsmXmlNd nd = new OsmXmlNd();
                 nd.ref = node.id;

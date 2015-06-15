@@ -1,0 +1,59 @@
+2015-06-15 00:34:41  INFO ==========================================================
+2015-06-15 00:34:41  INFO Processing element #303: OSM building has id=[41494700], levels=[7], height=[null], name=[null], part=[false]
+2015-06-15 00:34:41 DEBUG Computing area of polygon 41494700 with query: select ST_Area(ST_Transform(way, 32633)) from planet_osm_polygon where osm_id = ? ;
+2015-06-15 00:34:41  INFO OSM building 41494700 area has been computed: 231
+2015-06-15 00:34:41 DEBUG Building XML for remaking of element #41494700:
+2015-06-15 00:34:41 DEBUG       Building new relation#-41494700
+2015-06-15 00:34:41 DEBUG       Building part id=-8546
+2015-06-15 00:34:41 DEBUG               Point id=-8547 x=2.39515279270167 y=48.84700340225889
+2015-06-15 00:34:41 DEBUG               Point id=-8548 x=2.39524630848085 y=48.84699402375675
+2015-06-15 00:34:41 DEBUG               Point id=-8549 x=2.395313661278683 y=48.846987643031305
+2015-06-15 00:34:41 DEBUG               Point id=-8550 x=2.395455410130565 y=48.84697421418344
+2015-06-15 00:34:41 DEBUG               Point id=-8551 x=2.395464703776835 y=48.84697333370534
+2015-06-15 00:34:41 DEBUG               Point id=-8552 x=2.395440011754805 y=48.84684899783075
+2015-06-15 00:34:41 DEBUG               Point id=-8553 x=2.395282579891665 y=48.84686405849865
+2015-06-15 00:34:41 DEBUG               Point id=-8554 x=2.3952969659115 y=48.846942719290034
+2015-06-15 00:34:41 DEBUG               Point id=-8555 x=2.395305723686202 y=48.846946363674626
+2015-06-15 00:34:41 DEBUG               Point id=-8556 x=2.395296979049885 y=48.84695396975148
+2015-06-15 00:34:41 DEBUG               Point id=-8557 x=2.395289603736591 y=48.846950628779815
+2015-06-15 00:34:41 DEBUG               Point id=-8558 x=2.395265188217364 y=48.846952465615416
+2015-06-15 00:34:41 DEBUG               Point id=-8559 x=2.395263330502713 y=48.84693969573246
+2015-06-15 00:34:41 DEBUG               Point id=-8560 x=2.395129403375807 y=48.8469524789487
+2015-06-15 00:34:41  INFO Remaking data has been prepared: remakableBuildings=303 newBuildings=303 oldNodes=4381
+2015-06-15 00:34:41  INFO ==========================================================
+2015-06-15 00:34:41  INFO Remaking data has been finalized: nodes=7645 ways=915 relations=303
+2015-06-15 00:34:41  INFO === Synchronizing elements ===
+2015-06-15 00:34:42  INFO File gen/genfile.osm.xml has been created
+2015-06-15 00:34:42  INFO Ok all elements has been remaked
+2015-06-15 00:34:42  INFO Closing org.springframework.context.support.ClassPathXmlApplicationContext@76bdc53e: startup date [Mon Jun 15 00:31:25 CEST 2015]; root of context hierarchy
+2015-06-15 00:34:42  INFO === Statistics ===
+2015-06-15 00:34:42  INFO Number of matched elements: 303
+2015-06-15 00:34:42  INFO Number of alterable elements: 303
+2015-06-15 00:34:42  INFO Number of altered elements: 0
+2015-06-15 00:34:42  INFO Repartition by matching scores:
+2015-06-15 00:34:42  INFO - score between 0% and 10% : 6 (1%) elements <= 0 altered (6 were alterable)
+2015-06-15 00:34:42  INFO - score between 10% and 20% : 5 (1%) elements <= 0 altered (5 were alterable)
+2015-06-15 00:34:42  INFO - score between 20% and 30% : 2 (0%) elements <= 0 altered (2 were alterable)
+2015-06-15 00:34:42  INFO - score between 30% and 40% : 1 (0%) elements <= 0 altered (1 were alterable)
+2015-06-15 00:34:42  INFO - score between 40% and 50% : 8 (2%) elements <= 0 altered (8 were alterable)
+2015-06-15 00:34:42  INFO - score between 50% and 60% : 6 (1%) elements <= 0 altered (6 were alterable)
+2015-06-15 00:34:42  INFO - score between 60% and 70% : 7 (2%) elements <= 0 altered (7 were alterable)
+2015-06-15 00:34:42  INFO - score between 70% and 80% : 6 (1%) elements <= 0 altered (6 were alterable)
+2015-06-15 00:34:42  INFO - score between 80% and 90% : 23 (7%) elements <= 0 altered (23 were alterable)
+2015-06-15 00:34:42  INFO - score between 90% and 100% : 239 (78%) elements <= 0 altered (239 were alterable)
+2015-06-15 00:34:42  INFO === Closing import org.openstreetmap.osmaxil.plugin.loader ===
+2015-06-15 00:34:42  INFO Total of loaded imports: 352293
+2015-06-15 00:34:42  INFO Total of filtered imports: 351171
+2015-06-15 00:34:42  INFO Total of matched imports: 915
+2015-06-15 00:34:42  INFO Total of missed imports: 207
+2015-06-15 00:34:42  INFO === Closing element synchronizer ===
+2015-06-15 00:34:42  INFO Total of matched elements: 0
+2015-06-15 00:34:42  INFO Total of altered elements: 0
+2015-06-15 00:34:42  INFO === Closing OSM XML service ===
+2015-06-15 00:34:42  INFO Total of writing successes: 1
+2015-06-15 00:34:42  INFO Total of writing failures: 0
+2015-06-15 00:34:42  INFO === Closing OSM API service ===
+2015-06-15 00:34:42  INFO Total of read operations: success=303 failure=0
+2015-06-15 00:34:42  INFO Total of write operations: success=0 failure=0
+2015-06-15 00:34:42  INFO Total of changeset operations: open=0 close=0
+2015-06-15 00:34:42  INFO === Osmaxil has finished its job ===
