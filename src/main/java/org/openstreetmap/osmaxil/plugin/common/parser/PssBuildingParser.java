@@ -50,26 +50,19 @@ public class PssBuildingParser extends AbstractParser<BuildingImport> {
         }
     }
 
+    @Override
     public boolean hasNext() {
         return counter < data.buildings.size();
     }
 
+    @Override
     public BuildingImport next() {
         BuildingImport result = null;
         if (counter >= data.buildings.size()) {
             return null;
         }
         PssXmlBuilding building = data.buildings.get(counter++);
-        result = parse(building);
-        return result;
-    }
-
-    public void remove() {
-        // TODO Auto-generated method stub
-    }
-    
-    private BuildingImport parse(PssXmlBuilding building) {
-        BuildingImport result = new BuildingImport();
+        result = new BuildingImport();
         result.setId(this.counter);
         String[] latlon = building.coordinates.split(",");
         if (latlon.length == 2) {
@@ -82,7 +75,13 @@ public class PssBuildingParser extends AbstractParser<BuildingImport> {
         result.setUrl(building.url);
         return result;
     }
+
+    @Override
+    public void remove() {
+        // TODO Auto-generated method stub
+    }
     
+    @Override
     public int getSrid() {
         return srid;
     }

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.Coordinates;
 import org.openstreetmap.osmaxil.model.ElementTagNames;
 import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.ElementWithParentFlags;
@@ -28,6 +27,8 @@ import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnAnyValueMatchi
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+import com.vividsolutions.jts.geom.Point;
 
 public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
 
@@ -178,25 +179,34 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             relation.members.add(member);
                         
             // Extract points from the geometry
-            List<Coordinates> points = computeBuildingPartGeometry(bi);
+//            List<Coordinates> points = computeBuildingPartGeometry(bi);
+//            // Reparse transformed geometry to build a list of points
+//            wktConverted = wktConverted.replace("POLYGON((", "").replace("))", "");
+//            coords = wktConverted.split(",");
+//            for (int i = 0; i < coords.length; i++) {
+//                String[] p = coords[i].trim().split(" ");
+//                Coordinates point = new Coordinates(p[0], p[1], "");
+//                result.add(point);
+//            }
+            
             long firstNodeId = 0;
             // For each point except for the last one
-            for (int i = 0; i < points.size() - 1; i++) {
-                Coordinates point = points.get(i);
+            for (int i = 0; i < bi.getPoints().size() - 1; i++) {
+                Point point = bi.getPoints().get(i);
                 
                 // Try to get it from the internal cache
-                String key = point.x + "," + point.y;
+                String key = point.getX() + "," + point.getY();
                 OsmXmlNode node = this.newNodesByCoordinates.get(key);
                 if (node == null) {
                     // Create a new node (into the root)
                     node = new OsmXmlNode();
                     node.id = - this.idGenerator.getId();
                     node.visible = "true";
-                    node.lon = point.x;
-                    node.lat = point.y;
+                    node.lon = Double.toString(point.getX());
+                    node.lat = Double.toString(point.getY());
                     root.nodes.add(node);
                     this.newNodesByCoordinates.put(key, node);
-                    LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.x + " y=" + point.y);
+                    LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.getX() + " y=" + point.getY());
                 }
                 
                 // Create new node reference (into the building part)
@@ -208,6 +218,37 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
                     firstNodeId = node.id;
                 }
             }
+            
+//            long firstNodeId = 0;
+//            // For each point except for the last one
+//            for (int i = 0; i < points.size() - 1; i++) {
+//                Coordinates point = points.get(i);
+//                
+//                // Try to get it from the internal cache
+//                String key = point.x + "," + point.y;
+//                OsmXmlNode node = this.newNodesByCoordinates.get(key);
+//                if (node == null) {
+//                    // Create a new node (into the root)
+//                    node = new OsmXmlNode();
+//                    node.id = - this.idGenerator.getId();
+//                    node.visible = "true";
+//                    node.lon = point.x;
+//                    node.lat = point.y;
+//                    root.nodes.add(node);
+//                    this.newNodesByCoordinates.put(key, node);
+//                    LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.x + " y=" + point.y);
+//                }
+//                
+//                // Create new node reference (into the building part)
+//                OsmXmlNd nd = new OsmXmlNd();
+//                nd.ref = node.id;
+//                part.nds.add(nd);
+//                // Keep id of the first node
+//                if (firstNodeId == 0) {
+//                    firstNodeId = node.id;
+//                }
+//            }
+            
             // Don't forget to close the way with the first node
             OsmXmlNd nd = new OsmXmlNd();
             nd.ref = firstNodeId;
@@ -215,39 +256,6 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         }
         
         return root;
-    }
-
-    // TODO Eventually move that method into ParisData CSV loader
-    private List<Coordinates> computeBuildingPartGeometry(BuildingImport imp) {
-        List<Coordinates> result = new ArrayList<Coordinates>();
-        StringBuilder wkt = new StringBuilder("POLYGON(("); 
-        String geom = imp.getGeometry();
-        // Convert ODP format into WKT
-        geom = geom.replace("[", "").replace("]", "").replace(",", "");
-        String[] coords = geom.split(" ");
-        for (int i = 0; i < coords.length; i++) {
-            wkt.append(coords[i]);
-            if (i % 2 == 1 && i < coords.length - 1) {
-                wkt.append(", ");
-            } else {
-                wkt.append(" ");
-            }
-        }
-        wkt.append("))");
-        // Convert geometry coordinates to OSM SRID
-        int srid = ((ParisBuildingParser) this.getParser()).getSrid();
-        // TODO No need to convert, OSM XML use 4326 (instead of 900913 for the OSM API) ? 
-        String wktConverted = wkt.toString();
-        //String wktConverted = this.osmPostgis.tranformGeometry(wkt.toString(), srid);
-        // Reparse transformed geometry to build a list of points
-        wktConverted = wktConverted.replace("POLYGON((", "").replace("))", "");
-        coords = wktConverted.split(",");
-        for (int i = 0; i < coords.length; i++) {
-            String[] p = coords[i].trim().split(" ");
-            Coordinates point = new Coordinates(p[0], p[1], "");
-            result.add(point);
-        }
-        return result;
     }
 
     @Override

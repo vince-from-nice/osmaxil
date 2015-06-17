@@ -8,12 +8,17 @@ import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
 
+import org.openstreetmap.osmaxil.model.StringCoordinates;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import au.com.bytecode.opencsv.CSVReader;
+
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.io.ParseException;
 
 @Repository
 public class ParisBuildingParser extends AbstractParser<BuildingImport> {
@@ -41,11 +46,13 @@ public class ParisBuildingParser extends AbstractParser<BuildingImport> {
         this.hasNext = true;
     }
     
+    @Override
     public boolean hasNext() {
         // return this.reader.iterator().hasNext() // doesn't work ?
         return this.hasNext;
     }
 
+    @Override
     public BuildingImport next() {
         String[] row = null;
         try {
@@ -58,38 +65,71 @@ public class ParisBuildingParser extends AbstractParser<BuildingImport> {
             return null;
         }
         this.rowCount++;
-        BuildingImport result = new BuildingImport();
-        result.setId(this.rowCount);
+        BuildingImport building = new BuildingImport();
+        building.setId(this.rowCount);
         String[] latlon = row[0].split(",");
         if (latlon.length == 2) {
-            result.setLat(StringParsingHelper.parseDouble(latlon[0], "latitude"));
-            result.setLon(StringParsingHelper.parseDouble(latlon[1], "longitude"));
+            building.setLat(StringParsingHelper.parseDouble(latlon[0], "latitude"));
+            building.setLon(StringParsingHelper.parseDouble(latlon[1], "longitude"));
         }else {
             LOGGER.warn("Unable to parse latlon");
         }
         if (row.length > 1) {
             String geom = row[1].substring(row[1].indexOf(GEOM_TOKEN) + GEOM_TOKEN.length());
-            result.setGeometry(geom.substring(0, geom.length() - 2));
+            building.setGeometryRawString(geom.substring(0, geom.length() - 2));
+            try {
+                this.parseGeometry(building);
+            } catch (Exception e) {
+                LOGGER.error("Unable to build geometry: " + e.getMessage());
+            }
         }
         if (row.length > 19) {
-            result.setLevels(StringParsingHelper.parseInt(row[19], "levels"));
+            building.setLevels(StringParsingHelper.parseInt(row[19], "levels"));
         } else {
             LOGGER.warn("Unable to parse levels");
         }
         if (row.length > 6) {
-            result.setArea((int) StringParsingHelper.parseFloat(row[6], "area"));
+            building.setArea((int) StringParsingHelper.parseFloat(row[6], "area"));
         } else {
             LOGGER.warn("Unable to parse area");
         }        
-        return result;
+        return building;
     }
 
+    @Override
     public void remove() {
         // TODO Auto-generated method stub
     }
 
+    @Override
     public int getSrid() {
         return srid;
+    }
+    
+    // TODO call it after the filtering (no need to spend time on filtered imports)
+    private void parseGeometry(BuildingImport building) throws ParseException {
+        String geom = building.getGeometryRawString();
+        StringBuilder wktForPolygon = new StringBuilder("POLYGON(("); 
+        geom = geom.replace("[", "").replace("]", "").replace(",", "");
+        String[] coords = geom.split(" ");
+        for (int i = 0; i < coords.length; i++) {
+            if (i % 2 == 1) {
+                String coordinates = coords[i-1] + " " + coords[i];
+                wktForPolygon.append(coordinates);
+                if (i < coords.length - 1) {
+                    wktForPolygon.append(", ");
+                }
+                // Add a new point with string coordinates
+                StringCoordinates sc = new StringCoordinates(coords[i - 1], coords[i], "0.0");
+                building.getCoordinates().add(sc);
+                // Add a new point with real geometry
+                Point point = (Point) this.wktReader.read("POINT(" + coordinates + ")");
+                building.getPoints().add(point);
+            }
+        }
+        wktForPolygon.append("))");
+        building.setGeometryAsWKT(wktForPolygon.toString());
+        building.setPolygon((Polygon) wktReader.read(wktForPolygon.toString()));
     }
 
 }

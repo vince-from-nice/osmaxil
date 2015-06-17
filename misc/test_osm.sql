@@ -45,14 +45,8 @@ select(ST_Area(ST_GeomFromText('POLYGON((
 265490.39 6248770.86,
 265489.77 6248795.93))', 900913)));
 
-select(ST_Area(ST_GeomFromText('POLYGON((
-265489.77 6248795.93,
-265514.62 6248796.47,
-265515.49 6248757.45,
-265490.65 6248757.21,
-265490.64 6248759.15,
-265490.39 6248770.86,
-265489.77 6248795.93))', 900913)));
-
 select ST_Area(ST_Transform(way, 32633)) from planet_osm_polygon where osm_id = -1746495 ;
 select ST_Area(ST_Transform(way, 32633)) from planet_osm_polygon where osm_id = -1197720 ;
+
+select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(way, ST_Transform(ST_GeomFromText('', 4326), 4326);
+                

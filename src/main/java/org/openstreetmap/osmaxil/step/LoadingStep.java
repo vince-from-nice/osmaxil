@@ -1,6 +1,5 @@
 package org.openstreetmap.osmaxil.step;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;

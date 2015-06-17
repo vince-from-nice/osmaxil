@@ -1,7 +1,14 @@
 package org.openstreetmap.osmaxil.model.building;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTagNames;
+import org.openstreetmap.osmaxil.model.StringCoordinates;
+
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 
 public class BuildingImport extends AbstractImport {
 
@@ -13,8 +20,15 @@ public class BuildingImport extends AbstractImport {
 
     protected Integer area;
 
-    // TODO
-    protected String geometry;
+    protected String geometryRawString; // useful for debug only
+    
+    private String geometryAsWKT; // useful for PostGIS queries
+
+    protected Polygon geometryAsPolygon; // useless
+    
+    protected List<Point> points = new ArrayList<>(); // useless
+    
+    protected List<StringCoordinates> coordinates = new ArrayList<>(); // keep coordinates as strings (no more rounding issues)
     
     @Override
     public String getTagValue(String tagName) {
@@ -50,14 +64,6 @@ public class BuildingImport extends AbstractImport {
         this.height = height;
     }
 
-    public String getGeometry() {
-        return geometry;
-    }
-
-    public void setGeometry(String geometry) {
-        this.geometry = geometry;
-    }
-
     public Integer getArea() {
         return area;
     }
@@ -73,5 +79,46 @@ public class BuildingImport extends AbstractImport {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public String getGeometryRawString() {
+        return geometryRawString;
+    }
+
+    public void setGeometryRawString(String geometryString) {
+        this.geometryRawString = geometryString;
+    }
+
+    public String getGeometryAsWKT() {
+        return geometryAsWKT;
+    }
+
+    public void setGeometryAsWKT(String geometryWKT) {
+        this.geometryAsWKT = geometryWKT;
+    }
+
+    public Polygon getPolygon() {
+        return geometryAsPolygon;
+    }
+
+    public void setPolygon(Polygon polygon) {
+        this.geometryAsPolygon = polygon;
+    }
+
+    public List<Point> getPoints() {
+        return points;
+    }
+
+    public void setPoints(List<Point> points) {
+        this.points = points;
+    }
+
+    public List<StringCoordinates> getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(List<StringCoordinates> coordinates) {
+        this.coordinates = coordinates;
+    }
+
 
 }

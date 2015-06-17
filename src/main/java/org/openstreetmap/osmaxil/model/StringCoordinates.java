@@ -1,11 +1,11 @@
 package org.openstreetmap.osmaxil.model;
 
-public class Coordinates {
+public class StringCoordinates {
     
-    public Coordinates() {
+    public StringCoordinates() {
     }
     
-    public Coordinates(String x, String y, String z) {
+    public StringCoordinates(String x, String y, String z) {
         this.x = x;
         this.y = y;
         this.z = z;
