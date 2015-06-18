@@ -44,7 +44,7 @@ public class Application {
         this.loadingStep.loadImports();
         this.processingStep.processElements();
         this.synchronizingStep.synchronize();
-        this.statisticsStep.generateStats();
+        this.statisticsStep.displayStats();
         this.applicationContext.close();
     }
 }

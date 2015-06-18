@@ -1,6 +1,5 @@
 package org.openstreetmap.osmaxil.step;
 
-import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,27 +23,29 @@ public class StatisticsStep extends AbstractStep {
     @Autowired
     private ElementStore elementCache;
     
-    static private final Logger LOGGER = Logger.getLogger(StatisticsStep.class);
-
-    public void generateStats() {
-        LOGGER.info("=== Statistics ===");
-        this.buildStats();
-        this.displayStats();
-        //displayAllMatchingScore();
+    @Autowired
+    private LoadingStep loadingStep;
+    
+    @Autowired
+    private ProcessingStep processingStep;
+    
+    @Autowired
+    private SynchronizingStep synchronizingStep;
+    
+    @Override
+    public void displayStats() {
+        LOGGER_FOR_STATS.info("======= Statistics =======");
+        this.buildStatsByMatchingScore();
+        this.displayStatsByMatchingScore();
+        //showAllMatchingScores();
+        this.loadingStep.displayStats();
+        this.processingStep.displayStats();
+        this.synchronizingStep.displayStats();
+        
     }
     
-    private void displayAllMatchingScore() {
-        LOGGER.info("Here are all matching scores:");
-        for (AbstractElement element : elementCache.getElements().values()) {
-            LOGGER.info("- score for element " + element.getOsmId() + " is " + element.getMatchingScore());
-        }
-    }
-    
-    private void displayStats() {
-        LOGGER.info("Number of matched elements: " + this.matchedElementsNbr);
-        LOGGER.info("Number of alterable elements: " + this.alterableElementsNbr);
-        LOGGER.info("Number of altered elements: " + this.alteratedElementsNbr);
-        LOGGER.info("Repartition by matching scores:");
+    private void displayStatsByMatchingScore() {
+        LOGGER_FOR_STATS.info("Repartition by matching scores:");
         for (int i = 0; i < 10; i++) {
             StringBuilder sb = new StringBuilder();
             sb.append("- score between " + i * 10 + "% and " + (i + 1) * 10 + "% : ");
@@ -54,11 +55,14 @@ public class StatisticsStep extends AbstractStep {
             }
             sb.append(" elements <= " + this.alteredElementsNbrByScore[i] + " altered");
             sb.append(" (" + this.alterableElementsNbrByScore[i] + " were alterable)");
-            LOGGER.info(sb);
+            LOGGER_FOR_STATS.info(sb);
         }
+        LOGGER_FOR_STATS.info("Total of matched elements: " + this.matchedElementsNbr);
+        LOGGER_FOR_STATS.info("Total of alterable elements: " + this.alterableElementsNbr);
+        LOGGER_FOR_STATS.info("Total of altered elements: " + this.alteratedElementsNbr);
     }
 
-    private void buildStats() {
+    private void buildStatsByMatchingScore() {
         this.matchedElementsNbr = 0;
         this.alterableElementsNbr = 0;
         this.alteratedElementsNbr = 0;
@@ -68,7 +72,7 @@ public class StatisticsStep extends AbstractStep {
         for (AbstractElement element : this.elementCache.getElements().values()) {
             Float score = element.getMatchingScore();
             if (score == null) {
-                LOGGER.warn("Element " + element.getOsmId() + " doesn't have matching score !!");
+                LOGGER_FOR_STATS.warn("Element " + element.getOsmId() + " doesn't have matching score !!");
             } else {
                 boolean ok = false;
                 for (int i = 0; i < 10; i++) {
@@ -88,9 +92,16 @@ public class StatisticsStep extends AbstractStep {
                     }                    
                 }
                 if (!ok) {
-                    LOGGER.error("Stats issue with element " + element.getOsmId() + ", its matching score is " + element.getMatchingScore());
+                    LOGGER_FOR_STATS.error("Stats issue with element " + element.getOsmId() + ", its matching score is " + element.getMatchingScore());
                 }
             }
+        }
+    }
+    
+    private void showAllMatchingScores() {
+        LOGGER_FOR_STATS.info("Here are all matching scores:");
+        for (AbstractElement element : elementCache.getElements().values()) {
+            LOGGER_FOR_STATS.info("- score for element " + element.getOsmId() + " is " + element.getMatchingScore());
         }
     }
 

@@ -11,6 +11,7 @@ import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
+import org.openstreetmap.osmaxil.step.StatisticsStep;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractPlugin <ELEMENT extends AbstractElement, IMPORT extends AbstractImport> {
@@ -40,11 +41,15 @@ public abstract class AbstractPlugin <ELEMENT extends AbstractElement, IMPORT ex
     
     abstract public boolean isElementAlterable(ELEMENT element);
     
+    abstract public void displayStatistics();
+    
     static public final float MIN_MATCHING_SCORE = 0.0f; 
     
     static public final float MAX_MATCHING_SCORE = 1.0f; 
     
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
+    
+    static protected final Logger LOGGER_FOR_STATS = Logger.getLogger(StatisticsStep.class);
     
     public float computeElementMatchingScore(ELEMENT element) {
         return this.getScorer().computeElementMatchingScore(element);

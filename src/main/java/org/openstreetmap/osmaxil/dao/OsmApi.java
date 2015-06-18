@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
+import org.openstreetmap.osmaxil.step.StatisticsStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -54,6 +55,8 @@ public class OsmApi {
     
     static private final Logger LOGGER = Logger.getLogger(Application.class);
     
+    static private final Logger LOGGER_FOR_STATS = Logger.getLogger(StatisticsStep.class);
+    
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Public methods
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,13 +70,13 @@ public class OsmApi {
     
     @PreDestroy
     public void close() {
-        LOGGER.info("=== Closing OSM API service ===");
+        LOGGER_FOR_STATS.info("=== Closing OSM API service ===");
         if (this.currentChangesetID > 0) {
             this.closeChangeset(this.currentChangesetID);
         }
-        LOGGER.info("Total of read operations: success=" + this.counterForReadSuccess + " failure=" + this.counterForReadFailure);
-        LOGGER.info("Total of write operations: success=" + this.counterForWriteSuccess + " failure=" + this.counterForWriteFailure);
-        LOGGER.info("Total of changeset operations: open=" + this.counterForChangesetOpen + " close=" + this.counterForChangesetClose);
+        LOGGER_FOR_STATS.info("Total of read operations: success=" + this.counterForReadSuccess + " failure=" + this.counterForReadFailure);
+        LOGGER_FOR_STATS.info("Total of write operations: success=" + this.counterForWriteSuccess + " failure=" + this.counterForWriteFailure);
+        LOGGER_FOR_STATS.info("Total of changeset operations: open=" + this.counterForChangesetOpen + " close=" + this.counterForChangesetClose);
     }
     
     public OsmXmlRoot readElement(long id) {

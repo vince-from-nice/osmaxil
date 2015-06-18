@@ -14,6 +14,14 @@ public class ProcessingStep extends AbstractStep {
 
     @Autowired
     private ElementStore elementCache;
+    
+    @Override
+    public void displayStats() {
+        LOGGER_FOR_STATS.info("=== Statistics for " + this.getClass().getSimpleName() + "===");
+        LOGGER_FOR_STATS.info("Total of processed elements: " + this.counter);
+        LOGGER_FOR_STATS.info("Plugin specific statistics :");
+        this.plugin.displayStatistics();
+    }
 
     public void processElements() {
         LOGGER.info("=== Processing elements ===");

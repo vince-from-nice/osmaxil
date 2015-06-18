@@ -75,9 +75,6 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         this.remakableElements.add(element);
         this.newBuildingsByRemakableBuilding.put(element.getOsmId(), this.buildXmlForNewElementsCreation(element));
         this.oldNodesToDelete.addAll(this.buildElementToDelete(element));
-        LOGGER.info("Remaking data has been prepared: remakableBuildings=" + this.remakableElements.size()
-                + " newBuildings=" + this.newBuildingsByRemakableBuilding.size() + " newNodes=" + this.newNodesByCoordinates.size()
-                + " oldNodes=" + this.oldNodesToDelete.size());
     }
     
     @Override
@@ -111,7 +108,6 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
 //                root.nodes.add(node);
 //            }
 //        }
-        LOGGER.info("Remaking data has been finalized: nodes=" + root.nodes.size() + " ways=" + root.ways.size() + " relations=" + root.relations.size());
         this.remakingData = root;
     }
     
@@ -256,6 +252,20 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         }
         
         return root;
+    }
+    
+    @Override
+    public  void displayStatistics() {
+        LOGGER_FOR_STATS.info("Remaking data has been prepared as follow:");
+        LOGGER_FOR_STATS.info("\tremakableBuildings=" + this.remakableElements.size() + "");
+        LOGGER_FOR_STATS.info("\tnewBuildings=" + this.newBuildingsByRemakableBuilding.size() + "");
+        LOGGER_FOR_STATS.info("\tnewNodes=" + this.newNodesByCoordinates.size() + "");
+        LOGGER_FOR_STATS.info("\toldNodes=" + this.oldNodesToDelete.size() + "");
+        
+        LOGGER_FOR_STATS.info("Remaking data has finalized as follow:");
+        LOGGER_FOR_STATS.info("\tnodes=" + this.remakingData.nodes.size() + "");
+        LOGGER_FOR_STATS.info("\tways=" + this.remakingData.ways.size() + "");
+        LOGGER_FOR_STATS.info("\trelations=" + this.remakingData.relations.size());
     }
 
     @Override

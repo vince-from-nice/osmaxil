@@ -56,13 +56,13 @@ public class LoadingStep  extends AbstractStep {
         this.excludingArea = wktReader.read(this.excludingAreaString);
     }
         
-    @PreDestroy
-    public void close() {
-        LOGGER.info("=== Closing import org.openstreetmap.osmaxil.plugin.loader ===");
-        LOGGER.info("Total of loaded imports: " + this.counterForLoadedImports);
-        LOGGER.info("Total of filtered imports: " + this.counterForFilterededImports);
-        LOGGER.info("Total of matched imports: " + this.counterForMatchedImports);
-        LOGGER.info("Total of missed imports: " + (counterForLoadedImports - this.counterForFilterededImports - this.counterForMatchedImports));
+    @Override
+    public void displayStats() {
+        LOGGER_FOR_STATS.info("=== Statistics for " + this.getClass().getSimpleName() + "===");
+        LOGGER_FOR_STATS.info("Total of loaded imports: " + this.counterForLoadedImports);
+        LOGGER_FOR_STATS.info("Total of filtered imports: " + this.counterForFilterededImports);
+        LOGGER_FOR_STATS.info("Total of matched imports: " + this.counterForMatchedImports);
+        LOGGER_FOR_STATS.info("Total of missed imports: " + (counterForLoadedImports - this.counterForFilterededImports - this.counterForMatchedImports));
     }
 
     public void loadImports() {

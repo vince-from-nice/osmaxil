@@ -38,9 +38,9 @@ public class SynchronizingStep extends AbstractStep {
         this.synchronizationMode = this.synchronizationMode.trim();
     }
     
-    @PreDestroy
-    public void close() {
-        LOGGER.info("=== Closing element synchronizer ===");
+    @Override
+    public void displayStats() {
+        LOGGER_FOR_STATS.info("=== Statistics for " + this.getClass().getSimpleName() + "===");
         LOGGER.info("Total of matched elements: " + this.counterForMatchedElements);
         LOGGER.info("Total of altered elements: " + this.counterForAlteredElements);
     }

@@ -70,6 +70,12 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     }
     
     @Override
+    public  void displayStatistics() {
+        // TODO return stats from the matcher
+        LOGGER.info("No available stats for this plugin");
+    }
+    
+    @Override
     public String[] getUpdatableTagNames() {
         return UPDATABLE_TAG_NAMES;
     }

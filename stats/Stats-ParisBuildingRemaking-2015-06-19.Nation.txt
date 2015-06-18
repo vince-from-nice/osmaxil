@@ -1,0 +1,40 @@
+======= Statistics =======
+Repartition by matching scores:
+- score between 0% and 10% : 7 (2%) elements <= 0 altered (7 were alterable)
+- score between 10% and 20% : 7 (2%) elements <= 0 altered (7 were alterable)
+- score between 20% and 30% : 7 (2%) elements <= 0 altered (7 were alterable)
+- score between 30% and 40% : 3 (0%) elements <= 0 altered (3 were alterable)
+- score between 40% and 50% : 3 (0%) elements <= 0 altered (3 were alterable)
+- score between 50% and 60% : 6 (1%) elements <= 0 altered (6 were alterable)
+- score between 60% and 70% : 8 (2%) elements <= 0 altered (8 were alterable)
+- score between 70% and 80% : 9 (2%) elements <= 0 altered (9 were alterable)
+- score between 80% and 90% : 5 (1%) elements <= 0 altered (5 were alterable)
+- score between 90% and 100% : 273 (83%) elements <= 0 altered (273 were alterable)
+Total of matched elements: 328
+Total of alterable elements: 328
+Total of altered elements: 0
+=== Statistics for LoadingStep===
+Total of loaded imports: 352293
+Total of filtered imports: 351171
+Total of matched imports: 1030
+Total of missed imports: 92
+=== Statistics for ProcessingStep===
+Total of processed elements: 328
+Plugin specific statistics :
+Remaking data has been prepared as follow:
+	remakableBuildings=328
+	newBuildings=328
+	newNodes=5328
+	oldNodes=4606
+Remaking data has finalized as follow:
+	nodes=5328
+	ways=1565
+	relations=328
+=== Statistics for SynchronizingStep===
+=== Closing OSM XML service ===
+Total of writing successes: 1
+Total of writing failures: 0
+=== Closing OSM API service ===
+Total of read operations: success=328 failure=0
+Total of write operations: success=0 failure=0
+Total of changeset operations: open=0 close=0

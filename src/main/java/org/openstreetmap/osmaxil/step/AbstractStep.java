@@ -6,7 +6,7 @@ import org.openstreetmap.osmaxil.dao.OsmApi;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AbstractStep {
+public abstract class AbstractStep {
     
     protected AbstractPlugin plugin;
     
@@ -14,8 +14,12 @@ public class AbstractStep {
     protected OsmApi osmApiService;
     
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
+    
+    static protected final Logger LOGGER_FOR_STATS = Logger.getLogger(StatisticsStep.class);
 
     static protected final String LOG_SEPARATOR = "==========================================================";
+    
+    abstract public void displayStats();
     
     public AbstractPlugin getPlugin() {
         return plugin;
