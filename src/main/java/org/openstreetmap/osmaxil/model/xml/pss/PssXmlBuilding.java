@@ -5,6 +5,9 @@ import javax.xml.bind.annotation.XmlElement;
 public class PssXmlBuilding {
     
     @XmlElement
+    public String name;
+    
+    @XmlElement
     public String url;
     
     @XmlElement

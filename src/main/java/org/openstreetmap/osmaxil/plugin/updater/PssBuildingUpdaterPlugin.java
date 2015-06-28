@@ -33,7 +33,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     @Value("${plugins.pssBuildingUpdater.changesetComment}")
     private String changesetComment;
     
-    private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTagNames.HEIGHT, ElementTagNames.URL};
+    private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTagNames.HEIGHT, ElementTagNames.NAME, ElementTagNames.URL};
 
     @Override
     public float computeImportMatchingScore(BuildingImport imp) {
@@ -43,15 +43,15 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     
     @Override
     public boolean isElementTagUpdatable(BuildingElement element, String tagName) {
-        // Building tags are updatable only if it doesn't have an original value
-        return element.getOriginalValuesByTagNames().get(tagName) == null;
+        // Building tags are updatable only if it doesn't have an original value, except for the tag url which can have multiples values
+        return (ElementTagNames.URL.equals(tagName) ? true : element.getOriginalValuesByTagNames().get(tagName) == null);
     }
 
     @Override
     public boolean updateElementTag(BuildingElement element, String tagName) {
         String tagValue = element.getMatchingImports().get(0).getTagValue(tagName);
         if (tagValue == null) {
-            LOGGER.warn("Cannot update tag because best tag value is null for " + tagName);
+            LOGGER.warn("Cannot update tag because tag value is null for " + tagName);
             return false;
         }
         boolean updated = false;
@@ -65,13 +65,30 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
             LOGGER.info("===> Updating URL to " + tagValue);
             updated = true;
         }
+        if (ElementTagNames.NAME.equals(tagName)) {
+            // Ignore fake name based on the building address
+           if (Character.isDigit(tagValue.charAt(0))) {
+                LOGGER.info("Skipping name update because the value looks fake (" + tagValue + ")");
+            } else {
+                element.setTagValue(ElementTagNames.NAME, tagValue);
+                LOGGER.info("===> Updating name to " + tagValue);
+                updated = true;
+            }
+        }
         return updated;
+    }
+    
+    // Override that concrete method because
+    @Override
+    public boolean isElementAlterable(BuildingElement element) {
+       // if the height is not updatable we don't want to update the building at all (ie. not update the name or the url)
+       return this.isElementTagUpdatable(element, ElementTagNames.BUILDING_LEVELS);
     }
     
     @Override
     public  void displayStatistics() {
         // TODO return stats from the matcher
-        LOGGER.info("No available stats for this plugin");
+        LOGGER_FOR_STATS.info("No available stats for this plugin");
     }
     
     @Override

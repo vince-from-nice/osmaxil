@@ -34,14 +34,13 @@ public class StatisticsStep extends AbstractStep {
     
     @Override
     public void displayStats() {
-        LOGGER_FOR_STATS.info("======= Statistics =======");
-        this.buildStatsByMatchingScore();
-        this.displayStatsByMatchingScore();
-        //showAllMatchingScores();
         this.loadingStep.displayStats();
         this.processingStep.displayStats();
         this.synchronizingStep.displayStats();
-        
+        LOGGER_FOR_STATS.info("======= Advanced statistics =======");
+        this.buildStatsByMatchingScore();
+        this.displayStatsByMatchingScore();
+        //showAllMatchingScores();
     }
     
     private void displayStatsByMatchingScore() {

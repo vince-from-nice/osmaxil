@@ -1,45 +1,52 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <buildings>	
-	<!-- 5 first buildings of the 2015-05-15 export -->
+	<!-- 5 first buildings of the 2015-06-26 export -->
 	<building>
-		<url>http://www.pss-archi.eu/immeubles/FR-01004-32701.html</url>
-		<coordinates>45.96613370206098, 5.353742837905884</coordinates>
-		<height>15.00</height>
+		<name>Les Bastides du Cap - Bât. B</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40075.html</url>
+		<coordinates>43.59523170412698, 7.120479047298431</coordinates>
+		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
-		<url>http://www.pss-archi.eu/immeubles/FR-01014-21996.html</url>
-		<coordinates>46.269836021614985, 5.6723785400390625</coordinates>
+		<name>Les Galeries du Casino</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-37034.html</url>
+		<coordinates>43.56766666070741, 7.1124860644340515</coordinates>
+		<height>10.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Les Géraniums</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-42631.html</url>
+		<coordinates>43.5848518487099, 7.117737829685211</coordinates>
+		<height>23.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Les Jardins d&apos;Antibes</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40078.html</url>
+		<coordinates>43.59624375594781, 7.122584581375122</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
-		<url>http://www.pss-archi.eu/immeubles/FR-01033-32180.html</url>
-		<coordinates>46.11125127858506, 5.826272964477539</coordinates>
-		<height>25.00</height>
-		<estimatedHeight>yes</estimatedHeight>
-	</building>
-	<building>
-		<url>http://www.pss-archi.eu/immeubles/FR-01033-41275.html</url>
-		<coordinates>46.10712310264337, 5.824682414531708</coordinates>
-		<height>8.00</height>
-		<estimatedHeight>yes</estimatedHeight>
-	</building>
-	<building>
-		<url>http://www.pss-archi.eu/immeubles/FR-01053-18997.html</url>
-		<coordinates>46.204803455590195, 5.229637026786804</coordinates>
-		<height>18.00</height>
+		<name>Les Jardins d&apos;Aurélia</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-37206.html</url>
+		<coordinates>43.59838046972133, 7.115192413330078</coordinates>
+		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	
 	<!--Buildings in Ile-de-France -->
 	<building>
+		<name>82, avenue Niel</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-75056-28165.html</url>
 		<coordinates>48.88291364398775, 2.2967004776000976</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>81-85, rue d&apos;Avron</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-75056-16313.html</url>
 		<coordinates>48.85259849773819, 2.404680848121643</coordinates>
 		<height>21.00</height>

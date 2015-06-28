@@ -15,29 +15,32 @@ public class BuildingImport extends AbstractImport {
     protected Integer levels;
 
     protected Float height;
-    
+
     protected String url;
 
     protected Integer area;
 
     protected String geometryRawString; // useful for debug only
-    
+
     private String geometryAsWKT; // useful for PostGIS queries
 
     protected Polygon geometryAsPolygon; // useless
-    
+
     protected List<Point> points = new ArrayList<>(); // useless
-    
-    protected List<StringCoordinates> coordinates = new ArrayList<>(); // keep coordinates as strings (no more rounding issues)
-    
+
+    protected List<StringCoordinates> coordinates = new ArrayList<>(); // keep coordinates as strings (no more rounding
+                                                                       // issues)
+
     @Override
     public String getTagValue(String tagName) {
         if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
             return this.levels.toString();
         } else if (ElementTagNames.HEIGHT.equals(tagName)) {
             return this.height.toString();
-        }else if (ElementTagNames.URL.equals(tagName)) {
-            return this.url.toString();
+        } else if (ElementTagNames.URL.equals(tagName)) {
+            return this.url;
+        } else if (ElementTagNames.NAME.equals(tagName)) {
+            return this.name;
         }
         return null;
     }
@@ -45,7 +48,8 @@ public class BuildingImport extends AbstractImport {
     @Override
     public String toString() {
         return "Building import with id=[" + this.id + "] and name=[" + this.name + "], lat=[" + this.lat + "], lon=["
-                + this.lon + "], levels=[" + this.levels + "], height=[" + this.height + "], area=[" + this.area + "], url=[" + this.url + "]";
+                + this.lon + "], levels=[" + this.levels + "], height=[" + this.height + "], area=[" + this.area
+                + "], url=[" + this.url + "]";
     }
 
     public Integer getLevels() {
@@ -119,6 +123,5 @@ public class BuildingImport extends AbstractImport {
     public void setCoordinates(List<StringCoordinates> coordinates) {
         this.coordinates = coordinates;
     }
-
 
 }

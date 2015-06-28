@@ -1,0 +1,31 @@
+======= Statistics =======
+Repartition by matching scores:
+- score between 0% and 10% : 1 (0%) elements <= 0 altered (1 were alterable)
+- score between 10% and 20% : 10 (0%) elements <= 0 altered (10 were alterable)
+- score between 20% and 30% : 46 (0%) elements <= 0 altered (46 were alterable)
+- score between 30% and 40% : 135 (0%) elements <= 0 altered (135 were alterable)
+- score between 40% and 50% : 777 (2%) elements <= 0 altered (776 were alterable)
+- score between 50% and 60% : 0 (0%) elements <= 0 altered (0 were alterable)
+- score between 60% and 70% : 0 (0%) elements <= 0 altered (0 were alterable)
+- score between 70% and 80% : 0 (0%) elements <= 0 altered (0 were alterable)
+- score between 80% and 90% : 0 (0%) elements <= 0 altered (0 were alterable)
+- score between 90% and 100% : 30800 (96%) elements <= 30779 altered (30779 were alterable)
+Total of matched elements: 31769
+Total of alterable elements: 31747
+Total of altered elements: 30779
+=== Statistics for LoadingStep===
+Total of loaded imports: 43188
+Total of filtered imports: 351
+Total of matched imports: 33059
+Total of missed imports: 9778
+=== Statistics for ProcessingStep===
+Total of processed elements: 31769
+Plugin specific statistics :
+=== Statistics for SynchronizingStep===
+=== Closing OSM XML service ===
+Total of writing successes: 30779
+Total of writing failures: 0
+=== Closing OSM API service ===
+Total of read operations: success=31769 failure=41
+Total of write operations: success=0 failure=0
+Total of changeset operations: open=0 close=0

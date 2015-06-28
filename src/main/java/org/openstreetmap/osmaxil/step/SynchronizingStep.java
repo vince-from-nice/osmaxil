@@ -83,7 +83,7 @@ public class SynchronizingStep extends AbstractStep {
         boolean needToSync = false;
         AbstractUpdaterPlugin updaterPlugin = (AbstractUpdaterPlugin) this.plugin;
         for (String updatableTagName : updaterPlugin.getUpdatableTagNames()) {
-            LOGGER.info("* Updating data for the tag " + updatableTagName);
+            LOGGER.debug("* Updating data for the tag " + updatableTagName);
             // Check if tag is updatable
             if (updaterPlugin.isElementTagUpdatable(element, updatableTagName)) {
                 boolean updated = updaterPlugin.updateElementTag(element, updatableTagName);

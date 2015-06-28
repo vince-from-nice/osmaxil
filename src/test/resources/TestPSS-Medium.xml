@@ -1,2658 +1,3531 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<buildings>	
-	<!-- 43185 first buildings of the 2015-05-15 export -->
+<?xml version="1.0" encoding="utf-8"?>
+<buildings>
 	<building>
+		<name>Résidence Innovation</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01004-32701.html</url>
 		<coordinates>45.96613370206098, 5.353742837905884</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Collège Jean Rostan</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01014-21996.html</url>
 		<coordinates>46.269836021614985, 5.6723785400390625</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Gare de Bellegarde</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01033-32180.html</url>
 		<coordinates>46.11125127858506, 5.826272964477539</coordinates>
 		<height>25.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel de Ville de Bellegarde-sur-Valserine</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01033-41275.html</url>
 		<coordinates>46.10712310264337, 5.824682414531708</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>15-17, boulevard de Brou</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18997.html</url>
 		<coordinates>46.204803455590195, 5.229637026786804</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>2-6, rue Louis Blériot</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18283.html</url>
 		<coordinates>46.21176046622839, 5.233536958694458</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>3, rue du Pont des Chèvres</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-20803.html</url>
 		<coordinates>46.21006027497657, 5.220737457275391</coordinates>
 		<height>42.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>41bis-41ter, boulevard de Brou</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18985.html</url>
 		<coordinates>46.203288685457444, 5.2310532331466675</coordinates>
 		<height>31.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>5, rue Jules Migonney</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18434.html</url>
 		<coordinates>46.2032812600108, 5.22648811340332</coordinates>
 		<height>10.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Ainterexpo</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18352.html</url>
 		<coordinates>46.18786758276504, 5.248203277587891</coordinates>
 		<height>10.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Ancien Hôtel-Dieu</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18163.html</url>
 		<coordinates>46.20099417468152, 5.2331507205963135</coordinates>
 		<height>16.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Basilique du Sacré-Cur</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-20791.html</url>
 		<coordinates>46.19872555930486, 5.221477746963501</coordinates>
 		<height>25.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Bibliothèque Albert Camus</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18728.html</url>
 		<coordinates>46.203886430621225, 5.22398829460144</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>CAF de l&apos;Ain</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-19040.html</url>
 		<coordinates>46.21084355739709, 5.225023627281189</coordinates>
 		<height>17.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cathédrale Notre-Dame</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18164.html</url>
 		<coordinates>46.20561651350874, 5.227024555206299</coordinates>
 		<height>25.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Centre Commercial Carrefour de l&apos;Europe</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18205.html</url>
 		<coordinates>46.20880922727928, 5.235961675643921</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Centre Hospitalier de Bourg-en-Bresse - Hôpital de Fleyriat</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-19029.html</url>
 		<coordinates>46.224532490766435, 5.21101713180542</coordinates>
 		<height>25.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Centre Nautique Carré d&apos;Eau</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18202.html</url>
 		<coordinates>46.20987094911334, 5.24048924446106</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Chapelle du Lycée Lalande</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-20797.html</url>
 		<coordinates>46.202434752512936, 5.225828289985657</coordinates>
 		<height>22.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Crédit Agricole Centre Est</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18266.html</url>
 		<coordinates>46.20744306549591, 5.239201784133911</coordinates>
 		<height>13.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>DDTEFP de lAin</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-21156.html</url>
 		<coordinates>46.20745791526318, 5.235393047332764</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Église de Brou</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18121.html</url>
 		<coordinates>46.19799037416108, 5.236165523529053</coordinates>
 		<height>25.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Église Saint-Pierre-Chanel</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18203.html</url>
 		<coordinates>46.213805823076164, 5.233628153800964</coordinates>
 		<height>7.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Groupama</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18983.html</url>
 		<coordinates>46.207224030962514, 5.229100584983826</coordinates>
 		<height>22.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel de Ville</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18339.html</url>
 		<coordinates>46.20515244082838, 5.224975347518921</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Arc en Ciel</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18993.html</url>
 		<coordinates>46.203530011927505, 5.235167741775513</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Horizon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18984.html</url>
 		<coordinates>46.203010230520896, 5.2330005168914795</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Grenette</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18166.html</url>
 		<coordinates>46.20653350959807, 5.225114822387695</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Bastion</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18020.html</url>
 		<coordinates>46.20610657000336, 5.223720073699951</coordinates>
 		<height>30.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Codbar</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18204.html</url>
 		<coordinates>46.193723878328385, 5.231525301933289</coordinates>
 		<height>11.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Moulin de Rozières</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18207.html</url>
 		<coordinates>46.2119683462639, 5.227786302566528</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Résidences Fleuries - Tour 16</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18988.html</url>
 		<coordinates>46.210568852985894, 5.223693251609802</coordinates>
 		<height>45.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Résidences Fleuries - Tour 17</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18989.html</url>
 		<coordinates>46.21047975936828, 5.2244603633880615</coordinates>
 		<height>45.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Résidences Fleuries - Tour 18</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18990.html</url>
 		<coordinates>46.21041293906025, 5.2252596616744995</coordinates>
 		<height>45.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Terrasses de Brou</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18995.html</url>
 		<coordinates>46.20089021399529, 5.238397121429443</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Lycée Edgar Quinet - Bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18349.html</url>
 		<coordinates>46.196371446943914, 5.227153301239014</coordinates>
 		<height>16.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Maison de Bois</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18340.html</url>
 		<coordinates>46.20483315654782, 5.226541757583618</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Maison de l&apos;Agriculture</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18982.html</url>
 		<coordinates>46.20709038234363, 5.22948145866394</coordinates>
 		<height>22.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Maison du Vieux Bourg</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18425.html</url>
 		<coordinates>46.20323670730976, 5.226380825042725</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Médiathèque Élisabeth et Roger Vailland</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18594.html</url>
 		<coordinates>46.200615459806215, 5.240414142608643</coordinates>
 		<height>11.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Médiathèque Joannès Son</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18282.html</url>
 		<coordinates>46.210992045695974, 5.232388973236084</coordinates>
 		<height>7.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Multiplexe L&apos;Amphi</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18274.html</url>
 		<coordinates>46.20902454315633, 5.230865478515625</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Porte des Jacobins</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18341.html</url>
 		<coordinates>46.20337779073907, 5.226691961288452</coordinates>
 		<height>7.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Balnéa - Bât. 151-152</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-21160.html</url>
 		<coordinates>46.206982720719694, 5.238085985183716</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Balnéa - Bât. 31-32</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-21162.html</url>
 		<coordinates>46.20646668448926, 5.236664414405823</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Balnéa - Bât. 41-42</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-21161.html</url>
 		<coordinates>46.20654835961121, 5.237463712692261</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Balnéa - Bât. 51-54</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-21163.html</url>
 		<coordinates>46.20628477128111, 5.238204002380371</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence de France</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18986.html</url>
 		<coordinates>46.21003428911243, 5.227126479148865</coordinates>
 		<height>42.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Épi d&apos;Or</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-41801.html</url>
 		<coordinates>46.20220579737177, 5.251899361610413</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Salle de Musiques Actuelles La Tannerie</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18206.html</url>
 		<coordinates>46.19925652023566, 5.225576162338257</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>SDIS de l&apos;Ain</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18208.html</url>
 		<coordinates>46.21842337220128, 5.244040489196777</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>SEMCODA - Agence Bresse Dombes</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-19027.html</url>
 		<coordinates>46.209462596990505, 5.227174758911133</coordinates>
 		<height>16.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Siège de la Mutualité Sociale Agricole de l&apos;Ain</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18981.html</url>
 		<coordinates>46.20729828005474, 5.230940580368042</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Théâtre Municipal</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01053-18165.html</url>
 		<coordinates>46.2066337471089, 5.225511789321899</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Marché aux Meubles</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01091-19607.html</url>
 		<coordinates>46.14291265675675, 5.799815654754639</coordinates>
 		<height>10.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Dolmen</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01180-2903.html</url>
 		<coordinates>46.3284390873061, 6.105201244354248</coordinates>
 		<height>5.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Centre de rééducation fonctionnelle Mangini</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01185-41277.html</url>
 		<coordinates>45.97222982070784, 5.614118278026581</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Rêves de Saône</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01194-46273.html</url>
 		<coordinates>45.98695515253247, 4.7576473871719145</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Lycée Technologique Agricole Édouard Herriot</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01250-38997.html</url>
 		<coordinates>45.98387955695213, 4.804399609565735</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Viaduc de Nantua</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01269-31561.html</url>
 		<coordinates>46.1419796, 5.6156272</coordinates>
 		<height>77.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Église Notre-Dame de la Plaine</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01283-20804.html</url>
 		<coordinates>46.2571746851376, 5.643362402915955</coordinates>
 		<height>13.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Belandre</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01333-38301.html</url>
 		<coordinates>45.92797578248663, 4.952720403671265</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Collège de Saint-Denis-lès-Bourg</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01344-21994.html</url>
 		<coordinates>46.2034334814667, 5.196168422698975</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Lycée international de Saint-Genis-Pouilly</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01354-49716.html</url>
 		<coordinates>46.24076498861623, 6.031030859832754</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Émetteur de Lyon - Tramoyes</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-01424-14518.html</url>
 		<coordinates>45.875645957818904, 4.950810670852661</coordinates>
 		<height>253.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Piscine municipale de Château-Thierry</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02168-50572.html</url>
 		<coordinates>49.036137699656074, 3.3818578720092773</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Émetteur de Fleury</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02316-3671.html</url>
 		<coordinates>49.27732475579393, 3.1569600105285644</coordinates>
 		<height>275.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel de Ville</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02340-23667.html</url>
 		<coordinates>49.825491005632166, 3.2855772972106934</coordinates>
 		<height>10.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Rotonde SNCF d&apos;Hirson</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02381-36878.html</url>
 		<coordinates>49.91141251589949, 4.075627326965332</coordinates>
 		<height>5.50</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Cathédrale Notre-Dame de Laon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02408-413.html</url>
 		<coordinates>49.564693507570986, 3.6246514320373535</coordinates>
 		<height>60.50</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel Ibis Laon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02408-38768.html</url>
 		<coordinates>49.55006084719845, 3.6192816495895386</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Rotonde SNCF de Laon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02408-36880.html</url>
 		<coordinates>49.57862264845425, 3.6038482189178467</coordinates>
 		<height>5.50</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel de Ville - École</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02589-32353.html</url>
 		<coordinates>49.464672627890046, 3.5459983348846436</coordinates>
 		<height>6.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Tour Prime</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0261-34378.html</url>
 		<coordinates>47.386056291996454, 8.517290353775024</coordinates>
 		<height>126.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>1-3, rue Marconi</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24925.html</url>
 		<coordinates>49.85991253333035, 3.291049003601074</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>10, avenue Robert Schuman</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24919.html</url>
 		<coordinates>49.85872980812247, 3.291928768157959</coordinates>
 		<height>36.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>11-13, rue Marconi</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24927.html</url>
 		<coordinates>49.86004394545524, 3.2931411266326904</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>12-22, rue Geoffroy Saint-Hilaire</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24923.html</url>
 		<coordinates>49.86238855434102, 3.3001255989074707</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>4, rue d&apos;Alembert</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24920.html</url>
 		<coordinates>49.86397922714767, 3.2973575592041015</coordinates>
 		<height>49.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>4-8, rue du Gay Lussac</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24918.html</url>
 		<coordinates>49.859725789169644, 3.302088975906372</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>5-9, rue Marconi</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24926.html</url>
 		<coordinates>49.85997132300934, 3.292223811149597</coordinates>
 		<height>40.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>9-11, avenue du Parc Buffon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24917.html</url>
 		<coordinates>49.85922434294472, 3.3031511306762695</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Basilique de Saint-Quentin</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-428.html</url>
 		<coordinates>49.852539048901754, 3.3010053634643555</coordinates>
 		<height>82.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Jardins de l&apos;Abondance</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-41803.html</url>
 		<coordinates>49.835749858100996, 3.310385048389435</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Bel Air</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24922.html</url>
 		<coordinates>49.861925174585764, 3.300715684890747</coordinates>
 		<height>31.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Champagne</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24924.html</url>
 		<coordinates>49.86227098079403, 3.298720121383667</coordinates>
 		<height>30.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Île-de-France</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24913.html</url>
 		<coordinates>49.861178224728555, 3.297947645187378</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence la Fleurande</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24915.html</url>
 		<coordinates>49.86086699221303, 3.3024215698242187</coordinates>
 		<height>40.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence le Vermandois</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24921.html</url>
 		<coordinates>49.86142720929742, 3.2995998859405517</coordinates>
 		<height>40.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence les Bruyères</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24909.html</url>
 		<coordinates>49.85993328263698, 3.299342393875122</coordinates>
 		<height>35.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Les Glycines</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24907.html</url>
 		<coordinates>49.86048659419358, 3.30039381980896</coordinates>
 		<height>35.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence les Pervenches</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24908.html</url>
 		<coordinates>49.86024452116727, 3.29988956451416</coordinates>
 		<height>35.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Provence</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24916.html</url>
 		<coordinates>49.86115747595657, 3.3009839057922363</coordinates>
 		<height>53.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidene les Primevères</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02691-24911.html</url>
 		<coordinates>49.85969120683844, 3.29864501953125</coordinates>
 		<height>35.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Abbaye de Saint-Jean-des-Vignes de Soissons</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02722-419.html</url>
 		<coordinates>49.37574748931888, 3.3239811658859253</coordinates>
 		<height>80.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cathédrale Saint-Gervais-et-Saint-Protais de Soissons</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02722-418.html</url>
 		<coordinates>49.380794252061236, 3.3247053623199463</coordinates>
 		<height>60.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cité de la musique et de la danse de Soissons</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02722-23244.html</url>
 		<coordinates>49.37568811255518, 3.317645788192749</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Parking Les Yeux Verts</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-02722-23245.html</url>
 		<coordinates>49.37667305900853, 3.3173561096191406</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Tour Le Pré Bercy</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03013-42779.html</url>
 		<coordinates>46.57678035868196, 3.3189815282821655</coordinates>
 		<height>39.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Gare de Cusset</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03095-41898.html</url>
 		<coordinates>46.138786852823564, 3.4578676521778107</coordinates>
 		<height>11.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Collège Victor Hugo</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03103-42791.html</url>
 		<coordinates>46.35261512930026, 3.7968921661376953</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>1, allée Jean Nègre</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-23435.html</url>
 		<coordinates>46.343916985131855, 2.578192949295044</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>3, allée Jean Nègre</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-23436.html</url>
 		<coordinates>46.34441321278846, 2.5786596536636352</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>7, allée Jean Nègre</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-23437.html</url>
 		<coordinates>46.34573523015687, 2.5799041986465454</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>9, allée Jean Nègre</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-23439.html</url>
 		<coordinates>46.34622773825746, 2.5803762674331665</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cité Fontbouillant - Bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-32937.html</url>
 		<coordinates>46.33092829109365, 2.5782573223114013</coordinates>
 		<height>35.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cité Fontbouillant - Bât. C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-32938.html</url>
 		<coordinates>46.32785381163359, 2.578246593475342</coordinates>
 		<height>35.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Bâtellerie</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-50401.html</url>
 		<coordinates>46.344527208699425, 2.5995245575904846</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Seigneurie</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-50397.html</url>
 		<coordinates>46.340397219187835, 2.574620246887207</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Lycée Madame de Staël</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-23442.html</url>
 		<coordinates>46.33721006358642, 2.612648606300354</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence de l&apos;Avenue</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-50399.html</url>
 		<coordinates>46.32992657299136, 2.5787347555160522</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence du Square</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-50398.html</url>
 		<coordinates>46.32829091684178, 2.580687403678894</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Le Bourbonnais</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-23441.html</url>
 		<coordinates>46.347749671337354, 2.59651780128479</coordinates>
 		<height>45.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Lucius</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-41920.html</url>
 		<coordinates>46.343905875505904, 2.6097947359085083</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence Sainte-Geneviève</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-50400.html</url>
 		<coordinates>46.35013271364541, 2.59752094745636</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>ZAC de Pasquis - Lot Bureaux</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03185-26678.html</url>
 		<coordinates>46.36674249714068, 2.591925859451294</coordinates>
 		<height>10.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Ancien Hôtel des Postes et Télégraphes</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03190-42789.html</url>
 		<coordinates>46.564404019182014, 3.3348682522773743</coordinates>
 		<height>14.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel du département de l&apos;Allier</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03190-42774.html</url>
 		<coordinates>46.568767038029755, 3.333503007888794</coordinates>
 		<height>14.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Nouvelles Galeries</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03190-42782.html</url>
 		<coordinates>46.565104781282194, 3.3314645290374756</coordinates>
 		<height>25.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Musée Anne de Beaujeu</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03190-42790.html</url>
 		<coordinates>46.56727708626639, 3.3302468061447144</coordinates>
 		<height>11.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Préfecture de l&apos;Allier</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03190-42777.html</url>
 		<coordinates>46.567719650468895, 3.3346670866012573</coordinates>
 		<height>14.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Tour Planat</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03190-42773.html</url>
 		<coordinates>46.56108818523698, 3.327588737010956</coordinates>
 		<height>36.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Pavillon du Lac</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03195-26096.html</url>
 		<coordinates>46.28620464107988, 2.651929557323456</coordinates>
 		<height>10.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôpital Cur du Bourbonnais</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03254-42775.html</url>
 		<coordinates>46.309103155713174, 3.286086916923523</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Direction départementale du Crédit Agricole</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03286-42780.html</url>
 		<coordinates>46.53448779285138, 3.3469462394714355</coordinates>
 		<height>32.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Ancien Hôtel Mondial</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-42778.html</url>
 		<coordinates>46.126602776215236, 3.426240384578705</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Casino de Vichy</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27375.html</url>
 		<coordinates>46.123253216229166, 3.4202080965042114</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Castel Flamand</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27389.html</url>
 		<coordinates>46.12355140935197, 3.4179523587226868</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Castel Franc</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27380.html</url>
 		<coordinates>46.120286070113565, 3.421838879585266</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Centre commercial Les Quatres Chemins</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-23550.html</url>
 		<coordinates>46.12674963315516, 3.422262668609619</coordinates>
 		<height>10.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Église Saint-Blaise</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27382.html</url>
 		<coordinates>46.12120151491213, 3.4221741557121277</coordinates>
 		<height>42.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Église Sainte-Jeanne d&apos;Arc</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-42792.html</url>
 		<coordinates>46.133902393412136, 3.4238800406455994</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Galerie couverte</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27388.html</url>
 		<coordinates>46.12564466450546, 3.419969379901886</coordinates>
 		<height>5.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Gare de Vichy</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27379.html</url>
 		<coordinates>46.1269905520012, 3.430505096912384</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hall des sources</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27387.html</url>
 		<coordinates>46.126153280031765, 3.419918417930603</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel de Ville</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27378.html</url>
 		<coordinates>46.12439095172077, 3.4284156560897827</coordinates>
 		<height>30.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel des Postes</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-23549.html</url>
 		<coordinates>46.125232712228566, 3.4259533882141113</coordinates>
 		<height>10.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel dagglomération</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-23689.html</url>
 		<coordinates>46.12445936391571, 3.4262537956237793</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Forum</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27373.html</url>
 		<coordinates>46.12649607227426, 3.418665826320648</coordinates>
 		<height>30.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Maison des Jeunes et de la Culture</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27392.html</url>
 		<coordinates>46.14017404955544, 3.406888246536255</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Marché couvert</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27391.html</url>
 		<coordinates>46.13025921163883, 3.424708843231201</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Opéra de Vichy</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27374.html</url>
 		<coordinates>46.12314167226919, 3.419424891471863</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Pont de l&apos;Europe</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27393.html</url>
 		<coordinates>46.14189870409349, 3.411158323287964</coordinates>
 		<height>6.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Rotonde du Lac</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27394.html</url>
 		<coordinates>46.12921528416135, 3.41524600982666</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Source de l&apos;Hôpital</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27385.html</url>
 		<coordinates>46.12216007568333, 3.4209483861923218</coordinates>
 		<height>6.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Source des Célestins</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27386.html</url>
 		<coordinates>46.11963238402104, 3.4234562516212463</coordinates>
 		<height>6.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Tour des Ailes</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-35930.html</url>
 		<coordinates>46.14025507974742, 3.4133148193359375</coordinates>
 		<height>62.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Villa Vénitienne</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03310-27384.html</url>
 		<coordinates>46.123715749530675, 3.418448567390442</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Archives départementales de l&apos;Allier</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03321-42781.html</url>
 		<coordinates>46.56033204344823, 3.344516158103943</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Église des Bataillots</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-03321-42776.html</url>
 		<coordinates>46.55823323370554, 3.3430784940719604</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Banque Valiant - Succursale Berne Bundesplatz</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40492.html</url>
 		<coordinates>46.94745346919378, 7.4443477392196655</coordinates>
 		<height>23.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Centre Paul Klee</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40472.html</url>
 		<coordinates>46.94900984792571, 7.474329471588135</coordinates>
 		<height>19.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Crédit Suisse - Succursale de Berne</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40490.html</url>
 		<coordinates>46.94745346919378, 7.444696426391602</coordinates>
 		<height>23.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Église du Saint-Esprit</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40473.html</url>
 		<coordinates>46.94804306740272, 7.440745532512665</coordinates>
 		<height>55.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Église française</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40493.html</url>
 		<coordinates>46.9489475936453, 7.446509599685669</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Église Saint-Pierre-et-Paul</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40494.html</url>
 		<coordinates>46.94867294154395, 7.4515897035598755</coordinates>
 		<height>40.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Gerechtigkeitsgasse, 40</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40496.html</url>
 		<coordinates>46.94852645984697, 7.454558908939362</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel de Ville de Berne</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40495.html</url>
 		<coordinates>46.94872054800915, 7.452308535575867</coordinates>
 		<height>13.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Palais Fédéral</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40488.html</url>
 		<coordinates>46.946508633676935, 7.444176077842712</coordinates>
 		<height>64.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Pont de l&apos;Untertor</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40498.html</url>
 		<coordinates>46.94935407616896, 7.458445429801941</coordinates>
 		<height>8.10</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Pont de Nydegg</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40497.html</url>
 		<coordinates>46.94844589474274, 7.458558082580566</coordinates>
 		<height>25.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Siège de la Banque Nationale Suisse</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40489.html</url>
 		<coordinates>46.94706162082907, 7.444916367530823</coordinates>
 		<height>25.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Siège social de la BEKB | BCBE</name>
 		<url>http://www.pss-archi.eu/immeubles/CH-0351-40491.html</url>
 		<coordinates>46.94714218801681, 7.443532347679138</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Villa Morelia</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-04096-31038.html</url>
 		<coordinates>44.418034302093275, 6.73362135887146</coordinates>
 		<height>20.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cap Solano</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-04112-41921.html</url>
 		<coordinates>43.83915462695723, 5.778239965438843</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Mûriers</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-04112-18698.html</url>
 		<coordinates>43.82451919531021, 5.793174505233765</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Piscine Tournesol</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-04112-19869.html</url>
 		<coordinates>43.84201009120315, 5.7770222425460815</coordinates>
 		<height>6.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Émetteurs de Roumoules</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-04172-3562.html</url>
 		<coordinates>43.793495080290405, 6.158566474914551</coordinates>
 		<height>330.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Groupe scolaire de la Prairie</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05008-40742.html</url>
 		<coordinates>43.78280672819079, 7.250799536705017</coordinates>
 		<height>7.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel de la Gare</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05023-27985.html</url>
 		<coordinates>44.889484775021685, 6.633701026439667</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Patinoire de Briançon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05023-37835.html</url>
 		<coordinates>44.8896557984315, 6.6294130684036645</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Amboise</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7426.html</url>
 		<coordinates>44.554102484574976, 6.076469421386719</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Ancien Hôtel Lombard</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6843.html</url>
 		<coordinates>44.56326076481965, 6.086404323577881</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Antarès</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7417.html</url>
 		<coordinates>44.55217585147296, 6.072885990142822</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Beaugency</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7427.html</url>
 		<coordinates>44.553949579516086, 6.076984405517578</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>BTP</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6871.html</url>
 		<coordinates>44.55460706841882, 6.075224876403809</coordinates>
 		<height>10.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Caserne Reynier</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6737.html</url>
 		<coordinates>44.56261866194605, 6.079473495483398</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cathédrale St Arnoux</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6474.html</url>
 		<coordinates>44.55827663748672, 6.078228950500488</coordinates>
 		<height>70.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Château Laty bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7239.html</url>
 		<coordinates>44.55290981446123, 6.066792011260986</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Château Laty bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7237.html</url>
 		<coordinates>44.552527543226546, 6.066470146179199</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Château Laty bât. C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6733.html</url>
 		<coordinates>44.552099396462715, 6.0662126541137695</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Château Laty Bât. D</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7236.html</url>
 		<coordinates>44.551655955422504, 6.066298484802246</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Château Laty bât. E</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7238.html</url>
 		<coordinates>44.55216056047894, 6.066749095916748</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Château Laty bât. F</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7235.html</url>
 		<coordinates>44.55162537315727, 6.066920757293701</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Chenonceaux</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7428.html</url>
 		<coordinates>44.55373551175872, 6.0762763023376465</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cité St Michel</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6877.html</url>
 		<coordinates>44.5663335876, 6.092948913574219</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Collège Achille Mauzan</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6881.html</url>
 		<coordinates>44.56608899073762, 6.082863807678223</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Coopérative céréalière</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7167.html</url>
 		<coordinates>44.56627243848083, 6.089730262756348</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Côté Saint-Mens</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6734.html</url>
 		<coordinates>44.55728281871392, 6.0825419425964355</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Côté Théâtre</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6735.html</url>
 		<coordinates>44.55552448238052, 6.077370643615723</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM de Beauregard bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7240.html</url>
 		<coordinates>44.552970977625755, 6.078593730926514</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM de Beauregard bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7241.html</url>
 		<coordinates>44.55266516116029, 6.078464984893799</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM de Beauregard bât. C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7242.html</url>
 		<coordinates>44.55235934308782, 6.078336238861084</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM de Beauregard bât. D</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7243.html</url>
 		<coordinates>44.551992359279595, 6.078271865844727</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM de Beauregard bât. E</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7244.html</url>
 		<coordinates>44.55157949972927, 6.078228950500488</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM de Beauregard bât. G</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7245.html</url>
 		<coordinates>44.55131954962094, 6.07743501663208</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM de Beauregard bât. H</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7246.html</url>
 		<coordinates>44.550799645921124, 6.077821254730225</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Les Cèdres bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7694.html</url>
 		<coordinates>44.55057027516532, 6.066126823425293</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Les Cèdres bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7695.html</url>
 		<coordinates>44.550218571584146, 6.06569766998291</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Les Cèdres bât. C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7696.html</url>
 		<coordinates>44.55023386308838, 6.065096855163574</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Les Cèdres bât. D</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7697.html</url>
 		<coordinates>44.55070789772726, 6.064774990081787</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Les Cèdres bât. E</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7698.html</url>
 		<coordinates>44.55089139397031, 6.064431667327881</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Les Cèdres bât. F</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7699.html</url>
 		<coordinates>44.55125838472085, 6.065225601196289</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Les Cèdres bât. G</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7700.html</url>
 		<coordinates>44.55139600565569, 6.064882278442383</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6466.html</url>
 		<coordinates>44.560845198144875, 6.095073223114014</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7717.html</url>
 		<coordinates>44.560646444522604, 6.094515323638916</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7718.html</url>
 		<coordinates>44.56035595723791, 6.09567403793335</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. D</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7719.html</url>
 		<coordinates>44.56027951297455, 6.0949015617370605</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. E</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7721.html</url>
 		<coordinates>44.55983613426655, 6.09492301940918</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. F</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7722.html</url>
 		<coordinates>44.55975968932021, 6.094214916229248</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. G</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7720.html</url>
 		<coordinates>44.56021835749157, 6.0942792892456055</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. H</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7723.html</url>
 		<coordinates>44.560004312794895, 6.092691421508789</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. I</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7724.html</url>
 		<coordinates>44.56034066839326, 6.093270778656006</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Molines bât. J</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7725.html</url>
 		<coordinates>44.56053942306013, 6.0938286781311035</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Serrebourges bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7701.html</url>
 		<coordinates>44.55089139397031, 6.066684722900391</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Serrebourges bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7702.html</url>
 		<coordinates>44.55122780224667, 6.065933704376221</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Serrebourges bât. C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7703.html</url>
 		<coordinates>44.55161008201863, 6.0654401779174805</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Ste Marguerite Bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7044.html</url>
 		<coordinates>44.54894936272671, 6.075353622436523</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Ste Marguerite Bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7045.html</url>
 		<coordinates>44.548888195335735, 6.074860095977783</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>HLM Ste Marguerite Bât. C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7046.html</url>
 		<coordinates>44.54887290347795, 6.0743021965026855</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Horizon Nature</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-38303.html</url>
 		<coordinates>44.558207835195475, 6.063594818115234</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Horizon Nature 2</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-41922.html</url>
 		<coordinates>44.55847839333496, 6.062371730804443</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel du Département</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6870.html</url>
 		<coordinates>44.558108453964515, 6.076641082763672</coordinates>
 		<height>17.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Hôtel Le Michelet</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7012.html</url>
 		<coordinates>44.56355314860127, 6.08616828918457</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Arbois</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7011.html</url>
 		<coordinates>44.56096750772882, 6.084280014038086</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Arpège</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6890.html</url>
 		<coordinates>44.56517174334358, 6.0813188552856445</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Aster A8</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7410.html</url>
 		<coordinates>44.54188410402357, 6.056771278381348</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Avenue</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7423.html</url>
 		<coordinates>44.55401074158785, 6.0732293128967285</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Azur</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6780.html</url>
 		<coordinates>44.562664526672044, 6.084902286529541</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Edelweiss</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6878.html</url>
 		<coordinates>44.56280212063311, 6.08417272567749</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Eden</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6990.html</url>
 		<coordinates>44.557695637803626, 6.081447601318359</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Emeraude</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7059.html</url>
 		<coordinates>44.553414408646205, 6.077563762664795</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Etoile A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7068.html</url>
 		<coordinates>44.55465293946041, 6.078615188598633</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Etoile B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7067.html</url>
 		<coordinates>44.55497403573908, 6.078765392303467</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Hélios</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7259.html</url>
 		<coordinates>44.55417893695376, 6.074795722961426</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;îlot Carnot</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6823.html</url>
 		<coordinates>44.55644188187906, 6.079001426696777</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>L&apos;Orée du Bois</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6883.html</url>
 		<coordinates>44.55821547989852, 6.0840654373168945</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Caserne Desmichels</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6716.html</url>
 		<coordinates>44.56073817704804, 6.080739498138428</coordinates>
 		<height>17.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Chenaie</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6468.html</url>
 		<coordinates>44.56063115575429, 6.088464260101318</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Collégiale</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6839.html</url>
 		<coordinates>44.566104278071634, 6.08168363571167</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Colline</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7162.html</url>
 		<coordinates>44.55894936671421, 6.084129810333252</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Commanderie</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6831.html</url>
 		<coordinates>44.554041322599616, 6.073250770568848</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Futaie 1</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7251.html</url>
 		<coordinates>44.55610550374227, 6.081447601318359</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Futaie 2</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7252.html</url>
 		<coordinates>44.5556162229812, 6.081662178039551</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Pléiade</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7030.html</url>
 		<coordinates>44.537280519592116, 6.065483093261719</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Valériane bât. A &amp; B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7253.html</url>
 		<coordinates>44.555142228320825, 6.080803871154785</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Valériane bât. C &amp; D</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7254.html</url>
 		<coordinates>44.554744681435096, 6.081490516662598</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Valériane bât. E &amp; F</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7255.html</url>
 		<coordinates>44.55150304393559, 6.079087257385254</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Villa</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6894.html</url>
 		<coordinates>44.568825359525384, 6.089816093444824</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Villa Athéna</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6730.html</url>
 		<coordinates>44.56257279718389, 6.077735424041748</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Alfred de Musset</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7248.html</url>
 		<coordinates>44.55290981446123, 6.074924468994141</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Baltimore</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7055.html</url>
 		<coordinates>44.5573286876463, 6.080567836761475</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Beaucaire</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7710.html</url>
 		<coordinates>44.5489799463981, 6.0649895668029785</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Beauregard</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7058.html</url>
 		<coordinates>44.55283336041517, 6.077821254730225</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Beausoleil</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7077.html</url>
 		<coordinates>44.552970977625755, 6.072585582733154</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Bérardie B10</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7411.html</url>
 		<coordinates>44.542220564359, 6.05745792388916</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Boffa</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6768.html</url>
 		<coordinates>44.558842342130106, 6.0817694664001465</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Brasilia</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7054.html</url>
 		<coordinates>44.55832250563566, 6.08267068862915</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Cadet de Charance</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6872.html</url>
 		<coordinates>44.55873531734914, 6.075954437255859</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Camargue</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6728.html</url>
 		<coordinates>44.563841708931974, 6.0806965827941894</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Carline C12</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7409.html</url>
 		<coordinates>44.54235820666302, 6.05647087097168</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Célestin</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6815.html</url>
 		<coordinates>44.55579970374872, 6.0761260986328125</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Chambord</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7072.html</url>
 		<coordinates>44.55414835601429, 6.074001789093018</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Champollion</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6915.html</url>
 		<coordinates>44.55795555943161, 6.076083183288574</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Champsaur</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6803.html</url>
 		<coordinates>44.56488127865362, 6.085309982299805</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Charance</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6905.html</url>
 		<coordinates>44.54313817357245, 6.061341762542725</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Clos de Beauregard 1</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7015.html</url>
 		<coordinates>44.54717548229066, 6.074259281158447</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Clos de Beauregard 2</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7016.html</url>
 		<coordinates>44.54673200373479, 6.074130535125732</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Colombier A, B &amp; C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7412.html</url>
 		<coordinates>44.54303111990946, 6.055612564086914</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Colombier D, E &amp; F</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6869.html</url>
 		<coordinates>44.54324522703859, 6.055870056152344</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Colombier G &amp; H</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7413.html</url>
 		<coordinates>44.54264878379179, 6.05595588684082</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Colombier I &amp; J</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7414.html</url>
 		<coordinates>44.543046413301944, 6.056385040283203</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Concorde</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7065.html</url>
 		<coordinates>44.55824605870063, 6.082327365875244</coordinates>
 		<height>33.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Connétable</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6824.html</url>
 		<coordinates>44.56125799196018, 6.079409122467041</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Copernic</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6875.html</url>
 		<coordinates>44.5671743814702, 6.087584495544434</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Corindon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6816.html</url>
 		<coordinates>44.55590673392925, 6.076233386993408</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Daphné D14</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6820.html</url>
 		<coordinates>44.54255702274991, 6.057007312774658</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Daudet</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7711.html</url>
 		<coordinates>44.54922461519063, 6.0654401779174805</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Dauphiné</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6838.html</url>
 		<coordinates>44.55686999669545, 6.079409122467041</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Domaine de la Ferme Blanche A &amp; B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7020.html</url>
 		<coordinates>44.5732277385746, 6.087069511413574</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Domaine de la Ferme Blanche C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6828.html</url>
 		<coordinates>44.57333473669502, 6.086618900299072</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Domaine de la Ferme Blanche D &amp; E</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7021.html</url>
 		<coordinates>44.57309016927337, 6.0860395431518555</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Fleurendon A &amp; B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6830.html</url>
 		<coordinates>44.543260520374815, 6.062586307525635</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Fleurendon C &amp; D</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7408.html</url>
 		<coordinates>44.543229933698335, 6.062650680541992</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Florian</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7071.html</url>
 		<coordinates>44.553781383487305, 6.072993278503418</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Foch</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6782.html</url>
 		<coordinates>44.56257279718389, 6.084730625152588</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Frédéric Chopin</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7247.html</url>
 		<coordinates>44.552649870294836, 6.074731349945068</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le George Sand</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7249.html</url>
 		<coordinates>44.55272632458196, 6.075224876403809</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le GM</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7260.html</url>
 		<coordinates>44.55396487004005, 6.075010299682617</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Grand Morgon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6821.html</url>
 		<coordinates>44.54333698699575, 6.04921817779541</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Griottier</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6957.html</url>
 		<coordinates>44.5522675973527, 6.076136827468872</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Kentucky</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7056.html</url>
 		<coordinates>44.55749687342232, 6.080975532531738</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Ladoucette</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6778.html</url>
 		<coordinates>44.56069231080338, 6.082091331481934</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Loriot</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7258.html</url>
 		<coordinates>44.55387312683599, 6.075332164764404</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Lycée</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6801.html</url>
 		<coordinates>44.56527875628482, 6.082863807678223</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Majestic</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6962.html</url>
 		<coordinates>44.56662404503827, 6.0788726806640625</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Manoir de Kapados</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7166.html</url>
 		<coordinates>44.55261928855188, 6.08043909072876</coordinates>
 		<height>10.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Marialys</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6771.html</url>
 		<coordinates>44.55729810836206, 6.067306995391846</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Marivaux</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6968.html</url>
 		<coordinates>44.56358181359885, 6.080310344696045</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Marjolaine</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6888.html</url>
 		<coordinates>44.56096750772882, 6.074109077453613</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Marly</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6715.html</url>
 		<coordinates>44.56044769022132, 6.0776495933532715</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Méridien</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6960.html</url>
 		<coordinates>44.550478526609915, 6.063272953033447</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Merisier</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6955.html</url>
 		<coordinates>44.5513176382188, 6.075337529182434</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Miramont</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6469.html</url>
 		<coordinates>44.55050910947777, 6.0639166831970215</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Miraval</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6959.html</url>
 		<coordinates>44.55005036477229, 6.0637664794921875</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Mont Rose bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5955.html</url>
 		<coordinates>44.56955911250814, 6.091017723083496</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Mont Rose bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7912.html</url>
 		<coordinates>44.56922281020674, 6.0915327072143555</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Montana</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7074.html</url>
 		<coordinates>44.555983183937684, 6.080911159515381</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Montceau</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6966.html</url>
 		<coordinates>44.56585968024504, 6.076898574829102</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Montfort</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6963.html</url>
 		<coordinates>44.56688392677994, 6.078357696533203</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Montjoie</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6796.html</url>
 		<coordinates>44.5631537481662, 6.082413196563721</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Montségur</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6964.html</url>
 		<coordinates>44.5667463424731, 6.077628135681152</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Moulin de Valbonne</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6807.html</url>
 		<coordinates>44.56420861801381, 6.082284450531006</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Murier</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6956.html</url>
 		<coordinates>44.55190443573192, 6.07581228017807</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Noyer</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6954.html</url>
 		<coordinates>44.55141129685059, 6.0761260986328125</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Palace</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6837.html</url>
 		<coordinates>44.556728566256304, 6.079103350639343</coordinates>
 		<height>23.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Panoramic</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6798.html</url>
 		<coordinates>44.55761919004501, 6.082777976989746</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Parc</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7078.html</url>
 		<coordinates>44.55975968932021, 6.083335876464844</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Parc de Beauregard bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6827.html</url>
 		<coordinates>44.55032561202947, 6.075417995452881</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Parc de Beauregard bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7498.html</url>
 		<coordinates>44.550218571584146, 6.0749030113220215</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Parc du Belvédère bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6128.html</url>
 		<coordinates>44.56913109105979, 6.090996265411377</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Parc du Belvédère bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7913.html</url>
 		<coordinates>44.56897822549347, 6.091296672821045</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Parc du Château Bât. 1</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7060.html</url>
 		<coordinates>44.55235934308782, 6.079280376434326</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Parc du Château Bât. 2</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7061.html</url>
 		<coordinates>44.553016849956975, 6.0793232917785644</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Pasteur</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6911.html</url>
 		<coordinates>44.55832250563566, 6.075503826141357</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Piolit</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5483.html</url>
 		<coordinates>44.56188482141257, 6.090052127838135</coordinates>
 		<height>36.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Plein Ciel</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7064.html</url>
 		<coordinates>44.55451532622717, 6.080417633056641</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Président</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6873.html</url>
 		<coordinates>44.557038183797275, 6.079988479614258</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Provence</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7073.html</url>
 		<coordinates>44.55384254573583, 6.07370138168335</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Providen&apos;Ciel</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6882.html</url>
 		<coordinates>44.5591787044458, 6.074130535125732</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Prunellier</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6958.html</url>
 		<coordinates>44.5525543022947, 6.07730895280838</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Puymaure</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5923.html</url>
 		<coordinates>44.56378055719335, 6.076641082763672</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Régence</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6736.html</url>
 		<coordinates>44.56211414757363, 6.083786487579346</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Rio A, B &amp; C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7405.html</url>
 		<coordinates>44.548337685924366, 6.061298847198486</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Rio D, E &amp; F</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6772.html</url>
 		<coordinates>44.547833047723316, 6.061620712280273</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Rive Gauche</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7163.html</url>
 		<coordinates>44.5585059778699, 6.083550453186035</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Riverain</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7013.html</url>
 		<coordinates>44.54841414587618, 6.073744297027588</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Saint Coeur</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6886.html</url>
 		<coordinates>44.56023364636833, 6.082584857940674</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Saint Denis</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6961.html</url>
 		<coordinates>44.56313846005679, 6.0819196701049805</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Saint Germain</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6810.html</url>
 		<coordinates>44.571683886639654, 6.089150905609131</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Saint Laurent</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5957.html</url>
 		<coordinates>44.56174722528203, 6.091983318328857</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Sainte Marguerite</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6691.html</url>
 		<coordinates>44.55370493058625, 6.07919454574585</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Triolet</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7559.html</url>
 		<coordinates>44.56651703457186, 6.087133884429932</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Valmont</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6965.html</url>
 		<coordinates>44.5663335876, 6.077306270599365</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Vauban</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6684.html</url>
 		<coordinates>44.56167078284668, 6.083872318267822</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Verdun</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6692.html</url>
 		<coordinates>44.56050884546326, 6.077907085418701</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Villebois</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6809.html</url>
 		<coordinates>44.5721883180172, 6.087713241577148</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Zola</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7257.html</url>
 		<coordinates>44.55332266457437, 6.074345111846924</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Alpilles 1</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6813.html</url>
 		<coordinates>44.55497403573908, 6.076769828796387</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Alpilles 2</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7499.html</url>
 		<coordinates>44.55485171355612, 6.077606678009033</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Amandiers</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7434.html</url>
 		<coordinates>44.567052084935284, 6.088056564331055</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Autanes</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6727.html</url>
 		<coordinates>44.564728401918494, 6.089773178100586</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Bruyères</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6876.html</url>
 		<coordinates>44.55147246158998, 6.0720062255859375</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Buissonnets</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7299.html</url>
 		<coordinates>44.55382725517974, 6.078250408172607</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Charmettes</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7063.html</url>
 		<coordinates>44.55349086192896, 6.080031394958496</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Cordeliers</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6729.html</url>
 		<coordinates>44.56130385775887, 6.083636283874512</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Côteaux de Crève Coeur</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6969.html</url>
 		<coordinates>44.56587496763933, 6.076083183288574</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Coteaux du Forest - Bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7022.html</url>
 		<coordinates>44.56911389370366, 6.089121401309967</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Coteaux du Forest - Bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5956.html</url>
 		<coordinates>44.569054658326856, 6.088442802429199</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Coteaux du Forest - Bât. C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7023.html</url>
 		<coordinates>44.56966611737807, 6.088206768035889</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Coteaux du Forest - Bât. D</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7024.html</url>
 		<coordinates>44.569992863173276, 6.088681519031525</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Coteaux du Forest - Bât. E</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7025.html</url>
 		<coordinates>44.57018012016998, 6.088217496871948</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Dauphins</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6887.html</url>
 		<coordinates>44.55440829348746, 6.073787212371826</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Ecrins B &amp; D</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6891.html</url>
 		<coordinates>44.555402161354614, 6.0797953605651855</coordinates>
 		<height>36.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Ecrins entrée I</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7406.html</url>
 		<coordinates>44.55495874548025, 6.079409122467041</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Epis</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6787.html</url>
 		<coordinates>44.566639332231674, 6.088829040527344</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Fauvettes</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7048.html</url>
 		<coordinates>44.545202741422244, 6.064474582672119</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Grands Bois</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7256.html</url>
 		<coordinates>44.55407190359532, 6.080996990203857</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Hauts de Puymaure</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5484.html</url>
 		<coordinates>44.56310788382589, 6.074666976928711</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Hauts du Rochasson A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7017.html</url>
 		<coordinates>44.57289145748598, 6.087284088134766</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Hauts du Rochasson B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7018.html</url>
 		<coordinates>44.57273860180289, 6.0868120193481445</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Hespéris</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6967.html</url>
 		<coordinates>44.565003579752485, 6.075890064239502</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Heures Claires bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7496.html</url>
 		<coordinates>44.55338382730499, 6.070053577423096</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Heures Claires bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7497.html</url>
 		<coordinates>44.55347557128042, 6.070525646209717</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Hirondelles 1</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7050.html</url>
 		<coordinates>44.54419340628802, 6.063594818115234</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Hirondelles 2</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7051.html</url>
 		<coordinates>44.543795784611994, 6.064088344573975</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Hirondelles 3</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7052.html</url>
 		<coordinates>44.54404047519558, 6.06471061706543</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Iris</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7494.html</url>
 		<coordinates>44.554698810465815, 6.067757606506348</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Lilas</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5958.html</url>
 		<coordinates>44.56740368678011, 6.088464260101318</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Lucioles</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6814.html</url>
 		<coordinates>44.55443505169084, 6.075578927993774</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Lys</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7495.html</url>
 		<coordinates>44.554484745464485, 6.068358421325684</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Millepertuis</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6841.html</url>
 		<coordinates>44.549545741420005, 6.058895587921143</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Pins</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5486.html</url>
 		<coordinates>44.563597101591775, 6.075546741485596</coordinates>
 		<height>30.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Portes de Vapincum</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6825.html</url>
 		<coordinates>44.555264549893124, 6.074709892272949</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Résidences du Baron</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6842.html</url>
 		<coordinates>44.56154847474121, 6.081640720367432</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Sagnières</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7334.html</url>
 		<coordinates>44.54654849437854, 6.056878566741943</coordinates>
 		<height>27.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Séquoias</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6818.html</url>
 		<coordinates>44.56414746666089, 6.088099479675293</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Terrasses d&apos;Helvétia</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6731.html</url>
 		<coordinates>44.55702289408082, 6.06170654296875</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Terrasses de Bayard</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6889.html</url>
 		<coordinates>44.568962938914744, 6.084001064300537</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Terrasses de Chabanas</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7706.html</url>
 		<coordinates>44.55998902385786, 6.062779426574707</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Terrasses de Chaméo</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6829.html</url>
 		<coordinates>44.54951515804593, 6.060440540313721</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Terrasses de l&apos;Europe</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6840.html</url>
 		<coordinates>44.554423583890895, 6.074473857879639</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Vergers du Moulin</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5959.html</url>
 		<coordinates>44.551915904028256, 6.075868606567383</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Lycée Aristide Briand</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6804.html</url>
 		<coordinates>44.5663947366549, 6.085460186004639</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Lycée Dominique Villars</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6879.html</url>
 		<coordinates>44.56099808508465, 6.076083183288574</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Lycée St Joseph</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6880.html</url>
 		<coordinates>44.56478955266074, 6.077821254730225</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Palais de Justice</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6903.html</url>
 		<coordinates>44.5573439772824, 6.0774993896484375</coordinates>
 		<height>14.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Plein Soleil</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7713.html</url>
 		<coordinates>44.55118192850532, 6.067028045654297</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence d&apos;Amat</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6884.html</url>
 		<coordinates>44.55631956278157, 6.07769250869751</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence d&apos;Entrais Bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7031.html</url>
 		<coordinates>44.5703234286888, 6.091790199279785</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence d&apos;Entrais Bât. B &amp; C</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7032.html</url>
 		<coordinates>44.57007884860377, 6.092348098754883</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Résidence St Joseph</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6874.html</url>
 		<coordinates>44.56454494930599, 6.076254844665527</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Rochasson Neuf</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6907.html</url>
 		<coordinates>44.56833618572774, 6.08217716217041</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Sécurité Sociale</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6885.html</url>
 		<coordinates>44.55972911131356, 6.083979606628418</coordinates>
 		<height>17.50</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Sole Mio</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7493.html</url>
 		<coordinates>44.554530616602484, 6.067500114440918</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Terrain Aye</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-7309.html</url>
 		<coordinates>44.57348759081123, 6.099858283996582</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Tour de Beauregard</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5392.html</url>
 		<coordinates>44.55130425840194, 6.078250408172607</coordinates>
 		<height>51.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Tour Saint-Mens</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-5399.html</url>
 		<coordinates>44.55708405292247, 6.081748008728027</coordinates>
 		<height>42.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Villa Antigua</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-6767.html</url>
 		<coordinates>44.55930101753306, 6.070611476898193</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Villa Domitia</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05061-38302.html</url>
 		<coordinates>44.56228996368493, 6.076308488845825</coordinates>
 		<height>18.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Station Radar du Mont Ventoux</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05063-19373.html</url>
 		<coordinates>44.1718470059583, 5.288286209106445</coordinates>
 		<height>15.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>La Tour du Queyrelet</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05096-6693.html</url>
 		<coordinates>44.697091198651556, 6.326408386230469</coordinates>
 		<height>36.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Cairn</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05098-4007.html</url>
 		<coordinates>44.493291064077326, 6.556262969970703</coordinates>
 		<height>39.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Barrage de Serre-Ponçon</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05127-7120.html</url>
 		<coordinates>44.47090873306135, 6.269416809082031</coordinates>
 		<height>123.50</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Le Bois d&apos;Aurouze</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05139-4005.html</url>
 		<coordinates>44.677075977458706, 5.9271240234375</coordinates>
 		<height>39.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Les Issarts</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05139-4006.html</url>
 		<coordinates>44.6777778476305, 5.925407409667969</coordinates>
 		<height>39.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Pont de Savines</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05164-19841.html</url>
 		<coordinates>44.53047388905321, 6.39653205871582</coordinates>
 		<height>43.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Piscine Tournesol</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-05184-14181.html</url>
 		<coordinates>43.439369299968234, 5.257741212844849</coordinates>
 		<height>6.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>École André Saytour</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06003-41362.html</url>
 		<coordinates>43.804299603342265, 6.801470518112183</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>16 Pinède</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-36825.html</url>
 		<coordinates>43.56892598617585, 7.11638867855072</coordinates>
 		<height>17.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>19 Chemin des Îles - Bât. A</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-37666.html</url>
 		<coordinates>43.57336839629856, 7.1038466691970825</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>19 Chemin des Îles - Bât. B</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-37665.html</url>
 		<coordinates>43.573768702376086, 7.103927135467529</coordinates>
 		<height>11.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>26, boulevard Albert 1er</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-49088.html</url>
 		<coordinates>43.57779104777588, 7.12313175201416</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>33 Foch</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-47428.html</url>
 		<coordinates>43.577474100332175, 7.122535935581936</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>43° Sud</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-31729.html</url>
 		<coordinates>43.57193038164535, 7.097838521003723</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>61, chemin de l&apos;Ermitage</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-37000.html</url>
 		<coordinates>43.56510906066848, 7.12788462638855</coordinates>
 		<height>6.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Allia Garden</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-40600.html</url>
 		<coordinates>43.59395156045649, 7.119687795639038</coordinates>
 		<height>13.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Anthéa</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-40725.html</url>
 		<coordinates>43.59032271992803, 7.1183788776397705</coordinates>
 		<height>14.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Antibes Plaza</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-34594.html</url>
 		<coordinates>43.58119137173739, 7.119923830032349</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>California</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-47233.html</url>
 		<coordinates>43.56905619270853, 7.112177610397339</coordinates>
 		<height>21.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Cap Marine</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-40077.html</url>
 		<coordinates>43.594911185126236, 7.1224987506866455</coordinates>
 		<height>9.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Castel Vauban</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-40073.html</url>
 		<coordinates>43.59526472719974, 7.121608257293701</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Centre Hospitalier Antibes Juan-les-Pins - EHPAD 2</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-33741.html</url>
 		<coordinates>43.600369487805175, 7.119076251983643</coordinates>
 		<height>12.20</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Centre Hospitalier Antibes Juan-les-Pins - USP</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-33742.html</url>
 		<coordinates>43.60042387409485, 7.118475437164307</coordinates>
 		<height>6.00</height>
 		<estimatedHeight>no</estimatedHeight>
 	</building>
 	<building>
+		<name>Chalet Jeannette</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-41171.html</url>
 		<coordinates>43.55078857601051, 7.121472805738449</coordinates>
 		<height>8.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Clos Bellevue</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-33743.html</url>
 		<coordinates>43.59967800069301, 7.118357419967651</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Collège Bertone - Gymnase</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-50312.html</url>
 		<coordinates>43.59291227356398, 7.0996785163879395</coordinates>
 		<height>7.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Collège La Fontonne</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-33769.html</url>
 		<coordinates>43.60031510146632, 7.124676704406738</coordinates>
 		<height>10.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Collège Pierre Bertone</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-40738.html</url>
 		<coordinates>43.59289267104149, 7.098629041538516</coordinates>
 		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
+		<name>Collège Sidney Bechet</name>
 		<url>http://www.pss-archi.eu/immeubles/FR-06004-37654.html</url>
 		<coordinates>43.57350442293406, 7.092479467391968</coordinates>
 		<height>10.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
-	
-	<!--Buildings in Ile-de-France -->
 	<building>
-		<url>http://www.pss-archi.eu/immeubles/FR-75056-28165.html</url>
-		<coordinates>48.88291364398775, 2.2967004776000976</coordinates>
+		<name>Constellation</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-41228.html</url>
+		<coordinates>43.5705642359206, 7.104857861995697</coordinates>
 		<height>24.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 	<building>
-		<url>http://www.pss-archi.eu/immeubles/FR-75056-16313.html</url>
-		<coordinates>48.85259849773819, 2.404680848121643</coordinates>
+		<name>Dolce Azzura</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-39775.html</url>
+		<coordinates>43.57444494155001, 7.096610069274902</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Domaine Blue Riviera Park</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-43054.html</url>
+		<coordinates>43.58678780218548, 7.093531683328251</coordinates>
+		<height>12.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Domaine de Lépide</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-50793.html</url>
+		<coordinates>43.59714506991927, 7.076874375343323</coordinates>
+		<height>9.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Don Juan</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-33416.html</url>
+		<coordinates>43.57175937221301, 7.113497257232666</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>École du Cap</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-32116.html</url>
+		<coordinates>43.55726455841485, 7.129252552986145</coordinates>
+		<height>6.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Eden Square</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-32043.html</url>
+		<coordinates>43.57236567619119, 7.109924554824829</coordinates>
+		<height>18.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Église du Sacré-Cur</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-29004.html</url>
+		<coordinates>43.57967970856526, 7.118234038352966</coordinates>
+		<height>30.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>EHPAD Le Château de la Brague - Bât. L&apos;Oliveraie - Extension</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-50823.html</url>
+		<coordinates>43.61667248964212, 7.117913514375687</coordinates>
+		<height>6.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>EHPAD Le Château de la Brague - Bât. La Marina</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-50824.html</url>
+		<coordinates>43.61663462371182, 7.117214798927307</coordinates>
+		<height>6.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Étoile d&apos;Antibes</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-47427.html</url>
+		<coordinates>43.58371068253067, 7.121307339286773</coordinates>
+		<height>18.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Fleur de Lys</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-41528.html</url>
+		<coordinates>43.56886962803713, 7.113078832626343</coordinates>
+		<height>24.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Foyer d&apos;Accueil Médicalisé</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-46179.html</url>
+		<coordinates>43.574291640655346, 7.108677736462369</coordinates>
+		<height>9.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Garden Avenue</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-47377.html</url>
+		<coordinates>43.60031315909615, 7.094131708145142</coordinates>
+		<height>17.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Groupe scolaire Notre-Dame de la Tramontane</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-36990.html</url>
+		<coordinates>43.57710318746289, 7.093638181686401</coordinates>
+		<height>7.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Hôtel Belles Rives</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-41622.html</url>
+		<coordinates>43.56467371367664, 7.115514278411865</coordinates>
+		<height>14.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Hôtel Best Western Le Grand Pavois</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-32806.html</url>
+		<coordinates>43.566249888083654, 7.117297947406769</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Hôtel Juana</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-36521.html</url>
+		<coordinates>43.56757337629197, 7.116302847862244</coordinates>
+		<height>18.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Hôtel Marineland Resort</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-44896.html</url>
+		<coordinates>43.614531570761336, 7.126742005348206</coordinates>
+		<height>9.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>L&apos;Abysse</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-48726.html</url>
+		<coordinates>43.598070443084204, 7.0927608908073125</coordinates>
+		<height>14.20</height>
+		<estimatedHeight>no</estimatedHeight>
+	</building>
+	<building>
+		<name>L&apos;Allegria</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-43692.html</url>
+		<coordinates>43.57232863745118, 7.110114847221439</coordinates>
+		<height>17.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>L&apos;Armenonville</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40172.html</url>
+		<coordinates>43.57767640493604, 7.124719619750977</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>L&apos;Iliade</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40353.html</url>
+		<coordinates>43.56865002513141, 7.113545536994934</coordinates>
+		<height>26.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Maison des Pêcheurs</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-29185.html</url>
+		<coordinates>43.56150180491584, 7.117708325386047</coordinates>
+		<height>6.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Résidence</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-34116.html</url>
+		<coordinates>43.58186558458914, 7.119379341602325</coordinates>
+		<height>18.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Roseraie de la Pagane - Bât. A</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-46181.html</url>
+		<coordinates>43.588107240496555, 7.111089673016295</coordinates>
+		<height>9.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Roseraie de la Pagane - Bât. B</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-46182.html</url>
+		<coordinates>43.58784496675922, 7.111510779831633</coordinates>
+		<height>9.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Roseraie de Saint-Jean - Bât. 3</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40732.html</url>
+		<coordinates>43.58137789823857, 7.096046805381775</coordinates>
+		<height>20.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Roseraie de Saint-Jean - Bât. Excelsa</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40731.html</url>
+		<coordinates>43.58077945700007, 7.096400856971741</coordinates>
+		<height>37.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Roseraie de Saint-Jean - Bât. Florian</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40730.html</url>
+		<coordinates>43.58031119201265, 7.096722722053528</coordinates>
+		<height>37.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Sévillane</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-39462.html</url>
+		<coordinates>43.5814031569912, 7.121938169002533</coordinates>
+		<height>12.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>La Signature</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-39682.html</url>
+		<coordinates>43.59520256610654, 7.109248638153076</coordinates>
+		<height>12.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Beaugency</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40081.html</url>
+		<coordinates>43.58773499764732, 7.1147578954696655</coordinates>
+		<height>9.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Bel Air</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-34125.html</url>
+		<coordinates>43.600858962642526, 7.088359594345093</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Bellevue</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-41019.html</url>
+		<coordinates>43.59255677504939, 7.109881639480591</coordinates>
+		<height>12.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Cambridge</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40190.html</url>
+		<coordinates>43.56898623102445, 7.111627757549286</coordinates>
+		<height>24.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Capitan</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40076.html</url>
+		<coordinates>43.594452742861044, 7.1220481395721436</coordinates>
+		<height>9.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Carré du Fort</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40072.html</url>
+		<coordinates>43.59600677029141, 7.120492458343506</coordinates>
+		<height>12.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Chambord</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40080.html</url>
+		<coordinates>43.5878865340007, 7.113373875617981</coordinates>
+		<height>39.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Clos d&apos;Azur</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-39739.html</url>
+		<coordinates>43.59106093862024, 7.0948076248168945</coordinates>
+		<height>11.40</height>
+		<estimatedHeight>no</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Clos des Roses</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-34083.html</url>
+		<coordinates>43.60353158040757, 7.110975980758667</coordinates>
+		<height>9.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Corail</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-47932.html</url>
+		<coordinates>43.583387878920604, 7.118922024965286</coordinates>
 		<height>21.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Corazur</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-39751.html</url>
+		<coordinates>43.58361228535934, 7.122088372707367</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Domaine de Cyréna</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-32052.html</url>
+		<coordinates>43.595101554193135, 7.101802825927734</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Domaine des Pins</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40447.html</url>
+		<coordinates>43.59532688822875, 7.086632251739502</coordinates>
+		<height>6.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Grand Cavalier</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-33415.html</url>
+		<coordinates>43.58323730270292, 7.119105756282806</coordinates>
+		<height>21.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Palais Doré</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-37100.html</url>
+		<coordinates>43.569460414180696, 7.112845480442047</coordinates>
+		<height>27.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Parc de Beauvert</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-47964.html</url>
+		<coordinates>43.60017525065498, 7.100788950920105</coordinates>
+		<height>6.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Parc des Amarrines</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40902.html</url>
+		<coordinates>43.602762438043996, 7.117627859115601</coordinates>
+		<height>20.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Parc du Cap</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-41620.html</url>
+		<coordinates>43.565521082602174, 7.11939811706543</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Petit Beauvert</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-45253.html</url>
+		<coordinates>43.59559824807422, 7.114209426983621</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Pin Doré</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-39516.html</url>
+		<coordinates>43.56943903715156, 7.113379240036011</coordinates>
+		<height>24.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Poincaré</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-41086.html</url>
+		<coordinates>43.57169913013821, 7.11064338684082</coordinates>
+		<height>10.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Provençal</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-41623.html</url>
+		<coordinates>43.565602709254584, 7.1164315938949585</coordinates>
+		<height>30.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Sully</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-43513.html</url>
+		<coordinates>43.58157281404996, 7.120185277840392</coordinates>
+		<height>18.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Sunset</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-31492.html</url>
+		<coordinates>43.59975569627048, 7.092447280883789</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Sylvana</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-48113.html</url>
+		<coordinates>43.57462807620975, 7.116677074274435</coordinates>
+		<height>27.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Syracuse</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-37576.html</url>
+		<coordinates>43.58339467912814, 7.121796011924744</coordinates>
+		<height>18.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Valençay</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40079.html</url>
+		<coordinates>43.587389182489126, 7.113218307495117</coordinates>
+		<height>30.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Velleda</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-36988.html</url>
+		<coordinates>43.5700473078356, 7.108553946018219</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Le Wilson</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-42632.html</url>
+		<coordinates>43.57787654398888, 7.118083834648132</coordinates>
+		<height>23.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Les Allées du Prince</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-39685.html</url>
+		<coordinates>43.59633699595024, 7.1015238761901855</coordinates>
+		<height>15.00</height>
+		<estimatedHeight>yes</estimatedHeight>
+	</building>
+	<building>
+		<name>Les Aloès</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-31541.html</url>
+		<coordinates>43.5905908109212, 7.105928063392639</coordinates>
+		<height>20.50</height>
+		<estimatedHeight>no</estimatedHeight>
+	</building>
+	<building>
+		<name>Les Bastides du Cap - Bât. A</name>
+		<url>http://www.pss-archi.eu/immeubles/FR-06004-40074.html</url>
+		<coordinates>43.59526666973288, 7.121031582355499</coordinates>
+		<height>12.00</height>
 		<estimatedHeight>yes</estimatedHeight>
 	</building>
 </buildings>

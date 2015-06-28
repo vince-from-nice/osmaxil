@@ -64,6 +64,7 @@ public class PssBuildingParser extends AbstractParser<BuildingImport> {
         PssXmlBuilding building = data.buildings.get(counter++);
         result = new BuildingImport();
         result.setId(this.counter);
+        result.setName(building.name);
         String[] latlon = building.coordinates.split(",");
         if (latlon.length == 2) {
             result.setLat(StringParsingHelper.parseDouble(latlon[0], "latitude"));
