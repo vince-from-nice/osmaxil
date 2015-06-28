@@ -20,6 +20,15 @@ select osm_id, name, building, ST_AsEWKT(ST_Transform(way, 4326)) from planet_os
 select osm_id, name, building, ST_AsEWKT(ST_Transform(way, 4326)) from planet_osm_polygon where building <> '' LIMIT 100;
 select osm_id, name, building, ST_AsEWKT(way) from planet_osm_polygon where building <> '' and name <> '' order by name LIMIT 100 ;
 
+-- Quartier de Picpus
+select osm_id,name,building,ST_AsEWKT(ST_Transform(way, 4326)) from planet_osm_polygon where osm_id = -2171720;
+-- Quartier de Bercy
+select osm_id,name,building,ST_AsEWKT(ST_Transform(way, 4326)) from planet_osm_polygon where osm_id = -2171718;
+-- Quartier du Bel-Air
+select osm_id,name,building,ST_AsEWKT(ST_Transform(way, 4326)) from planet_osm_polygon where osm_id = -2171716;
+-- Quartier des Quinze-Vingts
+select osm_id,name,building,ST_AsEWKT(ST_Transform(way, 4326)) from planet_osm_polygon where osm_id = -2192616;
+
 -- multipolygones CarpeDiem
 select osm_id,name,building,ST_Area(way),ST_AsEWKT(way) from planet_osm_polygon where osm_id = -4296651996;
 select osm_id,name,building,ST_Area(way),ST_AsEWKT(way) from planet_osm_polygon where osm_id = 4296767828;
@@ -49,4 +58,6 @@ select ST_Area(ST_Transform(way, 32633)) from planet_osm_polygon where osm_id = 
 select ST_Area(ST_Transform(way, 32633)) from planet_osm_polygon where osm_id = -1197720 ;
 
 select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(way, ST_Transform(ST_GeomFromText('', 4326), 4326);
-                
+
+select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(way, ST_GeomFromText('POLYGON((2.398250920228302 48.84595995531564, 2.398278788054809 48.845923000438354, 2.398244390622222 48.84591201136309, 2.398161431620923 48.845885508035884, 2.398086502653111 48.84598726181667, 2.398184905895766 48.8460186431167, 2.398201090543588 48.846023804457246, 2.39820244529123 48.84602423647196, 2.398250920228302 48.84595995531564))', 4326));
+select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(way, ST_GeomFromText('POLYGON((48.84595995531564 2.398250920228302, 48.845923000438354 2.398278788054809, 48.84591201136309 2.398244390622222, 48.845885508035884 2.398161431620923, 48.84598726181667 2.398086502653111, 48.8460186431167 2.398184905895766, 48.846023804457246 2.398201090543588, 48.84602423647196 2.39820244529123, 48.84595995531564 2.398250920228302))', 4326));

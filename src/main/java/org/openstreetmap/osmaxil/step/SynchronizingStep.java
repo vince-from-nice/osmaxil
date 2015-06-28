@@ -1,7 +1,5 @@
 package org.openstreetmap.osmaxil.step;
 
-import javax.annotation.PreDestroy;
-
 import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.ElementStore;
 import org.openstreetmap.osmaxil.dao.OsmXml;
@@ -114,15 +112,16 @@ public class SynchronizingStep extends AbstractStep {
     
     private void remakeAllElements() {
         boolean success = false;
-        OsmXmlRoot xml = ((AbstractRemakerPlugin) this.plugin).getRemakingData();
-        if (xml == null) {
+        OsmXmlRoot xmlForCreation = ((AbstractRemakerPlugin) this.plugin).getDataForCreation();
+        OsmXmlRoot xmlForDeletion = ((AbstractRemakerPlugin) this.plugin).getDataForDeletion();
+        if (xmlForCreation == null || xmlForDeletion == null) {
             LOGGER.warn("Unable to remake element since its remaking data is null");
             return;
         }
         if ("api".equals(this.synchronizationMode)) {
-           // TODO api writing for remaking
+           // TODO direct api writing for remaking
         } else if ("gen".equals(this.synchronizationMode)) {
-            success = this.osmXmlFile.writeToFile("genfile", xml);
+            success = this.osmXmlFile.writeToFile("genfile-creation", xmlForCreation) && this.osmXmlFile.writeToFile("genfile-deletion", xmlForDeletion);
         }
         if (success) {
             LOGGER.info("Ok all elements has been remaked");

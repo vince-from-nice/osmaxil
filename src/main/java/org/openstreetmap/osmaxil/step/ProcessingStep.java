@@ -37,7 +37,7 @@ public class ProcessingStep extends AbstractStep {
         }
         // Do specific stuff depending on the plugin
         if (this.plugin instanceof AbstractRemakerPlugin) {
-            ((AbstractRemakerPlugin) this.plugin).finalizeRemakingData();
+            ((AbstractRemakerPlugin) this.plugin).buildRemakingData();
         }
     }
 
@@ -58,7 +58,7 @@ public class ProcessingStep extends AbstractStep {
             AbstractRemakerPlugin abstractPlugin = (AbstractRemakerPlugin) this.plugin;
             // Prepare remaking data for this element only if it is alterable
             if (abstractPlugin.isElementAlterable(element)) {
-                abstractPlugin.prepareRemakingDataByElement(element);
+                abstractPlugin.processElement(element);
             }
         }
     }

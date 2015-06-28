@@ -70,15 +70,15 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     }
 
     @Override
-    public void prepareRemakingDataByElement(BuildingElement element) {
+    public void processElement(BuildingElement element) {
         LOGGER.debug("Building XML for remaking of element #" + element.getOsmId() + ":");
         this.remakableElements.add(element);
-        this.newBuildingsByRemakableBuilding.put(element.getOsmId(), this.buildXmlForNewElementsCreation(element));
-        this.oldNodesToDelete.addAll(this.buildElementToDelete(element));
+        this.newBuildingsByRemakableBuilding.put(element.getOsmId(), this.buildNewBuildings(element));
+        this.oldNodesToDelete.addAll(this.buildNodesToDelete(element));
     }
     
     @Override
-    public void finalizeRemakingData() {
+    protected void buildDataForCreation() {
         OsmXmlRoot root = new OsmXmlRoot();
         root.version = 0.6f;
         root.generator= Application.NAME;
@@ -89,29 +89,37 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             root.ways.addAll(data.ways);
             root.relations.addAll(data.relations);
         }
-        // Merge deletions of all remakable buildings
-//        for (BuildingElement element : this.remakableElements) {
-//            OsmXmlWay way = new OsmXmlWay();
-//            way.id = element.getOsmId();
-//            way.action = "delete";
-//            way.version = element.getApiData().ways.get(0).version;
-//            way.changeset = element.getApiData().ways.get(0).changeset;
-//            root.ways.add(way);
-//        }
-        // Merge deletions of nodes of all remakable buildings
-//        for (ElementWithParentFlags e : this.oldNodesToDelete) {
-//            // TODO Check if they can be deleted
-//            if (true) {
-//                OsmXmlNode node = new OsmXmlNode();
-//                node.id = e.getOsmId();
-//                node.action = "delete";
-//                root.nodes.add(node);
-//            }
-//        }
-        this.remakingData = root;
+        this.dataForCreation = root;
     }
     
-    private List<ElementWithParentFlags> buildElementToDelete(BuildingElement element) {
+    @Override
+    protected void buildDataForDeletion() {
+        OsmXmlRoot root = new OsmXmlRoot();
+        root.version = 0.6f;
+        root.generator = Application.NAME;
+        // Merge deletions of all remakable buildings
+        for (BuildingElement element : this.remakableElements) {
+            OsmXmlWay way = new OsmXmlWay();
+            way.id = element.getOsmId();
+            way.action = "delete";
+            way.version = element.getApiData().ways.get(0).version;
+            way.changeset = element.getApiData().ways.get(0).changeset;
+            root.ways.add(way);
+        }
+        // Merge deletions of nodes of all remakable buildings
+        for (ElementWithParentFlags e : this.oldNodesToDelete) {
+            // TODO Check if they can be deleted
+            if (true) {
+                OsmXmlNode node = new OsmXmlNode();
+                node.id = e.getOsmId();
+                node.action = "delete";
+                root.nodes.add(node);
+            }
+        }
+        this.dataForDeletion = root;
+    }
+    
+    private List<ElementWithParentFlags> buildNodesToDelete(BuildingElement element) {
         ArrayList<ElementWithParentFlags> result = new ArrayList<>();
         for (OsmXmlNd nd : element.getApiData().ways.get(0).nds) {
             ElementWithParentFlags node = new ElementWithParentFlags();
@@ -130,10 +138,8 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         return result;
     }
     
-    private OsmXmlRoot buildXmlForNewElementsCreation(BuildingElement element) {
+    private OsmXmlRoot buildNewBuildings(BuildingElement element) {
         OsmXmlRoot root = new OsmXmlRoot();
-        
-        
         // Create the relation
         OsmXmlRelation relation = new OsmXmlRelation();
         // Reuse all tags from original element
@@ -143,11 +149,9 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         LOGGER.debug("\tBuilding new relation#"  + relation.id);
         // Add it into the root relation list
         root.relations.add(relation);
-        
         // For each matching import:
         for (AbstractImport imp : element.getMatchingImports()) {
             BuildingImport bi = (BuildingImport) imp;
-            
             // Create a new building part
             OsmXmlWay part = new OsmXmlWay();
             root.ways.add(part);
@@ -166,30 +170,16 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
             Integer levels = bi.getLevels() + 1; // US way of levels counting
             tag.v = levels.toString();
             part.tags.add(tag);
-            
             // Add member into the relation
             OsmXmlMember member = new OsmXmlMember();
             member.ref = part.id;
             member.role = "part";
             member.type = "way";
             relation.members.add(member);
-                        
-            // Extract points from the geometry
-//            List<Coordinates> points = computeBuildingPartGeometry(bi);
-//            // Reparse transformed geometry to build a list of points
-//            wktConverted = wktConverted.replace("POLYGON((", "").replace("))", "");
-//            coords = wktConverted.split(",");
-//            for (int i = 0; i < coords.length; i++) {
-//                String[] p = coords[i].trim().split(" ");
-//                Coordinates point = new Coordinates(p[0], p[1], "");
-//                result.add(point);
-//            }
-            
-            long firstNodeId = 0;
-            // For each point except for the last one
+            // For each point
+//            long firstNodeId = 0;
             for (int i = 0; i < bi.getPoints().size() - 1; i++) {
-                Point point = bi.getPoints().get(i);
-                
+                Point point = bi.getPoints().get(i);                
                 // Try to get it from the internal cache
                 String key = point.getX() + "," + point.getY();
                 OsmXmlNode node = this.newNodesByCoordinates.get(key);
@@ -204,68 +194,35 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
                     this.newNodesByCoordinates.put(key, node);
                     LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.getX() + " y=" + point.getY());
                 }
-                
                 // Create new node reference (into the building part)
                 OsmXmlNd nd = new OsmXmlNd();
                 nd.ref = node.id;
                 part.nds.add(nd);
                 // Keep id of the first node
-                if (firstNodeId == 0) {
-                    firstNodeId = node.id;
-                }
-            }
-            
-//            long firstNodeId = 0;
-//            // For each point except for the last one
-//            for (int i = 0; i < points.size() - 1; i++) {
-//                Coordinates point = points.get(i);
-//                
-//                // Try to get it from the internal cache
-//                String key = point.x + "," + point.y;
-//                OsmXmlNode node = this.newNodesByCoordinates.get(key);
-//                if (node == null) {
-//                    // Create a new node (into the root)
-//                    node = new OsmXmlNode();
-//                    node.id = - this.idGenerator.getId();
-//                    node.visible = "true";
-//                    node.lon = point.x;
-//                    node.lat = point.y;
-//                    root.nodes.add(node);
-//                    this.newNodesByCoordinates.put(key, node);
-//                    LOGGER.debug("\t\tPoint id=" + node.id + " x=" + point.x + " y=" + point.y);
-//                }
-//                
-//                // Create new node reference (into the building part)
-//                OsmXmlNd nd = new OsmXmlNd();
-//                nd.ref = node.id;
-//                part.nds.add(nd);
-//                // Keep id of the first node
 //                if (firstNodeId == 0) {
 //                    firstNodeId = node.id;
 //                }
-//            }
-            
+            }            
             // Don't forget to close the way with the first node
-            OsmXmlNd nd = new OsmXmlNd();
-            nd.ref = firstNodeId;
-            part.nds.add(nd);
-        }
-        
+//            OsmXmlNd nd = new OsmXmlNd();
+//            nd.ref = firstNodeId;
+//            part.nds.add(nd);
+        }        
         return root;
     }
     
     @Override
     public  void displayStatistics() {
         LOGGER_FOR_STATS.info("Remaking data has been prepared as follow:");
-        LOGGER_FOR_STATS.info("\tremakableBuildings=" + this.remakableElements.size() + "");
-        LOGGER_FOR_STATS.info("\tnewBuildings=" + this.newBuildingsByRemakableBuilding.size() + "");
-        LOGGER_FOR_STATS.info("\tnewNodes=" + this.newNodesByCoordinates.size() + "");
-        LOGGER_FOR_STATS.info("\toldNodes=" + this.oldNodesToDelete.size() + "");
+        LOGGER_FOR_STATS.info("\tRemakable buildings: " + this.remakableElements.size() + "");
+        LOGGER_FOR_STATS.info("\tNew buildings: " + this.newBuildingsByRemakableBuilding.size() + "");
+        LOGGER_FOR_STATS.info("\tNew nodes: " + this.newNodesByCoordinates.size() + "");
+        LOGGER_FOR_STATS.info("\tOld nodes: " + this.oldNodesToDelete.size() + "");
         
         LOGGER_FOR_STATS.info("Remaking data has finalized as follow:");
-        LOGGER_FOR_STATS.info("\tnodes=" + this.remakingData.nodes.size() + "");
-        LOGGER_FOR_STATS.info("\tways=" + this.remakingData.ways.size() + "");
-        LOGGER_FOR_STATS.info("\trelations=" + this.remakingData.relations.size());
+        LOGGER_FOR_STATS.info("\tNodes: " + this.dataForCreation.nodes.size() + "");
+        LOGGER_FOR_STATS.info("\tWays: " + this.dataForCreation.ways.size() + "");
+        LOGGER_FOR_STATS.info("\tRelations: " + this.dataForCreation.relations.size());
     }
 
     @Override

@@ -3,7 +3,6 @@ package org.openstreetmap.osmaxil.step;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.dao.ElementStore;

@@ -13,14 +13,27 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
 
     protected List<ELEMENT> remakableElements = new ArrayList<>();
     
-    protected OsmXmlRoot remakingData;
+    protected OsmXmlRoot dataForCreation;
+    
+    protected OsmXmlRoot dataForDeletion;
 
-    abstract public void prepareRemakingDataByElement(ELEMENT element);
+    abstract public void processElement(ELEMENT element);
 
-    abstract public void finalizeRemakingData();
+    abstract protected void buildDataForCreation();
+    
+    abstract protected void buildDataForDeletion();
+    
+    public void buildRemakingData() {
+        this.buildDataForCreation();
+        this.buildDataForDeletion();
+    }
 
-    public OsmXmlRoot getRemakingData() {
-        return remakingData;
+    public OsmXmlRoot getDataForCreation() {
+        return dataForCreation;
+    }
+
+    public OsmXmlRoot getDataForDeletion() {
+        return dataForDeletion;
     }
 
 }
