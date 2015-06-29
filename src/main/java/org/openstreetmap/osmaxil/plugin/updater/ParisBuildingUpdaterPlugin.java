@@ -70,7 +70,7 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     }
     
     @Override
-    public  void displayStatistics() {
+    public  void displayProcessingStatistics() {
         // TODO return stats from the matcher
         LOGGER_FOR_STATS.info("No available stats for this plugin");
     }

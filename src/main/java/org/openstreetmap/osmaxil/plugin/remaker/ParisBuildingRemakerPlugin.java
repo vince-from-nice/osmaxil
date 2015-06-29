@@ -212,7 +212,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     }
     
     @Override
-    public  void displayStatistics() {
+    public  void displayProcessingStatistics() {
         LOGGER_FOR_STATS.info("Remaking data has been prepared as follow:");
         LOGGER_FOR_STATS.info("\tRemakable buildings: " + this.remakableElements.size() + "");
         LOGGER_FOR_STATS.info("\tNew buildings: " + this.newBuildingsByRemakableBuilding.size() + "");
@@ -223,6 +223,11 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         LOGGER_FOR_STATS.info("\tNodes: " + this.dataForCreation.nodes.size() + "");
         LOGGER_FOR_STATS.info("\tWays: " + this.dataForCreation.ways.size() + "");
         LOGGER_FOR_STATS.info("\tRelations: " + this.dataForCreation.relations.size());
+    }
+    
+    @Override
+    public  void displaySynchronizingStatistics(){
+        LOGGER_FOR_STATS.info("No available stats for this plugin");
     }
 
     @Override

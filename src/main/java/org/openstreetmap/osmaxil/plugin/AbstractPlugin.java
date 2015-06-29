@@ -41,7 +41,9 @@ public abstract class AbstractPlugin <ELEMENT extends AbstractElement, IMPORT ex
     
     abstract public boolean isElementAlterable(ELEMENT element);
     
-    abstract public void displayStatistics();
+    abstract public void displayProcessingStatistics();
+    
+    abstract public void displaySynchronizingStatistics();
     
     static public final float MIN_MATCHING_SCORE = 0.0f; 
     

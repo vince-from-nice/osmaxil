@@ -33,6 +33,8 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     @Value("${plugins.pssBuildingUpdater.changesetComment}")
     private String changesetComment;
     
+    private int counterForFakeNames = 0;
+            
     private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTagNames.HEIGHT, ElementTagNames.NAME, ElementTagNames.URL};
 
     @Override
@@ -57,38 +59,54 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
         boolean updated = false;
         if (ElementTagNames.HEIGHT.equals(tagName)) {
             element.setHeight(Float.parseFloat(tagValue));
-            LOGGER.info("===> Updating height to " + tagValue);
+            LOGGER.info("===> Updating height to [" + tagValue + "]");
             updated = true;
         }
         if (ElementTagNames.URL.equals(tagName)) {
             element.setTagValue(ElementTagNames.URL, tagValue);
-            LOGGER.info("===> Updating URL to " + tagValue);
+            LOGGER.info("===> Updating URL to [" + tagValue + "]");
             updated = true;
         }
         if (ElementTagNames.NAME.equals(tagName)) {
             // Ignore fake name based on the building address
            if (Character.isDigit(tagValue.charAt(0))) {
                 LOGGER.info("Skipping name update because the value looks fake (" + tagValue + ")");
+                this.counterForFakeNames++;
             } else {
                 element.setTagValue(ElementTagNames.NAME, tagValue);
-                LOGGER.info("===> Updating name to " + tagValue);
+                LOGGER.info("===> Updating name to [" + tagValue + "]");
                 updated = true;
             }
+        }
+        if (updated) {
+            Integer counter = this.counterMap.get(tagName);
+            counter++;
+            this.counterMap.put(tagName, counter);
         }
         return updated;
     }
     
-    // Override that concrete method because
+    // TEMP just for stats: elements are updatable if all of the updatable tags are updatable with it
+//    @Override
+//    public boolean isElementAlterable(BuildingElement element) {
+//        for (int j = 0; j < this.getUpdatableTagNames().length; j++) {
+//            if(!this.isElementTagUpdatable(element, this.getUpdatableTagNames()[j])) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+    
     @Override
-    public boolean isElementAlterable(BuildingElement element) {
-       // if the height is not updatable we don't want to update the building at all (ie. not update the name or the url)
-       return this.isElementTagUpdatable(element, ElementTagNames.BUILDING_LEVELS);
+    public  void displayProcessingStatistics() {
+        // TODO return stats from the matcher
+        LOGGER_FOR_STATS.info("No available stats for this plugin");
     }
     
     @Override
-    public  void displayStatistics() {
-        // TODO return stats from the matcher
-        LOGGER_FOR_STATS.info("No available stats for this plugin");
+    public  void displaySynchronizingStatistics(){
+        super.displaySynchronizingStatistics();
+        LOGGER_FOR_STATS.info("- number of fake names: " + this.counterForFakeNames);
     }
     
     @Override

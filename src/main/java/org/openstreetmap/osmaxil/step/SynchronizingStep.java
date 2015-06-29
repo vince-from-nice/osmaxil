@@ -39,8 +39,12 @@ public class SynchronizingStep extends AbstractStep {
     @Override
     public void displayStats() {
         LOGGER_FOR_STATS.info("=== Statistics for " + this.getClass().getSimpleName() + "===");
+        LOGGER_FOR_STATS.info("Minimal matching score is " + this.plugin.getMinimalMatchingScore());
+        LOGGER_FOR_STATS.info("Synchronization mode is [" + this.synchronizationMode + "]");
         LOGGER.info("Total of matched elements: " + this.counterForMatchedElements);
         LOGGER.info("Total of altered elements: " + this.counterForAlteredElements);
+        LOGGER_FOR_STATS.info("Plugin specific statistics:");
+        this.plugin.displaySynchronizingStatistics();
     }
 
     public void synchronize() {

@@ -19,8 +19,8 @@ public class ProcessingStep extends AbstractStep {
     public void displayStats() {
         LOGGER_FOR_STATS.info("=== Statistics for " + this.getClass().getSimpleName() + "===");
         LOGGER_FOR_STATS.info("Total of processed elements: " + this.counter);
-        LOGGER_FOR_STATS.info("Plugin specific statistics :");
-        this.plugin.displayStatistics();
+        LOGGER_FOR_STATS.info("Plugin specific statistics:");
+        this.plugin.displayProcessingStatistics();
     }
 
     public void processElements() {
