@@ -37,7 +37,7 @@ public class StatisticsStep extends AbstractStep {
         this.loadingStep.displayStats();
         this.processingStep.displayStats();
         this.synchronizingStep.displayStats();
-        LOGGER_FOR_STATS.info("======= Advanced statistics =======");
+        LOGGER_FOR_STATS.info("=== Advanced statistics ===");
         this.buildStatsByMatchingScore();
         this.displayStatsByMatchingScore();
         //showAllMatchingScores();
@@ -47,7 +47,7 @@ public class StatisticsStep extends AbstractStep {
         LOGGER_FOR_STATS.info("Repartition by matching scores:");
         for (int i = 0; i < 10; i++) {
             StringBuilder sb = new StringBuilder();
-            sb.append("- score between " + i * 10 + "% and " + (i + 1) * 10 + "% : ");
+            sb.append(" - score between " + i * 10 + "% and " + (i + 1) * 10 + "% : ");
             sb.append(this.matchedElementsNbrByScore[i]);
             if (this.elementCache.getElements().size()  > 0) {
                 sb.append(" (" + 100 * this.matchedElementsNbrByScore[i] / this.elementCache.getElements().size() + "%)");

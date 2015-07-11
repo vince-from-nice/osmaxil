@@ -41,7 +41,7 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
     
     public  void displaySynchronizingStatistics(){
         for (String  updatableTagName : this.getUpdatableTagNames()) {
-            LOGGER_FOR_STATS.info("- number of updates on the tag " + updatableTagName + ": " + this.counterMap.get(updatableTagName));    
+            LOGGER_FOR_STATS.info(" - number of updates on the tag " + updatableTagName + ": " + this.counterMap.get(updatableTagName));    
         }
         
     }

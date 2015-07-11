@@ -43,6 +43,14 @@ select osm_id,name,building,st_asewkt(way) from planet_osm_polygon where buildin
 select osm_id,name,building,st_asewkt(way) from planet_osm_polygon where building <> '' and  ST_Contains(way, ST_Transform(ST_GeomFromText('POINT(2.38475269926 48.8458926819)', 4326), 4326));
 select osm_id,name,building,st_asewkt(way) from planet_osm_polygon where building <> '' and  ST_Contains(way, ST_Transform(ST_GeomFromText('POINT(2.416653424534161 48.84305412530941)', 4326), 900913));
 
+-- Les Balcons de la Nation
+select osm_id,name,building,ST_Area(way),ST_Area(ST_Transform(ST_Transform(way, 4326), 32633)),ST_AsEWKT(way) from planet_osm_polygon where osm_id = 128546153;
+select ST_Area(ST_Transform(ST_GeomFromText('POLYGON((2.3938146 48.8456683, 2.3941176 48.8456482, 2.3940766 48.8453958, 2.3937724 48.8454183, 2.3938146 48.8456683))', 4326), 32633));
+
+-- Find the point on building outer linestring which is the closest to another point
+select ST_AsEWKT(ST_ExteriorRing(ST_Transform(way, 4326))) from planet_osm_polygon where osm_id = 128546153;
+select ST_AsEWKT(line_interpolate_point(ST_ExteriorRing(ST_Transform(way, 4326)), line_locate_point(ST_ExteriorRing(ST_Transform(way, 4326)), ST_GeomFromText('POINT(2.3935059 48.8454880)', 4326)))) from planet_osm_polygon where osm_id = 128546153;
+
 select(ST_Area(ST_GeomFromText('POLYGON((0 0, 2 0, 2 3, 0 3, 0 0))', 900913)));
 
 select(ST_Area(ST_GeomFromText('POLYGON((

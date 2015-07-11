@@ -106,7 +106,7 @@ public class PssBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElem
     @Override
     public  void displaySynchronizingStatistics(){
         super.displaySynchronizingStatistics();
-        LOGGER_FOR_STATS.info("- number of fake names: " + this.counterForFakeNames);
+        LOGGER_FOR_STATS.info(" - number of fake names: " + this.counterForFakeNames);
     }
     
     @Override
