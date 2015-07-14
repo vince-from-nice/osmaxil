@@ -9,7 +9,7 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
 
     protected OsmXmlRoot dataForCreation;
     
-    abstract public void processElement(ELEMENT element);
+    abstract protected void processImport(IMPORT imp);
 
     abstract protected void buildDataForCreation();
     
@@ -22,11 +22,18 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     public void synchronize() {
         // TODO
     }
-    
-    public void buildMakingData() {
-        this.buildDataForCreation();    }
 
     public OsmXmlRoot getDataForCreation() {
         return dataForCreation;
+    }
+    
+    @Override
+    public void displayProcessingStatistics() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void displaySynchronizingStatistics() {
+        // TODO Auto-generated method stub
     }
 }

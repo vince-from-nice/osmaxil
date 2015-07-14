@@ -3,11 +3,23 @@ package org.openstreetmap.osmaxil.plugin.maker;
 import org.openstreetmap.osmaxil.model.tree.TreeElement;
 import org.openstreetmap.osmaxil.model.tree.TreeImport;
 import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
+import org.openstreetmap.osmaxil.plugin.common.parser.NiceTreeParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> {
 
+    @Autowired
+    private NiceTreeParser parser;
+    
+    @Value("${plugins.niceTreeMaker.changesetSourceLabel}")
+    private String changesetSourceLabel;
+
+    @Value("${plugins.niceTreeMaker.changesetComment}")
+    private String changesetComment;
+    
     @Override
-    public void processElement(TreeElement element) {
+    protected void processImport(TreeImport tree) {
         // TODO Auto-generated method stub
     }
 
@@ -18,32 +30,17 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
 
     @Override
     public String getChangesetComment() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.changesetComment;
     }
 
     @Override
     public String getChangesetSourceLabel() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void displayProcessingStatistics() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void displaySynchronizingStatistics() {
-        // TODO Auto-generated method stub
-        
+       return this.changesetSourceLabel;
     }
 
     @Override
     public AbstractParser<TreeImport> getParser() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.parser;
     }
 
 }
