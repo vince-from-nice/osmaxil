@@ -28,11 +28,10 @@ public class BuildingImport extends AbstractImport {
 
     protected List<Point> points = new ArrayList<>(); // useless
 
-    protected List<StringCoordinates> coordinates = new ArrayList<>(); // keep coordinates as strings (no more rounding
-                                                                       // issues)
+    protected List<StringCoordinates> coordinates = new ArrayList<>(); // keep coordinates as strings (no more rounding issues)
 
     @Override
-    public String getTagValue(String tagName) {
+    public String getValueByTagName(String tagName) {
         if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
             return this.levels.toString();
         } else if (ElementTagNames.HEIGHT.equals(tagName)) {
@@ -47,8 +46,8 @@ public class BuildingImport extends AbstractImport {
 
     @Override
     public String toString() {
-        return "Building import with id=[" + this.id + "] and name=[" + this.name + "], lat=[" + this.lat + "], lon=["
-                + this.lon + "], levels=[" + this.levels + "], height=[" + this.height + "], area=[" + this.area
+        return "Building import with id=[" + this.id + "] and name=[" + this.name + "], lat=[" + this.latitude + "], lon=["
+                + this.longitude + "], levels=[" + this.levels + "], height=[" + this.height + "], area=[" + this.area
                 + "], url=[" + this.url + "]";
     }
 

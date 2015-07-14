@@ -57,7 +57,7 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     @Override
     protected boolean updateElementTag(BuildingElement element, String tagName) {
         AbstractImport bestImport = this.scorer.getBestMatchingImportByElement(element);
-        String tagValue = bestImport.getTagValue(tagName);
+        String tagValue = bestImport.getValueByTagName(tagName);
         if (tagValue == null) {
             LOGGER.warn("Cannot update tag because best import tag value is null for " + tagName);
             return false;

@@ -69,8 +69,8 @@ public class ParisBuildingParser extends AbstractParser<BuildingImport> {
         building.setId(this.rowCount);
         String[] latlon = row[0].split(",");
         if (latlon.length == 2) {
-            building.setLat(StringParsingHelper.parseDouble(latlon[0], "latitude"));
-            building.setLon(StringParsingHelper.parseDouble(latlon[1], "longitude"));
+            building.setLatitude(StringParsingHelper.parseDouble(latlon[0], "latitude"));
+            building.setLongitude(StringParsingHelper.parseDouble(latlon[1], "longitude"));
         }else {
             LOGGER.warn("Unable to parse latlon");
         }

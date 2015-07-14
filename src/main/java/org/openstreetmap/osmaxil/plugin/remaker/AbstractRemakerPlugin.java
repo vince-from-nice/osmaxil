@@ -156,7 +156,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
             LOGGER.info(element);
             // And bind the import to it
             element.getMatchingImports().add(imp);
-            imp.setElement(element);
+            imp.setMatchingElement(element);
             StringBuilder sb = new StringBuilder("Matching imports are now : [ ");
             for (AbstractImport i : element.getMatchingImports()) {
                 sb.append(i.getId() + " ");

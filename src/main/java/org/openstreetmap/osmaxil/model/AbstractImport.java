@@ -6,15 +6,15 @@ public abstract class AbstractImport {
     
     protected String name;
     
-    protected AbstractElement element;
+    protected Double latitude;
+
+    protected Double longitude;
+    
+    protected AbstractElement matchingElement;
     
     protected float matchingScore;
     
-    protected Double lat;
-
-    protected Double lon;
-    
-    abstract public String getTagValue(String tagName);
+    abstract public String getValueByTagName(String tagName);
     
     @Override
     public String toString() {
@@ -36,13 +36,21 @@ public abstract class AbstractImport {
     public void setName(String name) {
         this.name = name;
     }
-
-    public AbstractElement getElement() {
-        return element;
+    
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setElement(AbstractElement element) {
-        this.element = element;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public float getMatchingScore() {
@@ -53,20 +61,12 @@ public abstract class AbstractImport {
         this.matchingScore = matchingScore;
     }
     
-    public Double getLat() {
-        return lat;
+    public AbstractElement getMatchingElement() {
+        return matchingElement;
     }
 
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    public Double getLon() {
-        return lon;
-    }
-
-    public void setLon(Double lon) {
-        this.lon = lon;
+    public void setMatchingElement(AbstractElement matchingElement) {
+        this.matchingElement = matchingElement;
     }
     
 }

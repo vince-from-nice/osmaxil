@@ -8,12 +8,14 @@ import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
 
-import org.openstreetmap.osmaxil.model.building.BuildingImport;
 import org.openstreetmap.osmaxil.model.tree.TreeImport;
+import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+@Repository
 public class NiceTreeParser extends AbstractParser<TreeImport> {
 
     private CSVReader reader;
@@ -22,11 +24,14 @@ public class NiceTreeParser extends AbstractParser<TreeImport> {
 
     boolean hasNext;
     
-    @Value("${plugins.parisBuildingParser.filePath}")
+    @Value("${plugins.niceTreeParser.filePath}")
     private String filePath;
     
-    @Value("${plugins.parisBuildingParser.srid}")
+    @Value("${plugins.niceTreeParser.srid}")
     private int srid;
+    
+    static private final String GEOM_TOKEN = "\"coordinates\": [";
+   
     
     @PostConstruct
     public void init() throws FileNotFoundException {
@@ -58,7 +63,14 @@ public class NiceTreeParser extends AbstractParser<TreeImport> {
         this.rowCount++;
         TreeImport tree = new TreeImport();
         tree.setId(this.rowCount);
-        
+        tree.setType(row[3]);
+        tree.setSubType(row[2]);
+        tree.setReferenceCode(row[4]);
+        String geom = row[5].substring(row[5].indexOf(GEOM_TOKEN) + GEOM_TOKEN.length());
+        geom = geom.substring(0, geom.length() - 2);
+        String[] coords = geom.split(", ");
+        tree.setLongitude(StringParsingHelper.parseDouble(coords[0], "lon"));
+        tree.setLatitude(StringParsingHelper.parseDouble(coords[1], "lat"));
         return tree;
     }
 

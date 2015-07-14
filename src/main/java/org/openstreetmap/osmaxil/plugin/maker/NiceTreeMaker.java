@@ -6,7 +6,9 @@ import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
 import org.openstreetmap.osmaxil.plugin.common.parser.NiceTreeParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component("NiceTreeMaker")
 public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> {
 
     @Autowired

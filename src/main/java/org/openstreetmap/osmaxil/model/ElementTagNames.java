@@ -13,4 +13,10 @@ public class ElementTagNames {
     
     public static final String BUILDING_PART = "building:part";
     
+    public static final String GENUS = "genus";
+    
+    public static final String SPECIFIES = "specifies";
+    
+    public static final String CIRCUMFERENCE = "circumference";
+    
 }

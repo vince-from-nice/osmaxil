@@ -129,6 +129,7 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
     public void displayProcessingStatistics() {
         LOGGER_FOR_STATS.info("=== Processing statistics ===");
         LOGGER_FOR_STATS.info("Total of imports which match one or more matching elements: " + this.counterForMatchedImports);
+        LOGGER_FOR_STATS.info("Total of missed imports: " + (counterForLoadedImports - this.counterForMatchedImports));
         LOGGER_FOR_STATS.info("Total of elements which have one or more matching imports: " + this.matchedElements.size());
         this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
     }
@@ -173,7 +174,7 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
             LOGGER.info(element);
             // And bind the import to it
             element.getMatchingImports().add(imp);
-            imp.setElement(element);
+            imp.setMatchingElement(element);
             StringBuilder sb = new StringBuilder("Matching imports are now : [ ");
             for (AbstractImport i : element.getMatchingImports()) {
                 sb.append(i.getId() + " ");

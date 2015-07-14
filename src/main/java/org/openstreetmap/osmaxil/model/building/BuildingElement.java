@@ -12,7 +12,6 @@ public class BuildingElement extends AbstractElement {
     
     public BuildingElement(long osmId) {
         super(osmId);
-        this.computedArea = 0;
     }
     
     @Override

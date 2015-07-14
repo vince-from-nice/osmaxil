@@ -45,7 +45,7 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
 
     @Override
     protected boolean updateElementTag(BuildingElement element, String tagName) {
-        String tagValue = element.getMatchingImports().get(0).getTagValue(tagName);
+        String tagValue = element.getMatchingImports().get(0).getValueByTagName(tagName);
         if (tagValue == null) {
             LOGGER.warn("Cannot update tag because tag value is null for " + tagName);
             return false;

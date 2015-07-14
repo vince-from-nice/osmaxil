@@ -90,7 +90,7 @@ public class CumulativeOnSameValueMatchingScorer<Element extends AbstractElement
         // For each matching import..
         for (AbstractImport imp : element.getMatchingImports()) {
             // Dispatch it by its tag value
-            String updatableTagValue = imp.getTagValue(matchingTagName);
+            String updatableTagValue = imp.getValueByTagName(matchingTagName);
             // String updatableTagValue = element.getTagValue(updatableTagName);
             if (map.get(updatableTagValue) == null) {
                 map.put(updatableTagValue, new ArrayList<AbstractImport>());

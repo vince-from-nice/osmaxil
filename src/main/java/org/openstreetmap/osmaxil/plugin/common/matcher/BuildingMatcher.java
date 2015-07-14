@@ -20,8 +20,8 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
         BuildingImport building = (BuildingImport) imp;
         if (building.getGeometryAsWKT() != null) {
             ids = this.findBuildingIDsByGeometry(building.getGeometryAsWKT(), srid);
-        } else if (building.getLat() != null && building.getLon() != null) {
-            ids = this.findBuildingIDsByLatLon(building.getLon(), building.getLat(), srid);
+        } else if (building.getLatitude() != null && building.getLongitude() != null) {
+            ids = this.findBuildingIDsByLatLon(building.getLongitude(), building.getLatitude(), srid);
         }  else {
             LOGGER.error("Unable to find building because there's no coordinates neither geometry");
         }
@@ -49,13 +49,13 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
     
    @Override
     public float computeMatchingImportScore(BuildingImport imp) {
-        BuildingElement element = (BuildingElement) imp.getElement();
+        BuildingElement element = (BuildingElement) imp.getMatchingElement();
         float result = AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
         if (imp.getArea() == null) {
             LOGGER.warn("Unable to compute score because building import has NO area");
             return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
         }
-        if (imp.getElement() == null) {
+        if (imp.getMatchingElement() == null) {
             LOGGER.warn("Unable to compute score because building import has NO element attached");
             return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
         }

@@ -104,7 +104,7 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
                 }
                 LOGGER.info("Loading import #" + this.counterForParsedImports + ": " + imp);
                 // Check if the import coordinates are fine with the bounding boxes
-                if (!this.checkCoordinatesWithFilteringArea(imp.getLon(), imp.getLat())) {
+                if (!this.checkCoordinatesWithFilteringArea(imp.getLongitude(), imp.getLatitude())) {
                     this.counterForFilteredImports++;
                     LOGGER.warn("Import has invalid coordinates, skipping it...");
                     break;
@@ -124,8 +124,6 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
         LOGGER_FOR_STATS.info("Total of parsed imports: " + this.counterForParsedImports);
         LOGGER_FOR_STATS.info("Total of filtered imports: " + this.counterForFilteredImports);
         LOGGER_FOR_STATS.info("Total of loaded imports: " + this.counterForLoadedImports);
-        LOGGER_FOR_STATS.info("Total of missed imports: "
-                + (counterForLoadedImports - this.counterForFilteredImports - this.counterForLoadedImports));
     }
 
     // =========================================================================

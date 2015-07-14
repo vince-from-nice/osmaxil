@@ -1,0 +1,21 @@
+idENT;SOUS_TYPE;CODE_REF;TYPE;N_ORDRE;geometry
+BA0400_0004;4;BA0400;Arbre;4;{"type": "Point", "coordinates": [7.24701747, 43.72702988]}
+BA0400_0005;4;BA0400;Arbre;5;{"type": "Point", "coordinates": [7.24693245, 43.72706716]}
+BA0400_0006;4;BA0400;Arbre;6;{"type": "Point", "coordinates": [7.24684627, 43.72710569]}
+SG0700_0001;4;SG0700;Arbre;1;{"type": "Point", "coordinates": [7.27934969, 43.73636618]}
+SG0700_0002;4;SG0700;Arbre;2;{"type": "Point", "coordinates": [7.27933641, 43.7363738]}
+SG0700_0003;4;SG0700;Arbre;3;{"type": "Point", "coordinates": [7.27929706, 43.73651139]}
+SG0700_0004;4;SG0700;Arbre;4;{"type": "Point", "coordinates": [7.27925223, 43.736566]}
+SG0700_0005;4;SG0700;Arbre;5;{"type": "Point", "coordinates": [7.27920904, 43.73662226]}
+SG0700_0006;4;SG0700;Arbre;6;{"type": "Point", "coordinates": [7.27910165, 43.73672421]}
+SG0700_0007;4;SG0700;Arbre;7;{"type": "Point", "coordinates": [7.27905151, 43.73677361]}
+SO0190_0001;4;SO0190;Arbre;1;{"type": "Point", "coordinates": [7.27686379, 43.73312181]}
+SO0190_0002;4;SO0190;Arbre;2;{"type": "Point", "coordinates": [7.27682431, 43.73310337]}
+SO0190_0003;4;SO0190;Arbre;3;{"type": "Point", "coordinates": [7.2767157, 43.73298788]}
+SO0190_0004;4;SO0190;Arbre;4;{"type": "Point", "coordinates": [7.27681425, 43.73298373]}
+SO0190_0005;4;SO0190;Arbre;5;{"type": "Point", "coordinates": [7.27687381, 43.73299174]}
+SO0190_0006;4;SO0190;Arbre;6;{"type": "Point", "coordinates": [7.27689175, 43.73299418]}
+AG0816_0593A;1;AG0816;Arbre;593A;{"type": "Point", "coordinates": [7.19017339, 43.69832833]}
+AG0816_0594A;1;AG0816;Arbre;594A;{"type": "Point", "coordinates": [7.19013039, 43.69841368]}
+AG0816_0595A;1;AG0816;Arbre;595A;{"type": "Point", "coordinates": [7.19004275, 43.69858123]}
+AG0816_0596A;1;AG0816;Arbre;596A;{"type": "Point", "coordinates": [7.19000111, 43.69866441]}

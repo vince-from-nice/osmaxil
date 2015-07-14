@@ -3,6 +3,7 @@ package org.openstreetmap.osmaxil.model.tree;
 import java.util.List;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.ElementTagNames;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
 
@@ -10,18 +11,30 @@ public class TreeElement extends AbstractElement {
 
     public TreeElement(long osmId) {
         super(osmId);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public List<OsmXmlTag> getTags() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.getApiData().nodes.get(0).tags;
+    }
+    
+    @Override
+    public void updateChangeset(long changesetId) {
+        this.getApiData().nodes.get(0).changeset = changesetId;
+    }
+    
+    public Double getLatitude() {
+        return Double.parseDouble(this.getApiData().nodes.get(0).lat);
+    }
+    
+    public Double getLongitude() {
+        return Double.parseDouble(this.getApiData().nodes.get(0).lon);
     }
 
     @Override
-    public void updateChangeset(long changesetId) {
-        // TODO Auto-generated method stub
+    public String toString() {
+        return "OSM tree has id=[" + this.getOsmId() + "], coords=[" + this.getLongitude() + " " + this.getLatitude() + "] genus=[" + this.getTagValue(ElementTagNames.GENUS) + "], species=["
+                + this.getTagValue(ElementTagNames.SPECIFIES) + "], name=[" + this.getName() + "]";
     }
 
 }
