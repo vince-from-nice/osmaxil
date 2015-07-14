@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +36,7 @@ public class CumulativeOnSameValueMatchingScorer<Element extends AbstractElement
     public float computeElementMatchingScore(AbstractElement element) {
         if (this.matchingTagName == null) {
             LOGGER.error("Unable to compute element matching score since no matching tag name is defined.");
-            return AbstractPlugin.MIN_MATCHING_SCORE;
+            return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
         }
         this.dispatchMatchingImportsByTagValues(element, this.matchingTagName);
         this.computeTotalScoresByTagValues(element);  

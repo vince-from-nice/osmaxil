@@ -12,16 +12,18 @@ import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingParser;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnSameValueMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Component("ParisBuildingUpdaterPlugin")
-public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
+@Component("ParisBuildingUpdater")
+public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
     private ParisBuildingParser parser;
     
     @Autowired
+    @Qualifier("BuildingMatcher")
     private BuildingMatcher matcher;
     
     @Autowired
@@ -42,17 +44,18 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     
     @PostConstruct
     public void init() {
+        super.init();
         this.scorer.setMatchingTagName(MATCHING_TAG_NAME);
     }
     
     @Override
-    public boolean isElementTagUpdatable(BuildingElement element, String tagName) {
+    protected boolean isElementTagUpdatable(BuildingElement element, String tagName) {
         // Building tags are updatable only if it doesn't have an original value
         return element.getOriginalValuesByTagNames().get(tagName) == null;
     }
     
     @Override
-    public boolean updateElementTag(BuildingElement element, String tagName) {
+    protected boolean updateElementTag(BuildingElement element, String tagName) {
         AbstractImport bestImport = this.scorer.getBestMatchingImportByElement(element);
         String tagValue = bestImport.getTagValue(tagName);
         if (tagValue == null) {
@@ -70,48 +73,42 @@ public class ParisBuildingUpdaterPlugin extends AbstractUpdaterPlugin<BuildingEl
     }
     
     @Override
-    public  void displayProcessingStatistics() {
-        // TODO return stats from the matcher
-        LOGGER_FOR_STATS.info("No available stats for this plugin");
-    }
-    
-    @Override
-    public String[] getUpdatableTagNames() {
+    protected String[] getUpdatableTagNames() {
         return UPDATABLE_TAG_NAMES;
     }
 
     @Override
-    public BuildingElement instanciateElement(long osmId) {
+    protected BuildingElement instanciateElement(long osmId) {
         return new BuildingElement(osmId);
     }
 
     @Override
-    public ParisBuildingParser getParser() {
+    protected ParisBuildingParser getParser() {
         return parser;
     }
     
     @Override
-    public AbstractMatcher<BuildingImport> getMatcher() {
+    protected AbstractMatcher<BuildingImport> getMatcher() {
         return this.matcher;
     }
 
     @Override
-    public AbstractMatchingScorer<BuildingElement> getScorer() {
+    protected AbstractMatchingScorer<BuildingElement> getScorer() {
       return this.scorer;
     }
 
     @Override
-    public String getChangesetSourceLabel() {
+    protected String getChangesetSourceLabel() {
         return changesetSourceLabel;
     }
 
     @Override
-    public String getChangesetComment() {
+    protected String getChangesetComment() {
         return changesetComment;
     }
 
     @Override
-    public float getMinimalMatchingScore() {
+    protected float getMinimalMatchingScore() {
         return this.minMatchingScore;
     }
     

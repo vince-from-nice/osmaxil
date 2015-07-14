@@ -26,16 +26,20 @@ import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnAnyValueMatchingScorer;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.vividsolutions.jts.geom.Point;
 
-public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
+@Component("ParisBuildingRemaker")
+public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
     private ParisBuildingParser parser;
 
     @Autowired
+    @Qualifier("BuildingMatcher")
     private BuildingMatcher matcher;
     
     @Autowired
@@ -58,21 +62,25 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
     
     private Map<String, OsmXmlNode> newNodesByCoordinates = new HashMap<>();
     
+    // =========================================================================
+    // Overrided methods
+    // =========================================================================
+    
     @Override
-    public BuildingElement instanciateElement(long osmId) {
+    protected BuildingElement instanciateElement(long osmId) {
         return new BuildingElement(osmId);
     }
 
     @Override
-    public boolean isElementAlterable(BuildingElement element) {
+    protected boolean isElementRemakable(BuildingElement element) {
         // TODO Check if element has only common tags for the Cadastre import or if it's complex structure ?
         return true;
     }
 
     @Override
-    public void processElement(BuildingElement element) {
+    protected void processElement(BuildingElement element) {
         LOGGER.debug("Building XML for remaking of element #" + element.getOsmId() + ":");
-        this.remakableElements.add(element);
+        this.remakableElements.put(element.getOsmId(), element);
         this.newBuildingsByRemakableBuilding.put(element.getOsmId(), this.buildNewBuildings(element));
         this.oldNodesToDelete.addAll(this.buildNodesToDelete(element));
     }
@@ -98,7 +106,7 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         root.version = 0.6f;
         root.generator = Application.NAME;
         // Merge deletions of all remakable buildings
-        for (BuildingElement element : this.remakableElements) {
+        for (BuildingElement element : this.remakableElements.values()) {
             OsmXmlWay way = new OsmXmlWay();
             way.id = element.getOsmId();
             way.action = "delete";
@@ -118,6 +126,49 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         }
         this.dataForDeletion = root;
     }
+    
+    @Override
+    public ParisBuildingParser getParser() {
+        return parser;
+    }
+    
+    @Override
+    public AbstractMatcher<BuildingImport> getMatcher() {
+        return this.matcher;
+    }
+
+    @Override
+    public AbstractMatchingScorer<BuildingElement> getScorer() {
+      return this.scorer;
+    }
+
+    @Override
+    public float getMinimalMatchingScore() {
+        return minMatchingScore;
+    }
+
+    @Override
+    public String getChangesetSourceLabel() {
+        return changesetSourceLabel;
+    }
+
+    @Override
+    public String getChangesetComment() {
+        return changesetComment;
+    }
+    
+    @Override
+    public  void displayProcessingStatistics() {
+        super.displayProcessingStatistics();
+        LOGGER_FOR_STATS.info("Remaking data has been prepared as follow:");
+        LOGGER_FOR_STATS.info("\tRemakable buildings: " + this.remakableElements.values().size() + "");
+        LOGGER_FOR_STATS.info("\tNew buildings: " + this.newBuildingsByRemakableBuilding.size() + "");
+        LOGGER_FOR_STATS.info("\tNew nodes: " + this.newNodesByCoordinates.size() + "");
+    }
+    
+    // =========================================================================
+    // Private methods
+    // =========================================================================
     
     private List<ElementWithParentFlags> buildNodesToDelete(BuildingElement element) {
         ArrayList<ElementWithParentFlags> result = new ArrayList<>();
@@ -210,54 +261,4 @@ public class ParisBuildingRemakerPlugin extends AbstractRemakerPlugin<BuildingEl
         }        
         return root;
     }
-    
-    @Override
-    public  void displayProcessingStatistics() {
-        LOGGER_FOR_STATS.info("Remaking data has been prepared as follow:");
-        LOGGER_FOR_STATS.info("\tRemakable buildings: " + this.remakableElements.size() + "");
-        LOGGER_FOR_STATS.info("\tNew buildings: " + this.newBuildingsByRemakableBuilding.size() + "");
-        LOGGER_FOR_STATS.info("\tNew nodes: " + this.newNodesByCoordinates.size() + "");
-        LOGGER_FOR_STATS.info("\tOld nodes: " + this.oldNodesToDelete.size() + "");
-        
-        LOGGER_FOR_STATS.info("Remaking data has finalized as follow:");
-        LOGGER_FOR_STATS.info("\tNodes: " + this.dataForCreation.nodes.size() + "");
-        LOGGER_FOR_STATS.info("\tWays: " + this.dataForCreation.ways.size() + "");
-        LOGGER_FOR_STATS.info("\tRelations: " + this.dataForCreation.relations.size());
-    }
-    
-    @Override
-    public  void displaySynchronizingStatistics(){
-        LOGGER_FOR_STATS.info("No available stats for this plugin");
-    }
-
-    @Override
-    public ParisBuildingParser getParser() {
-        return parser;
-    }
-    
-    @Override
-    public AbstractMatcher<BuildingImport> getMatcher() {
-        return this.matcher;
-    }
-
-    @Override
-    public AbstractMatchingScorer<BuildingElement> getScorer() {
-      return this.scorer;
-    }
-
-    @Override
-    public float getMinimalMatchingScore() {
-        return minMatchingScore;
-    }
-
-    @Override
-    public String getChangesetSourceLabel() {
-        return changesetSourceLabel;
-    }
-
-    @Override
-    public String getChangesetComment() {
-        return changesetComment;
-    }
-
 }

@@ -10,14 +10,13 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.step.StatisticsStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.oxm.Marshaller;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class OsmXml {
+public class OsmXmlFile {
 
     @Autowired
     @Qualifier(value="osmMarshaller")
@@ -29,7 +28,7 @@ public class OsmXml {
 
     static private final Logger LOGGER = Logger.getLogger(Application.class);
     
-    static private final Logger LOGGER_FOR_STATS = Logger.getLogger(StatisticsStep.class);
+    static private final Logger LOGGER_FOR_STATS = Logger.getLogger("LoggerForStats");
 
     static private final String GEN_DIR = "gen";
 

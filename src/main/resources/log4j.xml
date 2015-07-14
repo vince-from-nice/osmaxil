@@ -30,7 +30,7 @@
 		<appender-ref ref="logFile" />
 	</logger>
 
-	<logger name="org.openstreetmap.osmaxil.step.StatisticsStep" additivity="false">
+	<logger name="LoggerForStats" additivity="false">
 		<level value="info" />
 		<appender-ref ref="stdout" />
 		<appender-ref ref="statsFile" />

@@ -6,10 +6,10 @@ import java.util.List;
 import org.openstreetmap.osmaxil.model.MatchingElementId;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component(value="BuildingMatcher")
 public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
  
    @Override
@@ -50,14 +50,14 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
    @Override
     public float computeMatchingImportScore(BuildingImport imp) {
         BuildingElement element = (BuildingElement) imp.getElement();
-        float result = AbstractPlugin.MIN_MATCHING_SCORE;
+        float result = AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
         if (imp.getArea() == null) {
             LOGGER.warn("Unable to compute score because building import has NO area");
-            return AbstractPlugin.MIN_MATCHING_SCORE;
+            return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
         }
         if (imp.getElement() == null) {
             LOGGER.warn("Unable to compute score because building import has NO element attached");
-            return AbstractPlugin.MIN_MATCHING_SCORE;
+            return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
         }
         // Get element area
         int elementArea = element.getComputedArea();

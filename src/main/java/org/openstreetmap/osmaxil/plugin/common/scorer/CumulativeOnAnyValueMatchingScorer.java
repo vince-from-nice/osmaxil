@@ -2,7 +2,7 @@ package org.openstreetmap.osmaxil.plugin.common.scorer;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
+import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,12 +15,12 @@ public class CumulativeOnAnyValueMatchingScorer<Element extends AbstractElement>
     
     @Override
     public float computeElementMatchingScore(AbstractElement element) {
-        float score = AbstractPlugin.MIN_MATCHING_SCORE;
+        float score = AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
         for (AbstractImport imp : element.getMatchingImports()) {
             score += imp.getMatchingScore();
         }
-        if (score > AbstractPlugin.MAX_MATCHING_SCORE) {
-            score = AbstractPlugin.MAX_MATCHING_SCORE;
+        if (score > AbstractUpdaterPlugin.MAX_MATCHING_SCORE) {
+            score = AbstractUpdaterPlugin.MAX_MATCHING_SCORE;
         }
         return score;
     }
