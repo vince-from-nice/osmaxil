@@ -8,8 +8,8 @@ import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
 
-import org.openstreetmap.osmaxil.model.StringCoordinates;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
+import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,7 @@
 package org.openstreetmap.osmaxil.model.tree;
 
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.ElementTagNames;
+import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 
 public class TreeImport extends AbstractImport {
     

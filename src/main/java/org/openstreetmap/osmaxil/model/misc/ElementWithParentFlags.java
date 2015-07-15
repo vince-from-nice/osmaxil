@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.model;
+package org.openstreetmap.osmaxil.model.misc;
 
 import java.util.ArrayList;
 import java.util.List;

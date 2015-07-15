@@ -7,11 +7,11 @@ import java.util.Map;
 
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.ElementTagNames;
-import org.openstreetmap.osmaxil.model.ElementType;
-import org.openstreetmap.osmaxil.model.ElementWithParentFlags;
 import org.openstreetmap.osmaxil.model.building.BuildingElement;
 import org.openstreetmap.osmaxil.model.building.BuildingImport;
+import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
+import org.openstreetmap.osmaxil.model.misc.ElementType;
+import org.openstreetmap.osmaxil.model.misc.ElementWithParentFlags;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlMember;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNd;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
@@ -54,8 +54,6 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
     @Value("${plugins.parisBuildingMaker.changesetComment}")
     private String changesetComment;
     
-    IdIncrementor idGenerator = new IdIncrementor(1);
-    
     private Map<Long, OsmXmlRoot> newBuildingsByRemakableBuilding = new HashMap<>();
 
     private List<ElementWithParentFlags> oldNodesToDelete = new ArrayList<>();
@@ -80,7 +78,6 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
     @Override
     protected void processElement(BuildingElement element) {
         LOGGER.debug("Building XML for remaking of element #" + element.getOsmId() + ":");
-        this.remakableElements.put(element.getOsmId(), element);
         this.newBuildingsByRemakableBuilding.put(element.getOsmId(), this.buildNewBuildings(element));
         this.oldNodesToDelete.addAll(this.buildNodesToDelete(element));
     }

@@ -1,7 +1,14 @@
 package org.openstreetmap.osmaxil.plugin.maker;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.openstreetmap.osmaxil.model.tree.TreeElement;
 import org.openstreetmap.osmaxil.model.tree.TreeImport;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
 import org.openstreetmap.osmaxil.plugin.common.parser.NiceTreeParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +27,17 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     @Value("${plugins.niceTreeMaker.changesetComment}")
     private String changesetComment;
     
+    private List<OsmXmlRoot> trees = new ArrayList<>();
+    
     @Override
     protected void processImport(TreeImport tree) {
-        // TODO Auto-generated method stub
+        OsmXmlRoot root = new OsmXmlRoot();
+        OsmXmlNode node = new OsmXmlNode();
+        node.id = this.idGenerator.getId();
+        node.lat = tree.getLatitude().toString();
+        node.lon = tree.getLongitude().toString();
+       //TODO add tags and other attributes
+        this.trees.add(root);
     }
 
     @Override

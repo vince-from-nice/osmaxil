@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.model;
+package org.openstreetmap.osmaxil.model.misc;
 
 // TODO use an Enum !!
 public class ElementTagNames {

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
@@ -20,12 +21,11 @@ public abstract class AbstractElement {
     
     private boolean altered;
     
-    private float matchingScore;
-    
     abstract public List<OsmXmlTag> getTags();
     
+    // TODO move these attributes into plugins ?
+    private float matchingScore;
     private List<AbstractImport> matchingImports;
-    
     private Map<String, String> originalValuesByTagNames;
 
     static protected final Logger LOGGER = Logger.getLogger(Application.class);

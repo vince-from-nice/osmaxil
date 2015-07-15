@@ -7,11 +7,12 @@ import java.util.Map;
 import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.MatchingElementId;
+import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
+import org.openstreetmap.osmaxil.util.IdIncrementor;
 
 public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
         extends AbstractPlugin<ELEMENT, IMPORT> {
@@ -31,6 +32,8 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
     private int counterForMatchedImports;
 
     private int counterForRemakedElements;
+    
+    IdIncrementor idGenerator = new IdIncrementor(1);
     
     // =========================================================================
     // Abstract methods
@@ -79,6 +82,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
             }
             this.computeMatchingScores(element);
             if (this.isElementRemakable(element)) {
+                this.remakableElements.put(element.getOsmId(), element);
                 this.processElement(element);
             }
             LOGGER.info(LOG_SEPARATOR);

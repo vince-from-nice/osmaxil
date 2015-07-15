@@ -3,7 +3,7 @@ package org.openstreetmap.osmaxil.model.tree;
 import java.util.List;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
-import org.openstreetmap.osmaxil.model.ElementTagNames;
+import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
 

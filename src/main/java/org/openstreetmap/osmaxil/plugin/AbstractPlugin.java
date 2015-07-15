@@ -97,11 +97,11 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
         while (this.getParser().hasNext()) {
             try {
                 IMPORT imp = this.getParser().next();
-                this.counterForParsedImports++;
                 if (imp == null) {
                     LOGGER.warn("Import is null, skipping it...");
                     break;
                 }
+                this.counterForParsedImports++;
                 LOGGER.info("Loading import #" + this.counterForParsedImports + ": " + imp);
                 // Check if the import coordinates are fine with the bounding boxes
                 if (!this.checkCoordinatesWithFilteringArea(imp.getLongitude(), imp.getLatitude())) {
