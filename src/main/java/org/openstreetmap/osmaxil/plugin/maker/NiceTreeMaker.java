@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.model.tree.TreeElement;
 import org.openstreetmap.osmaxil.model.tree.TreeImport;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
+import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
 import org.openstreetmap.osmaxil.plugin.common.parser.NiceTreeParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +33,46 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     private List<OsmXmlRoot> trees = new ArrayList<>();
     
     @Override
+    protected boolean isImportMakable(TreeImport imp) {
+        // TODO Check if there's no existing tree too closed
+        return true;
+    }
+    
+    @Override
     protected void processImport(TreeImport tree) {
         OsmXmlRoot root = new OsmXmlRoot();
         OsmXmlNode node = new OsmXmlNode();
         node.id = this.idGenerator.getId();
         node.lat = tree.getLatitude().toString();
         node.lon = tree.getLongitude().toString();
-       //TODO add tags and other attributes
+        // Add the tag natural=*
+        OsmXmlTag tag = new OsmXmlTag();
+        tag.k =ElementTagNames.NATURAL;
+        tag.v = "tree";
+        node.tags.add(tag);
+        // Add the tag genus=*
+        tag = new OsmXmlTag();
+        tag.k = ElementTagNames.GENUS;
+        tag.v = tree.getType();
+        node.tags.add(tag);
+        // Add the tag specifies=*
+        tag = new OsmXmlTag();
+        tag.k = ElementTagNames.SPECIFIES;
+        tag.v = tree.getSubType();
+        node.tags.add(tag);
+        root.nodes.add(node);
         this.trees.add(root);
     }
 
     @Override
-    protected void buildDataForCreation() {
-        // TODO Auto-generated method stub
+    protected void buildData() {
+        OsmXmlRoot root = new OsmXmlRoot();
+        root.version = 0.6f;
+        root.generator = Application.NAME;
+        for (OsmXmlRoot tree : this.trees) {
+            root.nodes.add(tree.nodes.get(0));
+        }
+        this.data = root;
     }
 
     @Override

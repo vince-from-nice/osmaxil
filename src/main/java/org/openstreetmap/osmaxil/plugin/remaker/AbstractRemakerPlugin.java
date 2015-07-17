@@ -96,7 +96,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
     public void synchronize() {
         boolean success = false;
         if (this.dataForCreation == null || this.dataForDeletion == null) {
-            LOGGER.warn("Unable to remake element since its remaking data is null");
+            LOGGER.warn("Unable to synchronize element because data is null");
             return;
         }
         if ("api".equals(this.synchronizationMode)) {
@@ -106,8 +106,8 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
                     && this.osmXmlFile.writeToFile("genfile-deletion", this.dataForDeletion);
         }
         if (success) {
-            LOGGER.info("Ok all elements has been remaked");
-            this.counterForRemakedElements++;;
+            LOGGER.info("Ok all elements has been synchronized");
+            this.counterForRemakedElements++;
             //element.setAltered(true);
         }
     }

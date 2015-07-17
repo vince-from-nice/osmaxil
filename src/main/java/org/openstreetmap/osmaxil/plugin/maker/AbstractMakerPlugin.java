@@ -12,19 +12,23 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     // Instance variables
     // =========================================================================
     
-    //protected Map<Long, IMPORT> makableImports = new Hashtable<Long, IMPORT>();
-    
-    protected OsmXmlRoot dataForCreation;
+    protected OsmXmlRoot data;
     
     IdIncrementor idGenerator = new IdIncrementor(1);
+    
+    private int counterForMakableImports;
+
+    private int counterForMakedImports;
     
     // =========================================================================
     // Abstract methods
     // =========================================================================
     
+    abstract protected boolean isImportMakable(IMPORT imp); 
+    
     abstract protected void processImport(IMPORT imp);
 
-    abstract protected void buildDataForCreation();
+    abstract protected void buildData();
     
     // =========================================================================
     // Public methods
@@ -34,32 +38,51 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     public void process() {
         int importNbr = 0;
         for (IMPORT imp : this.loadedImports) {
-            LOGGER.info("Binding import #" + importNbr + ": " + imp);
+            LOGGER.info("Processing import #" + importNbr + ": " + imp);
             if (imp == null) {
                 LOGGER.warn("Import is null, skipping it...");
                 break;
             }
-            this.processImport(imp);
+            if (this.isImportMakable(imp)) {
+                this.processImport(imp);
+                this.counterForMakableImports++;
+            }
             LOGGER.info(LOG_SEPARATOR);
         }
+        this.buildData();
     }
     
     @Override
     public void synchronize() {
-        // TODO
+        boolean success = false;
+        if (this.data == null) {
+            LOGGER.warn("Unable to synchronize because data is null");
+            return;
+        }
+        if ("api".equals(this.synchronizationMode)) {
+            // TODO direct api writing for making
+        } else if ("gen".equals(this.synchronizationMode)) {
+            success = this.osmXmlFile.writeToFile("genfile", this.data);
+        }
+        if (success) {
+            LOGGER.info("Ok all imports has been synchronized");
+            this.counterForMakedImports++;
+        }
     }
-
+    
     public OsmXmlRoot getDataForCreation() {
-        return dataForCreation;
+        return data;
     }
     
     @Override
     public void displayProcessingStatistics() {
-        // TODO Auto-generated method stub
+        LOGGER_FOR_STATS.info("=== Processing statistics ===");
+        LOGGER_FOR_STATS.info("Total of makable imports: " + this.counterForMakableImports);
     }
 
     @Override
-    public void displaySynchronizingStatistics() {
-        // TODO Auto-generated method stub
+    public  void displaySynchronizingStatistics(){
+        LOGGER_FOR_STATS.info("=== Synchronizing statistics ===");
+        LOGGER_FOR_STATS.info("Total of maked imports: " + this.counterForMakedImports);
     }
 }
