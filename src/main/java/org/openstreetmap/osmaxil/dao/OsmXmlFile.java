@@ -41,6 +41,8 @@ public class OsmXmlFile {
 
     public boolean writeToFile(String name, OsmXmlRoot root) {
         boolean result = false;
+        root.version = 0.6f;
+        root.generator = Application.NAME;
         String fileName = this.getFileName(name);
         FileOutputStream os = null;
         try {

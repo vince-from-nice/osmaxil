@@ -27,6 +27,11 @@ public class OsmPostgis {
     private static int SRID_FOR_AREA_COMPUTATION = 32633;
     
     static private final Logger LOGGER = Logger.getLogger(Application.class);
+    
+    public Long[] findClosestElementIdsByQuery(String query) {
+        //TODO
+        return null;
+    }
 
     public Long[] findElementIdsByQuery(String query) {
         List<Long> result = this.jdbcTemplate.query(

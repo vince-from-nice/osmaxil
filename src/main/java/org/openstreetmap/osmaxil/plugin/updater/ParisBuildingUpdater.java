@@ -3,8 +3,8 @@ package org.openstreetmap.osmaxil.plugin.updater;
 import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.building.BuildingElement;
-import org.openstreetmap.osmaxil.model.building.BuildingImport;
+import org.openstreetmap.osmaxil.model.BuildingElement;
+import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
@@ -42,6 +42,11 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     
     private static final String MATCHING_TAG_NAME = ElementTagNames.BUILDING_LEVELS;
     
+    // =========================================================================
+    // Overrided methods
+    // =========================================================================
+
+    @Override
     @PostConstruct
     public void init() {
         super.init();

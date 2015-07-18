@@ -1,9 +1,8 @@
-package org.openstreetmap.osmaxil.model.building;
+package org.openstreetmap.osmaxil.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
 

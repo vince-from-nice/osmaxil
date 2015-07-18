@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.annotation.PostConstruct;
 import javax.xml.transform.stream.StreamSource;
 
-import org.openstreetmap.osmaxil.model.building.BuildingImport;
+import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.xml.pss.PssXmlBuilding;
 import org.openstreetmap.osmaxil.model.xml.pss.PssXmlRoot;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;

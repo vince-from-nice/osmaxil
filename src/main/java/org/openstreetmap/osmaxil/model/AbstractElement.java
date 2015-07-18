@@ -8,10 +8,11 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
+import org.openstreetmap.osmaxil.model.misc.Matchable;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
-public abstract class AbstractElement {
+public abstract class AbstractElement extends Matchable {
 
     protected Long osmId;
 
@@ -21,10 +22,7 @@ public abstract class AbstractElement {
     
     private boolean altered;
     
-    abstract public List<OsmXmlTag> getTags();
-    
     // TODO move these attributes into plugins ?
-    private float matchingScore;
     private List<AbstractImport> matchingImports;
     private Map<String, String> originalValuesByTagNames;
 
@@ -32,6 +30,8 @@ public abstract class AbstractElement {
     
     abstract public void updateChangeset(long changesetId);
 
+    abstract public List<OsmXmlTag> getTags();
+    
     public AbstractElement(long osmId) {
         this.osmId = osmId;
         this.altered = false;
@@ -112,14 +112,6 @@ public abstract class AbstractElement {
 
     public void setRelationId(long relationId) {
         this.relationId = relationId;
-    }
-
-    public float getMatchingScore() {
-        return matchingScore;
-    }
-
-    public void setMatchingScore(float matchingScore) {
-        this.matchingScore = matchingScore;
     }
 
     public Map<String, String> getOriginalValuesByTagNames() {

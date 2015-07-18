@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
 
-import org.openstreetmap.osmaxil.model.tree.TreeImport;
+import org.openstreetmap.osmaxil.model.TreeImport;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;

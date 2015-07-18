@@ -1,6 +1,8 @@
 package org.openstreetmap.osmaxil.model;
 
-public abstract class AbstractImport {
+import org.openstreetmap.osmaxil.model.misc.Matchable;
+
+public abstract class AbstractImport extends Matchable {
 
     protected long id;
     
@@ -11,8 +13,6 @@ public abstract class AbstractImport {
     protected Double longitude;
     
     protected AbstractElement matchingElement;
-    
-    protected float matchingScore;
     
     abstract public String getValueByTagName(String tagName);
     
@@ -51,14 +51,6 @@ public abstract class AbstractImport {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
-    }
-
-    public float getMatchingScore() {
-        return matchingScore;
-    }
-
-    public void setMatchingScore(float matchingScore) {
-        this.matchingScore = matchingScore;
     }
     
     public AbstractElement getMatchingElement() {

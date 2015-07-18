@@ -69,3 +69,23 @@ select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(wa
 
 select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(way, ST_GeomFromText('POLYGON((2.398250920228302 48.84595995531564, 2.398278788054809 48.845923000438354, 2.398244390622222 48.84591201136309, 2.398161431620923 48.845885508035884, 2.398086502653111 48.84598726181667, 2.398184905895766 48.8460186431167, 2.398201090543588 48.846023804457246, 2.39820244529123 48.84602423647196, 2.398250920228302 48.84595995531564))', 4326));
 select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(way, ST_GeomFromText('POLYGON((48.84595995531564 2.398250920228302, 48.845923000438354 2.398278788054809, 48.84591201136309 2.398244390622222, 48.845885508035884 2.398161431620923, 48.84598726181667 2.398086502653111, 48.8460186431167 2.398184905895766, 48.846023804457246 2.398201090543588, 48.84602423647196 2.39820244529123, 48.84595995531564 2.398250920228302))', 4326));
+
+-- Trees
+select * from planet_osm_nodes where tags is not null limit 100;
+select * from planet_osm_nodes n where ((tags->'natural') = 'tree') LIMIT 100;
+select osm_id, n.natural, ST_AsEWKT(way) from planet_osm_point n where n.natural = 'tree' LIMIT 100;
+select count(osm_id) from planet_osm_point n where n.natural = 'tree';
+
+select osm_id, n.natural, ST_AsEWKT(way) from planet_osm_point n where n.natural = 'tree' and osm_id = 2389577741;
+-- "SRID=900913;POINT(808968.25 5418364.78)"
+SELECT ST_Box2D(ST_GeomFromText('LINESTRING(1 2, 3 4, 5 6)'));
+SELECT ST_AsEWKT(ST_Envelope(ST_GeomFromText('LINESTRING(1 2, 3 4, 5 6)')));
+SELECT ST_AsEWKT(ST_MakeEnvelope(808958, 5418354, 808978, 5418374, 900913));
+
+select osm_id, n.natural, ST_AsEWKT(way) from planet_osm_point n where n.natural = 'tree' and way && ST_MakeEnvelope(808958, 5418354, 808978, 5418374, 900913);
+
+select osm_id, n.natural, ST_AsEWKT(way), ST_Distance(way, ST_GeomFromText('POINT(808968 5418364)', 900913)) as distance from planet_osm_point n 
+where n.natural = 'tree' and way && ST_MakeEnvelope(808958, 5418354, 808978, 5418374, 900913);
+
+
+

@@ -1,7 +1,7 @@
 package org.openstreetmap.osmaxil.plugin.updater;
 
-import org.openstreetmap.osmaxil.model.building.BuildingElement;
-import org.openstreetmap.osmaxil.model.building.BuildingImport;
+import org.openstreetmap.osmaxil.model.BuildingElement;
+import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcherWithoutSurface;
@@ -36,6 +36,10 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     private int counterForFakeNames = 0;
             
     private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTagNames.HEIGHT, ElementTagNames.NAME, ElementTagNames.URL};
+    
+    // =========================================================================
+    // Overrided methods
+    // =========================================================================
     
     @Override
     protected boolean isElementTagUpdatable(BuildingElement element, String tagName) {

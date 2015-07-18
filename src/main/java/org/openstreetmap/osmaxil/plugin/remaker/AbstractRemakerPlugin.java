@@ -72,7 +72,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
             this.associateImportsWithElements(imp);
             LOGGER.info(LOG_SEPARATOR);
         }
-        // For each matched element, compute its matching score and if it's remakable process it
+        // For each matched element, compute its matching score and process it if it's remakable
         int elementNbr = 0;
         for (ELEMENT element : this.matchedElements.values()) {
             LOGGER.info("Computing matching score for element #" + elementNbr + ": " + element);

@@ -111,7 +111,7 @@ public class OsmStandardApi {
 //      this.marshaller.marshal(b.getData(), new StreamResult(out));
 //      String xml = out.toString();
         try {
-            this.restTemplate.put(this.url + "way/" + element.getOsmId(), element.getApiData());
+            this.restTemplate.put(this.url + "way/" + element.getOsmId(), decorateData(element.getApiData()));
             this.counterForChangeset++;
             this.counterForWriteSuccess++;
         } catch (Exception e) {
@@ -126,6 +126,12 @@ public class OsmStandardApi {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Private methods
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private OsmXmlRoot decorateData(OsmXmlRoot root) {
+        root.version = 0.6f;
+        root.generator = Application.NAME;
+        return root;
+    }
     
     private void checkCurrentChangeset() {
         // Check there's a current changeset
