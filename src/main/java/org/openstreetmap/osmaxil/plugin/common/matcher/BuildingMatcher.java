@@ -11,9 +11,14 @@ import org.springframework.stereotype.Component;
 
 @Component(value="BuildingMatcher")
 public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
+    
+    /**
+     * Boolean to define if the matcher is using surfaces of buildings (when computing matching scores)
+     */
+    private boolean withSurfaces = true;
  
    @Override
-    public List<MatchingElementId> findMatchingImport(BuildingImport imp, int srid) {
+    public List<MatchingElementId> findMatchingElements(BuildingImport imp, int srid) {
         List<MatchingElementId> result = new ArrayList<MatchingElementId>();
         Long[] ids = new Long[0];
         // Find in PostGIS all buildings matching (ie. containing) the import
@@ -58,6 +63,10 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
         if (imp.getMatchingElement() == null) {
             LOGGER.warn("Unable to compute score because building import has NO element attached");
             return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
+        }
+        // If no surface are available the maximum score is always returned
+        if (!this.withSurfaces) {
+            return AbstractUpdaterPlugin.MAX_MATCHING_SCORE;
         }
         // Get element area
         int elementArea = element.getComputedArea();
@@ -111,7 +120,7 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
             elementId = - element.getRelationId(); // reinverse the ID because osm2pgsql stores relations like that
         }
         // TODO use JTS instead of PostGIS ?
-        int elementArea = this.osmPostgisService.getPolygonAreaById(elementId);
+        int elementArea = this.osmPostgis.getPolygonAreaById(elementId);
         // TODO cache it for next imports 
         LOGGER.info("OSM building " + element.getOsmId() + " area has been computed: " + elementArea);
         return elementArea;
@@ -120,7 +129,7 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
     private long findRelevantOuterMemberId(long relationId, BuildingImport imp) {
         long result = 0;
         // Fetch members from PostGIS
-        String membersString = this.osmPostgisService.getRelationMembers(relationId);
+        String membersString = this.osmPostgis.getRelationMembers(relationId);
         // Parse members strings
         membersString = membersString.substring(1, membersString.length() - 1);
         String[] members = membersString.split(","); 
@@ -147,24 +156,36 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
     private Long[] findBuildingIDsByGeometry(String geometry, int srid) {
         String geom = "ST_GeomFromText('" + geometry + "', " + srid + ")";
         // Transform geometry if it's needed
-        if (srid != this.osmPostgisService.getSrid()) {
-            geom = "ST_Transform(" + geom + ", " + this.osmPostgisService.getSrid() + ")";
+        if (srid != this.osmPostgis.getSrid()) {
+            geom = "ST_Transform(" + geom + ", " + this.osmPostgis.getSrid() + ")";
         }
         String query = "select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(way, " + geom + ");";
         LOGGER.debug("Looking in PostGIS for buildings containing geometry: " + query);
-        return this.osmPostgisService.findElementIdsByQuery(query);
+        return this.osmPostgis.findElementIdsByQuery(query);
     }
 
     private Long[]  findBuildingIDsByLatLon(double lon, double lat, int srid) {
         String geom = "ST_GeomFromText('POINT(" + lon + " " + lat + ")', " + srid + ")";
         // Transform geometry if it's needed
-        if (srid != this.osmPostgisService.getSrid()) {
-            geom = "ST_Transform(" + geom + ", " + this.osmPostgisService.getSrid() + ")";
+        if (srid != this.osmPostgis.getSrid()) {
+            geom = "ST_Transform(" + geom + ", " + this.osmPostgis.getSrid() + ")";
         }
         //List<Long> result = new ArrayList<Long>();
         String query = "select osm_id from planet_osm_polygon where building <> '' and  ST_Contains(way, " + geom + ");";
         LOGGER.debug("Looking in PostGIS for buildings containing coords: " + query);
-        return this.osmPostgisService.findElementIdsByQuery(query);
+        return this.osmPostgis.findElementIdsByQuery(query);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Gettes & Setters
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    public boolean isWithSurfaces() {
+        return withSurfaces;
+    }
+
+    public void setWithSurfaces(boolean withSurfaces) {
+        this.withSurfaces = withSurfaces;
     }
         
 }

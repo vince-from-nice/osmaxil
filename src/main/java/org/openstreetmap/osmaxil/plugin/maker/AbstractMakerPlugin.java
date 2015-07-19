@@ -59,6 +59,7 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
             LOGGER.info(LOG_SEPARATOR);
         }
         this.buildDataForCreation();
+        this.buildDataForDeletion();
     }
     
     @Override

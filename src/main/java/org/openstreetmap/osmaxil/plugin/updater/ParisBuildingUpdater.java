@@ -47,13 +47,6 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     // =========================================================================
 
     @Override
-    @PostConstruct
-    public void init() {
-        super.init();
-        this.scorer.setMatchingTagName(MATCHING_TAG_NAME);
-    }
-    
-    @Override
     protected boolean isElementTagUpdatable(BuildingElement element, String tagName) {
         // Building tags are updatable only if it doesn't have an original value
         return element.getOriginalValuesByTagNames().get(tagName) == null;
@@ -115,6 +108,16 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     @Override
     protected float getMinimalMatchingScore() {
         return this.minMatchingScore;
+    }
+    
+    // =========================================================================
+    // Private methods
+    // =========================================================================
+
+    @PostConstruct
+    private void init() {
+        this.scorer.setMatchingTagName(MATCHING_TAG_NAME);
+        this.matcher.setWithSurfaces(true);
     }
     
 }

@@ -137,7 +137,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
     
     private void associateImportsWithElements(IMPORT imp) {
         // Find relevant element
-        List<MatchingElementId> matchingElementIds = this.getMatcher().findMatchingImport(imp,
+        List<MatchingElementId> matchingElementIds = this.getMatcher().findMatchingElements(imp,
                 this.getParser().getSrid());
         if (matchingElementIds.size() > 0) {
             this.counterForMatchedImports++;

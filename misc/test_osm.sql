@@ -1,4 +1,11 @@
-﻿select ST_Transform(ST_GeomFromText('POLYGON((2.398250920228302 48.84595995531564, 2.398278788054809 48.845923000438354, 2.398244390622222 48.84591201136309, 2.398161431620923 48.845885508035884, 2.398086502653111 48.84598726181667, 2.398184905895766 48.8460186431167, 2.398201090543588 48.846023804457246, 2.39820244529123 48.84602423647196, 2.398250920228302 48.84595995531564))', 4326), 900913);
+﻿-- SRIDs
+select * from spatial_ref_sys where srid = '900913';
+select srtext from spatial_ref_sys where srid = '900913';
+-- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +units=m +k=1.0 +nadgrids=@null +no_defs"
+-- "PROJCS["Popular Visualisation CRS / Mercator (deprecated)",GEOGCS["Popular Visualisation CRS",DATUM["Popular_Visualisation_Datum",SPHEROID["Popular Visualisation Sphere",6378137,0,AUTHORITY["EPSG","7059"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY["EPSG","6055"]],P (...)"
+
+
+select ST_Transform(ST_GeomFromText('POLYGON((2.398250920228302 48.84595995531564, 2.398278788054809 48.845923000438354, 2.398244390622222 48.84591201136309, 2.398161431620923 48.845885508035884, 2.398086502653111 48.84598726181667, 2.398184905895766 48.8460186431167, 2.398201090543588 48.846023804457246, 2.39820244529123 48.84602423647196, 2.398250920228302 48.84595995531564))', 4326), 900913);
 
 select osm_id,name,building,ST_Area(way),ST_AsEWKT(way) from planet_osm_polygon where osm_id = -1746495;
 select osm_id,name,building,ST_Area(way),ST_AsEWKT(way) from planet_osm_polygon where osm_id = -1197720;
@@ -76,16 +83,31 @@ select * from planet_osm_nodes n where ((tags->'natural') = 'tree') LIMIT 100;
 select osm_id, n.natural, ST_AsEWKT(way) from planet_osm_point n where n.natural = 'tree' LIMIT 100;
 select count(osm_id) from planet_osm_point n where n.natural = 'tree';
 
+-- Tree sur la Promenade des Anglais
 select osm_id, n.natural, ST_AsEWKT(way) from planet_osm_point n where n.natural = 'tree' and osm_id = 2389577741;
 -- "SRID=900913;POINT(808968.25 5418364.78)"
-SELECT ST_Box2D(ST_GeomFromText('LINESTRING(1 2, 3 4, 5 6)'));
-SELECT ST_AsEWKT(ST_Envelope(ST_GeomFromText('LINESTRING(1 2, 3 4, 5 6)')));
 SELECT ST_AsEWKT(ST_MakeEnvelope(808958, 5418354, 808978, 5418374, 900913));
-
 select osm_id, n.natural, ST_AsEWKT(way) from planet_osm_point n where n.natural = 'tree' and way && ST_MakeEnvelope(808958, 5418354, 808978, 5418374, 900913);
-
+-- Requête qui marche !!
 select osm_id, n.natural, ST_AsEWKT(way), ST_Distance(way, ST_GeomFromText('POINT(808968 5418364)', 900913)) as distance from planet_osm_point n 
-where n.natural = 'tree' and way && ST_MakeEnvelope(808958, 5418354, 808978, 5418374, 900913);
+where n.natural = 'tree' and way && ST_MakeEnvelope(808958, 5418354, 808978, 5418374, 900913) ORDER BY distance;
+
+-- Imported tree
+SELECT ST_AsEWKT(ST_Transform(ST_GeomFromText('POINT (7.24701747 43.72702988)', 4326), 900913));
+-- Postgis: POINT(806734.294530357 5423296.14707365)
+-- Osmaxil: POINT (4867670.700143859 803507.514809089)
+SELECT ST_AsEWKT(ST_Transform(ST_GeomFromText('POINT (7.24701747 43.72702988)', 4326), 3857));
+-- Postgis: POINT(806734.294530357 5423296.14707365)
+-- Osmaxil: POINT (4867670.700143859 808893.9985083668)
+POINT (4867670.700143859 808893.9985083668)
+
+-- Tree sur la Promenade des Anglais : id="2504921074" lat="43.6950068" lon="7.2670199"
+SELECT ST_Transform(ST_GeomFromText('POINT(7.2670199 43.6950068)', 4326), 900913) as tree;
+select osm_id, n.natural, ST_AsEWKT(way), ST_Distance(way, ST_Transform(ST_GeomFromText('POINT(7.2670199 43.6950068)', 4326), 900913)) as distance from planet_osm_point n 
+where n.natural = 'tree' and way && ST_MakeEnvelope(808958, 5418354, 808978, 5418374, 900913) ORDER BY distance;
+
+select osm_id, n.natural, ST_AsEWKT(way), ST_Distance(way, ST_Transform(ST_GeomFromText('POINT(7.2670199 43.6950068)', 4326), 900913)) as distance from planet_osm_point n 
+where n.natural = 'tree' and way && ST_Buffer(ST_Transform(ST_GeomFromText('POINT(7.2670199 43.6950068)', 4326), 900913)), 20) ORDER BY distance;
 
 
 

@@ -3,9 +3,12 @@ package org.openstreetmap.osmaxil.plugin.maker;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.openstreetmap.osmaxil.model.TreeElement;
 import org.openstreetmap.osmaxil.model.TreeImport;
 import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
+import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
@@ -37,10 +40,10 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     private List<Long> oldTreeIdsToDelete = new ArrayList<>();
 
     /**
-     * Size of the box around imported trees where existing trees (which are the closest from imported trees)
+     * Size of the buffer around imported trees where existing trees (at least the closest one from imported trees)
      * must be deleted.
      */
-    private static final double DELETING_BOX_WIDTH = 2.0;
+    private static final double DELETING_BOX_RADIUS = 2.0;
 
     // =========================================================================
     // Overrided methods
@@ -48,14 +51,18 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     
     @Override
     protected boolean isImportMakable(TreeImport imp) {
-        // TODO Check if there's no existing tree too closed
+        // Nothing special to check with trees, true is always returned..
         return true;
     }
 
     @Override
     protected void processImport(TreeImport tree) {
         this.newTreesToCreate.add(createNewTree(tree));
-        this.oldTreeIdsToDelete.add(findOldTreeToDelete(tree));
+        // Find in the deleting area the existing tree which is the closest to the imported tree
+        List<MatchingElementId> matchingElementIds = this.matcher.findMatchingElements(tree, this.parser.getSrid());
+        if (matchingElementIds.size() > 0) {
+            this.oldTreeIdsToDelete.add(matchingElementIds.get(0).getOsmId());
+        }
     }
 
     @Override
@@ -99,10 +106,23 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
         return this.matcher;
     }
     
+    @Override
+    public void displayProcessingStatistics() {
+        super.displayProcessingStatistics();
+        LOGGER_FOR_STATS.info("Total of deleted trees: " + oldTreeIdsToDelete.size());
+        LOGGER_FOR_STATS.info("Total of created trees: " + newTreesToCreate.size());
+    }
+    
     // =========================================================================
     // Private methods
     // =========================================================================
 
+    @PostConstruct
+    private void init() {
+        this.matcher.setMatchingAreaRadius(DELETING_BOX_RADIUS);
+        this.matcher.setMatchClosestOnly(false);
+    }
+    
     private OsmXmlRoot createNewTree(TreeImport tree) {
         OsmXmlRoot root = new OsmXmlRoot();
         OsmXmlNode node = new OsmXmlNode();
@@ -127,24 +147,6 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
         node.tags.add(tag);
         root.nodes.add(node);
         return root;
-    }
-
-    private Long findOldTreeToDelete(TreeImport tree) {
-        // Find in the deleting area the existing tree which is the closest to the imported tree
-        String query = "SELECT osm_id, ST_Distance(way, ST_GeomFromText('";
-        query += "POINT(" + tree.getLongitude() + " " + tree.getLatitude() + ")', " + this.osmPostgis.getSrid() + ")) as distance ";
-        query += "from planet_osm_point n where n.natural = 'tree' and way && ";
-        query += "ST_MakeEnvelope(" + (tree.getLongitude() - DELETING_BOX_WIDTH / 2);
-        query += ", " + (tree.getLatitude() - DELETING_BOX_WIDTH / 2);
-        query += ", " + (tree.getLongitude() + DELETING_BOX_WIDTH / 2);
-        query += ", " + (tree.getLatitude() + DELETING_BOX_WIDTH / 2);
-        query += ", " + this.osmPostgis.getSrid() + ") ORDER BY distance;";
-        Long[] oldTreeIds = this.osmPostgis.findElementIdsByQuery(query);
-        if (oldTreeIds.length == 0) {
-            return null;    
-        } else {
-            return oldTreeIds[0];
-        }
     }
 
 }

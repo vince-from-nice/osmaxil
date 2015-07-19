@@ -1,10 +1,12 @@
 package org.openstreetmap.osmaxil.plugin.updater;
 
+import javax.annotation.PostConstruct;
+
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
-import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcherWithoutSurface;
+import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingParser;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.openstreetmap.osmaxil.plugin.common.scorer.ExclusiveMatchingScorer;
@@ -19,7 +21,7 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     private PssBuildingParser parser;
 
     @Autowired
-    private BuildingMatcherWithoutSurface matcher;
+    private BuildingMatcher matcher;
     
     @Autowired
     private ExclusiveMatchingScorer<BuildingElement> scorer;
@@ -134,6 +136,15 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     @Override
     protected float getMinimalMatchingScore() {
         return this.minMatchingScore;
+    }
+    
+    // =========================================================================
+    // Private methods
+    // =========================================================================
+
+    @PostConstruct
+    public void init() {
+        this.matcher.setWithSurfaces(false); 
     }
     
 }

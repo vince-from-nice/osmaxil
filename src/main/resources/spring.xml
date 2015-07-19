@@ -23,40 +23,30 @@
 
 	<context:property-placeholder location="classpath:settings.properties, classpath:password.properties" />
 
-	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.updater.PssBuildingUpdaterPlugin">
-	</bean-->
-	
-	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.updater.ParisBuildingUpdaterPlugin">
-    </bean-->
-    
-	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.remaker.ParisBuildingRemakerPlugin">
-    </bean-->
+	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.updater.PssBuildingUpdaterPlugin"> </bean -->
 
-	<!--bean id="loadingStep" class="org.openstreetmap.osmaxil.step.LoadingStep">
-		<property name="plugin" ref="activePlugin" />
-	</bean>
+	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.updater.ParisBuildingUpdaterPlugin"> </bean -->
 
-	<bean id="processingStep" class="org.openstreetmap.osmaxil.step.ProcessingStep">
-		<property name="plugin" ref="activePlugin" />
-	</bean>
+	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.remaker.ParisBuildingRemakerPlugin"> </bean -->
 
-	<bean id="synchronizingStep" class="org.openstreetmap.osmaxil.step.SynchronizingStep">
-		<property name="plugin" ref="activePlugin" />
-	</bean>
+	<!--bean id="loadingStep" class="org.openstreetmap.osmaxil.step.LoadingStep"> <property name="plugin" ref="activePlugin" /> </bean> 
+		<bean id="processingStep" class="org.openstreetmap.osmaxil.step.ProcessingStep"> <property name="plugin" ref="activePlugin" /> </bean> 
+		<bean id="synchronizingStep" class="org.openstreetmap.osmaxil.step.SynchronizingStep"> <property name="plugin" ref="activePlugin" 
+		/> </bean> <bean id="statisticsStep" class="org.openstreetmap.osmaxil.step.StatisticsStep"> <property name="plugin" ref="activePlugin" 
+		/> </bean -->
 
-	<bean id="statisticsStep" class="org.openstreetmap.osmaxil.step.StatisticsStep">
-		<property name="plugin" ref="activePlugin" />
-	</bean-->
-	
 	<!-- ******************************************************************************** -->
 	<!-- Configuration the PostGIS service -->
 	<!-- ******************************************************************************** -->
 
-	<bean id="postgisDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<bean id="postgisDataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver" />
 		<property name="url" value="${postGis.url}" />
 		<property name="username" value="${postGis.login}" />
 		<property name="password" value="${postGis.password}" />
+		<property name="removeAbandoned" value="true" />
+		<property name="initialSize" value="1" />
+		<property name="maxActive" value="1" />
 	</bean>
 
 	<bean id="postgisJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
@@ -85,13 +75,13 @@
 			</list>
 		</property>
 	</bean>
-	
-    <!-- ******************************************************************************** -->
-    <!-- Configuration the PSS building plugin -->
-    <!-- ******************************************************************************** -->
-    
-    <oxm:jaxb2-marshaller id="pssMarshaller">
-        <oxm:class-to-be-bound name="org.openstreetmap.osmaxil.model.xml.pss.PssXmlRoot" />
-    </oxm:jaxb2-marshaller>
+
+	<!-- ******************************************************************************** -->
+	<!-- Configuration the PSS building plugin -->
+	<!-- ******************************************************************************** -->
+
+	<oxm:jaxb2-marshaller id="pssMarshaller">
+		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.model.xml.pss.PssXmlRoot" />
+	</oxm:jaxb2-marshaller>
 
 </beans>

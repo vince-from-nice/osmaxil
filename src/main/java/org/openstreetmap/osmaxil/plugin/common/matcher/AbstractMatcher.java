@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractMatcher<IMPORT extends AbstractImport> {
 
     @Autowired
-    protected OsmPostgis osmPostgisService;
+    protected OsmPostgis osmPostgis;
     
-    abstract public List<MatchingElementId> findMatchingImport(IMPORT imp, int srid);
+    abstract public List<MatchingElementId> findMatchingElements(IMPORT imp, int srid);
     
     abstract public float computeMatchingImportScore(IMPORT imp);
     

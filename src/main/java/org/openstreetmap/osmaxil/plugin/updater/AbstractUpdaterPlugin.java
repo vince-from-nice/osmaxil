@@ -71,14 +71,6 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
     // Public methods
     // =========================================================================
 
-    @PostConstruct
-    public void init() {
-        LOGGER.info("Init of " + this.getClass().getName());
-        for (String updatableTagName : this.getUpdatableTagNames()) {
-            this.countersByTagName.put(updatableTagName, 0);
-        }
-    }
-
     @Override
     public void process() {
         // For each loaded import, bind it with its matching elements
@@ -147,9 +139,17 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
     // Private methods
     // =========================================================================
 
+    @PostConstruct
+    private void init() {
+        LOGGER.info("Init of " + this.getClass().getName());
+        for (String updatableTagName : this.getUpdatableTagNames()) {
+            this.countersByTagName.put(updatableTagName, 0);
+        }
+    }
+    
     private void associateImportsWithElements(IMPORT imp) {
         // Find relevant element
-        List<MatchingElementId> matchingElementIds = this.getMatcher().findMatchingImport(imp,
+        List<MatchingElementId> matchingElementIds = this.getMatcher().findMatchingElements(imp,
                 this.getParser().getSrid());
         if (matchingElementIds.size() > 0) {
             this.counterForMatchedImports++;
