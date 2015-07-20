@@ -4,14 +4,16 @@ Osmaxil is a free software written in Java which allows automatic data imports i
 
 It is designed as an expandable program with different plugins which can handle different types of OSM elements.
 
-There's 2 types of plugins:
+There's 3 types of plugins:
 * updater: the plugin add tag(s) to existing OSM elements
-* remaker: the plugin deletes existing elements and create new ones 
+* remaker: the plugin deletes existing elements and create new ones, process is driven by existing elements
+* maker: the plugin deletes existing elements and create new ones, process is driven by imports
 
-For now available plugins are focused on buildings:
+For now available plugins are focused on buildings and trees:
 * Paris building remaker: its data source is OpenDataParis (http://opendata.paris.fr). It aims to provide a better building shape cutting (352k elements instead of 86k currently), it's currently under development.
 * Paris building updater: its data source is OpenDataParis (http://opendata.paris.fr). It has already been applied on the live server on April 2015: 49k parisan buildings has been updated with their building:levels tag. More information are available on [the Wiki page](http://wiki.openstreetmap.org/wiki/Paris,_France/Buildings_Heights_Import) dedicated to the import.
-* PSS building updater: its data source is the database of the PSS association (http://www.pss-archi.eu). The last one should be applied soon, in fact it's depending on the way the PSS assocation will publish their database which contains informations (including height and floors) about 47k buildings all over France.
+* PSS building updater: its data source is the database of the PSS association (http://www.pss-archi.eu). It contains informations (including height and floors) about 47k buildings all over France but it cannot be applied for now because the PSS assocation publishes their database under the CC-BY-ND-NC licence wich is incompatible with ODbL licence. It could be changed in the future (I hope). 
+* Nice trees maker: its data source is the OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org/site/). It's going to be applied on the live server with a total of 30k imported municipal trees.
 
 ## How to run ##
 
