@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Repository
-public class NiceTreeParser extends AbstractParser<TreeImport> {
+public class NiceTreeParser2014 extends AbstractParser<TreeImport> {
 
     private CSVReader reader;
 
@@ -65,7 +65,7 @@ public class NiceTreeParser extends AbstractParser<TreeImport> {
         tree.setId(this.rowCount);
         tree.setType(row[3]);
         tree.setSubType(row[2]);
-        tree.setReferenceCode(row[4]);
+        tree.setReference(row[4]);
         String geom = row[5].substring(row[5].indexOf(GEOM_TOKEN) + GEOM_TOKEN.length());
         geom = geom.substring(0, geom.length() - 2);
         String[] coords = geom.split(", ");

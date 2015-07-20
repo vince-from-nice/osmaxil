@@ -5,6 +5,7 @@ import javax.annotation.PreDestroy;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.AbstractElement;
+import org.openstreetmap.osmaxil.model.misc.ElementType;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,7 +79,7 @@ public class OsmStandardApi {
         LOGGER_FOR_STATS.info("Total of changeset operations: open=" + this.counterForChangesetOpen + " close=" + this.counterForChangesetClose);
     }
     
-    public OsmXmlRoot readElement(long id) {
+    public OsmXmlRoot readElement(long id, ElementType type) {
         OsmXmlRoot result = null;
         LOGGER.info("Read element from OSM API with id=" + id + " : ");
         try {
@@ -92,7 +93,7 @@ public class OsmStandardApi {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Accept-Encoding", "");
             HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
-            ResponseEntity<OsmXmlRoot> responseEntity = this.restTemplate.exchange(this.url + "way/" + id, HttpMethod.GET, requestEntity, OsmXmlRoot.class);
+            ResponseEntity<OsmXmlRoot> responseEntity = this.restTemplate.exchange(this.url + type.getName() + "/" + id, HttpMethod.GET, requestEntity, OsmXmlRoot.class);
             result = responseEntity.getBody();
             
             this.counterForReadSuccess++;
@@ -103,7 +104,7 @@ public class OsmStandardApi {
         return result;
     }
     
-    public boolean writeElement(AbstractElement element) {
+    public boolean writeElement(AbstractElement element, ElementType type) {
         LOGGER.info("Write element to OSM API with id=" + element.getOsmId() + " : ");
         this.checkCurrentChangeset();
         element.updateChangeset(this.currentChangesetID);
@@ -111,7 +112,7 @@ public class OsmStandardApi {
 //      this.marshaller.marshal(b.getData(), new StreamResult(out));
 //      String xml = out.toString();
         try {
-            this.restTemplate.put(this.url + "way/" + element.getOsmId(), decorateData(element.getApiData()));
+            this.restTemplate.put(this.url + type.getName() + "/" + element.getOsmId(), decorateData(element.getApiData()));
             this.counterForChangeset++;
             this.counterForWriteSuccess++;
         } catch (Exception e) {

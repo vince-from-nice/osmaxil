@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.model.misc.ElementType;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
@@ -186,7 +187,7 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
         ELEMENT element = this.matchedElements.get(osmId);
         if (element == null) {
             // Fetch data from OSM API
-            OsmXmlRoot apiData = this.osmStandardApi.readElement(osmId);
+            OsmXmlRoot apiData = this.osmStandardApi.readElement(osmId, ElementType.Way);
             if (apiData == null) {
                 throw new Exception("Unable to fetch data from OSM API for element#" + osmId);
             }
@@ -244,7 +245,7 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
         if (needToSync) {
             boolean success = false;
             if ("api".equals(this.synchronizationMode)) {
-                success = this.osmStandardApi.writeElement(element);
+                success = this.osmStandardApi.writeElement(element, ElementType.Way);
             } else if ("gen".equals(this.synchronizationMode)) {
                 success = this.osmXmlFile.writeToFile("" + element.getOsmId(), element.getApiData());
             }

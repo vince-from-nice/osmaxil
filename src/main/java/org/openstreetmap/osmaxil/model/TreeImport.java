@@ -8,7 +8,7 @@ public class TreeImport extends AbstractImport {
     
     private String subType;
 
-    private String referenceCode;
+    private String reference;
     
     private int height;
     
@@ -25,15 +25,15 @@ public class TreeImport extends AbstractImport {
     @Override
     public String toString() {
         return "Tree with id=[" + this.id + "], coords=[" + this.latitude + ", " + this.longitude + "], genus=["
-                + this.type + "], subType=[" + this.subType + "], height=[" + this.height + "]";
+                + this.type + "], subType=[" + this.subType + "], height=[" + this.height + "], ref=[" + this.reference + "]";
     }
 
-    public String getReferenceCode() {
-        return referenceCode;
+    public String getReference() {
+        return reference;
     }
 
-    public void setReferenceCode(String referenceCode) {
-        this.referenceCode = referenceCode;
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
     public String getType() {
