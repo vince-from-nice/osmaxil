@@ -82,6 +82,8 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
             OsmXmlNode node = new OsmXmlNode();
             node.id = tree.getOsmId();
             node.action = "delete";
+            node.changeset = 0;
+            node.uid = 0;
             node.version = tree.getApiData().nodes.get(0).version;
             root.nodes.add(node);
         }
