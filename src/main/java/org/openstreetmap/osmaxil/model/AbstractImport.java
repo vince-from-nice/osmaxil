@@ -1,8 +1,8 @@
 package org.openstreetmap.osmaxil.model;
 
-import org.openstreetmap.osmaxil.model.misc.Matchable;
+import org.openstreetmap.osmaxil.model.misc.MatchableObject;
 
-public abstract class AbstractImport extends Matchable {
+public abstract class AbstractImport extends MatchableObject {
 
     protected long id;
     

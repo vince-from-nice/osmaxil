@@ -15,6 +15,8 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     
     protected OsmXmlRoot dataForCreation;
     
+    protected OsmXmlRoot dataForModification;
+    
     protected OsmXmlRoot dataForDeletion;
     
     IdIncrementor idGenerator = new IdIncrementor(1);
@@ -33,6 +35,8 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
 
     abstract protected void buildDataForCreation();
     
+    abstract protected void buildDataForModification();
+    
     abstract protected void buildDataForDeletion();
     
     abstract protected AbstractMatcher<IMPORT> getMatcher();
@@ -43,10 +47,10 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     
     @Override
     public void process() {
-        int importNbr = 0;
+        int importNbr = 1;
         // For each import compute its matching score and process it if it's makable
         for (IMPORT imp : this.loadedImports) {
-            LOGGER.info("Processing import #" + importNbr + ": " + imp);
+            LOGGER.info("Processing import #" + importNbr++ + ": " + imp);
             if (imp == null) {
                 LOGGER.warn("Import is null, skipping it...");
                 break;
@@ -59,21 +63,29 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
             LOGGER.info(LOG_SEPARATOR);
         }
         this.buildDataForCreation();
+        this.buildDataForModification();
         this.buildDataForDeletion();
     }
     
     @Override
     public void synchronize() {
-        boolean success = false;
-        if (this.dataForCreation == null || this.dataForDeletion == null) {
+        boolean success = true;
+        if (this.dataForCreation == null && this.dataForModification == null && this.dataForDeletion == null) {
             LOGGER.warn("Unable to synchronize because data is null");
             return;
         }
         if ("api".equals(this.synchronizationMode)) {
             // TODO direct api writing for making
         } else if ("gen".equals(this.synchronizationMode)) {
-            success = this.osmXmlFile.writeToFile("genfile-creation", this.dataForCreation)
-                    && this.osmXmlFile.writeToFile("genfile-deletion", this.dataForDeletion);
+            if (this.dataForCreation != null) { 
+                success = success && this.osmXmlFile.writeToFile("genfile-creation", this.dataForCreation);
+            }
+            if (this.dataForModification != null) { 
+                success = success && this.osmXmlFile.writeToFile("genfile-modification", this.dataForModification);
+            }
+            if (this.dataForDeletion != null) { 
+                success = success && this.osmXmlFile.writeToFile("genfile-deletion", this.dataForDeletion);
+            }
         }
         if (success) {
             LOGGER.info("Ok all imports has been synchronized");

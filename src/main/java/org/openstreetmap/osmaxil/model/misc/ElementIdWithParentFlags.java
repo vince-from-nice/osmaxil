@@ -3,7 +3,9 @@ package org.openstreetmap.osmaxil.model.misc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ElementWithParentFlags {
+import org.openstreetmap.osmaxil.model.ElementType;
+
+public class ElementIdWithParentFlags {
     
     Long osmId;
     

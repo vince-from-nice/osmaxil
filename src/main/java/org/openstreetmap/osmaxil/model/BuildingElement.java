@@ -2,7 +2,6 @@ package org.openstreetmap.osmaxil.model;
 
 import java.util.List;
 
-import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
 public class BuildingElement extends AbstractElement {
@@ -22,6 +21,11 @@ public class BuildingElement extends AbstractElement {
     public List<OsmXmlTag> getTags() {
         return this.getApiData().ways.get(0).tags;
     }
+    
+    @Override
+    public void setTags(List<OsmXmlTag> tags) {
+        this.getApiData().ways.get(0).tags = tags;
+    }
 
     @Override
     public String toString() {
@@ -30,12 +34,12 @@ public class BuildingElement extends AbstractElement {
     }
 
     public boolean isPart() {
-        return "yes".equals(this.getTagValue(ElementTagNames.BUILDING_PART));
+        return "yes".equals(this.getTagValue(ElementTag.BUILDING_PART));
     }
     
     public Float getHeight() {
         try {
-            String s = (String) this.getTagValue(ElementTagNames.HEIGHT);
+            String s = (String) this.getTagValue(ElementTag.HEIGHT);
             return (s != null ? Float.parseFloat(s) : null);
         } catch (Exception e) {
             LOGGER.warn("Unable to get levels for building import " + this.getOsmId() + " (" + e.getMessage()+ ")");
@@ -44,12 +48,12 @@ public class BuildingElement extends AbstractElement {
     }
 
     public boolean setHeight(Float value) {
-        return this.setTagValue(ElementTagNames.HEIGHT, value.toString());
+        return this.setTagValue(ElementTag.HEIGHT, value.toString());
     }
 
     public Integer getLevels() {
         try {
-            String s = (String) this.getTagValue(ElementTagNames.BUILDING_LEVELS);
+            String s = (String) this.getTagValue(ElementTag.BUILDING_LEVELS);
             return (s != null ? Integer.parseInt(s) : null);
         } catch (Exception e) {
             LOGGER.warn("Unable to get levels for building import " + this.getOsmId() + " (" + e.getMessage()+ ")");
@@ -58,7 +62,7 @@ public class BuildingElement extends AbstractElement {
     }
 
     public boolean setLevels(Integer value) {
-        return this.setTagValue(ElementTagNames.BUILDING_LEVELS, value.toString());
+        return this.setTagValue(ElementTag.BUILDING_LEVELS, value.toString());
     }
 
     public int getComputedArea() {

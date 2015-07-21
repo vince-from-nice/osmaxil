@@ -1,6 +1,5 @@
 package org.openstreetmap.osmaxil.model;
 
-import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 
 public class TreeImport extends AbstractImport {
     
@@ -14,9 +13,9 @@ public class TreeImport extends AbstractImport {
     
     @Override
     public String getValueByTagName(String tagName) {
-        if (ElementTagNames.GENUS.equals(tagName)) {
+        if (ElementTag.GENUS.equals(tagName)) {
             return this.type.toString();
-        } else if (ElementTagNames.SPECIFIES.equals(tagName)) {
+        } else if (ElementTag.SPECIFIES.equals(tagName)) {
             return this.subType.toString();
         }
         return null;

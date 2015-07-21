@@ -3,7 +3,6 @@ package org.openstreetmap.osmaxil.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
 import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
 
 import com.vividsolutions.jts.geom.Point;
@@ -31,13 +30,13 @@ public class BuildingImport extends AbstractImport {
 
     @Override
     public String getValueByTagName(String tagName) {
-        if (ElementTagNames.BUILDING_LEVELS.equals(tagName)) {
+        if (ElementTag.BUILDING_LEVELS.equals(tagName)) {
             return this.levels.toString();
-        } else if (ElementTagNames.HEIGHT.equals(tagName)) {
+        } else if (ElementTag.HEIGHT.equals(tagName)) {
             return this.height.toString();
-        } else if (ElementTagNames.URL.equals(tagName)) {
+        } else if (ElementTag.URL.equals(tagName)) {
             return this.url;
-        } else if (ElementTagNames.NAME.equals(tagName)) {
+        } else if (ElementTag.NAME.equals(tagName)) {
             return this.name;
         }
         return null;

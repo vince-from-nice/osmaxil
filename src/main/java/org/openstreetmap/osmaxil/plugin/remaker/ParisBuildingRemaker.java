@@ -8,9 +8,9 @@ import java.util.Map;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
-import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
-import org.openstreetmap.osmaxil.model.misc.ElementType;
-import org.openstreetmap.osmaxil.model.misc.ElementWithParentFlags;
+import org.openstreetmap.osmaxil.model.ElementTag;
+import org.openstreetmap.osmaxil.model.ElementType;
+import org.openstreetmap.osmaxil.model.misc.ElementIdWithParentFlags;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlMember;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNd;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
@@ -58,7 +58,7 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
 
     private Map<Long, OsmXmlRoot> newBuildingsByRemakableBuilding = new HashMap<>();
 
-    private List<ElementWithParentFlags> oldNodesToDelete = new ArrayList<>();
+    private List<ElementIdWithParentFlags> oldNodesToDelete = new ArrayList<>();
 
     private Map<String, OsmXmlNode> newNodesByCoordinates = new HashMap<>();
 
@@ -110,7 +110,7 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
             root.ways.add(way);
         }
         // Merge deletions of nodes of all remakable buildings
-        for (ElementWithParentFlags e : this.oldNodesToDelete) {
+        for (ElementIdWithParentFlags e : this.oldNodesToDelete) {
             // TODO Check if they can be deleted
             if (true) {
                 OsmXmlNode node = new OsmXmlNode();
@@ -165,16 +165,16 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
     // Private methods
     // =========================================================================
 
-    private List<ElementWithParentFlags> buildNodesToDelete(BuildingElement element) {
-        ArrayList<ElementWithParentFlags> result = new ArrayList<>();
+    private List<ElementIdWithParentFlags> buildNodesToDelete(BuildingElement element) {
+        ArrayList<ElementIdWithParentFlags> result = new ArrayList<>();
         for (OsmXmlNd nd : element.getApiData().ways.get(0).nds) {
-            ElementWithParentFlags node = new ElementWithParentFlags();
+            ElementIdWithParentFlags node = new ElementIdWithParentFlags();
             node.setOsmId(nd.ref);
             node.setType(ElementType.Node);
             // TODO use OverPass API to request all ways referencing current point ?
             List<Long> relatedWayIds = new ArrayList<>();
             for (Long relatedWayId : relatedWayIds) {
-                ElementWithParentFlags.Parent parent = node.new Parent();
+                ElementIdWithParentFlags.Parent parent = node.new Parent();
                 parent.setOsmId(relatedWayId);
                 parent.setFlag(false);
                 node.getParents().add(parent);
@@ -212,7 +212,7 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
             part.tags.add(tag);
             // Add the building:level tag
             tag = new OsmXmlTag();
-            tag.k = ElementTagNames.BUILDING_LEVELS;
+            tag.k = ElementTag.BUILDING_LEVELS;
             Integer levels = bi.getLevels() + 1; // US way of levels counting
             tag.v = levels.toString();
             part.tags.add(tag);

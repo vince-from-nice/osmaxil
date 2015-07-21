@@ -7,12 +7,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
-import org.openstreetmap.osmaxil.model.misc.Matchable;
+import org.openstreetmap.osmaxil.model.misc.MatchableObject;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
-public abstract class AbstractElement extends Matchable {
+public abstract class AbstractElement extends MatchableObject {
 
     protected Long osmId;
 
@@ -31,6 +30,8 @@ public abstract class AbstractElement extends Matchable {
     abstract public void updateChangeset(long changesetId);
 
     abstract public List<OsmXmlTag> getTags();
+    
+    abstract public void setTags(List<OsmXmlTag> tags);
     
     public AbstractElement(long osmId) {
         this.osmId = osmId;
@@ -77,7 +78,7 @@ public abstract class AbstractElement extends Matchable {
     }
 
     public String getName() {
-        return (String) this.getTagValue(ElementTagNames.NAME);
+        return (String) this.getTagValue(ElementTag.NAME);
     }
     
     // Getters & Setters

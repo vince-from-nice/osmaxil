@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
-import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
+import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingParser;
@@ -38,9 +38,9 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     @Value("${plugins.parisBuildingUpdater.changesetComment}")
     private String changesetComment;
     
-    private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTagNames.BUILDING_LEVELS};
+    private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTag.BUILDING_LEVELS};
     
-    private static final String MATCHING_TAG_NAME = ElementTagNames.BUILDING_LEVELS;
+    private static final String MATCHING_TAG_NAME = ElementTag.BUILDING_LEVELS;
     
     // =========================================================================
     // Overrided methods
@@ -61,7 +61,7 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
             return false;
         }
         boolean updated = false;
-        if (ElementTagNames.HEIGHT.equals(tagName)) {
+        if (ElementTag.HEIGHT.equals(tagName)) {
             // Adding +1 to levels because OSM use the US way to count building levels
             element.setLevels(Integer.parseInt(tagValue) + 1);
             LOGGER.info("===> Updating levels to " + (tagValue + 1));

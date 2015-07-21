@@ -7,10 +7,10 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.openstreetmap.osmaxil.model.ElementTag;
+import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.TreeElement;
 import org.openstreetmap.osmaxil.model.TreeImport;
-import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
-import org.openstreetmap.osmaxil.model.misc.ElementType;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
@@ -40,13 +40,15 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
 
     private List<OsmXmlRoot> newTreesToCreate = new ArrayList<>();
 
-    private Map<Long, TreeElement> oldTreeToDeleteById = new HashMap<Long, TreeElement>();
+    private Map<Long, TreeElement> matchingTreesById = new HashMap<Long, TreeElement>();
+    
+    private int counterForMultiMatchingTrees;
 
     /**
      * Size of the buffer around imported trees where existing trees (at least the closest one from imported trees) must
-     * be deleted.
+     * be updated or deleted.
      */
-    private static final double DELETING_BOX_RADIUS = 2.0;
+    private static final double MATCHING_BOX_RADIUS = 2.0;
 
     private static final String REF_CODE_SUFFIX = ":FR:Nice:trees";
 
@@ -61,9 +63,37 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     }
 
     @Override
-    protected void processImport(TreeImport tree) {
-        this.newTreesToCreate.add(createNewTree(tree));
-        this.updateOldTreesToDelete(tree);
+    protected void processImport(TreeImport importedTree) {
+        List<MatchingElementId> matchingElementIds = this.matcher.findMatchingElements(importedTree,
+                this.parser.getSrid());
+        if (matchingElementIds.isEmpty()) {
+            LOGGER.info("Tree has no match, need to create a new one...");
+            this.newTreesToCreate.add(createNewTree(importedTree));
+        } else {
+            LOGGER.info("Tree has a match, need to modify existing tree...");
+            TreeElement tree = this.matchingTreesById.get(matchingElementIds.get(0).getOsmId());
+            // if tree is not yet present in the map create a new one
+            if (tree == null) {
+                tree = new TreeElement(matchingElementIds.get(0).getOsmId());
+                this.matchingTreesById.put(tree.getOsmId(), tree);
+                tree.setApiData(this.osmStandardApi.readElement(tree.getOsmId(), ElementType.Node));
+                // Move existing tree to the same position than the imported tree
+                tree.setLatitude(importedTree.getLatitude());
+                tree.setLongitude(importedTree.getLongitude());
+                // And add the reference tag
+                OsmXmlTag tag = new OsmXmlTag();
+                tree.setTagValue(ElementTag.REF + REF_CODE_SUFFIX, importedTree.getReference());
+                tree.getApiData().nodes.get(0).tags.add(tag);
+            }
+            // Else the matching tree is already matching another imported tree
+            else {
+                this.counterForMultiMatchingTrees++;
+                LOGGER.warn("Existing tree#" + tree.getOsmId() + " is matching with more than one imported tree");
+                // In that case we create a new tree based on the new imported tree
+                // TOdO A better solution would be to keep the closest matching tree and for the other ones create a new tree
+                this.newTreesToCreate.add(createNewTree(importedTree));
+            }
+        }
     }
 
     @Override
@@ -76,18 +106,22 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     }
 
     @Override
-    protected void buildDataForDeletion() {
+    protected void buildDataForModification() {
         OsmXmlRoot root = new OsmXmlRoot();
-        for (TreeElement tree : this.oldTreeToDeleteById.values()) {
+        for (TreeElement tree : this.matchingTreesById.values()) {
             OsmXmlNode node = new OsmXmlNode();
             node.id = tree.getOsmId();
-            node.action = "delete";
+            node.action = "modify";
             node.changeset = 0;
             node.uid = 0;
             node.version = tree.getApiData().nodes.get(0).version;
             root.nodes.add(node);
         }
-        this.dataForDeletion = root;
+        this.dataForModification = root;
+    }
+
+    @Override
+    protected void buildDataForDeletion() {
     }
 
     @Override
@@ -113,8 +147,9 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     @Override
     public void displayProcessingStatistics() {
         super.displayProcessingStatistics();
-        LOGGER_FOR_STATS.info("Total of deleted trees: " + oldTreeToDeleteById.size());
         LOGGER_FOR_STATS.info("Total of created trees: " + newTreesToCreate.size());
+        LOGGER_FOR_STATS.info("Total of updated trees: " + matchingTreesById.size());
+        LOGGER_FOR_STATS.info("Total of multi matching trees: " + this.counterForMultiMatchingTrees);
     }
 
     // =========================================================================
@@ -123,7 +158,7 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
 
     @PostConstruct
     private void init() {
-        this.matcher.setMatchingAreaRadius(DELETING_BOX_RADIUS);
+        this.matcher.setMatchingAreaRadius(MATCHING_BOX_RADIUS);
         this.matcher.setMatchClosestOnly(false);
     }
 
@@ -136,45 +171,34 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
         node.lon = tree.getLongitude().toString();
         // Add the tag natural=*
         OsmXmlTag tag = new OsmXmlTag();
-        tag.k = ElementTagNames.NATURAL;
+        tag.k = ElementTag.NATURAL;
         tag.v = "tree";
-        node.tags.add(tag);
-        // Add the tag genus=*
-        tag = new OsmXmlTag();
-        tag.k = ElementTagNames.GENUS;
-        tag.v = tree.getType();
-        node.tags.add(tag);
-        // Add the tag specifies=*
-        tag = new OsmXmlTag();
-        tag.k = ElementTagNames.SPECIFIES;
-        tag.v = tree.getSubType();
         node.tags.add(tag);
         // Add the tag ref=*
         tag = new OsmXmlTag();
-        tag.k = ElementTagNames.REF + REF_CODE_SUFFIX;
+        tag.k = ElementTag.REF + REF_CODE_SUFFIX;
         tag.v = tree.getReference();
         node.tags.add(tag);
+//        // Add the tag genus=*
+//        tag = new OsmXmlTag();
+//        tag.k = ElementTag.GENUS;
+//        tag.v = tree.getType();
+//        node.tags.add(tag);
+//        // Add the tag specifies=*
+//        tag = new OsmXmlTag();
+//        tag.k = ElementTag.SPECIFIES;
+//        tag.v = tree.getSubType();
+//        node.tags.add(tag);
         root.nodes.add(node);
         return root;
     }
 
     /**
-     * Find in the deleting area the existing tree which is the closest to the imported tree and place them into the
-     * deleting list.
+     * Find in the deleting area the existing tree which is the closest to the imported tree, do some modification on it
+     * and then store it into the internal map.
      */
-    private List<TreeElement> updateOldTreesToDelete(TreeImport importedTree) {
+    private List<TreeElement> updateOldTreesToModify(TreeImport importedTree) {
         List<TreeElement> results = new ArrayList<>();
-        List<MatchingElementId> matchingElementIds = this.matcher.findMatchingElements(importedTree,
-                this.parser.getSrid());
-        // Depending on the matcher settings, list of ids can have one or many elements
-        for (MatchingElementId matchingElementId : matchingElementIds) {
-            TreeElement tree = this.oldTreeToDeleteById.get(matchingElementId.getOsmId());
-            if (tree == null) {
-                tree = new TreeElement(matchingElementId.getOsmId());
-                tree.setApiData(this.osmStandardApi.readElement(tree.getOsmId(), ElementType.Node));
-                this.oldTreeToDeleteById.put(tree.getOsmId(), tree);
-            }
-        }
         return results;
     }
 }

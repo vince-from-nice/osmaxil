@@ -1,7 +1,7 @@
-package org.openstreetmap.osmaxil.model.misc;
+package org.openstreetmap.osmaxil.model;
 
 // TODO use an Enum !!
-public class ElementTagNames {
+public class ElementTag {
     
     // ==========================================
     // Common tags

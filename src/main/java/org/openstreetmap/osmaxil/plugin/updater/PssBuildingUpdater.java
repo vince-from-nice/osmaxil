@@ -4,7 +4,7 @@ import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
-import org.openstreetmap.osmaxil.model.misc.ElementTagNames;
+import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingParser;
@@ -37,7 +37,7 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     
     private int counterForFakeNames = 0;
             
-    private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTagNames.HEIGHT, ElementTagNames.NAME, ElementTagNames.URL};
+    private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTag.HEIGHT, ElementTag.NAME, ElementTag.URL};
     
     // =========================================================================
     // Overrided methods
@@ -46,7 +46,7 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     @Override
     protected boolean isElementTagUpdatable(BuildingElement element, String tagName) {
         // Building tags are updatable only if it doesn't have an original value, except for the tag url which can have multiples values
-        return (ElementTagNames.URL.equals(tagName) ? true : element.getOriginalValuesByTagNames().get(tagName) == null);
+        return (ElementTag.URL.equals(tagName) ? true : element.getOriginalValuesByTagNames().get(tagName) == null);
     }
 
     @Override
@@ -57,23 +57,23 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
             return false;
         }
         boolean updated = false;
-        if (ElementTagNames.HEIGHT.equals(tagName)) {
+        if (ElementTag.HEIGHT.equals(tagName)) {
             element.setHeight(Float.parseFloat(tagValue));
             LOGGER.info("===> Updating height to [" + tagValue + "]");
             updated = true;
         }
-        if (ElementTagNames.URL.equals(tagName)) {
-            element.setTagValue(ElementTagNames.URL, tagValue);
+        if (ElementTag.URL.equals(tagName)) {
+            element.setTagValue(ElementTag.URL, tagValue);
             LOGGER.info("===> Updating URL to [" + tagValue + "]");
             updated = true;
         }
-        if (ElementTagNames.NAME.equals(tagName)) {
+        if (ElementTag.NAME.equals(tagName)) {
             // Ignore fake name based on the building address
            if (Character.isDigit(tagValue.charAt(0))) {
                 LOGGER.info("Skipping name update because the value looks fake (" + tagValue + ")");
                 this.counterForFakeNames++;
             } else {
-                element.setTagValue(ElementTagNames.NAME, tagValue);
+                element.setTagValue(ElementTag.NAME, tagValue);
                 LOGGER.info("===> Updating name to [" + tagValue + "]");
                 updated = true;
             }

@@ -1,6 +1,6 @@
 package org.openstreetmap.osmaxil.model.misc;
 
-public class Matchable {
+public class MatchableObject {
     
     protected float matchingScore;
 

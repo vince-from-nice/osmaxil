@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.model.misc;
+package org.openstreetmap.osmaxil.model;
 
 public enum ElementType {   
     
