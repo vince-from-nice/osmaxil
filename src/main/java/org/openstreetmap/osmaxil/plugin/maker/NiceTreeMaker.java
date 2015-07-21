@@ -48,7 +48,7 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
      * Size of the buffer around imported trees where existing trees (at least the closest one from imported trees) must
      * be updated or deleted.
      */
-    private static final double MATCHING_BOX_RADIUS = 2.0;
+    private static final double MATCHING_BOX_RADIUS = 10.0;
 
     private static final String REF_CODE_SUFFIX = ":FR:Nice:trees";
 

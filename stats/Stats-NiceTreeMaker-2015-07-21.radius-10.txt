@@ -1,0 +1,18 @@
+=== Loading statistics ===
+Total of parsed imports: 30521
+Total of filtered imports: 0
+Total of loaded imports: 30521
+=== Processing statistics ===
+Total of makable imports: 30521
+Total of created trees: 29738
+Total of updated trees: 783
+Total of multi matching trees: 499
+=== Synchronizing statistics ===
+Total of maked imports: 1
+=== Closing OSM XML service ===
+Total of writing successes: 2
+Total of writing failures: 0
+=== Closing OSM API service ===
+Total of read operations: success=783 failure=0
+Total of write operations: success=0 failure=0
+Total of changeset operations: open=0 close=0
