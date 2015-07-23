@@ -48,7 +48,7 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
      * Size of the buffer around imported trees where existing trees (at least the closest one from imported trees) must
      * be updated or deleted.
      */
-    private static final double MATCHING_BOX_RADIUS = 2.0;
+    private static final double MATCHING_BOX_RADIUS = 3.0;
 
     private static final String REF_CODE_SUFFIX = ":FR:Nice:trees";
 
@@ -67,11 +67,11 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
         List<MatchingElementId> matchingElementIds = this.matcher.findMatchingElements(importedTree,
                 this.parser.getSrid());
         if (matchingElementIds.isEmpty()) {
-            LOGGER.info("Tree has no match, need to create a new one...");
+            LOGGER.info("Tree has no matching trees, need to create a new one...");
             this.newTreesToCreate.add(createNewTree(importedTree));
         } else {
             long matchingOsmId = matchingElementIds.get(0).getOsmId();
-            LOGGER.info("Tree is matches existing tree #" + matchingOsmId);
+            LOGGER.info("Tree matches existing tree #" + matchingOsmId);
             TreeElement tree = this.matchingTreesById.get(matchingOsmId);
             // if tree is not yet present in the map create a new one
             if (tree == null) {
