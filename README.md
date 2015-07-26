@@ -6,13 +6,13 @@ It is designed as an expandable program with different plugins which can handle 
 
 There's 3 types of plugins:
 * __updater__ : the plugin add tag(s) to existing OSM elements
-* __maker__ : the plugin deletes existing elements and create new ones, process is driven by imports
-* __remaker__ : the plugin deletes existing elements and create new ones, process is driven by existing elements
+* __maker__ : the plugin modifies or deletes existing elements and create new ones, process is driven by imports
+* __remaker__ : the plugin modifies or deletes existing elements and create new ones, process is driven by existing elements
 
 For now available plugins are focused on buildings and trees:
 * _ParisBuildingRemaker_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It aims to provide a better building shape cutting (352k elements instead of 86k currently), it's currently under development.
 * _ParisBuildingUpdater_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It has already been applied on the live server on April 2015: 49k parisian buildings has been updated with their building:levels tag. More information are available on [the Wiki page](http://wiki.openstreetmap.org/wiki/Paris,_France/Buildings_Heights_Import) dedicated to the import.
-* _PssBuildingUpdater_ : its data source is the database of the PSS association (http://www.pss-archi.eu). It contains informations (including height and floors) about 47k buildings all over France but it cannot be applied for now because the PSS assocation publishes their database under the CC-BY-ND-NC licence wich is incompatible with ODbL licence. It could be changed in the future (I hope). 
+* _PssBuildingUpdater_ : its data source is the database of the PSS association (http://www.pss-archi.eu). It contains informations (including height and floors) about 47k buildings all over France but it cannot be applied for now because the PSS association publishes their database under the CC-BY-ND-NC licence wich is incompatible with the ODbL licence. It could be changed in the future (I hope). 
 * _NiceTreeMaker_ : its data source is the OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org/site/). It's going to be applied on the live server with a total of 30k imported municipal trees.
 
 ## How to run ##
@@ -109,18 +109,6 @@ The parameter **osmaxil.syncMode** defined in settings.xml can have the followin
 * gen (indirect writing with generated XML files)
 
 Note also that in the case of updating, a minimum matching score is defined in the settings.properties file for each updater plugin. OSM element can be updated only if it has a import whose matching score is bigger to that minimal score. If the matching score is enough then it tries to update one or more tag values. Depending on the plugin, update of the tag can be done only if the tag hasn't an original value yet. That way, the program will not destroy work which has been already done by other OSM contributors. That's the case with the OpenDataParis plugin.
-
-### Statistics generation ###
-
-That phase is implemented by the class named services.StatsGenerator.
-
-It crashes various statistics on the stdout such as :
-* Number of matched elements
-* Number of updatable/remakable elements
-* Number of updated/remaked elements
-
-It also displays all these statistics by matching score ranges.
-
 
 ## How to contribute ##
 
