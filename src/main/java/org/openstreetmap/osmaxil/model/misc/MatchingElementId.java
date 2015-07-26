@@ -5,6 +5,8 @@ public class MatchingElementId {
     private long osmId;
     
     private long relationId;
+    
+    private float score;
 
     public long getOsmId() {
         return osmId;
@@ -20,6 +22,14 @@ public class MatchingElementId {
 
     public void setRelationId(long relationId) {
         this.relationId = relationId;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
     }
     
 

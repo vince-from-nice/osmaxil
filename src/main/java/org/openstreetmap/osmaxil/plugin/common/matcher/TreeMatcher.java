@@ -3,6 +3,7 @@ package org.openstreetmap.osmaxil.plugin.common.matcher;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openstreetmap.osmaxil.dao.OsmPostgis;
 import org.openstreetmap.osmaxil.model.TreeImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.springframework.stereotype.Component;
@@ -32,31 +33,35 @@ public class TreeMatcher extends AbstractMatcher<TreeImport> {
         String treeGeometry = "ST_GeomFromText('" + wkt + "', " + this.osmPostgis.getSrid() + ")";
         // Transform coordinates of the tree if it's needed
         if (srid != this.osmPostgis.getSrid()) {
-            // ST_Transform(ST_GeomFromText('POINT(7.2670199 43.6950068)', 4326), 900913)
-            treeGeometry = "ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), " + this.osmPostgis.getSrid()
-                    + ")";
+            treeGeometry = "ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), " + this.osmPostgis.getSrid() + ")";
         }
         query += treeGeometry + ") AS distance ";
         query += "FROM planet_osm_point n WHERE n.natural = 'tree' AND way && ";
         String boxGeometry = "St_Buffer(ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), "
-                + this.osmPostgis.getSrid() + "), " + this.matchingAreaRadius + ")";
+                + this.osmPostgis.getSrid() + "), " + this.matchingAreaRadius + ") ";
         query += boxGeometry;
         query += "ORDER BY distance;";
-        Long[] oldTreeIds = this.osmPostgis.findElementIdsByQuery(query);
-        if (oldTreeIds.length > 0) {
+        // Perform the PostGIS query
+        OsmPostgis.IdWithScore[] oldTreeIdsWithScore = this.osmPostgis.findElementIdsWithScoreByQuery(query);
+        // Manage matching trees
+        if (oldTreeIdsWithScore.length > 0) {
             if (matchClosestOnly) {
-                MatchingElementId matchingElementId = new MatchingElementId();
-                matchingElementId.setOsmId(oldTreeIds[0]);
-                results.add(matchingElementId);
+                results.add(createMatchingElementId(oldTreeIdsWithScore[0]));
             } else {
-                for (Long id : oldTreeIds) {
-                    MatchingElementId matchingElementId = new MatchingElementId();
-                    matchingElementId.setOsmId(id);
-                    results.add(matchingElementId);
+                for (int i = 0; i < oldTreeIdsWithScore.length; i++) {
+                    results.add(createMatchingElementId(oldTreeIdsWithScore[i]));
                 }
             }
         }
         return results;
+    }
+    
+    private MatchingElementId createMatchingElementId(OsmPostgis.IdWithScore idWithScore) {
+        MatchingElementId matchingElementId = new MatchingElementId();
+        matchingElementId.setOsmId(idWithScore.id);
+        // Score of matching element is based on its distance to the imported tree
+        matchingElementId.setScore((float) (1 / idWithScore.score));
+        return matchingElementId;
     }
 
     @Override

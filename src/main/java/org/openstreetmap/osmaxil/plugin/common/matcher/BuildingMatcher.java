@@ -159,7 +159,7 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
         if (srid != this.osmPostgis.getSrid()) {
             geom = "ST_Transform(" + geom + ", " + this.osmPostgis.getSrid() + ")";
         }
-        String query = "select osm_id from planet_osm_polygon where building <> '' and  ST_Intersects(way, " + geom + ");";
+        String query = "select osm_id, 1 from planet_osm_polygon where building <> '' and  ST_Intersects(way, " + geom + ");";
         LOGGER.debug("Looking in PostGIS for buildings containing geometry: " + query);
         return this.osmPostgis.findElementIdsByQuery(query);
     }
@@ -171,7 +171,7 @@ public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
             geom = "ST_Transform(" + geom + ", " + this.osmPostgis.getSrid() + ")";
         }
         //List<Long> result = new ArrayList<Long>();
-        String query = "select osm_id from planet_osm_polygon where building <> '' and  ST_Contains(way, " + geom + ");";
+        String query = "select osm_id, 1 from planet_osm_polygon where building <> '' and  ST_Contains(way, " + geom + ");";
         LOGGER.debug("Looking in PostGIS for buildings containing coords: " + query);
         return this.osmPostgis.findElementIdsByQuery(query);
     }

@@ -44,6 +44,25 @@ public class OsmPostgis {
         return result.toArray(new Long[result.size()]);
     }
     
+    public class IdWithScore {
+        public long id;
+        public double score;
+    }
+
+    public IdWithScore[] findElementIdsWithScoreByQuery(String query) {
+        List<IdWithScore> result = this.jdbcTemplate.query(
+                query,
+                new RowMapper<IdWithScore>() {
+                    public IdWithScore mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        IdWithScore idWithScore = new IdWithScore();
+                        idWithScore.id = Long.parseLong(rs.getString("osm_id"));
+                        idWithScore.score = Double.parseDouble(rs.getString("distance"));
+                        return idWithScore;
+                    }
+                });
+        return result.toArray(new IdWithScore[result.size()]);
+    }
+    
     public String getRelationMembers(long relationId) {
         String result = "";
         String query = "select members from planet_osm_rels where id= ? ;";

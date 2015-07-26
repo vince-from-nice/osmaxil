@@ -21,7 +21,7 @@ public abstract class AbstractElement extends MatchableObject {
     
     private boolean altered;
     
-    // TODO move these attributes into plugins ?
+    // TODO move these attributes into AbstractUpdaterPlugin
     private List<AbstractImport> matchingImports;
     private Map<String, String> originalValuesByTagNames;
 

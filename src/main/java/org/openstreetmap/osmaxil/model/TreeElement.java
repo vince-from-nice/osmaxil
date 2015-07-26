@@ -39,7 +39,7 @@ public class TreeElement extends AbstractElement {
     }
     
     public void setLongitude(Double lon) {
-        this.getApiData().nodes.get(0).lat = lon.toString();
+        this.getApiData().nodes.get(0).lon = lon.toString();
     }
 
     @Override
