@@ -54,7 +54,7 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
      * Size of the buffer around imported trees where existing trees (at least the closest one from imported trees) must
      * be updated or deleted.
      */
-    private static final double MATCHING_BOX_RADIUS = 7.0;
+    private static final double MATCHING_BOX_RADIUS = 5.0;
 
     private static final String REF_CODE_SUFFIX = ":FR:Nice:trees";
 
@@ -71,12 +71,12 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     @Override
     protected void processImport(TreeImport importedTree) {
         List<MatchingElementId> matchingElementIds = this.getMatchingTreesByImportedTree(importedTree);
-        // If there's no matching tree, create have to create a new tree from the import
+        // If there's no matching tree, create a new tree from the import
         if (matchingElementIds.isEmpty()) {
             LOGGER.info("Tree has no matching tree, create a new tree from the import...");
             this.newTreesToCreate.add(createNewTreeFromImport(importedTree));
         } 
-        // Else need to watch was already done...
+        // Else watch was already done before...
         else {
             MatchingElementId bestMatchingElementId = matchingElementIds.get(0);
             long bestMatchingOsmId = bestMatchingElementId.getOsmId();
@@ -92,7 +92,7 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
             // Else the matching tree is already matching another imported tree, need to do a special process
             else {
                 this.counterForMultiMatchingTrees++;
-                LOGGER.warn("Best existing tree#" + bestMatchingOsmId + " is matching with more than one imported tree");
+                LOGGER.info("Best existing tree#" + bestMatchingOsmId + " is matching with more than one imported tree");
                 processMultiMatchingTree(importedTree, 0);
             }
         }
@@ -143,8 +143,9 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     @Override
     public void displayProcessingStatistics() {
         super.displayProcessingStatistics();
-        LOGGER_FOR_STATS.info("Total of created trees: " + newTreesToCreate.size());
-        LOGGER_FOR_STATS.info("Total of updated trees: " + existingTreesById.size());
+        LOGGER_FOR_STATS.info("Matching area radius: " + MATCHING_BOX_RADIUS);
+        LOGGER_FOR_STATS.info("Total of created trees: " + this.newTreesToCreate.size());
+        LOGGER_FOR_STATS.info("Total of updated trees: " + this.existingTreesById.size());
         LOGGER_FOR_STATS.info("Total of created or updated trees: " + (newTreesToCreate.size() + existingTreesById.size()));
         LOGGER_FOR_STATS.info("Total of multi matching trees: " + this.counterForMultiMatchingTrees);
     }
@@ -211,17 +212,17 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
         LOGGER.info("Process multi matching tree for imported tree #" + importedTree.getId() + " with index="
                 + (1 + matchingElementIndex) + "/" + matchingElementIds.size());
         long matchingOsmId = matchingElementId.getOsmId();
-        // If imported tree has a better score (ie. it is closer to the best existing tree than the previous closest imported tree)
         Float previousBestScore = this.bestScoreByExistingTreeId.get(matchingElementId.getOsmId());
+        // If we have a new winner (ie. it's closer to the best existing tree than the previous closest imported tree)
         if (previousBestScore == null || matchingElementId.getScore() > previousBestScore) {
             // The new best existing tree must be updated instead of created
-            String txt = "Imported tree is closer to the existing tree #" + matchingOsmId + " than the previous closest imported tree";
+            String txt = "Imported tree is closer to the existing tree #" + matchingOsmId + " than the previous closest imported tree ";
             if (previousBestScore != null) { 
                 txt += "(" + 1 / matchingElementId.getScore() + " < " + 1 / this.bestScoreByExistingTreeId.get(matchingElementId.getOsmId()) + ")";
             } else {
                 txt += "(no previous best score yet)";
             }
-            txt += " => can update existing tree instead of create it";
+            txt += " => can update it instead of create a new tree";
             LOGGER.info(txt); 
             TreeImport previousBestImportedTree = this.bestImportedTreeByExistingTreeId.get(matchingOsmId);
             TreeElement newExistingTree = this.createNewTreeFromExistingTree(matchingOsmId, importedTree);
@@ -235,15 +236,18 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
             }
         }
         else {
-            LOGGER.info("Imported tree is NOT closer to the existing tree #" + matchingOsmId + " than the previous closest imported tree ("
-                    + matchingElementId.getScore() + " >= " + this.bestScoreByExistingTreeId.get(matchingElementId.getOsmId()) + ")");
+            String txt = "Imported tree is NOT closer to the existing tree #" + matchingOsmId + " than the previous closest imported tree ";
+            if (previousBestScore != null) { 
+                txt += "(" + 1 / matchingElementId.getScore() + " > " + 1 / this.bestScoreByExistingTreeId.get(matchingElementId.getOsmId()) + ")";
+            }
+            LOGGER.info(txt); 
             // If there is another matching element for that import, retry with it
             if (matchingElementIndex < matchingElementIds.size() - 1) {
                 this.processMultiMatchingTree(importedTree, ++matchingElementIndex);
             }
             // Else the imported tree cannot update an existing tree, it must created
             else {
-                LOGGER.info("Imported tree doesn't have another matching tree => cannot update an existing tree, tree must created");
+                LOGGER.info("Imported tree doesn't have another matching tree => cannot update any existing tree, the tree must created");
                 this.newTreesToCreate.add(createNewTreeFromImport(importedTree));
             }
         }

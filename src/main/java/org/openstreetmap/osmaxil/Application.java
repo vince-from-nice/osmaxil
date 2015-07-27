@@ -11,11 +11,15 @@ public class Application {
     private ClassPathXmlApplicationContext applicationContext;
     
     static private final Logger LOGGER = Logger.getLogger(Application.class);
+    
+    static protected final Logger LOGGER_FOR_STATS = Logger.getLogger("LoggerForStats");
 
     public static void main(String[] args) {
         Application app = new Application();
         LOGGER.info("=== Starting Osmaxil ===");
+        long startTime = System.currentTimeMillis();
         app.run();
+        LOGGER_FOR_STATS .info("Job has been executed in " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
         LOGGER.info("=== Osmaxil has finished its job ===");
     }
 

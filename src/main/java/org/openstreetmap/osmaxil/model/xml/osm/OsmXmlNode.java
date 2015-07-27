@@ -15,7 +15,7 @@ public class OsmXmlNode {
     public int version;
     
     @XmlAttribute
-    public long changeset;
+    public Long changeset;
     
     @XmlAttribute
     public String user;
@@ -24,7 +24,7 @@ public class OsmXmlNode {
     public String visible;
     
     @XmlAttribute
-    public int uid;
+    public Integer uid;
     
     @XmlAttribute
     public String timestamp;
