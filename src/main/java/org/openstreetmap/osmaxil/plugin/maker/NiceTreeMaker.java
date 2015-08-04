@@ -48,13 +48,17 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     
     private Map<Long, List<MatchingElementId>> matchingTreeIdsByImportTreeId = new HashMap<>();
     
+    private List<TreeImport> nonMakableImportedTrees = new ArrayList<TreeImport>();
+    
     private int counterForMultiMatchingTrees;
+    
+    private boolean useReferenceCode = false; // apparently setting a tag for the internal reference is not a good thing (!)
 
     /**
      * Size of the buffer around imported trees where existing trees (at least the closest one from imported trees) must
      * be updated or deleted.
      */
-    private static final double MATCHING_BOX_RADIUS = 5.0;
+    private static final double MATCHING_BOX_RADIUS = 3.0;
 
     private static final String REF_CODE_SUFFIX = ":FR:Nice:trees";
 
@@ -64,17 +68,22 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
 
     @Override
     protected boolean isImportMakable(TreeImport imp) {
-        // Nothing special to check with trees, true is always returned..
+        // Check if the imported tree is inside an existing building
+        if (this.isTreeInsideExistingBuilding(imp)) {
+            LOGGER.warn("Tree #" + imp.getId() + " is inside an existing building => it's not makable");
+            this.nonMakableImportedTrees.add(imp);
+            return false;
+        }
         return true;
     }
-
+    
     @Override
     protected void processImport(TreeImport importedTree) {
         List<MatchingElementId> matchingElementIds = this.getMatchingTreesByImportedTree(importedTree);
         // If there's no matching tree, create a new tree from the import
         if (matchingElementIds.isEmpty()) {
             LOGGER.info("Tree has no matching tree, create a new tree from the import...");
-            this.newTreesToCreate.add(createNewTreeFromImport(importedTree));
+            this.newTreesToCreate.add(this.createNewTreeFromImport(importedTree));
         } 
         // Else watch was already done before...
         else {
@@ -121,10 +130,20 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     }
 
     @Override
+    protected void buildDataForNonMakableElements() {
+        OsmXmlRoot root = new OsmXmlRoot();
+        for (TreeImport importedTree : this.nonMakableImportedTrees) {
+            OsmXmlRoot xml = this.createNewTreeFromImport(importedTree);
+            root.nodes.add(xml.nodes.get(0));
+        }
+        this.dataForNonMakableElements = root;
+    }
+    
+    @Override
     public String getChangesetComment() {
         return this.changesetComment;
     }
-
+    
     @Override
     public String getChangesetSourceLabel() {
         return this.changesetSourceLabel;
@@ -159,6 +178,22 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
         this.matcher.setMatchingAreaRadius(MATCHING_BOX_RADIUS);
         this.matcher.setMatchClosestOnly(false);
     }
+    
+    private boolean isTreeInsideExistingBuilding(TreeImport imp) {
+        String geom = "ST_GeomFromText('POINT(" + imp.getLongitude() + " " + imp.getLatitude() + ")', " + this.parser.getSrid() + ")";
+        // Transform geometry if it's needed
+        if (this.parser.getSrid() != this.osmPostgis.getSrid()) {
+            geom = "ST_Transform(" + geom + ", " + this.osmPostgis.getSrid() + ")";
+        }
+        String query = "select osm_id, 1 from planet_osm_polygon where building <> '' and  ST_Contains(way, " + geom + ");";
+        LOGGER.debug("Looking in PostGIS for buildings containing coords: " + query);
+        Long[] ids = this.osmPostgis.findElementIdsByQuery(query);
+        if (ids.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private OsmXmlRoot createNewTreeFromImport(TreeImport tree) {
         OsmXmlRoot root = new OsmXmlRoot();
@@ -173,10 +208,12 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
         tag.v = "tree";
         node.tags.add(tag);
         // Add the tag ref=*
-        tag = new OsmXmlTag();
-        tag.k = ElementTag.REF + REF_CODE_SUFFIX;
-        tag.v = tree.getReference();
-        node.tags.add(tag);
+        if (this.useReferenceCode) {
+            tag = new OsmXmlTag();
+            tag.k = ElementTag.REF + REF_CODE_SUFFIX;
+            tag.v = tree.getReference();
+            node.tags.add(tag);
+        }
 //        // Add the tag genus=*
 //        tag = new OsmXmlTag();
 //        tag.k = ElementTag.GENUS;
@@ -201,7 +238,9 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
         tree.setLatitude(importedTree.getLatitude());
         tree.setLongitude(importedTree.getLongitude());
         // And add the reference tag
-        tree.setTagValue(ElementTag.REF + REF_CODE_SUFFIX, importedTree.getReference());
+        if (this.useReferenceCode) {
+            tree.setTagValue(ElementTag.REF + REF_CODE_SUFFIX, importedTree.getReference());
+        }
         return tree;
     }
     

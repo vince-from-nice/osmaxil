@@ -19,6 +19,8 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     
     protected OsmXmlRoot dataForDeletion;
     
+    protected OsmXmlRoot dataForNonMakableElements;
+    
     IdIncrementor idGenerator = new IdIncrementor(1);
     
     private int counterForMakableImports;
@@ -38,6 +40,8 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     abstract protected void buildDataForModification();
     
     abstract protected void buildDataForDeletion();
+    
+    abstract protected void buildDataForNonMakableElements();
     
     abstract protected AbstractMatcher<IMPORT> getMatcher();
     
@@ -65,6 +69,7 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
         this.buildDataForCreation();
         this.buildDataForModification();
         this.buildDataForDeletion();
+        this.buildDataForNonMakableElements();
     }
     
     @Override
@@ -78,13 +83,16 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
             // TODO direct api writing for making
         } else if ("gen".equals(this.synchronizationMode)) {
             if (this.dataForCreation != null) { 
-                success = success && this.osmXmlFile.writeToFile("genfile-creation", this.dataForCreation);
+                success = success && this.osmXmlFile.writeToFile("genfile-for-creation", this.dataForCreation);
             }
             if (this.dataForModification != null) { 
-                success = success && this.osmXmlFile.writeToFile("genfile-modification", this.dataForModification);
+                success = success && this.osmXmlFile.writeToFile("genfile-for-modification", this.dataForModification);
             }
             if (this.dataForDeletion != null) { 
-                success = success && this.osmXmlFile.writeToFile("genfile-deletion", this.dataForDeletion);
+                success = success && this.osmXmlFile.writeToFile("genfile-for-deletion", this.dataForDeletion);
+            }
+            if (this.dataForNonMakableElements != null) { 
+                success = success && this.osmXmlFile.writeToFile("genfile-for-non-makable-elements", this.dataForNonMakableElements);
             }
         }
         if (success) {
@@ -97,6 +105,7 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     public void displayProcessingStatistics() {
         LOGGER_FOR_STATS.info("=== Processing statistics ===");
         LOGGER_FOR_STATS.info("Total of makable imports: " + this.counterForMakableImports);
+        LOGGER_FOR_STATS.info("Total of non makable imports: " + (this.counterForLoadedImports - this.counterForMakableImports));
     }
 
     @Override

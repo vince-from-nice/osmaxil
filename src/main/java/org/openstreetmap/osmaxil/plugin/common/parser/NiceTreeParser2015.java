@@ -63,8 +63,8 @@ public class NiceTreeParser2015 extends AbstractParser<TreeImport> {
         this.rowCount++;
         TreeImport tree = new TreeImport();
         tree.setId(this.rowCount);
-        tree.setType(row[1]);
-        tree.setSubType(row[2]);
+        //tree.setGenus(row[1]);
+        //tree.setSpecies(row[2]);
         tree.setReference(row[0]);
         String geom = row[3].substring(row[3].indexOf(GEOM_TOKEN) + GEOM_TOKEN.length());
         geom = geom.substring(0, geom.length() - 2);

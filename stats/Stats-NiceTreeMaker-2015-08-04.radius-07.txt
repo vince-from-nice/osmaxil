@@ -3,17 +3,20 @@ Total of parsed imports: 30521
 Total of filtered imports: 0
 Total of loaded imports: 30521
 === Processing statistics ===
-Total of makable imports: 30521
-Total of created trees: 29738
-Total of updated trees: 783
-Total of created or updated trees: 30521
-Total of multi matching trees: 499
+Total of makable imports: 30246
+Total of non makable imports: 275
+Matching area radius: 7.0
+Total of created trees: 29381
+Total of updated trees: 865
+Total of created or updated trees: 30246
+Total of multi matching trees: 466
 === Synchronizing statistics ===
 Total of maked imports: 1
 === Closing OSM XML service ===
-Total of writing successes: 2
+Total of writing successes: 3
 Total of writing failures: 0
 === Closing OSM API service ===
-Total of read operations: success=783 failure=0
+Total of read operations: success=1106 failure=0
 Total of write operations: success=0 failure=0
 Total of changeset operations: open=0 close=0
+Job has been executed in 194 seconds

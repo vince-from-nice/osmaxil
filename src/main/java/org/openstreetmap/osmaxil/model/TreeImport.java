@@ -3,20 +3,20 @@ package org.openstreetmap.osmaxil.model;
 
 public class TreeImport extends AbstractImport {
     
-    private String type;
+    private String genus;
     
-    private String subType;
+    private String species;
 
     private String reference;
     
-    private int height;
+    private Integer height;
     
     @Override
     public String getValueByTagName(String tagName) {
         if (ElementTag.GENUS.equals(tagName)) {
-            return this.type.toString();
+            return this.genus.toString();
         } else if (ElementTag.SPECIFIES.equals(tagName)) {
-            return this.subType.toString();
+            return this.species.toString();
         }
         return null;
     }
@@ -24,7 +24,7 @@ public class TreeImport extends AbstractImport {
     @Override
     public String toString() {
         return "Tree with id=[" + this.id + "], coords=[" + this.latitude + ", " + this.longitude + "], genus=["
-                + this.type + "], subType=[" + this.subType + "], height=[" + this.height + "], ref=[" + this.reference + "]";
+                + this.genus + "], species=[" + this.species + "], height=[" + this.height + "], ref=[" + this.reference + "]";
     }
 
     public String getReference() {
@@ -35,20 +35,28 @@ public class TreeImport extends AbstractImport {
         this.reference = reference;
     }
 
-    public String getType() {
-        return type;
+    public String getGenus() {
+        return genus;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setGenus(String genus) {
+        this.genus = genus;
     }
 
-    public String getSubType() {
-        return subType;
+    public String getSpecies() {
+        return species;
     }
 
-    public void setSubType(String subType) {
-        this.subType = subType;
+    public void setSpecies(String subType) {
+        this.species = subType;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
     }
 
 }
