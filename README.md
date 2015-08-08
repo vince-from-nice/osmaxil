@@ -13,7 +13,7 @@ For now available plugins are focused on buildings and trees:
 * _ParisBuildingRemaker_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It aims to provide a better building shape cutting (352k elements instead of 86k currently), it's currently under development.
 * _ParisBuildingUpdater_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It has already been applied on the live server on April 2015: 49k parisian buildings has been updated with their building:levels tag. More information are available on [the Wiki page](http://wiki.openstreetmap.org/wiki/Paris,_France/Buildings_Heights_Import) dedicated to the import.
 * _PssBuildingUpdater_ : its data source is the database of the PSS association (http://www.pss-archi.eu). It contains informations (including height and floors) about 47k buildings all over France but it cannot be applied for now because the PSS association publishes their database under the CC-BY-ND-NC licence wich is incompatible with the ODbL licence. It could be changed in the future (I hope). 
-* _NiceTreeMaker_ : its data source is the OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org/site/). It's going to be applied on the live server with a total of 30k imported municipal trees.
+* _NiceTreeMaker_ : its data source is the OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org/site/). It has already been applied on the live server on August 2015: 29411 new trees has been added and 835 existing trees has been updated. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Nice,_France/Trees_Import) dedicated to the import.
 
 ## How to run ##
 
@@ -59,8 +59,6 @@ The process is divided in separate phases :
 
 ### Imports loading ###
 
-That phase is implemented by the class named services.ImportLoader.
-
 It loads all imports from a source whose type is depending on the actived plugin (for example the OpenDataParis plugin uses a CSV file).
 
 For each loaded import, the program looks for matching OSM element. The notion of "matching" depends on the plugins but typically it's based on the geographic coordinates. For example, the OpenDataParis plugin looks for OSM buildings which *contains* (see the PostGIS function *ST_Contains()*) the coordinates of the imports.  
@@ -68,8 +66,6 @@ For each loaded import, the program looks for matching OSM element. The notion o
 At the end of that phase all matching OSM elements are loaded into a map (see the ElementCache class) and linked to their matching imports (see the AbstractElement class).
 
 ### Element processing ###
-
-That phase is implemented by the class named services.ElementProcessor.
 
 The goal of that phase is depending on the type of the plugin.
 
@@ -97,9 +93,7 @@ The tag value (level=8) is the same for both method, BUT:
 
 ### Element synchronization ###
 
-That phase is implemented by the class named services.ElementSynchronizer.
-
-It eventually writes OSM elements. Depending on the type of the plugin (updater or remaker), *writing* means *updating* or *remaking*.
+This phase eventually writes OSM elements. Depending on the type of the plugin (updater or remaker), *writing* means *updating* or *remaking*.
 
 Furthermore, *writing* can be done directly to the OSM database via the OSM API, or it can be done inderectly by generating a XML files. Theses generated files can be considered as changes proposals: after that manual merges must done by a real humans.
 
@@ -115,4 +109,3 @@ Note also that in the case of updating, a minimum matching score is defined in t
 The source code is available on GitHub : https://github.com/vince-from-nice/osmaxil
 
 Any suggestions or pull requests are welcome :)
-
