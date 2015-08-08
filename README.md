@@ -5,9 +5,9 @@ Osmaxil is a free software written in Java which allows automatic data imports i
 It is designed as an expandable program with different plugins which can handle different types of OSM elements.
 
 There's 3 types of plugins:
-* __updater__ : the plugin add tag(s) to existing OSM elements
-* __maker__ : the plugin modifies or deletes existing elements and create new ones, process is driven by imports
-* __remaker__ : the plugin modifies or deletes existing elements and create new ones, process is driven by existing elements
+* __updater__ : the plugin add or update tag(s) to existing OSM elements
+* __maker__ : the plugin modifies or deletes existing OSM elements and create new ones, the process is driven by imports
+* __remaker__ : the plugin modifies or deletes existing OSM elements and create new ones, the process is driven by existing elements
 
 For now available plugins are focused on buildings and trees:
 * _ParisBuildingRemaker_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It aims to provide a better building shape cutting (352k elements instead of 86k currently), it's currently under development.
