@@ -40,7 +40,7 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
 
     @Value("${osmaxil.filteringArea.excluding}")
     protected String excludingAreaString;
-    
+
     @Value("${osmaxil.syncMode}")
     protected String synchronizationMode;
 
@@ -106,13 +106,13 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
                 // Check if the import coordinates are fine with the bounding boxes
                 if (!this.checkCoordinatesWithFilteringArea(imp.getLongitude(), imp.getLatitude())) {
                     this.counterForFilteredImports++;
-                    LOGGER.warn("Import has invalid coordinates, skipping it...");
-                    break;
+                    LOGGER.warn("Import has coordinates which are outside the filtering area, skipping it...");
+                } else {
+                    this.loadedImports.add(imp);
+                    this.counterForLoadedImports++;
                 }
-                this.loadedImports.add(imp);
-                this.counterForLoadedImports++;
             } catch (java.lang.Exception e) {
-                LOGGER.error("Unable to load an import has failed: ", e);
+                LOGGER.error("Unable to load an import: ", e);
             } finally {
                 LOGGER.info(LOG_SEPARATOR);
             }
@@ -122,7 +122,7 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
     public void displayLoadingStatistics() {
         LOGGER_FOR_STATS.info("=== Loading statistics ===");
         LOGGER_FOR_STATS.info("Total of parsed imports: " + this.counterForParsedImports);
-        LOGGER_FOR_STATS.info("Total of filtered imports: " + this.counterForFilteredImports);
+        LOGGER_FOR_STATS.info("Total of filtered out imports: " + this.counterForFilteredImports);
         LOGGER_FOR_STATS.info("Total of loaded imports: " + this.counterForLoadedImports);
     }
 

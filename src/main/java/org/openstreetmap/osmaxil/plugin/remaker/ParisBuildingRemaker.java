@@ -224,7 +224,7 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
             relation.members.add(member);
             // For each point
             // long firstNodeId = 0;
-            for (int i = 0; i < bi.getPoints().size() - 1; i++) {
+            for (int i = 0; i < bi.getPoints().size(); i++) {
                 Point point = bi.getPoints().get(i);
                 // Try to get it from the internal cache
                 String key = point.getX() + "," + point.getY();

@@ -25,7 +25,7 @@
 	</appender>
 
 	<logger name="org.openstreetmap.osmaxil" additivity="false">
-		<level value="info" />
+		<level value="debug" />
 		<appender-ref ref="stdout" />
 		<appender-ref ref="logFile" />
 	</logger>

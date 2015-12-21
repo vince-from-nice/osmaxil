@@ -66,6 +66,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
         int importNbr = 0;
         for (IMPORT imp : this.loadedImports) {
             LOGGER.info("Binding import #" + importNbr + ": " + imp);
+            importNbr++;
             if (imp == null) {
                 LOGGER.warn("Import is null, skipping it...");
                 break;
