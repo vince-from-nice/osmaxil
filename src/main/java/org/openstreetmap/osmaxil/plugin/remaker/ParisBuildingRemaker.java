@@ -188,6 +188,8 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
         OsmXmlRoot root = new OsmXmlRoot();
         // Create the relation
         OsmXmlRelation relation = new OsmXmlRelation();
+        relation.version = 0;
+        relation.uid = 0;
         // Reuse all tags from original element
         relation.tags = element.getTags();
         // Set a negative ID based on the original element ID
@@ -205,6 +207,8 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
             part.id = -this.idGenerator.getId();
             LOGGER.debug("\tBuilding part id=" + part.id);
             part.visible = "true";
+            part.version = 0;
+            part.uid = 0;
             // Add the building:part tag
             OsmXmlTag tag = new OsmXmlTag();
             tag.k = "building:part";
@@ -232,8 +236,10 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
                 if (node == null) {
                     // Create a new node (into the root)
                     node = new OsmXmlNode();
-                    node.id = -this.idGenerator.getId();
+                    node.id = - this.idGenerator.getId();
                     node.visible = "true";
+                    node.uid = 0;
+                    node.version = 0;
                     node.lon = Double.toString(point.getX());
                     node.lat = Double.toString(point.getY());
                     root.nodes.add(node);
