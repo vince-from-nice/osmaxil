@@ -85,14 +85,18 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
 
     abstract protected String getChangesetSourceLabel();
 
-    abstract protected void displayProcessingStatistics();
+    abstract public void displayProcessingStatistics();
 
-    abstract protected void displaySynchronizingStatistics();
+    abstract public void displaySynchronizingStatistics();
 
     // =========================================================================
     // Public methods
     // =========================================================================
 
+    public void prepare() {
+    	LOGGER.info("There is nothing to prepare for that plugin.");
+	}
+    
     public void load() {
         while (this.getParser().hasNext()) {
             try {

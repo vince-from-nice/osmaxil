@@ -17,10 +17,10 @@ import org.springframework.stereotype.Service;
 public class OsmPostgis {
     
     @Autowired
-    @Qualifier("postgisJdbcTemplate")
+    @Qualifier("osmPostgisJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
     
-    @Value("${postGis.srid}")
+    @Value("${osmPostgis.srid}")
     private int srid;
     
     // TODO Value the SRID in settings.xml
