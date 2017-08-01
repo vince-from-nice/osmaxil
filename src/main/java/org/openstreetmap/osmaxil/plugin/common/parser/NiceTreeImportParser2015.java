@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Repository
-public class NiceTreeParser2015 extends AbstractParser<TreeImport> {
+public class NiceTreeImportParser2015 extends AbstractImportParser<TreeImport> {
 
     private CSVReader reader;
 

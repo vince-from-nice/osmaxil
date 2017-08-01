@@ -5,7 +5,7 @@ import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.TreeElement;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 
@@ -45,7 +45,7 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     
     abstract protected void buildDataForNonMakableElements();
     
-    abstract protected AbstractMatcher<IMPORT> getMatcher();
+    abstract protected AbstractImportMatcher<IMPORT> getMatcher();
     
     // =========================================================================
     // Public methods

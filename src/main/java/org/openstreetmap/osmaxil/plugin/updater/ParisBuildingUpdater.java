@@ -6,9 +6,9 @@ import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
-import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
-import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
-import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingParser;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
+import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingImportMatcher;
+import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingImportParser;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnSameValueMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ import org.springframework.stereotype.Component;
 public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
-    private ParisBuildingParser parser;
+    private ParisBuildingImportParser parser;
     
     @Autowired
     @Qualifier("BuildingMatcher")
-    private BuildingMatcher matcher;
+    private BuildingImportMatcher matcher;
     
     @Autowired
     private CumulativeOnSameValueMatchingScorer<BuildingElement> scorer;
@@ -81,12 +81,12 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     }
 
     @Override
-    protected ParisBuildingParser getParser() {
+    protected ParisBuildingImportParser getParser() {
         return parser;
     }
     
     @Override
-    protected AbstractMatcher<BuildingImport> getMatcher() {
+    protected AbstractImportMatcher<BuildingImport> getMatcher() {
         return this.matcher;
     }
 

@@ -145,3 +145,15 @@ SELECT x, y, z, ST_AsEWKT(geom) FROM point_cloud_of_nice WHERE geom && ST_MakeEn
 SELECT x, y, z, ST_AsEWKT(geom) FROM point_cloud_of_nice 
 	WHERE ST_Intersects(geom, ST_GeomFromText('POLYGON((7.2454710513 43.691712862, 7.2452904098 43.6919726228, 7.2458982073 43.6921936046, 7.2450063676 43.6912734721, 7.2454710513 43.691712862))', 4326));
 
+SELECT count(osm_id) from planet_osm_polygon;
+
+SELECT osm_id from planet_osm_polygon WHERE ST_Intersects(way, ST_Transform(ST_GeomFromText('POLYGON((7.16667656102929 43.6274385733406, 7.16667656102929 43.7730641738773, 7.34539422876236 43.7730641738773, 7.34539422876236 43.6274385733406, 7.16667656102929 43.6274385733406))', 4326), 3857));
+
+select osm_id, name, building, ST_SRID(way), ST_AsEWKT(ST_Transform(way, 4326)) from planet_osm_polygon where building <> '' LIMIT 100 ;
+select osm_id, name, building, ST_SRID(way), ST_AsEWKT(ST_Transform(way, 4326)) from planet_osm_polygon where building <> '' AND ST_Intersects(ST_Transform(way, 4326), ST_GeomFromText('POLYGON((4 43, 4 44, 5 44, 5 43, 4 43))', 4326)) LIMIT 100 ;
+select osm_id, name, building, ST_SRID(way), ST_AsEWKT(ST_Transform(way, 4326)) from planet_osm_polygon where building <> '' AND ST_Intersects(way, ST_Transform(ST_GeomFromText('POLYGON((4 43, 4 44, 5 44, 5 43, 4 43))', 4326), 3857)) LIMIT 100 ;
+select osm_id from planet_osm_polygon WHERE ST_Intersects(way, ST_GeomFromText('POLYGON((4 43, 4 44, 5 44, 5 43, 4 43))', 4326));
+select ST_Intersects(ST_GeomFromText('POINT(4.31924397581823 43.5020669989816)'), ST_GeomFromText('POLYGON((4 43, 4 44, 5 44, 5 43, 4 43))', 4326));
+select ST_Intersects(ST_GeomFromText('POLYGON((4.31924397581823 43.5020669989816,4.31939399447068 43.5020840055454,4.31941896763558 43.501964959498,4.31926796083632 43.5019489954508,4.31924397581823 43.5020669989816))', 4326), ST_GeomFromText('POLYGON((4 43, 4 44, 5 44, 5 43, 4 43))', 4326));
+
+"SRID=4326;POLYGON((4.31924397581823 43.5020669989816,4.31939399447068 43.5020840055454,4.31941896763558 43.501964959498,4.31926796083632 43.5019489954508,4.31924397581823 43.5020669989816))"

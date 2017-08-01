@@ -21,7 +21,7 @@ import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.ParseException;
 
 @Repository
-public class ParisBuildingParser extends AbstractParser<BuildingImport> {
+public class ParisBuildingImportParser extends AbstractImportParser<BuildingImport> {
     
     private CSVReader reader;
 

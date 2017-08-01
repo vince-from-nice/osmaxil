@@ -15,10 +15,10 @@ import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
-import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
-import org.openstreetmap.osmaxil.plugin.common.matcher.TreeMatcher;
-import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
-import org.openstreetmap.osmaxil.plugin.common.parser.NiceTreeParser2015;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
+import org.openstreetmap.osmaxil.plugin.common.matcher.TreeImportMatcher;
+import org.openstreetmap.osmaxil.plugin.common.parser.AbstractImportParser;
+import org.openstreetmap.osmaxil.plugin.common.parser.NiceTreeImportParser2015;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,10 +28,10 @@ import org.springframework.stereotype.Component;
 public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> {
 
     @Autowired
-    private NiceTreeParser2015 parser;
+    private NiceTreeImportParser2015 parser;
 
     @Autowired
-    private TreeMatcher matcher;
+    private TreeImportMatcher matcher;
 
     @Value("${plugins.niceTreeMaker.changesetSourceLabel}")
     private String changesetSourceLabel;
@@ -151,12 +151,12 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     }
 
     @Override
-    public AbstractParser<TreeImport> getParser() {
+    public AbstractImportParser<TreeImport> getParser() {
         return this.parser;
     }
 
     @Override
-    protected AbstractMatcher<TreeImport> getMatcher() {
+    protected AbstractImportMatcher<TreeImport> getMatcher() {
         return this.matcher;
     }
 

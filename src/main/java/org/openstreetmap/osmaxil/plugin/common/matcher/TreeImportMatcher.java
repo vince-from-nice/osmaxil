@@ -14,7 +14,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.WKTWriter;
 
 @Component
-public class TreeMatcher extends AbstractMatcher<TreeImport> {
+public class TreeImportMatcher extends AbstractImportMatcher<TreeImport> {
 
     private double matchingAreaRadius;
 

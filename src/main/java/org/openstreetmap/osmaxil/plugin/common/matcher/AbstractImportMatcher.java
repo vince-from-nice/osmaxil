@@ -9,7 +9,7 @@ import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractMatcher<IMPORT extends AbstractImport> {
+public abstract class AbstractImportMatcher<IMPORT extends AbstractImport> {
 
     @Autowired
     protected OsmPostgisDB osmPostgis;

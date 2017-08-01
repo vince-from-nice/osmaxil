@@ -12,8 +12,8 @@ import org.openstreetmap.osmaxil.dao.OsmStandardApi;
 import org.openstreetmap.osmaxil.dao.OsmXmlFile;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
-import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
+import org.openstreetmap.osmaxil.plugin.common.parser.AbstractImportParser;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,9 +81,9 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
 
     abstract public void synchronize();
 
-    abstract protected AbstractParser<IMPORT> getParser();
+    abstract protected AbstractImportParser<IMPORT> getParser();
     
-    abstract protected AbstractMatcher<IMPORT> getMatcher();
+    abstract protected AbstractImportMatcher<IMPORT> getMatcher();
 
     abstract protected AbstractMatchingScorer<ELEMENT> getScorer();
 

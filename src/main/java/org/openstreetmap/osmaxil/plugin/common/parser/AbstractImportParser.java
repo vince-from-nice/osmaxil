@@ -11,7 +11,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.WKTReader;
 
 @Repository
-public abstract class AbstractParser<IMPORT extends AbstractImport> implements Iterator<IMPORT> {
+public abstract class AbstractImportParser<IMPORT extends AbstractImport> implements Iterator<IMPORT> {
     
     protected GeometryFactory geometryFactory =  new GeometryFactory();
     

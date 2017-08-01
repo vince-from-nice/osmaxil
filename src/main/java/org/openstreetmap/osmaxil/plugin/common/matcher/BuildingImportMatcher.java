@@ -10,7 +10,7 @@ import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 import org.springframework.stereotype.Component;
 
 @Component(value="BuildingMatcher")
-public class BuildingMatcher extends AbstractMatcher<BuildingImport> {
+public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport> {
     
     /**
      * Boolean to define if the matcher is using surfaces of buildings (when computing matching scores)

@@ -5,9 +5,9 @@ import javax.annotation.PostConstruct;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
-import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
-import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingMatcher;
-import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingParser;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
+import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingImportMatcher;
+import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingImportParser;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.openstreetmap.osmaxil.plugin.common.scorer.ExclusiveMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Component;
 public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
-    private PssBuildingParser parser;
+    private PssBuildingImportParser parser;
 
     @Autowired
-    private BuildingMatcher matcher;
+    private BuildingImportMatcher matcher;
     
     @Autowired
     private ExclusiveMatchingScorer<BuildingElement> scorer;
@@ -109,12 +109,12 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     }
 
     @Override
-    protected PssBuildingParser getParser() {
+    protected PssBuildingImportParser getParser() {
         return parser;
     }
     
     @Override
-    protected AbstractMatcher<BuildingImport> getMatcher() {
+    protected AbstractImportMatcher<BuildingImport> getMatcher() {
         return this.matcher;
     }
 
