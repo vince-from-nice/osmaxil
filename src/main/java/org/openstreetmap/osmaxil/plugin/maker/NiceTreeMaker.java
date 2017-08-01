@@ -19,6 +19,7 @@ import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.TreeMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
 import org.openstreetmap.osmaxil.plugin.common.parser.NiceTreeParser2015;
+import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

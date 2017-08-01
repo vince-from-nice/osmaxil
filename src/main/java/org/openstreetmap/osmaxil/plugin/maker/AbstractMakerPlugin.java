@@ -2,9 +2,11 @@ package org.openstreetmap.osmaxil.plugin.maker;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.model.TreeElement;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
+import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 
 public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends AbstractPlugin<ELEMENT, IMPORT> {
@@ -100,6 +102,12 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
             this.counterForMakedImports++;
         }
     }
+    
+	@Override
+	protected AbstractMatchingScorer<ELEMENT> getScorer() {
+		// TODO The maker plugins should use scorers like other types of plugin
+		return null;
+	}
     
     @Override
     public void displayProcessingStatistics() {

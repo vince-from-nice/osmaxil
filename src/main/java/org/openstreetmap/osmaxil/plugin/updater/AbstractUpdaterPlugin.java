@@ -60,10 +60,6 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
 
     abstract protected boolean updateElementTag(ELEMENT element, String tagName);
 
-    abstract protected AbstractMatcher<IMPORT> getMatcher();
-
-    abstract protected AbstractMatchingScorer<ELEMENT> getScorer();
-
     abstract protected ELEMENT instanciateElement(long osmId);
 
     abstract protected float getMinimalMatchingScore();

@@ -7,12 +7,14 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.dao.OsmPostgis;
+import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.dao.OsmStandardApi;
 import org.openstreetmap.osmaxil.dao.OsmXmlFile;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
+import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -45,7 +47,7 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
     protected String synchronizationMode;
 
     @Autowired
-    protected OsmPostgis osmPostgis;
+    protected OsmPostgisDB osmPostgis;
 
     @Autowired
     protected OsmStandardApi osmStandardApi;
@@ -80,6 +82,10 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
     abstract public void synchronize();
 
     abstract protected AbstractParser<IMPORT> getParser();
+    
+    abstract protected AbstractMatcher<IMPORT> getMatcher();
+
+    abstract protected AbstractMatchingScorer<ELEMENT> getScorer();
 
     abstract protected String getChangesetComment();
 

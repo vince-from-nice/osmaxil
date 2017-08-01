@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenericPostgis {
+public class GenericPostgisDB {
 
     @Autowired
     @Qualifier("genericPostgisJdbcTemplate")
@@ -44,10 +44,13 @@ public class GenericPostgis {
     }
     
     public void finalizePointCloudTable(String tableName, String fileSrid) {
+    	LOGGER.info("Add geometry column to the point cloud table");
     	this.jdbcTemplate.execute("SELECT AddGeometryColumn ('"+ tableName +"', 'geom', " + this.srid + ", 'POINT', 3)");
+    	LOGGER.info("Update the geometry column of the point cloud table");
     	this.jdbcTemplate.execute("UPDATE " + tableName +
     			" SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', " + fileSrid + "), " + this.srid + ")");
-   	
+    	LOGGER.info("Create an index on the geometry column of the point cloud table");
+    	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
     }
     
     /**

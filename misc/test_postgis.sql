@@ -109,5 +109,41 @@ where n.natural = 'tree' and way && ST_MakeEnvelope(808958, 5418354, 808978, 541
 select osm_id, n.natural, ST_AsEWKT(way), ST_Distance(way, ST_Transform(ST_GeomFromText('POINT(7.2670199 43.6950068)', 4326), 900913)) as distance from planet_osm_point n 
 where n.natural = 'tree' and way && ST_Buffer(ST_Transform(ST_GeomFromText('POINT(7.2670199 43.6950068)', 4326), 900913)), 20) ORDER BY distance;
 
+-- ------------------------------------------------------
+-- Point cloud
+-- ------------------------------------------------------
 
+select x, y, z, ST_AsEWKT(geom) from point_cloud_of_nice;
+select z from point_cloud_of_nice;
+select count(z) from point_cloud_of_nice;
 
+INSERT INTO point_cloud_of_nice VALUES(1, ST_Transform(ST_GeomFromText('POINT(1038159.210 6290003.290 -2775.350)', 2154), 4326));
+
+DROP TABLE point_cloud_of_nice;
+CREATE TABLE point_cloud_of_nice
+(
+  x numeric(11,3),
+  y numeric(11,3),
+  z numeric(11,3)
+)
+WITH (
+  OIDS=FALSE
+);
+ 
+COPY point_cloud_of_nice(x, y, z)
+    FROM 'E:/Geodata/Local/Cities/Nice/MNS_2009_Nice/go_06_1038_6290_9.xyz'
+    WITH DELIMITER AS ' ';
+SELECT AddGeometryColumn ('point_cloud_of_nice', 'geom', 4326, 'POINT', 3);
+UPDATE point_cloud_of_nice SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', 2154), 4326);
+
+CREATE INDEX point_cloud_geom ON point_cloud_of_nice USING GIST (geom);
+
+SELECT ST_Extent(geom) FROM point_cloud_of_nice;
+
+SELECT count(*) FROM point_cloud_of_nice WHERE geom && ST_MakeEnvelope(7, 43, 8, 44);
+SELECT x, y, z, ST_AsEWKT(geom) FROM point_cloud_of_nice WHERE geom && ST_MakeEnvelope(7.2450063676, 43.6912734721, 7.2480203658, 43.6929180872);
+SELECT x, y, z, ST_AsEWKT(geom) FROM point_cloud_of_nice 
+	WHERE ST_Intersects(geom, ST_GeomFromText('POLYGON((7.2454710513 43.691712862, 7.2452904098 43.6919726228, 7.2458982073 43.6921936046, 7.2450063676 43.6912734721, 7.2454710513 43.691712862))', 4326));
+
+[7.2454710513 43.691712862], [7.2452904098 43.6919726228], [7.2458982073 43.6921936046], [7.2460788488 43.6919338447], [7.2454710513 43.691712862]
+7.2454710513 43.691712862, 7.2458982073 43.6919338447

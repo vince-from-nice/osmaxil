@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OsmPostgis {
+public class OsmPostgisDB {
     
     @Autowired
     @Qualifier("osmPostgisJdbcTemplate")

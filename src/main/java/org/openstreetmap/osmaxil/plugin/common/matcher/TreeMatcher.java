@@ -3,7 +3,7 @@ package org.openstreetmap.osmaxil.plugin.common.matcher;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.dao.OsmPostgis;
+import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.model.TreeImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.springframework.stereotype.Component;
@@ -42,7 +42,7 @@ public class TreeMatcher extends AbstractMatcher<TreeImport> {
         query += boxGeometry;
         query += "ORDER BY distance;";
         // Perform the PostGIS query
-        OsmPostgis.IdWithScore[] oldTreeIdsWithScore = this.osmPostgis.findElementIdsWithScoreByQuery(query);
+        OsmPostgisDB.IdWithScore[] oldTreeIdsWithScore = this.osmPostgis.findElementIdsWithScoreByQuery(query);
         // Manage matching trees
         if (oldTreeIdsWithScore.length > 0) {
             if (matchClosestOnly) {
@@ -56,7 +56,7 @@ public class TreeMatcher extends AbstractMatcher<TreeImport> {
         return results;
     }
     
-    private MatchingElementId createMatchingElementId(OsmPostgis.IdWithScore idWithScore) {
+    private MatchingElementId createMatchingElementId(OsmPostgisDB.IdWithScore idWithScore) {
         MatchingElementId matchingElementId = new MatchingElementId();
         matchingElementId.setOsmId(idWithScore.id);
         // Score of matching element is based on its distance to the imported tree

@@ -6,9 +6,12 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 
 import org.apache.http.annotation.Obsolete;
-import org.openstreetmap.osmaxil.dao.GenericPostgis;
+import org.openstreetmap.osmaxil.dao.GenericPostgisDB;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
+import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractMatcher;
+import org.openstreetmap.osmaxil.plugin.common.parser.AbstractParser;
+import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -29,7 +32,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
     private String pointCloudTableName;
     
     @Autowired
-    protected GenericPostgis genericPostgis;
+    protected GenericPostgisDB genericPostgis;
 	
 	@Override
     public void prepare() {
@@ -45,8 +48,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 				File xyzFile = xyzFiles[i];
 				LOGGER.info("Loading file " + xyzFile);
 				this.genericPostgis.copyPointCloudFromYXZFile(this.pointCloudTableName, xyzFile.getPath());
-			}
-			
+			}			
 			this.genericPostgis.finalizePointCloudTable(this.pointCloudTableName, this.xyzFileSrid);
 		} else {
 			LOGGER.info("Point cloud table is not recreated, use the existing table.");
@@ -75,5 +77,59 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
         } finally {
             LOGGER.info(LOG_SEPARATOR);
         }
+	}
+
+	@Override
+	public void process() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void synchronize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected AbstractParser<BuildingImport> getParser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected AbstractMatcher<BuildingImport> getMatcher() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected AbstractMatchingScorer<BuildingElement> getScorer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected String getChangesetComment() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected String getChangesetSourceLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void displayProcessingStatistics() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displaySynchronizingStatistics() {
+		// TODO Auto-generated method stub
+		
 	}	
 }
