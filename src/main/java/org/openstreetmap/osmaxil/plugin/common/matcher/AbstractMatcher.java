@@ -14,10 +14,10 @@ public abstract class AbstractMatcher<IMPORT extends AbstractImport> {
     @Autowired
     protected OsmPostgisDB osmPostgis;
     
+    static protected final Logger LOGGER = Logger.getLogger(Application.class);
+    
     abstract public List<MatchingElementId> findMatchingElements(IMPORT imp, int srid);
     
-    abstract public float computeMatchingImportScore(IMPORT imp);
-    
-    static protected final Logger LOGGER = Logger.getLogger(Application.class);
+    public abstract float computeMatchingImportScore(IMPORT imp);
     
 }

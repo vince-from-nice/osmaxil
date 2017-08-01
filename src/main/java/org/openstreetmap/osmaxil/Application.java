@@ -33,7 +33,6 @@ public class Application {
         //NiceTreeMaker plugin = (NiceTreeMaker) this.applicationContext.getBean("NiceTreeMaker");
         NiceBuildingEnhancer plugin = (NiceBuildingEnhancer) this.applicationContext.getBean("NiceBuildingEnhancer");
         
-        plugin.prepare();
         plugin.load();
         plugin.process();
         plugin.synchronize();

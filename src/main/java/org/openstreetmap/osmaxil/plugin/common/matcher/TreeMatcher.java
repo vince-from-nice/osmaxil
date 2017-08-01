@@ -35,12 +35,12 @@ public class TreeMatcher extends AbstractMatcher<TreeImport> {
         if (srid != this.osmPostgis.getSrid()) {
             treeGeometry = "ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), " + this.osmPostgis.getSrid() + ")";
         }
-        query += treeGeometry + ") AS distance ";
+        query += treeGeometry + ") AS score ";
         query += "FROM planet_osm_point n WHERE n.natural = 'tree' AND way && ";
         String boxGeometry = "St_Buffer(ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), "
                 + this.osmPostgis.getSrid() + "), " + this.matchingAreaRadius + ") ";
         query += boxGeometry;
-        query += "ORDER BY distance;";
+        query += "ORDER BY score;";
         // Perform the PostGIS query
         OsmPostgisDB.IdWithScore[] oldTreeIdsWithScore = this.osmPostgis.findElementIdsWithScoreByQuery(query);
         // Manage matching trees

@@ -99,10 +99,6 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
     // Public methods
     // =========================================================================
 
-    public void prepare() {
-    	LOGGER.info("There is nothing to prepare for that plugin.");
-	}
-    
     public void load() {
         while (this.getParser().hasNext()) {
             try {
@@ -116,7 +112,7 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
                 // Check if the import coordinates are fine with the bounding boxes
                 if (!this.checkCoordinatesWithFilteringArea(imp.getLongitude(), imp.getLatitude())) {
                     this.counterForFilteredImports++;
-                    LOGGER.warn("Import has coordinates which are outside the filtering area, skipping it...");
+                    LOGGER.warn("Import has coordinates which are not respecting the filtering areas, skipping it...");
                 } else {
                     this.loadedImports.add(imp);
                     this.counterForLoadedImports++;

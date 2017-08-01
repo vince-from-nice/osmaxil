@@ -105,7 +105,7 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     
 	@Override
 	protected AbstractMatchingScorer<ELEMENT> getScorer() {
-		// TODO The maker plugins should use scorers like other types of plugin
+		// TODO To be homogeneous the maker plugins should use the scorers like other types of plugin do...
 		return null;
 	}
     
