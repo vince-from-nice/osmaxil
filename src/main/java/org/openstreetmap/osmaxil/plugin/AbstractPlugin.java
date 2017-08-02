@@ -36,6 +36,9 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
     private Geometry includingArea;
 
     private Geometry excludingArea;
+    
+	@Value("${osmaxil.filteringArea.srid}")
+	protected String filteringAreaSrid;
 
     @Value("${osmaxil.filteringArea.including}")
     protected String includingAreaString;

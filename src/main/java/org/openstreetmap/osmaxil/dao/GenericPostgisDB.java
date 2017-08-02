@@ -1,11 +1,19 @@
 package org.openstreetmap.osmaxil.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.dao.OsmPostgisDB.IdWithGeom;
+import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +59,23 @@ public class GenericPostgisDB {
     			" SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', " + fileSrid + "), " + this.srid + ")");
     	LOGGER.info("Create an index on the geometry column of the point cloud table");
     	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
+    }
+    
+    public List<StringCoordinates> findPointByGeometry(String geomAsWKT, int srid) {
+    	String query = "SELECT x, y, z FROM point_cloud_of_nice "
+    			+ "WHERE ST_Intersects(geom, ST_Transform(ST_GeomFromText('" + geomAsWKT + "', " + this.srid + "), 4326))";
+    	List<StringCoordinates> results = this.jdbcTemplate.query(
+                query,
+                new RowMapper<StringCoordinates>() {
+                    public StringCoordinates mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    	StringCoordinates coordinates = new StringCoordinates();
+                        coordinates.x = rs.getString("x");
+                        coordinates.y = rs.getString("y");
+                        coordinates.z = rs.getString("z");
+                        return coordinates;
+                    }
+                });
+    	return results;
     }
     
     /**

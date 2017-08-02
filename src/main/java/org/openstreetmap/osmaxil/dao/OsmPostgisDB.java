@@ -63,6 +63,25 @@ public class OsmPostgisDB {
         return result.toArray(new IdWithScore[result.size()]);
     }
     
+    public class IdWithGeom {
+        public long id;
+        public String geom;
+    }
+
+    public IdWithGeom[] findElementIdsWithGeomByQuery(String query) {
+        List<IdWithGeom> result = this.jdbcTemplate.query(
+                query,
+                new RowMapper<IdWithGeom>() {
+                    public IdWithGeom mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    	IdWithGeom idWithGeom = new IdWithGeom();
+                        idWithGeom.id = Long.parseLong(rs.getString("osm_id"));
+                        idWithGeom.geom = rs.getString("geomAsWKT");
+                        return idWithGeom;
+                    }
+                });
+        return result.toArray(new IdWithGeom[result.size()]);
+    }
+    
     public String getRelationMembers(long relationId) {
         String result = "";
         String query = "select members from planet_osm_rels where id= ? ;";

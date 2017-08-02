@@ -15,8 +15,6 @@ import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.openstreetmap.osmaxil.plugin.common.scorer.ScoringStatsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -145,7 +143,7 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
     }
     
     private void associateImportsWithElements(IMPORT imp) {
-        // Find relevant element
+        // Find relevant elements
         List<MatchingElementId> matchingElementIds = this.getMatcher().findMatchingElements(imp,
                 this.getParser().getSrid());
         if (matchingElementIds.size() > 0) {
@@ -196,13 +194,11 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
             for (String tagName : this.getUpdatableTagNames()) {
                 element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
             }
-        } /*
-           * else { // If element was already present refresh its data element.setApiData(apiData); }
-           */
+        }
         return element;
     }
 
-    private void computeMatchingScores(ELEMENT element) {
+    protected void computeMatchingScores(ELEMENT element) {
         try {
             // Compute a matching score for each import matching the element
             for (AbstractImport imp : element.getMatchingImports()) {

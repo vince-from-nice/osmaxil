@@ -21,7 +21,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="org.openstreetmap.osmaxil" scoped-proxy="targetClass" />
 
-	<context:property-placeholder location="classpath:settings.properties, classpath:password.properties" />
+	<context:property-placeholder location="classpath:settings.properties, classpath:passwords.properties, classpath:areas.properties" />
 
 	<!--bean id="activePlugin" class="org.openstreetmap.osmaxil.plugin.updater.PssBuildingUpdaterPlugin"> </bean -->
 

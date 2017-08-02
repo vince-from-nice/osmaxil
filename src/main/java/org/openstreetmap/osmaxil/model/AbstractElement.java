@@ -21,7 +21,9 @@ public abstract class AbstractElement extends MatchableObject {
     
     private boolean altered;
     
-    // TODO move these attributes into AbstractUpdaterPlugin
+    private String geometryString; 
+    
+	// TODO move these attributes into AbstractUpdaterPlugin
     private List<AbstractImport> matchingImports;
     private Map<String, String> originalValuesByTagNames;
 
@@ -122,5 +124,13 @@ public abstract class AbstractElement extends MatchableObject {
     public void setOriginalValuesByTagNames(Map<String, String> originalValuesByTagNames) {
         this.originalValuesByTagNames = originalValuesByTagNames;
     }
+    
+    public String getGeometryString() {
+		return geometryString;
+	}
+
+	public void setGeometryString(String geometryString) {
+		this.geometryString = geometryString;
+	}
 
 }

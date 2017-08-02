@@ -71,11 +71,6 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     }
     
     @Override
-    protected String[] getUpdatableTagNames() {
-        return UPDATABLE_TAG_NAMES;
-    }
-
-    @Override
     protected BuildingElement instanciateElement(long osmId) {
         return new BuildingElement(osmId);
     }
@@ -93,6 +88,11 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     @Override
     protected AbstractMatchingScorer<BuildingElement> getScorer() {
       return this.scorer;
+    }
+    
+    @Override
+    protected String[] getUpdatableTagNames() {
+        return UPDATABLE_TAG_NAMES;
     }
 
     @Override
