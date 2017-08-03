@@ -6,7 +6,6 @@ import java.util.List;
 import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
 
 import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
 
 public class BuildingImport extends AbstractImport {
 
@@ -18,13 +17,11 @@ public class BuildingImport extends AbstractImport {
 
     protected Integer area;
 
-    protected String geometryRawString; // useful for debug only
+    private String geometryAsWKT; 
+    
+    protected String geometryRawString;
 
-    private String geometryAsWKT; // useful for PostGIS queries
-
-    protected Polygon geometryAsPolygon; // useless
-
-    protected List<Point> points = new ArrayList<>(); // useless
+    protected List<Point> points = new ArrayList<>();
 
     protected List<StringCoordinates> coordinates = new ArrayList<>(); // keep coordinates as strings (no more rounding issues)
 
@@ -95,14 +92,6 @@ public class BuildingImport extends AbstractImport {
 
     public void setGeometryAsWKT(String geometryWKT) {
         this.geometryAsWKT = geometryWKT;
-    }
-
-    public Polygon getPolygon() {
-        return geometryAsPolygon;
-    }
-
-    public void setPolygon(Polygon polygon) {
-        this.geometryAsPolygon = polygon;
     }
 
     public List<Point> getPoints() {

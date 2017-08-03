@@ -61,9 +61,10 @@ public class GenericPostgisDB {
     	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
     }
     
-    public List<StringCoordinates> findPointByGeometry(String geomAsWKT, int srid) {
+    public List<StringCoordinates> findPointByGeometry(String geomAsWKT, int geomSrid) {
     	String query = "SELECT x, y, z FROM point_cloud_of_nice "
-    			+ "WHERE ST_Intersects(geom, ST_Transform(ST_GeomFromText('" + geomAsWKT + "', " + this.srid + "), 4326))";
+    			+ "WHERE ST_Intersects(geom, ST_Transform(ST_GeomFromText('" + geomAsWKT + "', " + geomSrid + "), " + this.srid + "))";
+    	LOGGER.debug("Used query is: " + query);
     	List<StringCoordinates> results = this.jdbcTemplate.query(
                 query,
                 new RowMapper<StringCoordinates>() {

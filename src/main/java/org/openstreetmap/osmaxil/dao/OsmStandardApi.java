@@ -81,7 +81,7 @@ public class OsmStandardApi {
     
     public OsmXmlRoot readElement(long id, ElementType type) {
         OsmXmlRoot result = null;
-        LOGGER.info("Read element from OSM API with id=" + id + " : ");
+        LOGGER.debug("Read element from OSM API with id=" + id + " : ");
         try {
             // Fetch a basic string 
             //String str = this.restTemplate.getForObject(this.url + "way/" + id, String.class);

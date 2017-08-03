@@ -38,7 +38,7 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
     protected Map<String, Integer> countersByTagName = new HashMap<String, Integer>();
 
     @Autowired
-    private ScoringStatsGenerator scoringStatsGenerator;
+    protected ScoringStatsGenerator scoringStatsGenerator;
 
     // =========================================================================
     // Static variables

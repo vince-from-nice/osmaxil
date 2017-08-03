@@ -129,7 +129,7 @@ public class ParisBuildingImportParser extends AbstractImportParser<BuildingImpo
         }
         wktForPolygon.append("))");
         building.setGeometryAsWKT(wktForPolygon.toString());
-        building.setPolygon((Polygon) wktReader.read(wktForPolygon.toString()));
+        //building.setPolygon((Polygon) wktReader.read(wktForPolygon.toString()));
     }
 
 }

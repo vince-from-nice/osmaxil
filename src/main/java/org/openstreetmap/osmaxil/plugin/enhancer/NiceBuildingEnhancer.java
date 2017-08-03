@@ -84,7 +84,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 				+ osmPostgis.getSrid() + "))";
 		condition += " AND ST_Disjoint(way, ST_Transform(ST_GeomFromText('" + excludingAreaString + "', " + this.filteringAreaSrid + "), "
 				+ osmPostgis.getSrid() + "))";
-		String query = "SELECT osm_id, ST_AsEWKT(way) as geomAsWKT, 1 from planet_osm_polygon WHERE building <> ''";
+		String query = "SELECT osm_id, ST_AsText(way) as geomAsWKT, 1 from planet_osm_polygon WHERE building <> ''";
 		if (query.toUpperCase().indexOf(" WHERE ") == -1) {
 			query += " WHERE " + condition;
 		} else {
@@ -97,7 +97,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			element.setGeometryString(idWithGeom.geom);
 			results.add(element);
 		}
-		LOGGER.debug("Number of returned element: " + results.size());
+		LOGGER.info("Number of returned element: " + results.size());
 		return results;
 	}
 
@@ -115,7 +115,9 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			BuildingImport imp = new BuildingImport();
 			List<StringCoordinates> coordinates = new ArrayList<>();
 			coordinates.add(stringCoordinates);
+			imp.setId(Long.parseLong(stringCoordinates.z.substring(0, stringCoordinates.z.indexOf("."))));
 			imp.setCoordinates(coordinates);
+			result.add(imp);
 		}
 		return result;
 	}
