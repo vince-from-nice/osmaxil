@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.model.BuildingImport;
-import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
+import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -120,7 +120,7 @@ public class ParisBuildingImportParser extends AbstractImportParser<BuildingImpo
                     wktForPolygon.append(", ");
                 }
                 // Add a new point with string coordinates
-                StringCoordinates sc = new StringCoordinates(coords[i - 1], coords[i], "0.0");
+                Coordinates sc = new Coordinates(coords[i - 1], coords[i], "0.0");
                 building.getCoordinates().add(sc);
                 // Add a new point with real geometry
                 Point point = (Point) this.wktReader.read("POINT(" + coordinates + ")");

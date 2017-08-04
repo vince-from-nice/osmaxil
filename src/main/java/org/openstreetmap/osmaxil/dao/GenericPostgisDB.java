@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB.IdWithGeom;
-import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
+import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,18 +61,15 @@ public class GenericPostgisDB {
     	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
     }
     
-    public List<StringCoordinates> findPointByGeometry(String geomAsWKT, int geomSrid) {
+    public List<Coordinates> findPointByGeometry(String geomAsWKT, int geomSrid) {
     	String query = "SELECT x, y, z FROM point_cloud_of_nice "
     			+ "WHERE ST_Intersects(geom, ST_Transform(ST_GeomFromText('" + geomAsWKT + "', " + geomSrid + "), " + this.srid + "))";
     	LOGGER.debug("Used query is: " + query);
-    	List<StringCoordinates> results = this.jdbcTemplate.query(
+    	List<Coordinates> results = this.jdbcTemplate.query(
                 query,
-                new RowMapper<StringCoordinates>() {
-                    public StringCoordinates mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    	StringCoordinates coordinates = new StringCoordinates();
-                        coordinates.x = rs.getString("x");
-                        coordinates.y = rs.getString("y");
-                        coordinates.z = rs.getString("z");
+                new RowMapper<Coordinates>() {
+                    public Coordinates mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    	Coordinates coordinates = new Coordinates(rs.getString("x"), rs.getString("y"), rs.getString("z"));
                         return coordinates;
                     }
                 });

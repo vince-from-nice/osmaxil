@@ -50,8 +50,8 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 		
         // For each matched element 
         for (ELEMENT element : this.matchedElements.values()) {
-        	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
         	// Update element with data from OSM API
+        	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
         	this.updateElementFromAPI(element);
         	// Compute its matching score
             LOGGER.info("Computing matching score for element #" + element.getOsmId());
@@ -68,15 +68,10 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
     @Override
     public void displayProcessingStatistics() {
         LOGGER_FOR_STATS.info("=== Processing statistics ===");
-        LOGGER_FOR_STATS.info("Total of elements which have targeted (inside the filtering area): " + this.targetedElement.size());
-        LOGGER_FOR_STATS.info("Total of elements which have one or more matching imports: " + this.matchedElements.size());
-        this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
+        LOGGER_FOR_STATS.info("Total of elements which have been targeted: " + this.targetedElement.size());
+        LOGGER_FOR_STATS.info("Total of elements which have at least one matching imports: " + this.matchedElements.size());
+        //this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
     }
-
-	@Override
-	public void displaySynchronizingStatistics() {
-		// TODO Auto-generated method stub
-	}
 
 	// =========================================================================
 	// Private methods

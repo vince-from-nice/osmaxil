@@ -3,7 +3,7 @@ package org.openstreetmap.osmaxil.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
+import org.openstreetmap.osmaxil.model.misc.Coordinates;
 
 import com.vividsolutions.jts.geom.Point;
 
@@ -23,7 +23,7 @@ public class BuildingImport extends AbstractImport {
 
     protected List<Point> points = new ArrayList<>();
 
-    protected List<StringCoordinates> coordinates = new ArrayList<>(); // keep coordinates as strings (no more rounding issues)
+    protected List<Coordinates> coordinates = new ArrayList<>(); // keep coordinates as strings (no more rounding issues)
 
     @Override
     public String getValueByTagName(String tagName) {
@@ -102,11 +102,11 @@ public class BuildingImport extends AbstractImport {
         this.points = points;
     }
 
-    public List<StringCoordinates> getCoordinates() {
+    public List<Coordinates> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(List<StringCoordinates> coordinates) {
+    public void setCoordinates(List<Coordinates> coordinates) {
         this.coordinates = coordinates;
     }
 

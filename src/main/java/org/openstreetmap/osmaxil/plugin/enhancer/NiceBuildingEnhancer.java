@@ -10,10 +10,12 @@ import java.util.List;
 import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.GenericPostgisDB;
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
+import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
-import org.openstreetmap.osmaxil.model.misc.StringCoordinates;
+import org.openstreetmap.osmaxil.model.PointImport;
+import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.AbstractImportParser;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
@@ -22,7 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component("NiceBuildingEnhancer")
-public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, BuildingImport> {
+public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, PointImport> {
 
 	@Value("${plugins.niceBuildingEnhancer.xyzFolderPath}")
 	private String xyzFolderPath;
@@ -38,6 +40,9 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 
 	@Value("${plugins.niceBuildingEnhancer.minMatchingScore}")
 	private float minMatchingScore;
+	
+	@Value("${plugins.niceBuildingEnhancer.minMatchingPoints}")
+	private float minMatchingPoints;
 
 	@Value("${plugins.niceBuildingEnhancer.changesetSourceLabel}")
 	private String changesetSourceLabel;
@@ -102,29 +107,46 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	}
 
 	@Override
-	public List<BuildingImport> findMatchingImports(BuildingElement element, int srid) {
-		List<BuildingImport> result = new ArrayList<BuildingImport>();
-		List<StringCoordinates> data = new ArrayList<>();
+	public List<PointImport> findMatchingImports(BuildingElement element, int srid) {
+		List<PointImport> result = new ArrayList<PointImport>();
+		List<Coordinates> data = new ArrayList<>();
 		// Find in PostGIS all imports matching (ie. containing) the element
 		if (element.getGeometryString() == null) {
 			LOGGER.warn("Unable to find matching imports because element has no geometry string");
 			return result;
 		}
 		data = this.genericPostgis.findPointByGeometry(element.getGeometryString(), srid);
-		for (StringCoordinates stringCoordinates : data) {
-			BuildingImport imp = new BuildingImport();
-			List<StringCoordinates> coordinates = new ArrayList<>();
-			coordinates.add(stringCoordinates);
-			imp.setId(Long.parseLong(stringCoordinates.z.substring(0, stringCoordinates.z.indexOf("."))));
-			imp.setCoordinates(coordinates);
+		// Create imports from results
+		for (Coordinates coordinates : data) {
+			PointImport imp = new PointImport(coordinates);
+			// Use the rounded value of 'z' as ID 
+			imp.setId(Long.parseLong(coordinates.z.substring(0, coordinates.z.indexOf("."))));
+			// TODO transform lat/lon to the correct SRID ? 
+			imp.setLatitude(Double.parseDouble(coordinates.x));
+			imp.setLongitude(Double.parseDouble(coordinates.y));
 			result.add(imp);
+			this.counterForMatchedImports++;
 		}
 		return result;
 	}
 
 	@Override
 	protected void computeMatchingScores(BuildingElement element) {
-		// TODO
+		// Check there is enough matching points
+		if (element.getMatchingImports().size() < this.minMatchingPoints) {
+			LOGGER.info("Element has only " + element.getMatchingImports().size() + " matching import(s), skipping it !");
+			return;
+		}
+		
+		// Find the best value for building height
+		int height = 0;
+		for (AbstractImport imp : element.getMatchingImports()) {
+			height += Double.parseDouble(((PointImport) imp).getZ());
+		}
+		height = height / element.getMatchingImports().size();
+		LOGGER.info("The height computed value is: " + height);
+		
+		// Compute matching score based on that best value
 	}
 
 	@Override
@@ -132,20 +154,41 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		// Building tags are updatable only if it doesn't have an original value
 		return element.getOriginalValuesByTagNames().get(tagName) == null;
 	}
+	
+	@Override
+	protected boolean updateElementTag(BuildingElement element, String tagName) {
+        boolean updated = false;
+		// TODO
+        String tagValue = "todo";
+        if (ElementTag.HEIGHT.equals(tagName)) {
+            element.setHeight(Float.parseFloat(tagValue));
+            LOGGER.info("===> Updating height to [" + tagValue + "]");
+            updated = true;
+        }
+        return updated;
+	}
 
 	public void displayLoadingStatistics() {
 		LOGGER_FOR_STATS.info("=== Loading statistics ===");
 		LOGGER_FOR_STATS.info("Sorry but there is no loading statistic for that plugin ");
 	}
+	
+    @Override
+    public void displayProcessingStatistics() {
+        super.displayProcessingStatistics();
+        LOGGER_FOR_STATS.info("Total of matching points: " + this.counterForMatchedImports);
+		LOGGER_FOR_STATS.info("Average of matching points for each building: "
+				+ this.counterForMatchedImports / this.matchedElements.size());
+    }
 
 	@Override
-	protected AbstractImportParser<BuildingImport> getParser() {
+	protected AbstractImportParser<PointImport> getParser() {
 		// useless for this plugin
 		return null;
 	}
 
 	@Override
-	protected AbstractImportMatcher<BuildingImport> getMatcher() {
+	protected AbstractImportMatcher<PointImport> getMatcher() {
 		// useless for this plugin
 		return null;
 	}
@@ -154,12 +197,6 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	protected AbstractMatchingScorer<BuildingElement> getScorer() {
 		// useless for this plugin
 		return null;
-	}
-
-	@Override
-	protected boolean updateElementTag(BuildingElement element, String tagName) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
