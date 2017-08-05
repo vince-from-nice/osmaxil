@@ -42,8 +42,10 @@ public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport>
             // If ID is negative it means it's a multipolygon relations => need to find its relevant outer member
             else {
                 LOGGER.debug("A multipolygon relation has been found (" + ids[i] + "), looking for its relevant outer member");
-                relevantElement.setOsmId(this.findRelevantOuterMemberId(- ids[i], imp));
-                relevantElement.setRelationId(- ids[i]);
+                long relationId = - ids[i];
+                String membersString = osmPostgis.getRelationMembers(relationId);
+                relevantElement.setOsmId(BuildingElement.getOuterOrInnerMemberId(relationId, membersString, true));
+                relevantElement.setRelationId(relationId);
             }
             result.add(relevantElement);
             sb.append(ids[i] + " ");
@@ -124,33 +126,6 @@ public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport>
         // TODO cache it for next imports 
         LOGGER.info("OSM building " + element.getOsmId() + " area has been computed: " + elementArea);
         return elementArea;
-    }
-    
-    private long findRelevantOuterMemberId(long relationId, BuildingImport imp) {
-        long result = 0;
-        // Fetch members from PostGIS
-        String membersString = this.osmPostgis.getRelationMembers(relationId);
-        // Parse members strings
-        membersString = membersString.substring(1, membersString.length() - 1);
-        String[] members = membersString.split(","); 
-        List<Long> outerMemberIds = new ArrayList<Long>();
-        for (int i = 0; i < members.length; i++) {
-            if ("outer".equals(members[i]) && members[i-1].startsWith("w")) {
-                outerMemberIds.add(Long.parseLong(members[i - 1].substring(1)));
-                //OsmApiRoot memberData = this.osmApiService.readElement(outerMemberId);
-            }
-        }
-        // For now support only relation with just one outer member
-        if (outerMemberIds.size() == 1) {
-            result = outerMemberIds.get(0);
-            LOGGER.info("For multipolygon relation with id=" + relationId + ", outer member with id=[" + result +"] has been found");
-        } 
-        // Else we just return the negative relation ID
-        else {
-            result = - relationId;
-            LOGGER.warn("For multipolygon relation with id=" + relationId + ", no outer member has been found (members are " + membersString + ")");
-        }
-        return result;
     }
     
     private Long[] findBuildingIDsByGeometry(String geometry, int srid) {

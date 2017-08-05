@@ -61,9 +61,19 @@ public class GenericPostgisDB {
     	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
     }
     
-    public List<Coordinates> findPointByGeometry(String geomAsWKT, int geomSrid) {
-    	String query = "SELECT x, y, z FROM point_cloud_of_nice "
-    			+ "WHERE ST_Intersects(geom, ST_Transform(ST_GeomFromText('" + geomAsWKT + "', " + geomSrid + "), " + this.srid + "))";
+    public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float scaleFactor, int geomSrid) {
+    	final String geom = "ST_Transform(ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + "), " + this.srid + ")";
+    	String query = "SELECT x, y, z FROM point_cloud_of_nice, " + geom + " as includingGeom";
+    	String condition = "ST_Scale(includingGeom, " + scaleFactor + ", " + scaleFactor + ")";
+		condition = "ST_Translate(" + condition + ", " 
+				+ "-" + scaleFactor + "*(ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2 + ((ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2), "
+				+ "-" + scaleFactor + "*(ST_Ymin(includingGeom)+ST_YMax(includingGeom))/2 + ((ST_Ymin(includingGeom)+ST_YMax(includingGeom))/2))";
+    	query += " WHERE ST_Intersects(geom, " + condition + ")";
+    	// TODO do the same for excluding geom (need cleanup before)
+//    	if (excludingGeomAsWKT != null) {
+//    		condition += " AND ST_Disjoint(geom, ST_Transform(ST_GeomFromText('" + excludingGeomAsWKT + "', " + geomSrid + "), " + this.srid + "))";
+//    	}
+    	// TODO use JTS to scale the geoms ? The current query is working but takes 15 minutes to execute :(
     	LOGGER.debug("Used query is: " + query);
     	List<Coordinates> results = this.jdbcTemplate.query(
                 query,

@@ -43,6 +43,12 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	
 	@Value("${plugins.niceBuildingEnhancer.minMatchingPoints}")
 	private float minMatchingPoints;
+	
+	@Value("${plugins.niceBuildingEnhancer.toleranceRadius}")
+	private float toleranceRadius;
+	
+	@Value("${plugins.niceBuildingEnhancer.scaleFactor}")
+	private float scaleFactor;
 
 	@Value("${plugins.niceBuildingEnhancer.changesetSourceLabel}")
 	private String changesetSourceLabel;
@@ -89,7 +95,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 				+ osmPostgis.getSrid() + "))";
 		condition += " AND ST_Disjoint(way, ST_Transform(ST_GeomFromText('" + excludingAreaString + "', " + this.filteringAreaSrid + "), "
 				+ osmPostgis.getSrid() + "))";
-		String query = "SELECT osm_id, ST_AsText(way) as geomAsWKT, 1 from planet_osm_polygon WHERE building <> ''";
+		String query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE building <> ''";
 		if (query.toUpperCase().indexOf(" WHERE ") == -1) {
 			query += " WHERE " + condition;
 		} else {
@@ -99,13 +105,22 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		OsmPostgisDB.IdWithGeom[] idsWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
 		for (OsmPostgisDB.IdWithGeom idWithGeom : idsWithGeom) {
 			BuildingElement element = new BuildingElement(idWithGeom.id);
+			// If ID is negative it means the element is a multipolygon relations => need to find its relevant outer member
+			if (idWithGeom.id < 0) {
+                LOGGER.debug("A multipolygon relation has been found (" + idWithGeom.id + "), looking for its relevant outer member");
+                long relationId = - idWithGeom.id;
+                element.setRelationId(relationId);
+                String membersString = osmPostgis.getRelationMembers(relationId);
+                element.setOsmId(BuildingElement.getOuterOrInnerMemberId(relationId, membersString, true));
+                element.setInnerGeometryString(this.getInnerGeometryString(relationId, membersString));
+			}
 			element.setGeometryString(idWithGeom.geom);
 			results.add(element);
 		}
 		LOGGER.info("Number of returned element: " + results.size());
 		return results;
 	}
-
+	
 	@Override
 	public List<PointImport> findMatchingImports(BuildingElement element, int srid) {
 		List<PointImport> result = new ArrayList<PointImport>();
@@ -115,7 +130,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			LOGGER.warn("Unable to find matching imports because element has no geometry string");
 			return result;
 		}
-		data = this.genericPostgis.findPointByGeometry(element.getGeometryString(), srid);
+		data = this.genericPostgis.findPointByGeometry(element.getGeometryString(), element.getInnerGeometryString(), scaleFactor, srid);
 		// Create imports from results
 		for (Coordinates coordinates : data) {
 			PointImport imp = new PointImport(coordinates);
@@ -138,7 +153,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			return;
 		}
 		
-		// Find the best value for building height
+		// Find the best value for building height (for now it is just the average of all points heights)
 		int height = 0;
 		for (AbstractImport imp : element.getMatchingImports()) {
 			height += Double.parseDouble(((PointImport) imp).getZ());
@@ -146,7 +161,18 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		height = height / element.getMatchingImports().size();
 		LOGGER.info("The height computed value is: " + height);
 		
-		// Compute matching score based on that best value
+		// Compute matching score based on that height value and the tolerance radius
+		int numberOfPointClosedToComputedHeight = 0;
+		for (AbstractImport imp : element.getMatchingImports()) {
+			int z = (int) Double.parseDouble(((PointImport) imp).getZ());
+			if (z > height - this.toleranceRadius && z < height + this.toleranceRadius) {
+				numberOfPointClosedToComputedHeight++;	
+			}			
+		}
+		element.setMatchingScore((float) numberOfPointClosedToComputedHeight / element.getMatchingImports().size());
+		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
+		LOGGER.info("The number of points closed to computed height is: " + numberOfPointClosedToComputedHeight);
+		LOGGER.info("The matching score is: " + element.getMatchingScore());
 	}
 
 	@Override
@@ -228,6 +254,22 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	// Private methods
 	// =========================================================================
 
+	/**
+	 * Returns the geometry as WKT of the inner member of a multipolygon building.
+	 */
+	private String getInnerGeometryString(long relationId, String membersString) {
+        long innerMemberId = BuildingElement.getOuterOrInnerMemberId(relationId, membersString, false);
+        String query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE building <> '' AND osm_id=" + innerMemberId;
+        LOGGER.debug("Used query is: " + query);
+        // Damned the inner member id is a key of the planet_osm_ways table which doesn't store the coordinates but only point IDs :(
+        //OsmPostgisDB.IdWithGeom[] innerMemberIdWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
+        // TODO do another request to fetch points coordinates
+        return null;
+	}
+	
+	/**
+	 * Former method to load all the point cloud data (but COPY is much more efficient).
+	 */
 	@Obsolete
 	private void readPointCloudFromXYZFile(String xyzFilePath) {
 		genericPostgis.beginTransaction();

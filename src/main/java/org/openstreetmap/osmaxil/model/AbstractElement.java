@@ -17,7 +17,7 @@ public abstract class AbstractElement extends MatchableObject {
 
     protected OsmXmlRoot apiData;
 
-    private long relationId;
+    private Long relationId;
     
     private boolean altered;
     
@@ -109,11 +109,11 @@ public abstract class AbstractElement extends MatchableObject {
         this.altered = altered;
     }
 
-    public long getRelationId() {
+    public Long getRelationId() {
         return relationId;
     }
 
-    public void setRelationId(long relationId) {
+    public void setRelationId(Long relationId) {
         this.relationId = relationId;
     }
 

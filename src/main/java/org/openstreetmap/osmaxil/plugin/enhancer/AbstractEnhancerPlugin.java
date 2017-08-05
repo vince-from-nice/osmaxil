@@ -18,7 +18,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	 */
 	protected List<ELEMENT> targetedElement;
 	
-	protected int limitForMatchedElements = 10;
+	protected int limitForMatchedElements = 0;
 
 	abstract protected List<IMPORT> findMatchingImports(ELEMENT element, int srid);
 
@@ -33,31 +33,31 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 		// Load IDs of all targeted elements
 		LOGGER.info("Looking in PostGIS for existing elements which are respecting the filtering areas");
 		this.targetedElement = this.getTargetedElements();
-
-		// For each targeted element, associate matched imports
+		// For each targeted element, 
 		for (ELEMENT element : this.targetedElement) {
-			LOGGER.info("Binding imports with element #" + element.getOsmId() + ": ");
+			LOGGER.info(LOG_SEPARATOR);
 			if (element.getOsmId() == null || element.getOsmId() == 0) {
 				LOGGER.warn("Element is null, skipping it...");
 				break;
 			}
+			// Associate matched imports
+	        LOGGER.info("Find matching imports for element #" + element.getOsmId());
 			this.associateImportsWithElements(element);
-			LOGGER.info(LOG_SEPARATOR);
-			if (this.matchedElements.size() == limitForMatchedElements) {
+			// If the element has at least one matching import 
+			if (!element.getMatchingImports().isEmpty()) {
+	        	// Update element with data from OSM API
+	        	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
+	        	this.updateElementFromAPI(element);
+	        	// Compute its matching score
+	            LOGGER.info("Computing matching score for element #" + element.getOsmId());
+	            this.computeMatchingScores(element);
+			}			
+            // Check limit if defined (useful for debug) 
+			if (limitForMatchedElements > 0 && this.matchedElements.size() == limitForMatchedElements) {
 				break;
 			}
 		}
-		
-        // For each matched element 
-        for (ELEMENT element : this.matchedElements.values()) {
-        	// Update element with data from OSM API
-        	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
-        	this.updateElementFromAPI(element);
-        	// Compute its matching score
-            LOGGER.info("Computing matching score for element #" + element.getOsmId());
-            this.computeMatchingScores(element);
-            LOGGER.info(LOG_SEPARATOR);
-        }
+		LOGGER.info(LOG_SEPARATOR);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
         LOGGER_FOR_STATS.info("=== Processing statistics ===");
         LOGGER_FOR_STATS.info("Total of elements which have been targeted: " + this.targetedElement.size());
         LOGGER_FOR_STATS.info("Total of elements which have at least one matching imports: " + this.matchedElements.size());
-        //this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
+        this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
     }
 
 	// =========================================================================
@@ -79,7 +79,6 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	
 	private void associateImportsWithElements(ELEMENT element) {
         // Find matching imports
-        LOGGER.info("Find matching imports");
         List<IMPORT> matchingImports = this.findMatchingImports(element, this.osmPostgis.getSrid());
         if (matchingImports.size() > 0) {
         	this.matchedElements.put(element.getOsmId(), element);

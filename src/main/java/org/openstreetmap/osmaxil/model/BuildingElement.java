@@ -1,5 +1,6 @@
 package org.openstreetmap.osmaxil.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
@@ -7,6 +8,8 @@ import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 public class BuildingElement extends AbstractElement {
     
     private int computedArea;
+        
+    private String innerGeometryString; // used by building which has a "hole" (multipolygon)
     
     public BuildingElement(long osmId) {
         super(osmId);
@@ -73,4 +76,37 @@ public class BuildingElement extends AbstractElement {
         this.computedArea = computedArea;
     }
 
+    public static long getOuterOrInnerMemberId(long relationId, String membersString, boolean outer) {
+        long result = 0;
+        // Parse members strings
+        membersString = membersString.substring(1, membersString.length() - 1);
+        String[] members = membersString.split(","); 
+        List<Long> memberIds = new ArrayList<Long>();
+        for (int i = 0; i < members.length; i++) {
+            if ((outer?"outer":"inner").equals(members[i]) && members[i-1].startsWith("w")) {
+                memberIds.add(Long.parseLong(members[i - 1].substring(1)));
+                //OsmApiRoot memberData = this.osmApiService.readElement(outerMemberId);
+            }
+        }
+        // For now support only relation with just one outer member
+        if (memberIds.size() == 1) {
+            result = memberIds.get(0);
+            LOGGER.info("For multipolygon relation with id=" + relationId + ", " + (outer?"outer":"inner") + " member with id=[" + result +"] has been found");
+        } 
+        // Else we just return the negative relation ID
+        else {
+            result = - relationId;
+            LOGGER.warn("For multipolygon relation with id=" + relationId + ", no " + (outer?"outer":"inner") + " member has been found (members are " + membersString + ")");
+        }
+        return result;
+    }
+
+	public String getInnerGeometryString() {
+		return innerGeometryString;
+	}
+
+	public void setInnerGeometryString(String innerGeometryString) {
+		this.innerGeometryString = innerGeometryString;
+	}
+    
 }
