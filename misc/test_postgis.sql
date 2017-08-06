@@ -175,7 +175,6 @@ SELECT ST_AsEWKT(ST_Translate(ST_Scale(ST_GeomFromText('POLYGON((7.2680997849 43
 INSERT INTO gluar_polygon VALUES('includingArea03c', 'SRID=4326;POLYGON((7.269110977675 43.697754691875,7.271133363225 43.697754691875,7.271133363225 43.696552362425,7.269110977675 43.696552362425,7.269110977675 43.697754691875))');
 INSERT INTO gluar_polygon VALUES('includingArea03c', ST_Translate(ST_Scale(ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326), 0.5, 05), -0.5 * (ST_Xmin(geom)+ST_XMax(geom))/2 + ((ST_Xmin(geom)+ST_XMax(geom))/2), -0.5 * (ST_Ymin(geom)+ST_YMax(geom))/2 + ((ST_Ymin(geom)+ST_YMax(geom))/2))) from (select ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326) as geom) a;
 
-
 SELECT x, y, z FROM point_cloud_of_nice, ST_Transform(ST_GeomFromText('POLYGON((4 43, 4 44, 5 44, 5 43, 4 43))', 3857), 4326) as geom2 
 WHERE ST_Intersects(geom, ST_Translate(ST_Scale(geom2, 0.8, 0.8),
  -0.8*(ST_Xmin(geom2)+ST_XMax(geom2))/2 + ((ST_Xmin(geom2)+ST_XMax(geom2))/2), -0.8*(ST_Ymin(geom2)+ST_YMax(geom2))/2 + ((ST_Ymin(geom2)+ST_YMax(geom2))/2)))
@@ -183,6 +182,8 @@ WHERE ST_Intersects(geom, ST_Translate(ST_Scale(geom2, 0.8, 0.8),
 SELECT x, y, z FROM point_cloud_of_nice, ST_Transform(ST_GeomFromText('POLYGON((804006.02 5416600.7,804018.6 5416615.94,804033.63 5416603.32,804034.41 5416604.24,804049.66 5416587.46,804047.21 5416585.62,804057.9 5416569.61,804043.32 5416559.29,804038.08 5416567.76,804038.97 5416568.38,804036.75 5416572.07,804035.86 5416571.45,804033.07 5416575.46,804030.29 5416579,804031.07 5416579.61,804024.95 5416586.69,804024.17 5416585.92,804021.16 5416588.85,804017.6 5416591.77,804017.93 5416592.39,804014.48 5416595.47,804013.82 5416594.85,804006.02 5416600.7))', 3857), 4326) as includingGeom 
 WHERE ST_Intersects(geom, ST_Translate(ST_Scale(includingGeom, 0.8, 0.8),-0.8*(ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2 + ((ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2),-0.8*(ST_Ymin(includingGeom)+ST_YMax(includingGeom))/2 + ((ST_Ymin(includingGeom)+ST_YMax(includingGeom))/2)))
 
+SELECT x, y, z FROM point_cloud_of_nice
+WHERE ST_Intersects(geom, ST_Translate(ST_Scale(includingGeom, 0.8, 0.8),-0.8*(ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2 + ((ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2),-0.8*(ST_Ymin(includingGeom)+ST_YMax(includingGeom))/2 + ((ST_Ymin(includingGeom)+ST_YMax(includingGeom))/2)))
 
 SELECT name, ST_AsEWKT(geom) as geomAsWKT, 1 from gluar_polygon;
 

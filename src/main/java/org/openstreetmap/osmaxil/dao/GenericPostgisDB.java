@@ -2,12 +2,10 @@ package org.openstreetmap.osmaxil.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.dao.OsmPostgisDB.IdWithGeom;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,15 +40,24 @@ public class GenericPostgisDB {
     // Point cloud tables
     ////////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Recreate a point cloud table.
+     */
     public void recreatePointCloudTable(String tableName, String fileSrid) {
     	this.jdbcTemplate.execute("DROP TABLE IF EXISTS " + tableName);
     	this.jdbcTemplate.execute("CREATE TABLE " + tableName + " (x numeric(11,3), y numeric(11,3), z numeric(11,3))");
     }
     
+    /**
+     * Fill a point cloud table by using the COPY statement (which much more efficient than INSERT).
+     */
     public void copyPointCloudFromYXZFile(String tableName, String filePath) {
     	this.jdbcTemplate.execute("COPY " + tableName + " (x, y, z) FROM '" + filePath + "' WITH DELIMITER AS ' '");    	
     }
     
+    /**
+     * Finalize a point cloud table by adding its geometry column and an spatial index.
+     */
     public void finalizePointCloudTable(String tableName, String fileSrid) {
     	LOGGER.info("Add geometry column to the point cloud table");
     	this.jdbcTemplate.execute("SELECT AddGeometryColumn ('"+ tableName +"', 'geom', " + this.srid + ", 'POINT', 3)");
@@ -61,6 +68,39 @@ public class GenericPostgisDB {
     	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
     }
     
+    /**
+     * Find all points which intersect the including geometry and disjoint the excluding geometry (useful for multipolygon buildings with "hole").
+     * That method use a radius as argument in order to skrink the including and excluding geometries.
+     */
+    public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int shrinkRadius, int geomSrid) {
+    	final String includingGeom = "ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + ")";
+    	String query = "SELECT x, y, z FROM point_cloud_of_nice";
+    	String condition = "ST_Transform(ST_Buffer(" + includingGeom + ", -" + shrinkRadius + "), " + srid + ")";
+    	query += " WHERE ST_Intersects(geom, " + condition + ")";
+    	// Do the same for excluding geom (need cleanup before)
+    	if (excludingGeomAsWKT != null) {
+    		final String excludingGeom = "ST_GeomFromText('" + excludingGeomAsWKT + "', " + geomSrid + ")";
+    		condition += " AND ST_Disjoint(geom, ST_Transform(ST_Buffer(" + excludingGeom + ", -" + shrinkRadius + "), " + srid + "))";
+    	}
+    	LOGGER.debug("Used query is: " + query);
+    	List<Coordinates> results = this.jdbcTemplate.query(
+                query,
+                new RowMapper<Coordinates>() {
+                    public Coordinates mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    	Coordinates coordinates = new Coordinates(rs.getString("x"), rs.getString("y"), rs.getString("z"));
+                        return coordinates;
+                    }
+                });
+    	return results;
+    }
+    
+    /**
+     * Find all points which intersect the including geometry and disjoint the excluding geometry (useful for multipolygon buildings with "hole").
+     * That method use a factor as argument in order to scale/skrink the including and excluding geometries.
+     * 
+     * TODO: use JTS instead of PostGis functions (ST_Scale and ST_Translate) to perform the scale/skrink process because this implementation
+     * is working but it takes 15 minutes to execute ! 
+     */
     public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float scaleFactor, int geomSrid) {
     	final String geom = "ST_Transform(ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + "), " + this.srid + ")";
     	String query = "SELECT x, y, z FROM point_cloud_of_nice, " + geom + " as includingGeom";
@@ -73,7 +113,6 @@ public class GenericPostgisDB {
 //    	if (excludingGeomAsWKT != null) {
 //    		condition += " AND ST_Disjoint(geom, ST_Transform(ST_GeomFromText('" + excludingGeomAsWKT + "', " + geomSrid + "), " + this.srid + "))";
 //    	}
-    	// TODO use JTS to scale the geoms ? The current query is working but takes 15 minutes to execute :(
     	LOGGER.debug("Used query is: " + query);
     	List<Coordinates> results = this.jdbcTemplate.query(
                 query,

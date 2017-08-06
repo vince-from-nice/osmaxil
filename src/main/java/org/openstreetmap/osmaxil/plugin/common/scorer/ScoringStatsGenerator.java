@@ -24,7 +24,7 @@ public class ScoringStatsGenerator {
     static protected final Logger LOGGER_FOR_STATS = Logger.getLogger("LoggerForStats");
     
     public void displayStatsByMatchingScore(Collection<AbstractElement> elements) {
-        LOGGER_FOR_STATS.info("Repartions of elements by matching scores:");
+        LOGGER_FOR_STATS.info("Repartitions of elements by matching scores:");
         buildStatsByMatchingScore(elements);
         for (int i = 0; i < 10; i++) {
             StringBuilder sb = new StringBuilder();

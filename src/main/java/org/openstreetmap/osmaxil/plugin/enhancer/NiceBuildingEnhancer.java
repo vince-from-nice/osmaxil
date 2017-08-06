@@ -12,7 +12,6 @@ import org.openstreetmap.osmaxil.dao.GenericPostgisDB;
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
-import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.model.PointImport;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
@@ -42,13 +41,13 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	private float minMatchingScore;
 	
 	@Value("${plugins.niceBuildingEnhancer.minMatchingPoints}")
-	private float minMatchingPoints;
+	private int minMatchingPoints;
 	
 	@Value("${plugins.niceBuildingEnhancer.toleranceRadius}")
 	private float toleranceRadius;
 	
-	@Value("${plugins.niceBuildingEnhancer.scaleFactor}")
-	private float scaleFactor;
+	@Value("${plugins.niceBuildingEnhancer.shrinkRadius}")
+	private int shrinkRadius;
 
 	@Value("${plugins.niceBuildingEnhancer.changesetSourceLabel}")
 	private String changesetSourceLabel;
@@ -130,7 +129,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			LOGGER.warn("Unable to find matching imports because element has no geometry string");
 			return result;
 		}
-		data = this.genericPostgis.findPointByGeometry(element.getGeometryString(), element.getInnerGeometryString(), scaleFactor, srid);
+		data = this.genericPostgis.findPointByGeometry(element.getGeometryString(), element.getInnerGeometryString(), shrinkRadius, srid);
 		// Create imports from results
 		for (Coordinates coordinates : data) {
 			PointImport imp = new PointImport(coordinates);
@@ -153,23 +152,30 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			return;
 		}
 		
-		// Find the best value for building height (for now it is just the average of all points heights)
-		int height = 0;
+		// Find the best value for building height
+		int computedHeight = 0;
+		// for now it is just the average of all points heights but a more complex statistic function would be better...
 		for (AbstractImport imp : element.getMatchingImports()) {
-			height += Double.parseDouble(((PointImport) imp).getZ());
+			computedHeight += Double.parseDouble(((PointImport) imp).getZ());
 		}
-		height = height / element.getMatchingImports().size();
-		LOGGER.info("The height computed value is: " + height);
+		computedHeight = computedHeight / element.getMatchingImports().size();
+		LOGGER.info("The height computed value is: " + computedHeight);
 		
 		// Compute matching score based on that height value and the tolerance radius
 		int numberOfPointClosedToComputedHeight = 0;
 		for (AbstractImport imp : element.getMatchingImports()) {
 			int z = (int) Double.parseDouble(((PointImport) imp).getZ());
-			if (z > height - this.toleranceRadius && z < height + this.toleranceRadius) {
+			if (z >= computedHeight - this.toleranceRadius && z <= computedHeight + this.toleranceRadius) {
 				numberOfPointClosedToComputedHeight++;	
 			}			
 		}
 		element.setMatchingScore((float) numberOfPointClosedToComputedHeight / element.getMatchingImports().size());
+		
+		// TODO Compute the altitude of the center of the building (thanks to GDAL and the DTM of Nice)
+		
+		// TODO Remove the altitude from the computed height
+		
+		// Log some infos
 		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
 		LOGGER.info("The number of points closed to computed height is: " + numberOfPointClosedToComputedHeight);
 		LOGGER.info("The matching score is: " + element.getMatchingScore());
@@ -202,6 +208,10 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
     @Override
     public void displayProcessingStatistics() {
         super.displayProcessingStatistics();
+        LOGGER_FOR_STATS.info("Minimum matching score is: " + this.minMatchingScore);
+        LOGGER_FOR_STATS.info("Minimum matching point is: " + this.minMatchingPoints);
+        LOGGER_FOR_STATS.info("Shrink radius is: " + this.shrinkRadius);
+        LOGGER_FOR_STATS.info("Tolerance radius is: " + this.toleranceRadius);
         LOGGER_FOR_STATS.info("Total of matching points: " + this.counterForMatchedImports);
 		LOGGER_FOR_STATS.info("Average of matching points for each building: "
 				+ this.counterForMatchedImports / this.matchedElements.size());
