@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.annotation.Obsolete;
+import org.openstreetmap.osmaxil.dao.GenericDemFile;
 import org.openstreetmap.osmaxil.dao.GenericPostgisDB;
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.model.AbstractImport;
@@ -61,6 +62,9 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 
 	@Autowired
 	protected GenericPostgisDB genericPostgis;
+	
+	@Autowired
+	protected GenericDemFile genericDemFile;
 
 	// =========================================================================
 	// Overrided methods
@@ -159,7 +163,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			computedHeight += Double.parseDouble(((PointImport) imp).getZ());
 		}
 		computedHeight = computedHeight / element.getMatchingImports().size();
-		LOGGER.info("The height computed value is: " + computedHeight);
+		LOGGER.info("Computed height is: " + computedHeight);
 		
 		// Compute matching score based on that height value and the tolerance radius
 		int numberOfPointClosedToComputedHeight = 0;
@@ -171,7 +175,13 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		}
 		element.setMatchingScore((float) numberOfPointClosedToComputedHeight / element.getMatchingImports().size());
 		
+		// TODO Compute the coordinates of the building center
+		double xCenter = 0;
+		double yCenter = 0;
+		
 		// TODO Compute the altitude of the center of the building (thanks to GDAL and the DTM of Nice)
+		double altitude = this.genericDemFile.getValueByCoordinates(xCenter, yCenter, this.osmPostgis.getSrid());
+		LOGGER.info("Computed altitude is: " + altitude);
 		
 		// TODO Remove the altitude from the computed height
 		
