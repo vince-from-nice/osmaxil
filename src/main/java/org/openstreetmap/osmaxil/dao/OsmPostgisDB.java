@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -91,21 +92,28 @@ public class OsmPostgisDB {
     
     public int getPolygonAreaById(long osmId) {
         int result = 0;
-        String query = "select ST_Area(ST_Transform(way, " + SRID_FOR_AREA_COMPUTATION + ")) from planet_osm_polygon where osm_id = ? ;";
+        String query = "select ST_Area(ST_Transform(way, " + SRID_FOR_AREA_COMPUTATION + ")) from planet_osm_polygon where osm_id = ?";
         LOGGER.debug("Computing area of polygon " + osmId + " with query: " + query);
         result = this.jdbcTemplate.queryForObject(query, Integer.class, osmId);
         return result;
     }
     
-    // TODO replace it by STS
-    public String tranformGeometry(String wkt, int originalSrid) {
-        String result = "";
-        String query = "select ST_AsText(ST_Transform(ST_GeomFromText('" + wkt + "', ?), ?))";
-        //LOGGER.debug("Transforming geometry with query: " + query);
-        result = this.jdbcTemplate.queryForObject(query, String.class, originalSrid, this.srid);
+    public Coordinates getPolygonCenter(long osmId, int targetSrid) {
+    	String query = "select ST_X(ST_Centroid(way)) as x, ST_Y(ST_Centroid(way)) as y from planet_osm_polygon where osm_id = ?";
+    	if (targetSrid != this.getSrid()) {
+    		query = "select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = ?) a";
+    	}
+    	LOGGER.debug("Computing center of polygon with query: " + query);
+        Coordinates result = this.jdbcTemplate.queryForObject(
+                query,
+                new RowMapper<Coordinates>() {
+                    public Coordinates mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        return new Coordinates(rs.getString("x"), rs.getString("y"), "0");
+                    }
+                }, osmId);
         return result;
     }
-
+    
     public int getSrid() {
         return srid;
     }

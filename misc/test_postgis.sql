@@ -196,3 +196,9 @@ SELECT x, y, z FROM point_cloud_of_nice WHERE ST_Intersects(geom, ST_Transform(S
 SELECT x, y, z FROM point_cloud_of_nice WHERE ST_Intersects(geom, ST_Transform(ST_GeomFromText('POLYGON((809050.69 5418683.97,809057.26 5418686.58,809061.6 5418688.28,809061.82 5418686.28,809070.39 5418688.12,809068.94 5418696.13,809104.23 5418710.6,809103.68 5418712.3,809115.37 5418716.92,809119.82 5418708.6,809121.26 5418705.68,809115.48 5418690.13,809112.03 5418684.12,809104.34 5418672.27,809105.9 5418671.03,809104.46 5418667.74,809103.34 5418663.95,809103.01 5418659.79,809103.34 5418657.33,809101.45 5418657.02,809100.11 5418659.49,809056.81 5418634.7,809055.48 5418637.47,809054.47 5418651.48,809055.59 5418653.02,809053.25 5418657.79,809052.36 5418664.11,809051.91 5418676.11,809050.69 5418683.97))', 3857), 4326))
 
 SELECT * FROM planet_osm_ways WHERE id=142850664;
+
+select ST_AsText(ST_Centroid(way)) from planet_osm_polygon where osm_id = 143754774;
+select ST_X(ST_Centroid(way)), ST_Y(ST_Centroid(way)) from planet_osm_polygon where osm_id = 143754774;
+select ST_X(ST_Centroid(way)) as x, ST_Y(ST_Centroid(way)) as y from planet_osm_polygon where osm_id = 143754774
+
+select ST_X(center) as x, ST_Y(center) as y from (select ST_Centroid(way) as center from planet_osm_polygon where osm_id = 143754774) a;

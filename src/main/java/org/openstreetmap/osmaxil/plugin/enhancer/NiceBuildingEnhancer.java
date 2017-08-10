@@ -175,14 +175,10 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		}
 		element.setMatchingScore((float) numberOfPointClosedToComputedHeight / element.getMatchingImports().size());
 		
-		// TODO Compute the coordinates of the building center
-		double xCenter = 0;
-		double yCenter = 0;
-		
-		// TODO Compute the altitude of the center of the building (thanks to GDAL and the DTM of Nice)
-		double altitude = this.genericDemFile.getValueByCoordinates(xCenter, yCenter, this.osmPostgis.getSrid());
+		// Compute the altitude of the center of the building (thanks to GDAL and the DTM of Nice) to remove it from computed height
+		Coordinates center = this.osmPostgis.getPolygonCenter(element.getOsmId(), this.genericDemFile.getSrid());
+		double altitude = this.genericDemFile.getValueByCoordinates(Double.parseDouble(center.x), Double.parseDouble(center.y), this.osmPostgis.getSrid());
 		LOGGER.info("Computed altitude is: " + altitude);
-		
 		// TODO Remove the altitude from the computed height
 		
 		// Log some infos
