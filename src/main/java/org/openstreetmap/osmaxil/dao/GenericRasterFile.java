@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenericDemFile {
+public class GenericRasterFile {
     
     @Value("${genericDemFile.filePath}")
     private String filePath;
@@ -25,8 +25,8 @@ public class GenericDemFile {
     
 	private double xUpperLeft, yUpperLeft;
 	
-	private double xLowerLeft, yLowerLeft;
-    
+	private double xPixelSize, yPixelSize;
+	
     private List<Band> bands;
     
     static private final Logger LOGGER = Logger.getLogger(Application.class);
@@ -46,17 +46,18 @@ public class GenericDemFile {
 		this.xUpperLeft = geotransform[0];
 		this.yUpperLeft = geotransform[3];
 		LOGGER.info("Upper left coordinates are: " + this.xUpperLeft + " " + this.yUpperLeft);
-		this.xLowerLeft = geotransform[0];
-		this.yLowerLeft = geotransform[3] + geotransform[5] * dataset.getRasterYSize();
-		LOGGER.info("Lower left coordinates are: " + this.xLowerLeft + " " + this.yLowerLeft);
+		// Store the pixel sizes
+		this.xPixelSize = geotransform[1];
+		this.yPixelSize = Math.abs(geotransform[5]);
+		LOGGER.info("Pixel sizes are: " + this.xPixelSize + " " + this.yPixelSize);
     }
     
     public double getValueByCoordinates(double x, double y, int srid) {
     	if (this.bands == null) {
     		this.init();
     	}
-    	int xFile = (int) (x - xUpperLeft) / 5;
-    	int yFile = (int) (yUpperLeft - y) / 5;
+    	int xFile = (int) Math.round((x - xUpperLeft) / this.xPixelSize);
+    	int yFile = (int) Math.round((yUpperLeft - y) / this.yPixelSize);
     	double[] result = new double[1];
 		bands.get(0).ReadRaster(xFile, yFile, 1, 1, result);
     	return result[0];

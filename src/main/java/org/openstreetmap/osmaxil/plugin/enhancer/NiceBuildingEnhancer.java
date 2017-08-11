@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.annotation.Obsolete;
-import org.openstreetmap.osmaxil.dao.GenericDemFile;
+import org.openstreetmap.osmaxil.dao.GenericRasterFile;
 import org.openstreetmap.osmaxil.dao.GenericPostgisDB;
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.model.AbstractImport;
@@ -64,7 +64,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	protected GenericPostgisDB genericPostgis;
 	
 	@Autowired
-	protected GenericDemFile genericDemFile;
+	protected GenericRasterFile genericDemFile;
 
 	// =========================================================================
 	// Overrided methods
@@ -94,6 +94,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	
 	protected List<BuildingElement> getTargetedElements() {
 		List<BuildingElement> results = new ArrayList<>();
+		// TODO encapsulate query into DAO
 		String condition = "ST_Intersects(way, ST_Transform(ST_GeomFromText('" + includingAreaString + "', " + this.filteringAreaSrid + "), "
 				+ osmPostgis.getSrid() + "))";
 		condition += " AND ST_Disjoint(way, ST_Transform(ST_GeomFromText('" + excludingAreaString + "', " + this.filteringAreaSrid + "), "
@@ -156,35 +157,42 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			return;
 		}
 		
-		// Find the best value for building height
-		int computedHeight = 0;
-		// for now it is just the average of all points heights but a more complex statistic function would be better...
+		// Find the best value for building elevation
+		int elevation = 0;
+		// for now it is just the average of all points elevations but a more complex statistic function would be better...
 		for (AbstractImport imp : element.getMatchingImports()) {
-			computedHeight += Double.parseDouble(((PointImport) imp).getZ());
+			elevation += Double.parseDouble(((PointImport) imp).getZ());
 		}
-		computedHeight = computedHeight / element.getMatchingImports().size();
-		LOGGER.info("Computed height is: " + computedHeight);
+		int MAGIC_NUMBER = 1;
+		elevation = elevation / element.getMatchingImports().size() + MAGIC_NUMBER;
+		LOGGER.info("Computed elevation is: " + elevation);
 		
-		// Compute matching score based on that height value and the tolerance radius
-		int numberOfPointClosedToComputedHeight = 0;
+		// Compute matching score based on that elevation value and the tolerance radius
+		int numberOfPointClosedToComputedElevation = 0;
 		for (AbstractImport imp : element.getMatchingImports()) {
 			int z = (int) Double.parseDouble(((PointImport) imp).getZ());
-			if (z >= computedHeight - this.toleranceRadius && z <= computedHeight + this.toleranceRadius) {
-				numberOfPointClosedToComputedHeight++;	
+			if (z >= elevation - this.toleranceRadius && z <= elevation + this.toleranceRadius) {
+				numberOfPointClosedToComputedElevation++;	
 			}			
 		}
-		element.setMatchingScore((float) numberOfPointClosedToComputedHeight / element.getMatchingImports().size());
-		
-		// Compute the altitude of the center of the building (thanks to GDAL and the DTM of Nice) to remove it from computed height
-		Coordinates center = this.osmPostgis.getPolygonCenter(element.getOsmId(), this.genericDemFile.getSrid());
-		double altitude = this.genericDemFile.getValueByCoordinates(Double.parseDouble(center.x), Double.parseDouble(center.y), this.osmPostgis.getSrid());
-		LOGGER.info("Computed altitude is: " + altitude);
-		// TODO Remove the altitude from the computed height
+		element.setMatchingScore((float) numberOfPointClosedToComputedElevation / element.getMatchingImports().size());
 		
 		// Log some infos
 		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
-		LOGGER.info("The number of points closed to computed height is: " + numberOfPointClosedToComputedHeight);
+		LOGGER.info("The number of points closed to computed elevation is: " + numberOfPointClosedToComputedElevation);
 		LOGGER.info("The matching score is: " + element.getMatchingScore());
+		
+		// TODO move code below
+		
+		// Compute the altitude of the center of the building (thanks to GDAL and the DTM of Nice) 
+		Coordinates center = this.osmPostgis.getPolygonCenter(element.getOsmId(), this.genericDemFile.getSrid());
+		int altitude = (int) Math.round(this.genericDemFile.getValueByCoordinates(Double.parseDouble(center.x), Double.parseDouble(center.y), this.osmPostgis.getSrid()));
+		LOGGER.info("Computed altitude is: " + altitude);
+	
+		// Computed height is the elevation minus the altitude
+		Float height = new Float(elevation - altitude);
+		element.setHeight(height);
+		LOGGER.info("Computed height is: " + height);
 	}
 
 	@Override

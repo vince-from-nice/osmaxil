@@ -168,6 +168,7 @@ INSERT INTO gluar_polygon VALUES('includingArea01', ST_GeomFromText('POLYGON((7.
 INSERT INTO gluar_polygon VALUES('includingArea02', ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326));
 INSERT INTO gluar_polygon VALUES('includingArea02a', ST_Buffer(ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326), -0.001));
 INSERT INTO gluar_polygon VALUES('includingArea02b', ST_Scale(ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326), 0.5, 0.5));
+INSERT INTO gluar_polygon VALUES('includingArea03', ST_GeomFromText('POLYGON((7.2272623405 43.6885776021, 7.2323405743 43.6885776021, 7.2323405743 43.6859095683, 7.2272623405 43.6859095683, 7.2272623405 43.6885776021))', 4326));
 
 SELECT ST_Translate(ST_Scale(ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326), 0.5, 0.5), -0.5 * (ST_Xmin(geom)+ST_XMax(geom))/2 + ((ST_Xmin(geom)+ST_XMax(geom))/2), -0.5 * (ST_Ymin(geom)+ST_YMax(geom))/2 + ((ST_Ymin(geom)+ST_YMax(geom))/2)) from (select ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326) as geom) a;
 SELECT ST_AsEWKT(ST_Translate(ST_Scale(ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326), 0.5, 0.5), -0.5 * (ST_Xmin(geom)+ST_XMax(geom))/2 + ((ST_Xmin(geom)+ST_XMax(geom))/2), -0.5 * (ST_Ymin(geom)+ST_YMax(geom))/2 + ((ST_Ymin(geom)+ST_YMax(geom))/2))) from (select ST_GeomFromText('POLYGON((7.2680997849 43.6983558566, 7.272144556 43.6983558566, 7.272144556 43.6959511977, 7.2680997849 43.6959511977, 7.2680997849 43.6983558566))', 4326) as geom) a;
@@ -201,4 +202,6 @@ select ST_AsText(ST_Centroid(way)) from planet_osm_polygon where osm_id = 143754
 select ST_X(ST_Centroid(way)), ST_Y(ST_Centroid(way)) from planet_osm_polygon where osm_id = 143754774;
 select ST_X(ST_Centroid(way)) as x, ST_Y(ST_Centroid(way)) as y from planet_osm_polygon where osm_id = 143754774
 
-select ST_X(center) as x, ST_Y(center) as y from (select ST_Centroid(way) as center from planet_osm_polygon where osm_id = 143754774) a;
+select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = 143754774) a;
+select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = 140247253) a;
+select osm_id,name,building,ST_Area(way),ST_AsEWKT(way) from planet_osm_polygon where osm_id = 140247253;
