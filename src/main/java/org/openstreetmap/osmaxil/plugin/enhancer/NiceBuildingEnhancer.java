@@ -44,8 +44,11 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	@Value("${plugins.niceBuildingEnhancer.minMatchingPoints}")
 	private int minMatchingPoints;
 	
-	@Value("${plugins.niceBuildingEnhancer.toleranceRadius}")
-	private float toleranceRadius;
+	@Value("${plugins.niceBuildingEnhancer.computingDistance}")
+	private int computingDistance;
+	
+	@Value("${plugins.niceBuildingEnhancer.toleranceDelta}")
+	private float toleranceDelta;
 	
 	@Value("${plugins.niceBuildingEnhancer.shrinkRadius}")
 	private int shrinkRadius;
@@ -58,7 +61,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.BUILDING_LEVELS };
 
-	private static final String MATCHING_TAG_NAME = ElementTag.BUILDING_LEVELS;
+	private static final String MATCHING_TAG_NAME = ElementTag.HEIGHT;
 
 	@Autowired
 	protected GenericPostgisDB genericPostgis;
@@ -148,48 +151,53 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		}
 		return result;
 	}
-
+	
 	@Override
 	protected void computeMatchingScores(BuildingElement element) {
+		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
 		// Check there is enough matching points
 		if (element.getMatchingImports().size() < this.minMatchingPoints) {
 			LOGGER.info("Element has only " + element.getMatchingImports().size() + " matching import(s), skipping it !");
 			return;
 		}
-		
-		// Find the best value for building elevation
-		int elevation = 0;
-		// for now it is just the average of all points elevations but a more complex statistic function would be better...
-		for (AbstractImport imp : element.getMatchingImports()) {
-			elevation += Double.parseDouble(((PointImport) imp).getZ());
-		}
-		int MAGIC_NUMBER = 1;
-		elevation = elevation / element.getMatchingImports().size() + MAGIC_NUMBER;
-		LOGGER.info("Computed elevation is: " + elevation);
-		
-		// Compute matching score based on that elevation value and the tolerance radius
-		int numberOfPointClosedToComputedElevation = 0;
-		for (AbstractImport imp : element.getMatchingImports()) {
-			int z = (int) Double.parseDouble(((PointImport) imp).getZ());
-			if (z >= elevation - this.toleranceRadius && z <= elevation + this.toleranceRadius) {
-				numberOfPointClosedToComputedElevation++;	
-			}			
-		}
-		element.setMatchingScore((float) numberOfPointClosedToComputedElevation / element.getMatchingImports().size());
-		
-		// Log some infos
-		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
-		LOGGER.info("The number of points closed to computed elevation is: " + numberOfPointClosedToComputedElevation);
-		LOGGER.info("The matching score is: " + element.getMatchingScore());
-		
-		// TODO move code below
-		
-		// Compute the altitude of the center of the building (thanks to GDAL and the DTM of Nice) 
+
+		// Compute altitude of the center of the building (thanks to GDAL and the DTM of Nice) 
 		Coordinates center = this.osmPostgis.getPolygonCenter(element.getOsmId(), this.genericDemFile.getSrid());
 		int altitude = (int) Math.round(this.genericDemFile.getValueByCoordinates(Double.parseDouble(center.x), Double.parseDouble(center.y), this.osmPostgis.getSrid()));
 		LOGGER.info("Computed altitude is: " + altitude);
-	
-		// Computed height is the elevation minus the altitude
+		
+		// Find the max of all points elevations
+		int max = 0;
+		for (AbstractImport imp : element.getMatchingImports()) {
+			int h = (int) Math.round(Double.parseDouble(((PointImport) imp).getZ()));
+			if (h > max) {
+				max = h;
+			}
+		}
+		LOGGER.info("Max elevation is: " + max);
+
+		// Decrement elevation from the max until a descent value is found
+		int elevation = max;
+		for (elevation = max; elevation > max - this.computingDistance && elevation > altitude; elevation--) {
+			// Compute a matching score based on that elevation value
+			int numberOfClosedPoints = 0;
+			for (AbstractImport imp : element.getMatchingImports()) {
+				int z = (int) Double.parseDouble(((PointImport) imp).getZ());
+				if (z >= elevation - this.toleranceDelta) {
+					numberOfClosedPoints++;	
+				}			
+			}
+			// The matching score is the coverage of closest points 
+			element.setMatchingScore((float) numberOfClosedPoints / element.getMatchingImports().size());
+			LOGGER.info("For height=" + elevation + " the number of closed points is: " + numberOfClosedPoints 
+					+ " and the matching score is: " + element.getMatchingScore());
+			if (element.getMatchingScore() >= this.minMatchingScore) {
+				LOGGER.info("Ok, " + elevation + " is a good value");
+				break;
+			}
+		}
+		
+		// The final height is the elevation minus the altitude
 		Float height = new Float(elevation - altitude);
 		element.setHeight(height);
 		LOGGER.info("Computed height is: " + height);
@@ -225,7 +233,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
         LOGGER_FOR_STATS.info("Minimum matching score is: " + this.minMatchingScore);
         LOGGER_FOR_STATS.info("Minimum matching point is: " + this.minMatchingPoints);
         LOGGER_FOR_STATS.info("Shrink radius is: " + this.shrinkRadius);
-        LOGGER_FOR_STATS.info("Tolerance radius is: " + this.toleranceRadius);
+        LOGGER_FOR_STATS.info("Tolerance delta is: " + this.toleranceDelta);
         LOGGER_FOR_STATS.info("Total of matching points: " + this.counterForMatchedImports);
 		LOGGER_FOR_STATS.info("Average of matching points for each building: "
 				+ this.counterForMatchedImports / this.matchedElements.size());

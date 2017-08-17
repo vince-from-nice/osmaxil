@@ -3,7 +3,6 @@ package org.openstreetmap.osmaxil.plugin.enhancer;
 import java.util.Collection;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementType;
@@ -18,7 +17,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	 */
 	protected List<ELEMENT> targetedElement;
 	
-	protected int limitForMatchedElements = 0;
+	protected int limitForMatchedElements = 100;
 
 	abstract protected List<IMPORT> findMatchingImports(ELEMENT element, int srid);
 
