@@ -17,7 +17,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	 */
 	protected List<ELEMENT> targetedElement;
 	
-	protected int limitForMatchedElements = 100;
+	protected int limitForMatchedElements = 10;
 
 	abstract protected List<IMPORT> findMatchingImports(ELEMENT element, int srid);
 
@@ -39,29 +39,26 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 				LOGGER.warn("Element is null, skipping it...");
 				break;
 			}
-			// Associate matched imports
+			// Bind it with its matching elements
 	        LOGGER.info("Find matching imports for element #" + element.getOsmId());
 			this.associateImportsWithElements(element);
 			// If the element has at least one matching import 
 			if (!element.getMatchingImports().isEmpty()) {
-	        	// Update element with data from OSM API
-	        	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
-	        	this.updateElementFromAPI(element);
 	        	// Compute its matching score
 	            LOGGER.info("Computing matching score for element #" + element.getOsmId());
 	            this.computeMatchingScores(element);
+	        	// Update element with data from OSM API only if its matching score is ok
+	            if (element.getMatchingScore() >= this.getMinimalMatchingScore()) {
+		        	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
+		        	this.updateElementFromAPI(element);
+	            }
 			}			
-            // Check limit if defined (useful for debug) 
+            // Check limit (useful for debug) 
 			if (limitForMatchedElements > 0 && this.matchedElements.size() == limitForMatchedElements) {
 				break;
 			}
 		}
 		LOGGER.info(LOG_SEPARATOR);
-	}
-
-	@Override
-	public void synchronize() {
-		// TODO Auto-generated method stub
 	}
 
     @Override

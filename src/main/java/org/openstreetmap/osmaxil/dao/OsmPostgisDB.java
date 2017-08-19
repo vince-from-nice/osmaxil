@@ -45,42 +45,42 @@ public class OsmPostgisDB {
         return result.toArray(new Long[result.size()]);
     }
     
-    public class IdWithScore {
+    public class IdWithDouble {
         public long id;
-        public double score;
+        public double d;
     }
 
-    public IdWithScore[] findElementIdsWithScoreByQuery(String query) {
-        List<IdWithScore> result = this.jdbcTemplate.query(
+    public IdWithDouble[] findElementIdsWithDoubleByQuery(String query) {
+        List<IdWithDouble> result = this.jdbcTemplate.query(
                 query,
-                new RowMapper<IdWithScore>() {
-                    public IdWithScore mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        IdWithScore idWithScore = new IdWithScore();
-                        idWithScore.id = Long.parseLong(rs.getString("osm_id"));
-                        idWithScore.score = Double.parseDouble(rs.getString("distance"));
-                        return idWithScore;
+                new RowMapper<IdWithDouble>() {
+                    public IdWithDouble mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        IdWithDouble idWithDouble = new IdWithDouble();
+                        idWithDouble.id = Long.parseLong(rs.getString("osm_id"));
+                        idWithDouble.d = Double.parseDouble(rs.getString("distance"));
+                        return idWithDouble;
                     }
                 });
-        return result.toArray(new IdWithScore[result.size()]);
+        return result.toArray(new IdWithDouble[result.size()]);
     }
     
-    public class IdWithGeom {
+    public class IdWithString {
         public long id;
-        public String geom;
+        public String string;
     }
 
-    public IdWithGeom[] findElementIdsWithGeomByQuery(String query) {
-        List<IdWithGeom> result = this.jdbcTemplate.query(
+    public IdWithString[] findElementIdsWithGeomByQuery(String query) {
+        List<IdWithString> result = this.jdbcTemplate.query(
                 query,
-                new RowMapper<IdWithGeom>() {
-                    public IdWithGeom mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    	IdWithGeom idWithGeom = new IdWithGeom();
+                new RowMapper<IdWithString>() {
+                    public IdWithString mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    	IdWithString idWithGeom = new IdWithString();
                         idWithGeom.id = Long.parseLong(rs.getString("osm_id"));
-                        idWithGeom.geom = rs.getString("geomAsWKT");
+                        idWithGeom.string = rs.getString("geomAsWKT");
                         return idWithGeom;
                     }
                 });
-        return result.toArray(new IdWithGeom[result.size()]);
+        return result.toArray(new IdWithString[result.size()]);
     }
     
     public String getRelationMembers(long relationId) {

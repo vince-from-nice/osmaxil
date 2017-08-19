@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.annotation.Obsolete;
 import org.openstreetmap.osmaxil.dao.GenericRasterFile;
@@ -59,7 +61,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	@Value("${plugins.niceBuildingEnhancer.changesetComment}")
 	private String changesetComment;
 
-	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.BUILDING_LEVELS };
+	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
 
 	private static final String MATCHING_TAG_NAME = ElementTag.HEIGHT;
 
@@ -68,6 +70,8 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	
 	@Autowired
 	protected GenericRasterFile genericDemFile;
+	
+	private Map<BuildingElement, Float>computedHeightsByBuilding = new HashMap<>();
 
 	// =========================================================================
 	// Overrided methods
@@ -97,7 +101,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	
 	protected List<BuildingElement> getTargetedElements() {
 		List<BuildingElement> results = new ArrayList<>();
-		// TODO encapsulate query into DAO
+		// Get only elements whose coordinates are fine with the filtering areas
 		String condition = "ST_Intersects(way, ST_Transform(ST_GeomFromText('" + includingAreaString + "', " + this.filteringAreaSrid + "), "
 				+ osmPostgis.getSrid() + "))";
 		condition += " AND ST_Disjoint(way, ST_Transform(ST_GeomFromText('" + excludingAreaString + "', " + this.filteringAreaSrid + "), "
@@ -109,8 +113,9 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			query += " AND " + condition;
 		}
 		LOGGER.debug("Used query is: " + query);
-		OsmPostgisDB.IdWithGeom[] idsWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
-		for (OsmPostgisDB.IdWithGeom idWithGeom : idsWithGeom) {
+		// Fetch from DB the IDs but also the geometries
+		OsmPostgisDB.IdWithString[] idsWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
+		for (OsmPostgisDB.IdWithString idWithGeom : idsWithGeom) {
 			BuildingElement element = new BuildingElement(idWithGeom.id);
 			// If ID is negative it means the element is a multipolygon relations => need to find its relevant outer member
 			if (idWithGeom.id < 0) {
@@ -121,7 +126,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
                 element.setOsmId(BuildingElement.getOuterOrInnerMemberId(relationId, membersString, true));
                 element.setInnerGeometryString(this.getInnerGeometryString(relationId, membersString));
 			}
-			element.setGeometryString(idWithGeom.geom);
+			element.setGeometryString(idWithGeom.string);
 			results.add(element);
 		}
 		LOGGER.info("Number of returned element: " + results.size());
@@ -176,7 +181,8 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		}
 		LOGGER.info("Max elevation is: " + max);
 
-		// Decrement elevation from the max until a descent value is found
+		// Decrement elevation from the max until a descent value is found.
+		// The goal is to find the *highest* elevation which has a valid score.
 		int elevation = max;
 		for (elevation = max; elevation > max - this.computingDistance && elevation > altitude; elevation--) {
 			// Compute a matching score based on that elevation value
@@ -192,14 +198,14 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			LOGGER.info("For height=" + elevation + " the number of closed points is: " + numberOfClosedPoints 
 					+ " and the matching score is: " + element.getMatchingScore());
 			if (element.getMatchingScore() >= this.minMatchingScore) {
-				LOGGER.info("Ok, " + elevation + " is a good value");
+				LOGGER.info("Ok it's enough, the value " + elevation + " can be used");
 				break;
 			}
 		}
 		
 		// The final height is the elevation minus the altitude
 		Float height = new Float(elevation - altitude);
-		element.setHeight(height);
+		this.computedHeightsByBuilding.put(element, height);
 		LOGGER.info("Computed height is: " + height);
 	}
 
@@ -212,11 +218,14 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	@Override
 	protected boolean updateElementTag(BuildingElement element, String tagName) {
         boolean updated = false;
-		// TODO
-        String tagValue = "todo";
         if (ElementTag.HEIGHT.equals(tagName)) {
-            element.setHeight(Float.parseFloat(tagValue));
-            LOGGER.info("===> Updating height to [" + tagValue + "]");
+            Float computedHeight = this.computedHeightsByBuilding.get(element);
+            if (computedHeight == null) {
+                LOGGER.warn("Cannot update tag because computed height is null");
+                return false;
+            }
+            element.setHeight(computedHeight);
+            LOGGER.info("===> Updating height to [" + computedHeight + "]");
             updated = true;
         }
         return updated;
@@ -295,7 +304,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
         LOGGER.debug("Used query is: " + query);
         // Damned the inner member id is a key of the planet_osm_ways table which doesn't store the coordinates but only point IDs :(
         //OsmPostgisDB.IdWithGeom[] innerMemberIdWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
-        // TODO do another request to fetch points coordinates
+        // Need to do another request to fetch points coordinates...
         return null;
 	}
 	

@@ -14,9 +14,10 @@ import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnSameValueMatch
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component("ParisBuildingUpdater")
+@Component("ParisBuildingUpdater") @Lazy
 public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
 
     @Autowired

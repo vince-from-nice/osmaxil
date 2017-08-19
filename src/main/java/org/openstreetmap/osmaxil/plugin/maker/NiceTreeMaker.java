@@ -22,9 +22,10 @@ import org.openstreetmap.osmaxil.plugin.common.parser.NiceTreeImportParser2015;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component("NiceTreeMaker")
+@Component("NiceTreeMaker") @Lazy
 public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> {
 
     @Autowired

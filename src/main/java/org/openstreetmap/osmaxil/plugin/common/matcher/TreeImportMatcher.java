@@ -35,14 +35,14 @@ public class TreeImportMatcher extends AbstractImportMatcher<TreeImport> {
         if (srid != this.osmPostgis.getSrid()) {
             treeGeometry = "ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), " + this.osmPostgis.getSrid() + ")";
         }
-        query += treeGeometry + ") AS score ";
+        query += treeGeometry + ") AS distance ";
         query += "FROM planet_osm_point n WHERE n.natural = 'tree' AND way && ";
         String boxGeometry = "St_Buffer(ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), "
                 + this.osmPostgis.getSrid() + "), " + this.matchingAreaRadius + ") ";
         query += boxGeometry;
         query += "ORDER BY score;";
         // Perform the PostGIS query
-        OsmPostgisDB.IdWithScore[] oldTreeIdsWithScore = this.osmPostgis.findElementIdsWithScoreByQuery(query);
+        OsmPostgisDB.IdWithDouble[] oldTreeIdsWithScore = this.osmPostgis.findElementIdsWithDoubleByQuery(query);
         // Manage matching trees
         if (oldTreeIdsWithScore.length > 0) {
             if (matchClosestOnly) {
@@ -56,11 +56,11 @@ public class TreeImportMatcher extends AbstractImportMatcher<TreeImport> {
         return results;
     }
     
-    private MatchingElementId createMatchingElementId(OsmPostgisDB.IdWithScore idWithScore) {
+    private MatchingElementId createMatchingElementId(OsmPostgisDB.IdWithDouble idWithScore) {
         MatchingElementId matchingElementId = new MatchingElementId();
         matchingElementId.setOsmId(idWithScore.id);
         // Score of matching element is based on its distance to the imported tree
-        matchingElementId.setScore((float) (1 / idWithScore.score));
+        matchingElementId.setScore((float) (1 / idWithScore.d));
         return matchingElementId;
     }
 

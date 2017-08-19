@@ -22,6 +22,9 @@ public class BuildingElement extends AbstractElement {
 
     @Override
     public List<OsmXmlTag> getTags() {
+    	if (this.getApiData() == null) {
+    		return new ArrayList<>();
+    	}
         return this.getApiData().ways.get(0).tags;
     }
     

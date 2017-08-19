@@ -41,18 +41,20 @@ public class OsmXmlFile {
 
     public boolean writeToFile(String name, OsmXmlRoot root) {
         boolean result = false;
-        root.version = 0.6f;
-        root.generator = Application.NAME;
-        String fileName = this.getFileName(name);
+        String fileName = null;
         FileOutputStream os = null;
         try {
+            root.version = 0.6f;
+            root.generator = Application.NAME;
+            fileName = this.getFileName(name);
+            os = null;
             os = new FileOutputStream(fileName);
             this.marshaller.marshal(root, new StreamResult(os));
             this.counterForWriteSuccess++;
             result = true;
             LOGGER.info("File " + fileName + " has been created");
-        } catch (IOException e) {
-            LOGGER.error("Unable to write " + fileName + ": " + e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("Unable to write file <" + fileName + ">: " + e.getMessage());
             this.counterForWriteFailures++;
             result = false;
         } finally {

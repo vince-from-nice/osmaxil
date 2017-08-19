@@ -112,7 +112,7 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
                 }
                 this.counterForParsedImports++;
                 LOGGER.info("Loading import #" + this.counterForParsedImports + ": " + imp);
-                // Check if the import coordinates are fine with the bounding boxes
+                // Check if the import coordinates are fine with the filtering areas
                 if (!this.checkCoordinatesWithFilteringArea(imp.getLongitude(), imp.getLatitude())) {
                     this.counterForFilteredImports++;
                     LOGGER.warn("Import has coordinates which are not respecting the filtering areas, skipping it...");

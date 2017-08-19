@@ -26,11 +26,12 @@ import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnAnyValueMatchi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.vividsolutions.jts.geom.Point;
 
-@Component("ParisBuildingRemaker")
+@Component("ParisBuildingRemaker") @Lazy
 public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
 
     // =========================================================================
