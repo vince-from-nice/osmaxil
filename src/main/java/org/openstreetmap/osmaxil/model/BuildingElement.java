@@ -9,7 +9,7 @@ public class BuildingElement extends AbstractElement {
     
     private int computedArea;
         
-    private String innerGeometryString; // used by building which has a "hole" (multipolygon)
+	private String innerGeometryString; // used by building which has a "hole" (multipolygon)
     
     public BuildingElement(long osmId) {
         super(osmId);

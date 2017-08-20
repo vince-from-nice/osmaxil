@@ -17,7 +17,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	 */
 	protected List<ELEMENT> targetedElement;
 	
-	protected int limitForMatchedElements = 10;
+	protected int limitForMatchedElements = 0;
 
 	abstract protected List<IMPORT> findMatchingImports(ELEMENT element, int srid);
 

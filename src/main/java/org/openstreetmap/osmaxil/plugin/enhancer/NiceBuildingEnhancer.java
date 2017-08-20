@@ -167,7 +167,8 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		}
 
 		// Compute altitude of the center of the building (thanks to GDAL and the DTM of Nice) 
-		Coordinates center = this.osmPostgis.getPolygonCenter(element.getOsmId(), this.genericDemFile.getSrid());
+		long osmId = (element.getRelationId() != null ? - element.getRelationId() : element.getOsmId());
+		Coordinates center = this.osmPostgis.getPolygonCenter(osmId, this.genericDemFile.getSrid());
 		int altitude = (int) Math.round(this.genericDemFile.getValueByCoordinates(Double.parseDouble(center.x), Double.parseDouble(center.y), this.osmPostgis.getSrid()));
 		LOGGER.info("Computed altitude is: " + altitude);
 		
