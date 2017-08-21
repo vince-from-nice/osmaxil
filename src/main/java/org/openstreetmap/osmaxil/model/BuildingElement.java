@@ -99,7 +99,7 @@ public class BuildingElement extends AbstractElement {
         // Else we just return the negative relation ID
         else {
             result = - relationId;
-            LOGGER.warn("For multipolygon relation with id=" + relationId + ", no " + (outer?"outer":"inner") + " member has been found (members are " + membersString + ")");
+            LOGGER.warn("For multipolygon relation with id=" + relationId + ", no " + (outer?"outer":"inner") + " member can be selected because there are many (members are " + membersString + ")");
         }
         return result;
     }

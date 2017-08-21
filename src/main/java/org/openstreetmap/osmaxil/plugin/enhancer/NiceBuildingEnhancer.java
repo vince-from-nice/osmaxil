@@ -23,9 +23,10 @@ import org.openstreetmap.osmaxil.plugin.common.parser.AbstractImportParser;
 import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component("NiceBuildingEnhancer")
+@Component("NiceBuildingEnhancer") @Lazy
 public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, PointImport> {
 
 	@Value("${plugins.niceBuildingEnhancer.xyzFolderPath}")
@@ -112,20 +113,22 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		} else {
 			query += " AND " + condition;
 		}
+		//query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -175167";
 		LOGGER.debug("Used query is: " + query);
-		// Fetch from DB the IDs but also the geometries
+		// Fetch from DB the IDs and the geometries
 		OsmPostgisDB.IdWithString[] idsWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
 		for (OsmPostgisDB.IdWithString idWithGeom : idsWithGeom) {
 			BuildingElement element = new BuildingElement(idWithGeom.id);
 			// If ID is negative it means the element is a multipolygon relations => need to find its relevant outer member
-			if (idWithGeom.id < 0) {
-                LOGGER.debug("A multipolygon relation has been found (" + idWithGeom.id + "), looking for its relevant outer member");
-                long relationId = - idWithGeom.id;
-                element.setRelationId(relationId);
-                String membersString = osmPostgis.getRelationMembers(relationId);
-                element.setOsmId(BuildingElement.getOuterOrInnerMemberId(relationId, membersString, true));
-                element.setInnerGeometryString(this.getInnerGeometryString(relationId, membersString));
-			}
+			// In fact it's better to work directly on relations instead of outer members
+//			if (idWithGeom.id < 0) {
+//                LOGGER.debug("A multipolygon relation has been found (" + idWithGeom.id + "), looking for its relevant outer member");
+//                long relationId = - idWithGeom.id;
+//                element.setRelationId(relationId);
+//                String membersString = osmPostgis.getRelationMembers(relationId);
+//                element.setOsmId(BuildingElement.getOuterOrInnerMemberId(relationId, membersString, true));
+//                element.setInnerGeometryString(this.getInnerGeometryString(relationId, membersString));
+//			}
 			element.setGeometryString(idWithGeom.string);
 			results.add(element);
 		}
@@ -167,8 +170,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		}
 
 		// Compute altitude of the center of the building (thanks to GDAL and the DTM of Nice) 
-		long osmId = (element.getRelationId() != null ? - element.getRelationId() : element.getOsmId());
-		Coordinates center = this.osmPostgis.getPolygonCenter(osmId, this.genericDemFile.getSrid());
+		Coordinates center = this.osmPostgis.getPolygonCenter(element.getOsmId(), this.genericDemFile.getSrid());
 		int altitude = (int) Math.round(this.genericDemFile.getValueByCoordinates(Double.parseDouble(center.x), Double.parseDouble(center.y), this.osmPostgis.getSrid()));
 		LOGGER.info("Computed altitude is: " + altitude);
 		

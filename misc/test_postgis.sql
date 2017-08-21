@@ -204,4 +204,26 @@ select ST_X(ST_Centroid(way)) as x, ST_Y(ST_Centroid(way)) as y from planet_osm_
 
 select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = 143754774) a;
 select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = 140247253) a;
-select osm_id,name,building,ST_Area(way),ST_AsEWKT(way) from planet_osm_polygon where osm_id = 140247253;
+select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = 142850777) a;
+select osm_id,name,building,ST_Area(way),ST_AsEWKT(way) from planet_osm_polygon where osm_id = 142850777;
+
+select * from apple_buildings where height > 0 limit 100;
+select count(gid) from apple_buildings;
+select count(gid) from apple_buildings where height > 0;
+
+select * from planet_osm_polygon where osm_id = -1867273;
+select * from planet_osm_rels where id = 1867273;
+select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = -1867273) a;
+
+select * from planet_osm_polygon where osm_id = -1848685;
+select * from planet_osm_rels where id = 1848685;
+select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = -1848685) a;
+
+select * from planet_osm_polygon where osm_id = -175167;
+select * from planet_osm_rels where id = 175167;
+"{144458571,144458569}"
+select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = -175167) a;
+select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = -175167) a
+
+
+

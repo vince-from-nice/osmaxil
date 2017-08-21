@@ -32,6 +32,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 		// Load IDs of all targeted elements
 		LOGGER.info("Looking in PostGIS for existing elements which are respecting the filtering areas");
 		this.targetedElement = this.getTargetedElements();
+		int i = 0;
 		// For each targeted element, 
 		for (ELEMENT element : this.targetedElement) {
 			LOGGER.info(LOG_SEPARATOR);
@@ -40,7 +41,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 				break;
 			}
 			// Bind it with its matching elements
-	        LOGGER.info("Find matching imports for element #" + element.getOsmId());
+	        LOGGER.info("Find matching imports for element #" + element.getOsmId() + " <" + i++ + ">");
 			this.associateImportsWithElements(element);
 			// If the element has at least one matching import 
 			if (!element.getMatchingImports().isEmpty()) {
@@ -92,7 +93,8 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	}
 	
 	private void updateElementFromAPI(ELEMENT element) {
-        OsmXmlRoot apiData = this.osmStandardApi.readElement(element.getOsmId(), ElementType.Way);
+		long osmId = (element.getOsmId() > 0 ? element.getOsmId() : - element.getOsmId());
+        OsmXmlRoot apiData = this.osmStandardApi.readElement(osmId, ElementType.Way);
         if (apiData == null) {
             LOGGER.warn("Unable to fetch data from OSM API for element#" + element.getOsmId());
         } else {

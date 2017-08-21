@@ -99,19 +99,21 @@ public class OsmPostgisDB {
     }
     
     public Coordinates getPolygonCenter(long osmId, int targetSrid) {
+    	//osmId = (osmId > 0 ? osmId : - osmId);
     	String query = "select ST_X(ST_Centroid(way)) as x, ST_Y(ST_Centroid(way)) as y from planet_osm_polygon where osm_id = ?";
     	if (targetSrid != this.getSrid()) {
     		query = "select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = ?) a";
     	}
     	LOGGER.debug("Computing center of polygon with query: " + query);
-        Coordinates result = this.jdbcTemplate.queryForObject(
+        List<Coordinates> result = this.jdbcTemplate.query(
                 query,
                 new RowMapper<Coordinates>() {
                     public Coordinates mapRow(ResultSet rs, int rowNum) throws SQLException {
                         return new Coordinates(rs.getString("x"), rs.getString("y"), "0");
                     }
                 }, osmId);
-        return result;
+        // TODO handle multi outer members
+        return result.get(0);
     }
     
     public int getSrid() {
