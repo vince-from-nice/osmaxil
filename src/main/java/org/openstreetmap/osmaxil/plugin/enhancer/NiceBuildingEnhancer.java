@@ -113,24 +113,31 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		} else {
 			query += " AND " + condition;
 		}
-		//query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -175167";
+		//query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -1867709";
 		LOGGER.debug("Used query is: " + query);
 		// Fetch from DB the IDs and the geometries
 		OsmPostgisDB.IdWithString[] idsWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
 		for (OsmPostgisDB.IdWithString idWithGeom : idsWithGeom) {
-			BuildingElement element = new BuildingElement(idWithGeom.id);
-			// If ID is negative it means the element is a multipolygon relations => need to find its relevant outer member
-			// In fact it's better to work directly on relations instead of outer members
-//			if (idWithGeom.id < 0) {
-//                LOGGER.debug("A multipolygon relation has been found (" + idWithGeom.id + "), looking for its relevant outer member");
-//                long relationId = - idWithGeom.id;
-//                element.setRelationId(relationId);
-//                String membersString = osmPostgis.getRelationMembers(relationId);
-//                element.setOsmId(BuildingElement.getOuterOrInnerMemberId(relationId, membersString, true));
-//                element.setInnerGeometryString(this.getInnerGeometryString(relationId, membersString));
-//			}
-			element.setGeometryString(idWithGeom.string);
-			results.add(element);
+			// If ID is negative it means the element is normal (ie. a way)
+			if (idWithGeom.id > 0) {
+				BuildingElement element = new BuildingElement(idWithGeom.id);
+				element.setGeometryString(idWithGeom.string);
+				results.add(element);
+			} 
+			// If ID is negative it means the element is a multipolygon relation create a new element for each outer member
+			else {
+				long relationId = -idWithGeom.id;
+				String membersString = osmPostgis.getRelationMembers(relationId);
+				LOGGER.info("A multipolygon relation has been found (" + idWithGeom.id + "), create an element for each of its outer members: " + membersString); 
+				List<Long> outerMemberIds = BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, true);
+				for (Long outerMemberId : outerMemberIds) {
+					BuildingElement element = new BuildingElement(outerMemberId);
+					element.setRelationId(relationId);
+					// TODO extract geom for each outer with its inner(s)
+					element.setGeometryString(idWithGeom.string);
+					results.add(element);
+				}
+			}
 		}
 		LOGGER.info("Number of returned element: " + results.size());
 		return results;
@@ -169,8 +176,10 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			return;
 		}
 
-		// Compute altitude of the center of the building (thanks to GDAL and the DTM of Nice) 
-		Coordinates center = this.osmPostgis.getPolygonCenter(element.getOsmId(), this.genericDemFile.getSrid());
+		// Compute altitude of the center of the building from the DTM of Nice ( 
+		Coordinates center = this.osmPostgis.getPolygonCenter(
+				(element.getRelationId() == null ? element.getOsmId() : - element.getRelationId()),
+				this.genericDemFile.getSrid());
 		int altitude = (int) Math.round(this.genericDemFile.getValueByCoordinates(Double.parseDouble(center.x), Double.parseDouble(center.y), this.osmPostgis.getSrid()));
 		LOGGER.info("Computed altitude is: " + altitude);
 		
@@ -248,7 +257,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
         LOGGER_FOR_STATS.info("Tolerance delta is: " + this.toleranceDelta);
         LOGGER_FOR_STATS.info("Total of matching points: " + this.counterForMatchedImports);
 		LOGGER_FOR_STATS.info("Average of matching points for each building: "
-				+ this.counterForMatchedImports / this.matchedElements.size());
+				+ (this.matchedElements.size() > 0 ? this.counterForMatchedImports / this.matchedElements.size() : "0"));
     }
 
 	@Override
@@ -302,7 +311,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	 * Returns the geometry as WKT of the inner member of a multipolygon building.
 	 */
 	private String getInnerGeometryString(long relationId, String membersString) {
-        long innerMemberId = BuildingElement.getOuterOrInnerMemberId(relationId, membersString, false);
+        long innerMemberId = BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, false).get(0);
         String query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE building <> '' AND osm_id=" + innerMemberId;
         LOGGER.debug("Used query is: " + query);
         // Damned the inner member id is a key of the planet_osm_ways table which doesn't store the coordinates but only point IDs :(

@@ -236,7 +236,6 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
         // Do the update sync only if needed
         if (needToSync) {
             boolean success = false;
-            element.setOsmId((element.getOsmId() > 0 ? element.getOsmId() : - element.getOsmId()));
             if ("api".equals(this.synchronizationMode)) {
                 success = this.osmStandardApi.writeElement(element, ElementType.Way);
             } else if ("gen".equals(this.synchronizationMode)) {

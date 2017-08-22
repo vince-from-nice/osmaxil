@@ -93,8 +93,11 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	}
 	
 	private void updateElementFromAPI(ELEMENT element) {
-		long osmId = (element.getOsmId() > 0 ? element.getOsmId() : - element.getOsmId());
-        OsmXmlRoot apiData = this.osmStandardApi.readElement(osmId, ElementType.Way);
+//		long osmId = (element.getOsmId() > 0 ? element.getOsmId() : - element.getOsmId());
+//		ElementType elementType = (element.getOsmId() > 0 ? ElementType.Way : ElementType.Relation);
+//		element.setOsmId((element.getRelationId() == null ? element.getOsmId() : element.getRelationId()));
+		// TODO store type into element and use it everywhere
+        OsmXmlRoot apiData = this.osmStandardApi.readElement(element.getOsmId(), ElementType.Way);
         if (apiData == null) {
             LOGGER.warn("Unable to fetch data from OSM API for element#" + element.getOsmId());
         } else {

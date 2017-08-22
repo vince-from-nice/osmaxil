@@ -99,7 +99,6 @@ public class OsmPostgisDB {
     }
     
     public Coordinates getPolygonCenter(long osmId, int targetSrid) {
-    	//osmId = (osmId > 0 ? osmId : - osmId);
     	String query = "select ST_X(ST_Centroid(way)) as x, ST_Y(ST_Centroid(way)) as y from planet_osm_polygon where osm_id = ?";
     	if (targetSrid != this.getSrid()) {
     		query = "select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = ?) a";

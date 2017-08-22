@@ -44,7 +44,8 @@ public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport>
                 LOGGER.debug("A multipolygon relation has been found (" + ids[i] + "), looking for its relevant outer member");
                 long relationId = - ids[i];
                 String membersString = osmPostgis.getRelationMembers(relationId);
-                relevantElement.setOsmId(BuildingElement.getOuterOrInnerMemberId(relationId, membersString, true));
+                // TODO Take in account all outer members and not the first one only
+                relevantElement.setOsmId(BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, true).get(0));
                 relevantElement.setRelationId(relationId);
             }
             result.add(relevantElement);

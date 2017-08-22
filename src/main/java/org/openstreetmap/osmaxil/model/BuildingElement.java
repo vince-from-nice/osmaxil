@@ -79,29 +79,16 @@ public class BuildingElement extends AbstractElement {
         this.computedArea = computedArea;
     }
 
-    public static long getOuterOrInnerMemberId(long relationId, String membersString, boolean outer) {
-        long result = 0;
-        // Parse members strings
+    public static List<Long> getOuterOrInnerMemberIds(long relationId, String membersString, boolean outer) {
+    	List<Long> results = new ArrayList<>();
         membersString = membersString.substring(1, membersString.length() - 1);
         String[] members = membersString.split(","); 
-        List<Long> memberIds = new ArrayList<Long>();
         for (int i = 0; i < members.length; i++) {
             if ((outer?"outer":"inner").equals(members[i]) && members[i-1].startsWith("w")) {
-                memberIds.add(Long.parseLong(members[i - 1].substring(1)));
-                //OsmApiRoot memberData = this.osmApiService.readElement(outerMemberId);
+            	results.add(Long.parseLong(members[i - 1].substring(1)));
             }
         }
-        // For now support only relation with just one outer member
-        if (memberIds.size() == 1) {
-            result = memberIds.get(0);
-            LOGGER.info("For multipolygon relation with id=" + relationId + ", " + (outer?"outer":"inner") + " member with id=[" + result +"] has been found");
-        } 
-        // Else we just return the negative relation ID
-        else {
-            result = - relationId;
-            LOGGER.warn("For multipolygon relation with id=" + relationId + ", no " + (outer?"outer":"inner") + " member can be selected because there are many (members are " + membersString + ")");
-        }
-        return result;
+        return results;
     }
 
 	public String getInnerGeometryString() {
