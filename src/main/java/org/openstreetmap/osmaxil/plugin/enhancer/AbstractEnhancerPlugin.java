@@ -17,6 +17,8 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	 */
 	protected List<ELEMENT> targetedElement;
 	
+	protected int counterForUpdatableElements = 0;
+	
 	protected int limitForMatchedElements = 0;
 
 	abstract protected List<IMPORT> findMatchingImports(ELEMENT element, int srid);
@@ -32,7 +34,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 		// Load IDs of all targeted elements
 		LOGGER.info("Looking in PostGIS for existing elements which are respecting the filtering areas");
 		this.targetedElement = this.getTargetedElements();
-		int i = 0;
+		int i = 1;
 		// For each targeted element, 
 		for (ELEMENT element : this.targetedElement) {
 			LOGGER.info(LOG_SEPARATOR);
@@ -51,7 +53,8 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	        	// Update element with data from OSM API only if its matching score is ok
 	            if (element.getMatchingScore() >= this.getMinimalMatchingScore()) {
 		        	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
-		        	this.updateElementFromAPI(element);
+		        	this.updateElementDataFromAPI(element);
+		        	counterForUpdatableElements++;
 	            }
 			}			
             // Check limit (useful for debug) 
@@ -67,7 +70,13 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
         LOGGER_FOR_STATS.info("=== Processing statistics ===");
         LOGGER_FOR_STATS.info("Total of elements which have been targeted: " + this.targetedElement.size());
         LOGGER_FOR_STATS.info("Total of elements which have at least one matching imports: " + this.matchedElements.size());
+        LOGGER_FOR_STATS.info("Total of matching imports: " + this.counterForMatchedImports);
+        LOGGER_FOR_STATS.info("Total of matched elements: " + this.matchedElements.size());
+		LOGGER_FOR_STATS.info("Average of matching imports for each elements: "
+				+ (this.matchedElements.size() > 0 ? this.counterForMatchedImports / this.matchedElements.size() : "0"));
         this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
+        LOGGER_FOR_STATS.info("Minimum matching score is: " + this.getMinimalMatchingScore());
+        LOGGER_FOR_STATS.info("Total of updatable elements: " + this.counterForUpdatableElements);
     }
 
 	// =========================================================================
@@ -92,7 +101,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
         LOGGER.info(sb.append("]").toString());
 	}
 	
-	private void updateElementFromAPI(ELEMENT element) {
+	private void updateElementDataFromAPI(ELEMENT element) {
 //		long osmId = (element.getOsmId() > 0 ? element.getOsmId() : - element.getOsmId());
 //		ElementType elementType = (element.getOsmId() > 0 ? ElementType.Way : ElementType.Relation);
 //		element.setOsmId((element.getRelationId() == null ? element.getOsmId() : element.getRelationId()));

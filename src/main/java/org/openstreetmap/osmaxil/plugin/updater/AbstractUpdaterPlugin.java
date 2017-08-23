@@ -94,15 +94,46 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
 
     @Override
     public void synchronize() {
+        int counter = 1;
         for (ELEMENT element : this.matchedElements.values()) {
-            int elementNbr = 0;
+            LOGGER.info("Updating element #" + element.getOsmId() + " <" + counter++ + ">");
             try {
-                LOGGER.info("Updating element #" + elementNbr + ": " + element);
-                if (element == null) {
-                    LOGGER.warn("Element is null, skipping it...");
+            	// Check if its best matching score is enough
+                if (element.getMatchingScore() < this.getMinimalMatchingScore()) {
+                    LOGGER.info("Element cannot be updated because its matching score is " + element.getMatchingScore()
+                            + " (min=" + this.getMinimalMatchingScore() + ")");
                     return;
                 }
-                this.updateElement(element);
+                boolean needToSync = false;
+                for (String updatableTagName : this.getUpdatableTagNames()) {
+                    LOGGER.debug("* Updating data for the tag " + updatableTagName);
+                    // Check if tag is updatable
+                    if (this.isElementTagUpdatable(element, updatableTagName)) {
+                        boolean updated = this.updateElementTag(element, updatableTagName);
+                        if (updated) {
+                            needToSync = true;
+                            Integer counterByTag = this.countersByTagName.get(updatableTagName);
+                            counterByTag++;
+                            this.countersByTagName.put(updatableTagName, counterByTag);
+                        }
+                    }
+                }
+                // Do the update sync only if needed
+                if (needToSync) {
+                    boolean success = false;
+                    if ("api".equals(this.synchronizationMode)) {
+                        success = this.osmStandardApi.writeElement(element, ElementType.Way);
+                    } else if ("gen".equals(this.synchronizationMode)) {
+                        success = this.osmXmlFile.writeToFile("" + element.getOsmId(), element.getApiData());
+                    }
+                    if (success) {
+                        this.counterForUpdatedElements++;
+                        element.setAltered(true);
+                        LOGGER.debug("Ok element has been updated");
+                    }
+                } else {
+                    LOGGER.info("Element cannot be updated (maybe original value(s) exist(s))");
+                }
             } catch (java.lang.Exception e) {
                 LOGGER.error("Synchronization of element " + element.getOsmId() + " has failed: ", e);
             }
@@ -212,42 +243,4 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
         LOGGER.info(LOG_SEPARATOR);
     }
 
-    private void updateElement(ELEMENT element) {
-        // Check if its best matching score is enough
-        if (element.getMatchingScore() < this.getMinimalMatchingScore()) {
-            LOGGER.info("Element cannot be updated because its matching score is " + element.getMatchingScore()
-                    + " (min=" + this.getMinimalMatchingScore() + ")");
-            return;
-        }
-        boolean needToSync = false;
-        for (String updatableTagName : this.getUpdatableTagNames()) {
-            LOGGER.debug("* Updating data for the tag " + updatableTagName);
-            // Check if tag is updatable
-            if (this.isElementTagUpdatable(element, updatableTagName)) {
-                boolean updated = this.updateElementTag(element, updatableTagName);
-                if (updated) {
-                    needToSync = true;
-                    Integer counter = this.countersByTagName.get(updatableTagName);
-                    counter++;
-                    this.countersByTagName.put(updatableTagName, counter);
-                }
-            }
-        }
-        // Do the update sync only if needed
-        if (needToSync) {
-            boolean success = false;
-            if ("api".equals(this.synchronizationMode)) {
-                success = this.osmStandardApi.writeElement(element, ElementType.Way);
-            } else if ("gen".equals(this.synchronizationMode)) {
-                success = this.osmXmlFile.writeToFile("" + element.getOsmId(), element.getApiData());
-            }
-            if (success) {
-                this.counterForUpdatedElements++;
-                element.setAltered(true);
-                LOGGER.debug("Ok element has been updated");
-            }
-        } else {
-            LOGGER.info("Element cannot be updated (maybe original value(s) exist(s))");
-        }
-    }
 }

@@ -64,8 +64,6 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
 
-	private static final String MATCHING_TAG_NAME = ElementTag.HEIGHT;
-
 	@Autowired
 	protected GenericPostgisDB genericPostgis;
 	
@@ -73,6 +71,8 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	protected GenericRasterFile genericDemFile;
 	
 	private Map<BuildingElement, Float>computedHeightsByBuilding = new HashMap<>();
+	
+	private Map<Long, Integer> outerMemberIndexes = new HashMap<>(); // used by building relations
 
 	// =========================================================================
 	// Overrided methods
@@ -113,7 +113,8 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		} else {
 			query += " AND " + condition;
 		}
-		//query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -1867709";
+		// Specify building IDs directly (used for debugging)
+		query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -6640171";
 		LOGGER.debug("Used query is: " + query);
 		// Fetch from DB the IDs and the geometries
 		OsmPostgisDB.IdWithString[] idsWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
@@ -124,19 +125,24 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 				element.setGeometryString(idWithGeom.string);
 				results.add(element);
 			} 
-			// If ID is negative it means the element is a multipolygon relation create a new element for each outer member
+			// If ID is negative it means the element is a relation
+			// See http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for details
 			else {
 				long relationId = -idWithGeom.id;
 				String membersString = osmPostgis.getRelationMembers(relationId);
-				LOGGER.info("A multipolygon relation has been found (" + idWithGeom.id + "), create an element for each of its outer members: " + membersString); 
+				LOGGER.info("A multipolygon relation has been found (" + idWithGeom.id + "), its outer members are: " + membersString); 
 				List<Long> outerMemberIds = BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, true);
-				for (Long outerMemberId : outerMemberIds) {
-					BuildingElement element = new BuildingElement(outerMemberId);
-					element.setRelationId(relationId);
-					// TODO extract geom for each outer with its inner(s)
-					element.setGeometryString(idWithGeom.string);
-					results.add(element);
+				Integer currentOuterMemberIndex = this.outerMemberIndexes.get(relationId);
+				if (currentOuterMemberIndex == null) {
+					currentOuterMemberIndex = 0;
 				}
+				long outerMemberId = outerMemberIds.get(currentOuterMemberIndex);
+				this.outerMemberIndexes.put(relationId, ++currentOuterMemberIndex);
+				LOGGER.info("Outer member ID found is " + outerMemberId + " (current index is " + currentOuterMemberIndex + "), creating a new element with it");
+				BuildingElement element = new BuildingElement(outerMemberId);
+				element.setRelationId(relationId);
+				element.setGeometryString(idWithGeom.string);
+				results.add(element);
 			}
 		}
 		LOGGER.info("Number of returned element: " + results.size());
@@ -251,13 +257,10 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
     @Override
     public void displayProcessingStatistics() {
         super.displayProcessingStatistics();
-        LOGGER_FOR_STATS.info("Minimum matching score is: " + this.minMatchingScore);
-        LOGGER_FOR_STATS.info("Minimum matching point is: " + this.minMatchingPoints);
-        LOGGER_FOR_STATS.info("Shrink radius is: " + this.shrinkRadius);
-        LOGGER_FOR_STATS.info("Tolerance delta is: " + this.toleranceDelta);
-        LOGGER_FOR_STATS.info("Total of matching points: " + this.counterForMatchedImports);
-		LOGGER_FOR_STATS.info("Average of matching points for each building: "
-				+ (this.matchedElements.size() > 0 ? this.counterForMatchedImports / this.matchedElements.size() : "0"));
+        LOGGER_FOR_STATS.info("Specific settings of the plugin:");
+        LOGGER_FOR_STATS.info(" - Minimum matching point is: " + this.minMatchingPoints);
+        LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
+        LOGGER_FOR_STATS.info(" - Tolerance delta is: " + this.toleranceDelta);
     }
 
 	@Override

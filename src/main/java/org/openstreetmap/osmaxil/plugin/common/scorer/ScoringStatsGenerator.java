@@ -38,7 +38,7 @@ public class ScoringStatsGenerator {
 //            sb.append(" (" + this.updatableElementsNbrByScore[i] + " were updatable)");
             LOGGER_FOR_STATS.info(sb);
         }
-        LOGGER_FOR_STATS.info("Total of matched elements: " + this.matchedElementsNbr);
+//        LOGGER_FOR_STATS.info("Number of matched elements: " + this.matchedElementsNbr);
 //        LOGGER_FOR_STATS.info("Total of updatable elements: " + this.updatableElementsNbr);
 //        LOGGER_FOR_STATS.info("Total of updated elements: " + this.updatedElementsNbr);
     }

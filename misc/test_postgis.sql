@@ -226,4 +226,22 @@ select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroi
 select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = -175167) a
 
 
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = -6640171;
+select * from planet_osm_rels where id = 6640171;
+"{138321368,138321636,138321332,138321322,138321558}"
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = 138321368;
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = 138321636;
+
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = -1948088;
+select * from planet_osm_rels where id = 1948088;
+"{143789635,143790012,143790205}"
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = 143789635;
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = 143790012;
+
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = -1001349;
+select * from planet_osm_rels where id = 1001349;
+"{63445806,63438024}"
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = 63445806;
+select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = 63438024;
+
 
