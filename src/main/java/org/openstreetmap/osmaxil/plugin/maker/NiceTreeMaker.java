@@ -233,7 +233,7 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
     private TreeElement createNewTreeFromExistingTree(long osmId, TreeImport importedTree) {
         TreeElement tree = new TreeElement(osmId);
         // Fetch data from the API
-        tree.setApiData(this.osmStandardApi.readElement(tree.getOsmId(), ElementType.Node));
+        tree.setApiData(this.osmStandardApi.readElement(tree.getOsmId(), tree.getType()));
         // Flag it as an element to modify
         tree.getApiData().nodes.get(0).action = "modify";
         // Move existing tree to the same position than the imported tree

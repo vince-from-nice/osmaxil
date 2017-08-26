@@ -29,6 +29,8 @@ public abstract class AbstractElement extends MatchableObject {
 
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
     
+    abstract public ElementType getType();
+    
     abstract public void updateChangeset(long changesetId);
 
     abstract public List<OsmXmlTag> getTags();

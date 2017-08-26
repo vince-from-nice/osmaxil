@@ -176,7 +176,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
         ELEMENT element = this.matchedElements.get(osmId);
         if (element == null) {
             // Fetch data from OSM API
-            OsmXmlRoot apiData = this.osmStandardApi.readElement(osmId, ElementType.Way);
+            OsmXmlRoot apiData = this.osmStandardApi.readElement(osmId, element.getType());
             if (apiData == null) {
                 throw new Exception("Unable to fetch data from OSM API for element#" + osmId);
             }

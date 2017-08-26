@@ -72,7 +72,9 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	
 	private Map<BuildingElement, Float>computedHeightsByBuilding = new HashMap<>();
 	
-	private Map<Long, Integer> outerMemberIndexes = new HashMap<>(); // used by building relations
+	private List<Long> targetedRelationIds = new ArrayList<>(); // used by building relations
+	
+	//private Map<Long, Integer> outerMemberIndexes = new HashMap<>(); // used by building relations
 
 	// =========================================================================
 	// Overrided methods
@@ -114,7 +116,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			query += " AND " + condition;
 		}
 		// Specify building IDs directly (used for debugging)
-		query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -6640171";
+		//query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -6640171";
 		LOGGER.debug("Used query is: " + query);
 		// Fetch from DB the IDs and the geometries
 		OsmPostgisDB.IdWithString[] idsWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
@@ -129,20 +131,31 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			// See http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for details
 			else {
 				long relationId = -idWithGeom.id;
-				String membersString = osmPostgis.getRelationMembers(relationId);
-				LOGGER.info("A multipolygon relation has been found (" + idWithGeom.id + "), its outer members are: " + membersString); 
-				List<Long> outerMemberIds = BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, true);
-				Integer currentOuterMemberIndex = this.outerMemberIndexes.get(relationId);
-				if (currentOuterMemberIndex == null) {
-					currentOuterMemberIndex = 0;
+				if (this.targetedRelationIds.contains(relationId)) {
+					LOGGER.info("Relation with ID=" + relationId + " has already been targeted, skipping it...");
+				} else {
+					this.targetedRelationIds.add(relationId);
+					String membersString = osmPostgis.getRelationMembers(relationId);
+					List<Long> outerMemberIds = BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, true);
+					// For now only relations with only one "outer" member are supported
+					// See my thread on the french OSM forum: http://forum.openstreetmap.fr/viewtopic.php?f=5&t=6397&sid=2986b3c59cfc7c1877237b8ad8982110
+					/*
+					long outerMemberId = outerMemberIds.get(currentOuterMemberIndex);
+					this.outerMemberIndexes.put(relationId, ++currentOuterMemberIndex);
+					LOGGER.info("Outer member ID selected is " + outerMemberId + " (current index is " + currentOuterMemberIndex + "), creating a new element with it");
+					 */					
+					if (outerMemberIds.size() > 1) {
+						LOGGER.error("Relation with ID=" + relationId + " is new but it has several outer members, only relation with an unique outer member are supported for now.");
+					} else {
+						// Create a new element from the unique outer member
+						long outerMemberId = outerMemberIds.get(0);
+						LOGGER.info("Relation with ID=" + relationId + " is new, create a new targeted element from its unique outer member (id=" + outerMemberId + ")");
+						BuildingElement element = new BuildingElement(outerMemberId);
+						element.setRelationId(relationId);
+						element.setGeometryString(idWithGeom.string);
+						results.add(element);
+					}
 				}
-				long outerMemberId = outerMemberIds.get(currentOuterMemberIndex);
-				this.outerMemberIndexes.put(relationId, ++currentOuterMemberIndex);
-				LOGGER.info("Outer member ID found is " + outerMemberId + " (current index is " + currentOuterMemberIndex + "), creating a new element with it");
-				BuildingElement element = new BuildingElement(outerMemberId);
-				element.setRelationId(relationId);
-				element.setGeometryString(idWithGeom.string);
-				results.add(element);
 			}
 		}
 		LOGGER.info("Number of returned element: " + results.size());
@@ -168,7 +181,6 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 			imp.setLatitude(Double.parseDouble(coordinates.x));
 			imp.setLongitude(Double.parseDouble(coordinates.y));
 			result.add(imp);
-			this.counterForMatchedImports++;
 		}
 		return result;
 	}
@@ -176,11 +188,6 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	@Override
 	protected void computeMatchingScores(BuildingElement element) {
 		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
-		// Check there is enough matching points
-		if (element.getMatchingImports().size() < this.minMatchingPoints) {
-			LOGGER.info("Element has only " + element.getMatchingImports().size() + " matching import(s), skipping it !");
-			return;
-		}
 
 		// Compute altitude of the center of the building from the DTM of Nice ( 
 		Coordinates center = this.osmPostgis.getPolygonCenter(
@@ -230,7 +237,12 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	@Override
 	protected boolean isElementTagUpdatable(BuildingElement element, String tagName) {
 		// Building tags are updatable only if it doesn't have an original value
-		return element.getOriginalValuesByTagNames().get(tagName) == null;
+		String originalValue = element.getOriginalValuesByTagNames().get(tagName);
+		if (originalValue != null) {
+			LOGGER.info("The tag " + tagName + " cannot be updated because it has an original value: " + originalValue);
+			return false;
+		}		
+		return true;
 	}
 	
 	@Override
@@ -304,6 +316,11 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	@Override
 	protected float getMinimalMatchingScore() {
 		return this.minMatchingScore;
+	}
+	
+	@Override
+	protected float getMinimalMatchingImports() {
+		return this.minMatchingPoints;
 	}
 
 	// =========================================================================

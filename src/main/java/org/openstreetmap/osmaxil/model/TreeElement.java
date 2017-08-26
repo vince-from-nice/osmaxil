@@ -11,6 +11,11 @@ public class TreeElement extends AbstractElement {
         super(osmId);
     }
 
+	@Override
+	public ElementType getType() {
+		return ElementType.Node;
+	}
+	
     @Override
     public List<OsmXmlTag> getTags() {
         return this.getApiData().nodes.get(0).tags;

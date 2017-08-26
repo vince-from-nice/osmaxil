@@ -15,6 +15,11 @@ public class BuildingElement extends AbstractElement {
         super(osmId);
     }
     
+	@Override
+	public ElementType getType() {
+		return ElementType.Way;
+	}
+	
     @Override
     public void updateChangeset(long changesetId) {
         this.getApiData().ways.get(0).changeset = changesetId;
@@ -22,7 +27,7 @@ public class BuildingElement extends AbstractElement {
 
     @Override
     public List<OsmXmlTag> getTags() {
-    	if (this.getApiData() == null) {
+    	if (this.getApiData() == null || this.getApiData().ways == null || this.getApiData().ways.get(0) == null) {
     		return new ArrayList<>();
     	}
         return this.getApiData().ways.get(0).tags;
