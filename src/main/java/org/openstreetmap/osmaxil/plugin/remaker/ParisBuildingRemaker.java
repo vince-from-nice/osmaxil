@@ -21,8 +21,8 @@ import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlWay;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingImportMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.ParisBuildingImportParser;
-import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
-import org.openstreetmap.osmaxil.plugin.common.scorer.CumulativeOnAnyValueMatchingScorer;
+import org.openstreetmap.osmaxil.plugin.common.selector.AbstractMatchingScoreSelector;
+import org.openstreetmap.osmaxil.plugin.common.selector.CumulativeOnAnyValueMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +46,7 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
     private BuildingImportMatcher matcher;
 
     @Autowired
-    private CumulativeOnAnyValueMatchingScorer<BuildingElement> scorer;
+    private CumulativeOnAnyValueMatchingScoreSelector<BuildingElement> scorer;
 
     @Value("${plugins.parisBuildingMaker.minMatchingScore}")
     private float minMatchingScore;
@@ -134,7 +134,7 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
     }
 
     @Override
-    public AbstractMatchingScorer<BuildingElement> getScorer() {
+    public AbstractMatchingScoreSelector<BuildingElement> getScorer() {
         return this.scorer;
     }
 

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.scorer;
+package org.openstreetmap.osmaxil.plugin.common.selector;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * - For the element global score : it accumulates matching scores of all matching score of the element.
  */
 @Component
-public class CumulativeOnAnyValueMatchingScorer<Element extends AbstractElement> extends AbstractMatchingScorer<Element> {
+public class CumulativeOnAnyValueMatchingScoreSelector<Element extends AbstractElement> extends AbstractMatchingScoreSelector<Element> {
     
     @Override
     public float computeElementMatchingScore(AbstractElement element) {

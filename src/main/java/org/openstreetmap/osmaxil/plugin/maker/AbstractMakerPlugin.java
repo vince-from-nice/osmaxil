@@ -6,7 +6,7 @@ import org.openstreetmap.osmaxil.model.TreeElement;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
+import org.openstreetmap.osmaxil.plugin.common.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 
 public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends AbstractPlugin<ELEMENT, IMPORT> {
@@ -104,7 +104,7 @@ public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPOR
     }
     
 	@Override
-	protected AbstractMatchingScorer<ELEMENT> getScorer() {
+	protected AbstractMatchingScoreSelector<ELEMENT> getScorer() {
 		// TODO To be homogeneous the maker plugins should use the scorers like other types of plugin do...
 		return null;
 	}

@@ -12,7 +12,7 @@ import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
+import org.openstreetmap.osmaxil.plugin.common.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 
 public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
@@ -54,7 +54,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
     
     abstract protected AbstractImportMatcher<IMPORT> getMatcher();
     
-    abstract protected AbstractMatchingScorer<ELEMENT> getScorer();
+    abstract protected AbstractMatchingScoreSelector<ELEMENT> getScorer();
     
     // =========================================================================
     // Public methods

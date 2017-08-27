@@ -123,7 +123,7 @@ public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport>
             elementId = - element.getRelationId(); // reinverse the ID because osm2pgsql stores relations like that
         }
         // TODO use JTS instead of PostGIS ?
-        int elementArea = this.osmPostgis.getPolygonAreaById(elementId);
+        int elementArea = this.osmPostgis.getPolygonArea(elementId);
         // TODO cache it for next imports 
         LOGGER.info("OSM building " + element.getOsmId() + " area has been computed: " + elementArea);
         return elementArea;

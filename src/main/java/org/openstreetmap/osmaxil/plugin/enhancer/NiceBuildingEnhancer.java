@@ -5,29 +5,25 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.annotation.Obsolete;
-import org.openstreetmap.osmaxil.dao.GenericRasterFile;
 import org.openstreetmap.osmaxil.dao.GenericPostgisDB;
-import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
-import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
+import org.openstreetmap.osmaxil.model.CloudPointImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
-import org.openstreetmap.osmaxil.model.PointImport;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.AbstractImportParser;
-import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
+import org.openstreetmap.osmaxil.plugin.common.scorer.BuildingPointCloudScorer;
+import org.openstreetmap.osmaxil.plugin.common.selector.AbstractMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component("NiceBuildingEnhancer") @Lazy
-public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, PointImport> {
+public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, CloudPointImport> {
 
 	@Value("${plugins.niceBuildingEnhancer.xyzFolderPath}")
 	private String xyzFolderPath;
@@ -68,14 +64,8 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	protected GenericPostgisDB genericPostgis;
 	
 	@Autowired
-	protected GenericRasterFile genericDemFile;
+	protected BuildingPointCloudScorer buildingPointCloudScorer;
 	
-	private Map<BuildingElement, Float>computedHeightsByBuilding = new HashMap<>();
-	
-	private List<Long> targetedRelationIds = new ArrayList<>(); // used by building relations
-	
-	//private Map<Long, Integer> outerMemberIndexes = new HashMap<>(); // used by building relations
-
 	// =========================================================================
 	// Overrided methods
 	// =========================================================================
@@ -103,68 +93,12 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	}
 	
 	protected List<BuildingElement> getTargetedElements() {
-		List<BuildingElement> results = new ArrayList<>();
-		// Get only elements whose coordinates are fine with the filtering areas
-		String condition = "ST_Intersects(way, ST_Transform(ST_GeomFromText('" + includingAreaString + "', " + this.filteringAreaSrid + "), "
-				+ osmPostgis.getSrid() + "))";
-		condition += " AND ST_Disjoint(way, ST_Transform(ST_GeomFromText('" + excludingAreaString + "', " + this.filteringAreaSrid + "), "
-				+ osmPostgis.getSrid() + "))";
-		String query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE building <> ''";
-		if (query.toUpperCase().indexOf(" WHERE ") == -1) {
-			query += " WHERE " + condition;
-		} else {
-			query += " AND " + condition;
-		}
-		// Specify building IDs directly (used for debugging)
-		//query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -6640171";
-		LOGGER.debug("Used query is: " + query);
-		// Fetch from DB the IDs and the geometries
-		OsmPostgisDB.IdWithString[] idsWithGeom = this.osmPostgis.findElementIdsWithGeomByQuery(query);
-		for (OsmPostgisDB.IdWithString idWithGeom : idsWithGeom) {
-			// If ID is negative it means the element is normal (ie. a way)
-			if (idWithGeom.id > 0) {
-				BuildingElement element = new BuildingElement(idWithGeom.id);
-				element.setGeometryString(idWithGeom.string);
-				results.add(element);
-			} 
-			// If ID is negative it means the element is a relation
-			// See http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for details
-			else {
-				long relationId = -idWithGeom.id;
-				if (this.targetedRelationIds.contains(relationId)) {
-					LOGGER.info("Relation with ID=" + relationId + " has already been targeted, skipping it...");
-				} else {
-					this.targetedRelationIds.add(relationId);
-					String membersString = osmPostgis.getRelationMembers(relationId);
-					List<Long> outerMemberIds = BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, true);
-					// For now only relations with only one "outer" member are supported
-					// See my thread on the french OSM forum: http://forum.openstreetmap.fr/viewtopic.php?f=5&t=6397&sid=2986b3c59cfc7c1877237b8ad8982110
-					/*
-					long outerMemberId = outerMemberIds.get(currentOuterMemberIndex);
-					this.outerMemberIndexes.put(relationId, ++currentOuterMemberIndex);
-					LOGGER.info("Outer member ID selected is " + outerMemberId + " (current index is " + currentOuterMemberIndex + "), creating a new element with it");
-					 */					
-					if (outerMemberIds.size() > 1) {
-						LOGGER.error("Relation with ID=" + relationId + " is new but it has several outer members, only relation with an unique outer member are supported for now.");
-					} else {
-						// Create a new element from the unique outer member
-						long outerMemberId = outerMemberIds.get(0);
-						LOGGER.info("Relation with ID=" + relationId + " is new, create a new targeted element from its unique outer member (id=" + outerMemberId + ")");
-						BuildingElement element = new BuildingElement(outerMemberId);
-						element.setRelationId(relationId);
-						element.setGeometryString(idWithGeom.string);
-						results.add(element);
-					}
-				}
-			}
-		}
-		LOGGER.info("Number of returned element: " + results.size());
-		return results;
+		return this.osmPostgis.findBuildingsByArea(this.includingAreaString, this.excludingAreaString, this.filteringAreaSrid);
 	}
 	
 	@Override
-	public List<PointImport> findMatchingImports(BuildingElement element, int srid) {
-		List<PointImport> result = new ArrayList<PointImport>();
+	public List<CloudPointImport> findMatchingImports(BuildingElement element, int srid) {
+		List<CloudPointImport> result = new ArrayList<CloudPointImport>();
 		List<Coordinates> data = new ArrayList<>();
 		// Find in PostGIS all imports matching (ie. containing) the element
 		if (element.getGeometryString() == null) {
@@ -174,7 +108,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 		data = this.genericPostgis.findPointByGeometry(element.getGeometryString(), element.getInnerGeometryString(), shrinkRadius, srid);
 		// Create imports from results
 		for (Coordinates coordinates : data) {
-			PointImport imp = new PointImport(coordinates);
+			CloudPointImport imp = new CloudPointImport(coordinates);
 			// Use the rounded value of 'z' as ID 
 			imp.setId(Long.parseLong(coordinates.z.substring(0, coordinates.z.indexOf("."))));
 			// TODO transform lat/lon to the correct SRID ? 
@@ -187,51 +121,7 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	
 	@Override
 	protected void computeMatchingScores(BuildingElement element) {
-		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
-
-		// Compute altitude of the center of the building from the DTM of Nice ( 
-		Coordinates center = this.osmPostgis.getPolygonCenter(
-				(element.getRelationId() == null ? element.getOsmId() : - element.getRelationId()),
-				this.genericDemFile.getSrid());
-		int altitude = (int) Math.round(this.genericDemFile.getValueByCoordinates(Double.parseDouble(center.x), Double.parseDouble(center.y), this.osmPostgis.getSrid()));
-		LOGGER.info("Computed altitude is: " + altitude);
-		
-		// Find the max of all points elevations
-		int max = 0;
-		for (AbstractImport imp : element.getMatchingImports()) {
-			int h = (int) Math.round(Double.parseDouble(((PointImport) imp).getZ()));
-			if (h > max) {
-				max = h;
-			}
-		}
-		LOGGER.info("Max elevation is: " + max);
-
-		// Decrement elevation from the max until a descent value is found.
-		// The goal is to find the *highest* elevation which has a valid score.
-		int elevation = max;
-		for (elevation = max; elevation > max - this.computingDistance && elevation > altitude; elevation--) {
-			// Compute a matching score based on that elevation value
-			int numberOfClosedPoints = 0;
-			for (AbstractImport imp : element.getMatchingImports()) {
-				int z = (int) Double.parseDouble(((PointImport) imp).getZ());
-				if (z >= elevation - this.toleranceDelta) {
-					numberOfClosedPoints++;	
-				}			
-			}
-			// The matching score is the coverage of closest points 
-			element.setMatchingScore((float) numberOfClosedPoints / element.getMatchingImports().size());
-			LOGGER.info("For height=" + elevation + " the number of closed points is: " + numberOfClosedPoints 
-					+ " and the matching score is: " + element.getMatchingScore());
-			if (element.getMatchingScore() >= this.minMatchingScore) {
-				LOGGER.info("Ok it's enough, the value " + elevation + " can be used");
-				break;
-			}
-		}
-		
-		// The final height is the elevation minus the altitude
-		Float height = new Float(elevation - altitude);
-		this.computedHeightsByBuilding.put(element, height);
-		LOGGER.info("Computed height is: " + height);
+		this.buildingPointCloudScorer.computeElementMatchingScore(element, this.computingDistance, this.toleranceDelta, this.minMatchingScore);
 	}
 
 	@Override
@@ -249,13 +139,12 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	protected boolean updateElementTag(BuildingElement element, String tagName) {
         boolean updated = false;
         if (ElementTag.HEIGHT.equals(tagName)) {
-            Float computedHeight = this.computedHeightsByBuilding.get(element);
-            if (computedHeight == null) {
-                LOGGER.warn("Cannot update tag because computed height is null");
+            if (element.getComputedHeight() == null) {
+                LOGGER.error("Cannot update tag because computed height is null");
                 return false;
             }
-            element.setHeight(computedHeight);
-            LOGGER.info("===> Updating height to [" + computedHeight + "]");
+            element.setHeight(element.getComputedHeight());
+            LOGGER.info("===> Updating height to [" + element.getHeight() + "]");
             updated = true;
         }
         return updated;
@@ -276,19 +165,19 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
     }
 
 	@Override
-	protected AbstractImportParser<PointImport> getParser() {
+	protected AbstractImportParser<CloudPointImport> getParser() {
 		// useless for this plugin
 		return null;
 	}
 
 	@Override
-	protected AbstractImportMatcher<PointImport> getMatcher() {
+	protected AbstractImportMatcher<CloudPointImport> getMatcher() {
 		// useless for this plugin
 		return null;
 	}
 
 	@Override
-	protected AbstractMatchingScorer<BuildingElement> getScorer() {
+	protected AbstractMatchingScoreSelector<BuildingElement> getScorer() {
 		// useless for this plugin
 		return null;
 	}

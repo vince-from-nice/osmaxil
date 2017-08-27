@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.scorer;
+package org.openstreetmap.osmaxil.plugin.common.selector;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * - For the element global score : it returns matching score of the best matching import
  */
 @Component
-public class SimpleMatchingScorer extends AbstractMatchingScorer<AbstractElement>{
+public class SimpleMatchingScoreSelector extends AbstractMatchingScoreSelector<AbstractElement>{
 
     @Override
     public float computeElementMatchingScore(AbstractElement element) {

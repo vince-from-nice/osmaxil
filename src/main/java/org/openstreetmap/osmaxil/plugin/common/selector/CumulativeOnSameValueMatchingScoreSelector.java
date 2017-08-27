@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.scorer;
+package org.openstreetmap.osmaxil.plugin.common.selector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * The global matching score of the element is the biggest total matching score.
  */
 @Component
-public class CumulativeOnSameValueMatchingScorer<Element extends AbstractElement> extends AbstractMatchingScorer<Element> {
+public class CumulativeOnSameValueMatchingScoreSelector<Element extends AbstractElement> extends AbstractMatchingScoreSelector<Element> {
 
     private Map<Long, Map<String, List<AbstractImport>>> importsByElementByTagValue;
     
@@ -27,7 +27,7 @@ public class CumulativeOnSameValueMatchingScorer<Element extends AbstractElement
     
     private String matchingTagName;
     
-    public CumulativeOnSameValueMatchingScorer() {
+    public CumulativeOnSameValueMatchingScoreSelector() {
         this.importsByElementByTagValue = new HashMap<Long, Map<String,List<AbstractImport>>>();
         this.totalScoresByElementByTagValue = new HashMap<Long, Map<String,Float>>();
     }    

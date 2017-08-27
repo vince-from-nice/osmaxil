@@ -8,8 +8,8 @@ import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.plugin.common.matcher.BuildingImportMatcher;
 import org.openstreetmap.osmaxil.plugin.common.parser.PssBuildingImportParser;
-import org.openstreetmap.osmaxil.plugin.common.scorer.AbstractMatchingScorer;
-import org.openstreetmap.osmaxil.plugin.common.scorer.ExclusiveMatchingScorer;
+import org.openstreetmap.osmaxil.plugin.common.selector.AbstractMatchingScoreSelector;
+import org.openstreetmap.osmaxil.plugin.common.selector.ExclusiveMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -25,7 +25,7 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     private BuildingImportMatcher matcher;
     
     @Autowired
-    private ExclusiveMatchingScorer<BuildingElement> scorer;
+    private ExclusiveMatchingScoreSelector<BuildingElement> scorer;
     
     @Value("${plugins.pssBuildingUpdater.minMatchingScore}")
     private float minMatchingScore;
@@ -59,7 +59,7 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
         }
         boolean updated = false;
         if (ElementTag.HEIGHT.equals(tagName)) {
-            element.setHeight(Float.parseFloat(tagValue));
+            element.setHeight(Integer.parseInt(tagValue));
             LOGGER.info("===> Updating height to [" + tagValue + "]");
             updated = true;
         }
@@ -120,7 +120,7 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     }
 
     @Override
-    protected AbstractMatchingScorer<BuildingElement> getScorer() {
+    protected AbstractMatchingScoreSelector<BuildingElement> getScorer() {
       return this.scorer;
     }
 

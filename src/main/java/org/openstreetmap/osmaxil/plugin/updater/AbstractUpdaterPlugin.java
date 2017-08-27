@@ -15,7 +15,7 @@ import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.openstreetmap.osmaxil.plugin.common.scorer.ScoringStatsGenerator;
+import org.openstreetmap.osmaxil.plugin.common.selector.MatchingScoreStatsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
     protected Map<String, Integer> countersByTagName = new HashMap<String, Integer>();
 
     @Autowired
-    protected ScoringStatsGenerator scoringStatsGenerator;
+    protected MatchingScoreStatsGenerator scoringStatsGenerator;
 
     // =========================================================================
     // Static variables

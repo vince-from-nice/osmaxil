@@ -2,10 +2,12 @@ package org.openstreetmap.osmaxil.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,6 +30,10 @@ public class OsmPostgisDB {
     private static int SRID_FOR_AREA_COMPUTATION = 32633;
     
     static private final Logger LOGGER = Logger.getLogger(Application.class);
+    
+	private List<Long> targetedRelationIds = new ArrayList<>(); // used by building relations
+	
+	//private Map<Long, Integer> outerMemberIndexes = new HashMap<>(); // used by building relations
     
     public Long[] findClosestElementIdsByQuery(String query) {
         //TODO
@@ -90,7 +96,7 @@ public class OsmPostgisDB {
         return result;
     }
     
-    public int getPolygonAreaById(long osmId) {
+    public int getPolygonArea(long osmId) {
         int result = 0;
         String query = "select ST_Area(ST_Transform(way, " + SRID_FOR_AREA_COMPUTATION + ")) from planet_osm_polygon where osm_id = ?";
         LOGGER.debug("Computing area of polygon " + osmId + " with query: " + query);
@@ -118,5 +124,65 @@ public class OsmPostgisDB {
     public int getSrid() {
         return srid;
     }
+    
+    public List<BuildingElement> findBuildingsByArea(String includingAreaString, String excludingAreaString, int filteringAreaSrid) {
+		List<BuildingElement> results = new ArrayList<>();
+		// Get only elements whose coordinates are fine with the filtering areas
+		String condition = "ST_Intersects(way, ST_Transform(ST_GeomFromText('" + includingAreaString + "', " + filteringAreaSrid + "), "
+				+ this.srid + "))";
+		condition += " AND ST_Disjoint(way, ST_Transform(ST_GeomFromText('" + excludingAreaString + "', " + filteringAreaSrid + "), "
+				+ this.srid + "))";
+		String query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE building <> ''";
+		if (query.toUpperCase().indexOf(" WHERE ") == -1) {
+			query += " WHERE " + condition;
+		} else {
+			query += " AND " + condition;
+		}
+		// Specify building IDs directly (used for debugging)
+		//query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE osm_id = -6640171";
+		LOGGER.debug("Used query is: " + query);
+		// Fetch from DB the IDs and the geometries
+		OsmPostgisDB.IdWithString[] idsWithGeom = this.findElementIdsWithGeomByQuery(query);
+		for (OsmPostgisDB.IdWithString idWithGeom : idsWithGeom) {
+			// If ID is negative it means the element is normal (ie. a way)
+			if (idWithGeom.id > 0) {
+				BuildingElement element = new BuildingElement(idWithGeom.id);
+				element.setGeometryString(idWithGeom.string);
+				results.add(element);
+			} 
+			// If ID is negative it means the element is a relation
+			// See http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for details
+			else {
+				long relationId = -idWithGeom.id;
+				if (this.targetedRelationIds.contains(relationId)) {
+					LOGGER.info("Relation with ID=" + relationId + " has already been targeted, skipping it...");
+				} else {
+					this.targetedRelationIds.add(relationId);
+					String membersString = this.getRelationMembers(relationId);
+					List<Long> outerMemberIds = BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, true);
+					// For now only relations with only one "outer" member are supported
+					// See my thread on the french OSM forum: http://forum.openstreetmap.fr/viewtopic.php?f=5&t=6397&sid=2986b3c59cfc7c1877237b8ad8982110
+					/*
+					long outerMemberId = outerMemberIds.get(currentOuterMemberIndex);
+					this.outerMemberIndexes.put(relationId, ++currentOuterMemberIndex);
+					LOGGER.info("Outer member ID selected is " + outerMemberId + " (current index is " + currentOuterMemberIndex + "), creating a new element with it");
+					 */					
+					if (outerMemberIds.size() > 1) {
+						LOGGER.warn("Relation with ID=" + relationId + " is new but it has several outer members, only relation with an unique outer member are supported for now.");
+					} else {
+						// Create a new element from the unique outer member
+						long outerMemberId = outerMemberIds.get(0);
+						LOGGER.info("Relation with ID=" + relationId + " is new, create a new targeted element from its unique outer member (id=" + outerMemberId + ")");
+						BuildingElement element = new BuildingElement(outerMemberId);
+						element.setRelationId(relationId);
+						element.setGeometryString(idWithGeom.string);
+						results.add(element);
+					}
+				}
+			}
+		}
+		LOGGER.info("Number of returned element: " + results.size());
+		return results;
+	}
     
 }

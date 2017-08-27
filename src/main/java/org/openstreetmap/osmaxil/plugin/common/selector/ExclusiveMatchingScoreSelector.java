@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.scorer;
+package org.openstreetmap.osmaxil.plugin.common.selector;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * It works exactly like the SimpleMatchingImportComparator except that elements with more than one matching import has the minimal global score.
  */
 @Component
-public class ExclusiveMatchingScorer<Element extends AbstractElement> extends AbstractMatchingScorer<Element> {
+public class ExclusiveMatchingScoreSelector<Element extends AbstractElement> extends AbstractMatchingScoreSelector<Element> {
     
     @Override
     public float computeElementMatchingScore(AbstractElement element) {

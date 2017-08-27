@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.scorer;
+package org.openstreetmap.osmaxil.plugin.common.selector;
 
 import java.util.Collection;
 
@@ -7,7 +7,7 @@ import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ScoringStatsGenerator {
+public class MatchingScoreStatsGenerator {
     
     private int matchedElementsNbr;
 

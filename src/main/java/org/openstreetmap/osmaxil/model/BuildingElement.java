@@ -7,10 +7,12 @@ import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
 public class BuildingElement extends AbstractElement {
     
-    private int computedArea;
-        
-	private String innerGeometryString; // used by building which has a "hole" (multipolygon)
+    private Integer computedArea;
     
+    private Integer computedHeight;
+    
+	private String innerGeometryString; // could be used by building which has a "hole" (multipolygon)
+	
     public BuildingElement(long osmId) {
         super(osmId);
     }
@@ -48,17 +50,17 @@ public class BuildingElement extends AbstractElement {
         return "yes".equals(this.getTagValue(ElementTag.BUILDING_PART));
     }
     
-    public Float getHeight() {
+    public Integer getHeight() {
         try {
             String s = (String) this.getTagValue(ElementTag.HEIGHT);
-            return (s != null ? Float.parseFloat(s) : null);
+            return (s != null ? Integer.parseInt(s) : null);
         } catch (Exception e) {
             LOGGER.warn("Unable to get levels for building import " + this.getOsmId() + " (" + e.getMessage()+ ")");
             return null;
         }
     }
 
-    public boolean setHeight(Float value) {
+    public boolean setHeight(Integer value) {
         return this.setTagValue(ElementTag.HEIGHT, value.toString());
     }
 
@@ -76,7 +78,7 @@ public class BuildingElement extends AbstractElement {
         return this.setTagValue(ElementTag.BUILDING_LEVELS, value.toString());
     }
 
-    public int getComputedArea() {
+    public Integer getComputedArea() {
         return computedArea;
     }
 
@@ -84,6 +86,22 @@ public class BuildingElement extends AbstractElement {
         this.computedArea = computedArea;
     }
 
+	public Integer getComputedHeight() {
+		return computedHeight;
+	}
+
+	public void setComputedHeight(int computedHeight) {
+		this.computedHeight = computedHeight;
+	}
+
+	public String getInnerGeometryString() {
+		return innerGeometryString;
+	}
+
+	public void setInnerGeometryString(String innerGeometryString) {
+		this.innerGeometryString = innerGeometryString;
+	}
+	
     public static List<Long> getOuterOrInnerMemberIds(long relationId, String membersString, boolean outer) {
     	List<Long> results = new ArrayList<>();
         membersString = membersString.substring(1, membersString.length() - 1);
@@ -95,13 +113,4 @@ public class BuildingElement extends AbstractElement {
         }
         return results;
     }
-
-	public String getInnerGeometryString() {
-		return innerGeometryString;
-	}
-
-	public void setInnerGeometryString(String innerGeometryString) {
-		this.innerGeometryString = innerGeometryString;
-	}
-    
 }
