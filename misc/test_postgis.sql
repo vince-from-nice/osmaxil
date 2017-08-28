@@ -223,7 +223,6 @@ select * from planet_osm_polygon where osm_id = -175167;
 select * from planet_osm_rels where id = 175167;
 "{144458571,144458569}"
 select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = -175167) a;
-select ST_X(center) as x, ST_Y(center) as y from (select ST_Transform(ST_Centroid(way), 2154) as center from planet_osm_polygon where osm_id = -175167) a
 
 
 select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = -6640171;

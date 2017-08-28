@@ -11,8 +11,8 @@ import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
-import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.plugin.common.selector.AbstractMatchingScoreSelector;
+import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
+import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 
 public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>

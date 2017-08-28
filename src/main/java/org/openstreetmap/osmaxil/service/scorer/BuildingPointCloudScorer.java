@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.scorer;
+package org.openstreetmap.osmaxil.service.scorer;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
@@ -10,7 +10,7 @@ import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.CloudPointImport;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
-import org.openstreetmap.osmaxil.plugin.common.selector.AbstractMatchingScoreSelector;
+import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;

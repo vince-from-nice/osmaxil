@@ -81,6 +81,8 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 				LOGGER.info("Element has a matching score of " + element.getMatchingScore()
 						+ ", skipping it because minimum value is " + this.getMinimalMatchingScore());
             	continue;
+            } else {
+            	this.counterForUpdatableElements++;
             }
             // Update its data from OSM API
         	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
@@ -94,7 +96,6 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
     	            element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
     	        }
             }
-        	counterForUpdatableElements++;
             // Check limit (useful for debug) 
 			if (limitForMatchedElements > 0 && this.matchedElements.size() == limitForMatchedElements) {
 				break;

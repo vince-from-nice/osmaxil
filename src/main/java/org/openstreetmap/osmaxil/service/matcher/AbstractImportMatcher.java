@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.matcher;
+package org.openstreetmap.osmaxil.service.matcher;
 
 import java.util.List;
 

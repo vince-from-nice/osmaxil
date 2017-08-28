@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.parser;
+package org.openstreetmap.osmaxil.service.parser;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

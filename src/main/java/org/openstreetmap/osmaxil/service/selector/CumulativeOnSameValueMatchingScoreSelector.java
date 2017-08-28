@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.common.selector;
+package org.openstreetmap.osmaxil.service.selector;
 
 import java.util.ArrayList;
 import java.util.HashMap;

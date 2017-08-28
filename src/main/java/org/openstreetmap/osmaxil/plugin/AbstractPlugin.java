@@ -12,9 +12,9 @@ import org.openstreetmap.osmaxil.dao.OsmStandardApi;
 import org.openstreetmap.osmaxil.dao.OsmXmlFile;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.common.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.plugin.common.parser.AbstractImportParser;
-import org.openstreetmap.osmaxil.plugin.common.selector.AbstractMatchingScoreSelector;
+import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
+import org.openstreetmap.osmaxil.service.parser.AbstractImportParser;
+import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
