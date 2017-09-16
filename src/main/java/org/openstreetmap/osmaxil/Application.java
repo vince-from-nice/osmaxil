@@ -1,8 +1,7 @@
 package org.openstreetmap.osmaxil;
 
 import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.plugin.enhancer.NiceBuildingEnhancer;
-import org.openstreetmap.osmaxil.plugin.remaker.ParisBuildingRemaker;
+import org.openstreetmap.osmaxil.plugin.BuildingEnhancer;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Application {
@@ -27,11 +26,10 @@ public class Application {
     public void run() {
         this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
         
-        //PssBuildingUpdater plugin = (PssBuildingUpdater) this.applicationContext.getBean("PssBuildingUpdater");
-        //ParisBuildingUpdater plugin = (ParisBuildingUpdater) this.applicationContext.getBean("ParisBuildingUpdater");
-        //ParisBuildingRemaker plugin = (ParisBuildingRemaker) this.applicationContext.getBean("ParisBuildingRemaker");
-        //NiceTreeMaker plugin = (NiceTreeMaker) this.applicationContext.getBean("NiceTreeMaker");
-        NiceBuildingEnhancer plugin = (NiceBuildingEnhancer) this.applicationContext.getBean("NiceBuildingEnhancer");
+        BuildingEnhancer plugin = (BuildingEnhancer) this.applicationContext.getBean("BuildingEnhancer");        
+        //PssBuildingUpdater plugin = (BuildingUpdater) this.applicationContext.getBean("BuildingUpdater");
+        //ParisBuildingRemaker plugin = (BuildingRemaker) this.applicationContext.getBean("BuildingRemaker");
+        //NiceTreeMaker plugin = (TreeMaker) this.applicationContext.getBean("TreeMaker");
         
         plugin.load();
         plugin.process();

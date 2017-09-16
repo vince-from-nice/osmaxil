@@ -2,15 +2,12 @@ package org.openstreetmap.osmaxil.service.scorer;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.dao.GenericPostgisDB;
 import org.openstreetmap.osmaxil.dao.GenericRasterFile;
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
-import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.CloudPointImport;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
-import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;

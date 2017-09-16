@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.enhancer;
+package org.openstreetmap.osmaxil.plugin;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,41 +22,32 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component("NiceBuildingEnhancer") @Lazy
-public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, CloudPointImport> {
+@Component("BuildingEnhancer") @Lazy
+public class BuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, CloudPointImport> {
 
-	@Value("${plugins.niceBuildingEnhancer.xyzFolderPath}")
+	@Value("${plugins.buildingEnhancer.xyzFolderPath}")
 	private String xyzFolderPath;
 
-	@Value("${plugins.niceBuildingEnhancer.xyzFileSrid}")
+	@Value("${plugins.buildingEnhancer.xyzFileSrid}")
 	private String xyzFileSrid;
 
-	@Value("${plugins.niceBuildingEnhancer.needToPreparePointCloudInDB}")
+	@Value("${plugins.buildingEnhancer.needToPreparePointCloudInDB}")
 	private Boolean needToPreparePointCloudInDB;
 
-	@Value("${plugins.niceBuildingEnhancer.pointCloudTableName}")
+	@Value("${plugins.buildingEnhancer.pointCloudTableName}")
 	private String pointCloudTableName;
-
-	@Value("${plugins.niceBuildingEnhancer.minMatchingScore}")
-	private float minMatchingScore;
 	
-	@Value("${plugins.niceBuildingEnhancer.minMatchingPoints}")
+	@Value("${plugins.buildingEnhancer.minMatchingPoints}")
 	private int minMatchingPoints;
 	
-	@Value("${plugins.niceBuildingEnhancer.computingDistance}")
+	@Value("${plugins.buildingEnhancer.computingDistance}")
 	private int computingDistance;
 	
-	@Value("${plugins.niceBuildingEnhancer.toleranceDelta}")
+	@Value("${plugins.buildingEnhancer.toleranceDelta}")
 	private float toleranceDelta;
 	
-	@Value("${plugins.niceBuildingEnhancer.shrinkRadius}")
+	@Value("${plugins.buildingEnhancer.shrinkRadius}")
 	private int shrinkRadius;
-
-	@Value("${plugins.niceBuildingEnhancer.changesetSourceLabel}")
-	private String changesetSourceLabel;
-
-	@Value("${plugins.niceBuildingEnhancer.changesetComment}")
-	private String changesetComment;
 
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
 
@@ -190,26 +181,6 @@ public class NiceBuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement
 	@Override
 	protected String[] getUpdatableTagNames() {
 		return UPDATABLE_TAG_NAMES;
-	}
-
-	@Override
-	protected String getChangesetSourceLabel() {
-		return changesetSourceLabel;
-	}
-
-	@Override
-	protected String getChangesetComment() {
-		return changesetComment;
-	}
-
-	@Override
-	protected float getMinimalMatchingScore() {
-		return this.minMatchingScore;
-	}
-	
-	@Override
-	protected float getMinimalMatchingImports() {
-		return this.minMatchingPoints;
 	}
 
 	// =========================================================================

@@ -1,15 +1,13 @@
-package org.openstreetmap.osmaxil.plugin.maker;
+package org.openstreetmap.osmaxil.plugin;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.TreeElement;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 
-public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends AbstractPlugin<ELEMENT, IMPORT> {
+public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends _AbstractPlugin<ELEMENT, IMPORT> {
 
     // =========================================================================
     // Instance variables

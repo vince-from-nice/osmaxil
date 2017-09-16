@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.remaker;
+package org.openstreetmap.osmaxil.plugin;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -7,16 +7,14 @@ import java.util.Map;
 import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 
 public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
-        extends AbstractPlugin<ELEMENT, IMPORT> {
+        extends _AbstractPlugin<ELEMENT, IMPORT> {
 
     // =========================================================================
     // Instance variables
@@ -43,8 +41,6 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
     abstract protected boolean isElementRemakable(ELEMENT element);
     
     abstract protected ELEMENT instanciateElement(long osmId);
-    
-    abstract protected float getMinimalMatchingScore();
     
     abstract protected void processElement(ELEMENT element);
 

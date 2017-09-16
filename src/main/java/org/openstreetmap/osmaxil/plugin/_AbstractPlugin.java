@@ -25,7 +25,7 @@ import com.vividsolutions.jts.geom.IntersectionMatrix;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
-public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> {
+public abstract class _AbstractPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> {
 
     // =========================================================================
     // Instance variables
@@ -49,6 +49,15 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
     @Value("${osmaxil.syncMode}")
     protected String synchronizationMode;
 
+    @Value("${osmaxil.changesetSourceLabel}")
+    protected String changesetSourceLabel;
+    
+    @Value("${osmaxil.changesetComment}")
+    protected String changesetComment;
+
+    @Value("${osmaxil.minMatchingScore}")
+    protected float minMatchingScore;
+    
     @Autowired
     protected OsmPostgisDB osmPostgis;
 
@@ -89,10 +98,6 @@ public abstract class AbstractPlugin<ELEMENT extends AbstractElement, IMPORT ext
     abstract protected AbstractImportMatcher<IMPORT> getMatcher();
 
     abstract protected AbstractMatchingScoreSelector<ELEMENT> getScorer();
-
-    abstract protected String getChangesetComment();
-
-    abstract protected String getChangesetSourceLabel();
 
     abstract public void displayProcessingStatistics();
 

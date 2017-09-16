@@ -15,11 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.ParseException;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 @Repository @Lazy
 public class ParisBuildingImportParser extends AbstractImportParser<BuildingImport> {

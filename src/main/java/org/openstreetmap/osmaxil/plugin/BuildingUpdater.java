@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.updater;
+package org.openstreetmap.osmaxil.plugin;
 
 import javax.annotation.PostConstruct;
 
@@ -13,12 +13,11 @@ import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.service.selector.CumulativeOnSameValueMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component("ParisBuildingUpdater") @Lazy
-public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
+@Component("BuildingUpdater") @Lazy
+public class BuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
     private ParisBuildingImportParser parser;
@@ -29,15 +28,6 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     
     @Autowired
     private CumulativeOnSameValueMatchingScoreSelector<BuildingElement> scorer;
-    
-    @Value("${plugins.parisBuildingUpdater.minMatchingScore}")
-    private float minMatchingScore;
-
-    @Value("${plugins.parisBuildingUpdater.changesetSourceLabel}")
-    private String changesetSourceLabel;
-    
-    @Value("${plugins.parisBuildingUpdater.changesetComment}")
-    private String changesetComment;
     
     private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTag.BUILDING_LEVELS};
     
@@ -94,21 +84,6 @@ public class ParisBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement,
     @Override
     protected String[] getUpdatableTagNames() {
         return UPDATABLE_TAG_NAMES;
-    }
-
-    @Override
-    protected String getChangesetSourceLabel() {
-        return changesetSourceLabel;
-    }
-
-    @Override
-    protected String getChangesetComment() {
-        return changesetComment;
-    }
-
-    @Override
-    protected float getMinimalMatchingScore() {
-        return this.minMatchingScore;
     }
     
     // =========================================================================

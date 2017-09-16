@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
+import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.stereotype.Component;
 
 /**

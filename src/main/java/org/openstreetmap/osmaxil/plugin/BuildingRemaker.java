@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.remaker;
+package org.openstreetmap.osmaxil.plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,14 +25,13 @@ import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.service.selector.CumulativeOnAnyValueMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.vividsolutions.jts.geom.Point;
 
-@Component("ParisBuildingRemaker") @Lazy
-public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
+@Component("BuildingRemaker") @Lazy
+public class BuildingRemaker extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
 
     // =========================================================================
     // Instance variables
@@ -47,15 +46,6 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
 
     @Autowired
     private CumulativeOnAnyValueMatchingScoreSelector<BuildingElement> scorer;
-
-    @Value("${plugins.parisBuildingMaker.minMatchingScore}")
-    private float minMatchingScore;
-
-    @Value("${plugins.parisBuildingMaker.changesetSourceLabel}")
-    private String changesetSourceLabel;
-
-    @Value("${plugins.parisBuildingMaker.changesetComment}")
-    private String changesetComment;
 
     private Map<Long, OsmXmlRoot> newBuildingsByRemakableBuilding = new HashMap<>();
 
@@ -136,21 +126,6 @@ public class ParisBuildingRemaker extends AbstractRemakerPlugin<BuildingElement,
     @Override
     public AbstractMatchingScoreSelector<BuildingElement> getScorer() {
         return this.scorer;
-    }
-
-    @Override
-    public float getMinimalMatchingScore() {
-        return minMatchingScore;
-    }
-
-    @Override
-    public String getChangesetSourceLabel() {
-        return changesetSourceLabel;
-    }
-
-    @Override
-    public String getChangesetComment() {
-        return changesetComment;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.updater;
+package org.openstreetmap.osmaxil.plugin;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,17 +11,15 @@ import javax.annotation.PostConstruct;
 import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.plugin.AbstractPlugin;
 import org.openstreetmap.osmaxil.service.selector.MatchingScoreStatsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends
-        AbstractPlugin<ELEMENT, IMPORT> {
+        _AbstractPlugin<ELEMENT, IMPORT> {
 
     // =========================================================================
     // Instance variables
@@ -60,8 +58,6 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
 
     abstract protected ELEMENT instanciateElement(long osmId);
 
-    abstract protected float getMinimalMatchingScore();
-
     // =========================================================================
     // Public methods
     // =========================================================================
@@ -98,9 +94,9 @@ public abstract class AbstractUpdaterPlugin<ELEMENT extends AbstractElement, IMP
         for (ELEMENT element : this.matchedElements.values()) {
         	LOGGER.info("Synchronizing element #" + element.getOsmId() + " <" + counter++ + ">");
         	// Check if its best matching score is enough
-            if (element.getMatchingScore() < this.getMinimalMatchingScore()) {
+            if (element.getMatchingScore() < this.minMatchingScore) {
                 LOGGER.info("Element cannot be synchronized because its matching score is " + element.getMatchingScore()
-                        + " (min=" + this.getMinimalMatchingScore() + ")");
+                        + " (min=" + this.minMatchingScore + ")");
                 LOGGER.info(LOG_SEPARATOR);
                 continue;
             }

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.updater;
+package org.openstreetmap.osmaxil.plugin;
 
 import javax.annotation.PostConstruct;
 
@@ -11,12 +11,11 @@ import org.openstreetmap.osmaxil.service.parser.PssBuildingImportParser;
 import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.service.selector.ExclusiveMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component ("PssBuildingUpdater") @Lazy
-public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
+@Component ("BuildingUpdaterForPSS") @Lazy
+public class BuildingUpdaterForPSS extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
 
     @Autowired
     private PssBuildingImportParser parser;
@@ -26,15 +25,6 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     
     @Autowired
     private ExclusiveMatchingScoreSelector<BuildingElement> scorer;
-    
-    @Value("${plugins.pssBuildingUpdater.minMatchingScore}")
-    private float minMatchingScore;
-
-    @Value("${plugins.pssBuildingUpdater.changesetSourceLabel}")
-    private String changesetSourceLabel;
-    
-    @Value("${plugins.pssBuildingUpdater.changesetComment}")
-    private String changesetComment;
     
     private int counterForFakeNames = 0;
             
@@ -122,21 +112,6 @@ public class PssBuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, B
     @Override
     protected AbstractMatchingScoreSelector<BuildingElement> getScorer() {
       return this.scorer;
-    }
-
-    @Override
-    protected String getChangesetSourceLabel() {
-        return changesetSourceLabel;
-    }
-
-    @Override
-    protected String getChangesetComment() {
-        return changesetComment;
-    }
-
-    @Override
-    protected float getMinimalMatchingScore() {
-        return this.minMatchingScore;
     }
     
     // =========================================================================

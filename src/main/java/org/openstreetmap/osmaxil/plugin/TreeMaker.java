@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin.maker;
+package org.openstreetmap.osmaxil.plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.model.ElementTag;
-import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.TreeElement;
 import org.openstreetmap.osmaxil.model.TreeImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
@@ -19,26 +18,18 @@ import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.service.matcher.TreeImportMatcher;
 import org.openstreetmap.osmaxil.service.parser.AbstractImportParser;
 import org.openstreetmap.osmaxil.service.parser.NiceTreeImportParser2015;
-import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component("NiceTreeMaker") @Lazy
-public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> {
+@Component("TreeMaker") @Lazy
+public class TreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> {
 
     @Autowired
     private NiceTreeImportParser2015 parser;
 
     @Autowired
     private TreeImportMatcher matcher;
-
-    @Value("${plugins.niceTreeMaker.changesetSourceLabel}")
-    private String changesetSourceLabel;
-
-    @Value("${plugins.niceTreeMaker.changesetComment}")
-    private String changesetComment;
 
     private List<OsmXmlRoot> newTreesToCreate = new ArrayList<>();
 
@@ -139,16 +130,6 @@ public class NiceTreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> 
             root.nodes.add(xml.nodes.get(0));
         }
         this.dataForNonMakableElements = root;
-    }
-    
-    @Override
-    public String getChangesetComment() {
-        return this.changesetComment;
-    }
-    
-    @Override
-    public String getChangesetSourceLabel() {
-        return this.changesetSourceLabel;
     }
 
     @Override

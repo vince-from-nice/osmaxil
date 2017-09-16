@@ -1,13 +1,11 @@
-package org.openstreetmap.osmaxil.plugin.enhancer;
+package org.openstreetmap.osmaxil.plugin;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.plugin.updater.AbstractUpdaterPlugin;
 
 public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
 		extends AbstractUpdaterPlugin<ELEMENT, IMPORT> {
@@ -26,9 +24,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
     // =========================================================================
 
 	abstract protected List<ELEMENT> getTargetedElements();
-	
-    abstract protected float getMinimalMatchingImports();
-    
+	    
     abstract protected List<IMPORT> findMatchingImports(ELEMENT element, int srid);
 	
 	// =========================================================================
@@ -65,10 +61,10 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 	        }
 	        LOGGER.info(sb.append("]").toString());
 			// Check if the total of matching imports is fine
-			if (element.getMatchingImports().size() < this.getMinimalMatchingImports()) {
+			if (element.getMatchingImports().size() < this.minMatchingScore) {
 				LOGGER.info("Element has only " + element.getMatchingImports().size()
 						+ " matching imports, skipping it because minimum value is "
-						+ this.getMinimalMatchingImports());
+						+ this.minMatchingScore);
 				continue;
 			} else {
 	        	this.matchedElements.put(element.getOsmId(), element);
@@ -77,9 +73,9 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
             LOGGER.info("Computing matching score for element #" + element.getOsmId());
             this.computeMatchingScores(element);
         	// Check if its matching score is fine
-            if (element.getMatchingScore() < this.getMinimalMatchingScore()) {
+            if (element.getMatchingScore() < this.minMatchingScore) {
 				LOGGER.info("Element has a matching score of " + element.getMatchingScore()
-						+ ", skipping it because minimum value is " + this.getMinimalMatchingScore());
+						+ ", skipping it because minimum value is " + this.minMatchingScore);
             	continue;
             } else {
             	this.counterForUpdatableElements++;
@@ -113,7 +109,7 @@ public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IM
 		LOGGER_FOR_STATS.info("Average of matching imports for each element: "
 				+ (this.matchedElements.size() > 0 ? this.counterForMatchedImports / this.matchedElements.size() : "0"));
         this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
-        LOGGER_FOR_STATS.info("Minimum matching score is: " + this.getMinimalMatchingScore());
+        LOGGER_FOR_STATS.info("Minimum matching score is: " + this.minMatchingScore);
         LOGGER_FOR_STATS.info("Total of updatable elements: " + this.counterForUpdatableElements);
     }
 
