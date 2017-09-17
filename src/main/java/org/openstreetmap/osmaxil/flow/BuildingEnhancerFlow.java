@@ -37,15 +37,6 @@ public class BuildingEnhancerFlow extends AbstractEnhancerFlow<BuildingElement, 
 	@Value("${flow.buildingEnhancer.pointCloudTableName}")
 	private String pointCloudTableName;
 	
-	@Value("${flow.buildingEnhancer.minMatchingPoints}")
-	private int minMatchingPoints;
-	
-	@Value("${flow.buildingEnhancer.computingDistance}")
-	private int computingDistance;
-	
-	@Value("${flow.buildingEnhancer.toleranceDelta}")
-	private float toleranceDelta;
-	
 	@Value("${flow.buildingEnhancer.shrinkRadius}")
 	private int shrinkRadius;
 
@@ -53,11 +44,6 @@ public class BuildingEnhancerFlow extends AbstractEnhancerFlow<BuildingElement, 
 
 	@Autowired
 	protected GenericPostgisDB genericPostgis;
-	
-	@Autowired
-	protected BuildingPointCloudScorer scorer;
-//	@Qualifier("${flow.buildingEnhancer.scorer}")
-//	protected AbstractElementScorer scorer;
 	
 	// =========================================================================
 	// Overrided methods
@@ -114,7 +100,7 @@ public class BuildingEnhancerFlow extends AbstractEnhancerFlow<BuildingElement, 
 	
 	@Override
 	protected void computeMatchingScores(BuildingElement element) {
-		this.scorer.computeElementMatchingScore(element, this.computingDistance, this.toleranceDelta, this.minMatchingScore);
+		this.scorer.computeElementMatchingScore(element/*, this.computingDistance, this.toleranceDelta*/, this.minMatchingScore);
 	}
 
 	@Override
@@ -152,9 +138,12 @@ public class BuildingEnhancerFlow extends AbstractEnhancerFlow<BuildingElement, 
     public void displayProcessingStatistics() {
         super.displayProcessingStatistics();
         LOGGER_FOR_STATS.info("Specific settings of the plugin:");
-        LOGGER_FOR_STATS.info(" - Minimum matching point is: " + this.minMatchingPoints);
         LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
-        LOGGER_FOR_STATS.info(" - Tolerance delta is: " + this.toleranceDelta);
+        if (this.scorer instanceof BuildingPointCloudScorer) {
+        	BuildingPointCloudScorer bdcs = (BuildingPointCloudScorer) this.scorer;
+	        LOGGER_FOR_STATS.info(" - Minimum matching point is: " + bdcs.minMatchingPoints);
+	        LOGGER_FOR_STATS.info(" - Tolerance delta is: " + bdcs.toleranceDelta);
+        }
     }
 
 	@Override

@@ -4,13 +4,23 @@ import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.CloudPointImport;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component("BuildingPointCloudScorer") @Lazy
 public class BuildingPointCloudScorer extends AbstractElementScorer<BuildingElement> {
+	
+	@Value("${scorer.buildingPointCloud.minMatchingPoints}")
+	public int minMatchingPoints;
+	
+	@Value("${scorer.buildingPointCloud.computingDistance}")
+	public int computingDistance;
+	
+	@Value("${scorer.buildingPointCloud.toleranceDelta}")
+	public float toleranceDelta;
 
-	public float computeElementMatchingScore(BuildingElement element, int computingDistance, float toleranceDelta, float minMatchingScore) {
+	public float computeElementMatchingScore(BuildingElement element/*, int computingDistance, float toleranceDelta*/, float minMatchingScore) {
 		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
 	
 		// Compute altitude of the center of the building with the DTM 

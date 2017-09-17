@@ -27,7 +27,7 @@ public class BuildingUpdaterFlow extends AbstractUpdaterFlow<BuildingElement, Bu
     private BuildingImportMatcher matcher;
     
     @Autowired
-    private CumulativeOnSameValueMatchingScoreSelector<BuildingElement> scorer;
+    private CumulativeOnSameValueMatchingScoreSelector<BuildingElement> selector;
     
     private static final String UPDATABLE_TAG_NAMES[] = new String[] {ElementTag.BUILDING_LEVELS};
     
@@ -45,7 +45,7 @@ public class BuildingUpdaterFlow extends AbstractUpdaterFlow<BuildingElement, Bu
     
     @Override
     protected boolean updateElementTag(BuildingElement element, String tagName) {
-        AbstractImport bestImport = this.scorer.getBestMatchingImportByElement(element);
+        AbstractImport bestImport = this.selector.getBestMatchingImportByElement(element);
         String tagValue = bestImport.getValueByTagName(tagName);
         if (tagValue == null) {
             LOGGER.warn("Cannot update tag because best import tag value is null for " + tagName);
@@ -78,7 +78,7 @@ public class BuildingUpdaterFlow extends AbstractUpdaterFlow<BuildingElement, Bu
 
     @Override
     protected AbstractMatchingScoreSelector<BuildingElement> getScorer() {
-      return this.scorer;
+      return this.selector;
     }
     
     @Override
@@ -92,7 +92,7 @@ public class BuildingUpdaterFlow extends AbstractUpdaterFlow<BuildingElement, Bu
 
     @PostConstruct
     private void init() {
-        this.scorer.setMatchingTagName(MATCHING_TAG_NAME);
+        this.selector.setMatchingTagName(MATCHING_TAG_NAME);
         this.matcher.setWithSurfaces(true);
     }
     

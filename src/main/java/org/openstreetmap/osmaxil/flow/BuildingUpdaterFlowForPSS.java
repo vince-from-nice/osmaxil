@@ -24,7 +24,7 @@ public class BuildingUpdaterFlowForPSS extends AbstractUpdaterFlow<BuildingEleme
     private BuildingImportMatcher matcher;
     
     @Autowired
-    private ExclusiveMatchingScoreSelector<BuildingElement> scorer;
+    private ExclusiveMatchingScoreSelector<BuildingElement> selector;
     
     private int counterForFakeNames = 0;
             
@@ -111,7 +111,7 @@ public class BuildingUpdaterFlowForPSS extends AbstractUpdaterFlow<BuildingEleme
 
     @Override
     protected AbstractMatchingScoreSelector<BuildingElement> getScorer() {
-      return this.scorer;
+      return this.selector;
     }
     
     // =========================================================================

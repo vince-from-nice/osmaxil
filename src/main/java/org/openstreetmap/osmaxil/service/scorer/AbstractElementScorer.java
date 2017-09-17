@@ -17,6 +17,6 @@ abstract public class AbstractElementScorer<ELEMENT extends AbstractElement> {
 	
 	static protected final Logger LOGGER = Logger.getLogger(Application.class);
 
-	abstract public float computeElementMatchingScore(ELEMENT element, int computingDistance, float toleranceDelta, float minMatchingScore);
+	abstract public float computeElementMatchingScore(ELEMENT element, float minMatchingScore);
 
 }

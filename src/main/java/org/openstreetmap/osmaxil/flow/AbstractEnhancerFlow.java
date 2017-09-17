@@ -3,9 +3,13 @@ package org.openstreetmap.osmaxil.flow;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
+import org.openstreetmap.osmaxil.service.scorer.AbstractElementScorer;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractEnhancerFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
 		extends AbstractUpdaterFlow<ELEMENT, IMPORT> {
@@ -18,6 +22,10 @@ public abstract class AbstractEnhancerFlow<ELEMENT extends AbstractElement, IMPO
 	protected int counterForUpdatableElements = 0;
 	
 	protected int limitForMatchedElements = 0;
+	
+	@Autowired
+	@Resource(name="${flow.enhancer.scorer}")
+	protected AbstractElementScorer<ELEMENT> scorer;
 	
     // =========================================================================
     // Abstract methods
