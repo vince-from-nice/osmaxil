@@ -1,57 +1,63 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.flow;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
-import org.openstreetmap.osmaxil.util.IdIncrementor;
+import org.openstreetmap.osmaxil.service.selector.MatchingScoreStatsGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
-        extends _AbstractPlugin<ELEMENT, IMPORT> {
+@Component
+public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends
+        _AbstractImportFlow<ELEMENT, IMPORT> {
 
     // =========================================================================
     // Instance variables
     // =========================================================================
-    
-    protected Map<Long, ELEMENT> matchedElements = new Hashtable<Long, ELEMENT>();
-    
-    protected Map<Long, ELEMENT> remakableElements = new Hashtable<Long, ELEMENT>();
-    
-    protected OsmXmlRoot dataForCreation;
-    
-    protected OsmXmlRoot dataForDeletion;
-    
-    private int counterForMatchedImports;
 
-    private int counterForRemakedElements;
+    protected Map<Long, ELEMENT> matchedElements = new Hashtable<Long, ELEMENT>();
+
+    protected Map<Long, ELEMENT> updatableElements = new Hashtable<Long, ELEMENT>();
+
+    protected int counterForMatchedImports;
+
+    protected int counterForUpdatedElements;
     
-    IdIncrementor idGenerator = new IdIncrementor(1);
-    
+    protected Map<String, Integer> countersByTagName = new HashMap<String, Integer>();
+
+    @Autowired
+    protected MatchingScoreStatsGenerator scoringStatsGenerator;
+
+    // =========================================================================
+    // Static variables
+    // =========================================================================
+
+    static public final float MIN_MATCHING_SCORE = 0.0f;
+
+    static public final float MAX_MATCHING_SCORE = 1.0f;
+
     // =========================================================================
     // Abstract methods
     // =========================================================================
 
-    abstract protected boolean isElementRemakable(ELEMENT element);
-    
-    abstract protected ELEMENT instanciateElement(long osmId);
-    
-    abstract protected void processElement(ELEMENT element);
+    abstract protected String[] getUpdatableTagNames();
 
-    abstract protected void buildDataForCreation();
-    
-    abstract protected void buildDataForDeletion();
-    
-    abstract protected AbstractImportMatcher<IMPORT> getMatcher();
-    
-    abstract protected AbstractMatchingScoreSelector<ELEMENT> getScorer();
-    
+    abstract protected boolean isElementTagUpdatable(ELEMENT element, String tagName);
+
+    abstract protected boolean updateElementTag(ELEMENT element, String tagName);
+
+    abstract protected ELEMENT instanciateElement(long osmId);
+
     // =========================================================================
     // Public methods
     // =========================================================================
@@ -62,7 +68,6 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
         int importNbr = 0;
         for (IMPORT imp : this.loadedImports) {
             LOGGER.info("Binding import #" + importNbr + ": " + imp);
-            importNbr++;
             if (imp == null) {
                 LOGGER.warn("Import is null, skipping it...");
                 break;
@@ -70,7 +75,7 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
             this.associateImportsWithElements(imp);
             LOGGER.info(LOG_SEPARATOR);
         }
-        // For each matched element, compute its matching score and process it if it's remakable
+        // For each matched element, compute its matching score
         int elementNbr = 0;
         for (ELEMENT element : this.matchedElements.values()) {
             LOGGER.info("Computing matching score for element #" + elementNbr + ": " + element);
@@ -79,62 +84,96 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
                 break;
             }
             this.computeMatchingScores(element);
-            if (this.isElementRemakable(element)) {
-                this.remakableElements.put(element.getOsmId(), element);
-                this.processElement(element);
+            LOGGER.info(LOG_SEPARATOR);
+        }
+    }
+
+    @Override
+    public void synchronize() {
+        int counter = 1;
+        for (ELEMENT element : this.matchedElements.values()) {
+        	LOGGER.info("Synchronizing element #" + element.getOsmId() + " <" + counter++ + ">");
+        	// Check if its best matching score is enough
+            if (element.getMatchingScore() < this.minMatchingScore) {
+                LOGGER.info("Element cannot be synchronized because its matching score is " + element.getMatchingScore()
+                        + " (min=" + this.minMatchingScore + ")");
+                LOGGER.info(LOG_SEPARATOR);
+                continue;
+            }
+            boolean needToSync = false;
+            // Fore each updatable tags (in theory)
+            for (String updatableTagName : this.getUpdatableTagNames()) {
+                // Check if it's really updatable (data should have been update from live)
+                if (this.isElementTagUpdatable(element, updatableTagName)) {
+                    boolean updated = this.updateElementTag(element, updatableTagName);
+                    if (updated) {
+                        needToSync = true;
+                        Integer counterByTag = this.countersByTagName.get(updatableTagName);
+                        counterByTag++;
+                        this.countersByTagName.put(updatableTagName, counterByTag);
+                    }
+                } else {
+                	LOGGER.warn("Element tag cannot be updated");
+                }
+            }
+            try {
+                // Do the synchronization only if needed
+                if (needToSync) {
+                    boolean success = false;
+                    if ("api".equals(this.synchronizationMode)) {
+                        success = this.osmStandardApi.writeElement(element, element.getType());
+                    } else if ("gen".equals(this.synchronizationMode)) {
+                        success = this.osmXmlFile.writeToFile("" + element.getOsmId(), element.getApiData());
+                    }
+                    if (success) {
+                        this.counterForUpdatedElements++;
+                        element.setAltered(true);
+                        LOGGER.debug("Ok element has been synchronized");
+                    }
+                } else {
+                    LOGGER.info("Element doesn't need to be synchronized");
+                }
+            } catch (java.lang.Exception e) {
+                LOGGER.error("Synchronization of element " + element.getOsmId() + " has failed: ", e);
             }
             LOGGER.info(LOG_SEPARATOR);
         }
-        // Build global remaking data
-        this.buildDataForCreation();
-        this.buildDataForDeletion();
     }
-    
+
     @Override
-    public void synchronize() {
-        boolean success = false;
-        if (this.dataForCreation == null || this.dataForDeletion == null) {
-            LOGGER.warn("Unable to synchronize element because data is null");
-            return;
-        }
-        if ("api".equals(this.synchronizationMode)) {
-            // TODO direct api writing for remaking
-        } else if ("gen".equals(this.synchronizationMode)) {
-            success = this.osmXmlFile.writeToFile("genfile-creation", this.dataForCreation)
-                    && this.osmXmlFile.writeToFile("genfile-deletion", this.dataForDeletion);
-        }
-        if (success) {
-            LOGGER.info("Ok all elements has been synchronized");
-            this.counterForRemakedElements++;
-            //element.setAltered(true);
-        }
-    }
-    
-    @Override
-    public  void displayProcessingStatistics() {
+    public void displayProcessingStatistics() {
         LOGGER_FOR_STATS.info("=== Processing statistics ===");
         LOGGER_FOR_STATS.info("Total of imports which match one or more matching elements: " + this.counterForMatchedImports);
+        LOGGER_FOR_STATS.info("Total of missed imports: " + (counterForLoadedImports - this.counterForMatchedImports));
         LOGGER_FOR_STATS.info("Total of elements which have one or more matching imports: " + this.matchedElements.size());
-        LOGGER_FOR_STATS.info("Remaking data has been finalized as follow:");
-        LOGGER_FOR_STATS.info("\tNodes: " + this.dataForCreation.nodes.size() + "");
-        LOGGER_FOR_STATS.info("\tWays: " + this.dataForCreation.ways.size() + "");
-        LOGGER_FOR_STATS.info("\tRelations: " + this.dataForCreation.relations.size());
+        this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
     }
-    
+
     @Override
-    public  void displaySynchronizingStatistics(){
+    public void displaySynchronizingStatistics() {
         LOGGER_FOR_STATS.info("=== Synchronizing statistics ===");
-        LOGGER_FOR_STATS.info("Total of remaked elements: " + this.counterForRemakedElements);
+        LOGGER_FOR_STATS.info("Total of updated elements: " + this.counterForUpdatedElements);
+        LOGGER_FOR_STATS.info("Total of updates by tag:");
+        for (String updatableTagName : this.getUpdatableTagNames()) {
+            LOGGER_FOR_STATS.info("\t - total of updates on the tag [" + updatableTagName + "]: "
+                    + this.countersByTagName.get(updatableTagName));
+        }
     }
 
     // =========================================================================
     // Private methods
     // =========================================================================
 
-    // TODO make these private methods common with the AbstractUpdaterPlugin 
+    @PostConstruct
+    private void init() {
+        LOGGER.info("Init of " + this.getClass().getName());
+        for (String updatableTagName : this.getUpdatableTagNames()) {
+            this.countersByTagName.put(updatableTagName, 0);
+        }
+    }
     
     private void associateImportsWithElements(IMPORT imp) {
-        // Find relevant element
+        // Find relevant elements
         List<MatchingElementId> matchingElementIds = this.getMatcher().findMatchingElements(imp,
                 this.getParser().getSrid());
         if (matchingElementIds.size() > 0) {
@@ -181,11 +220,15 @@ public abstract class AbstractRemakerPlugin<ELEMENT extends AbstractElement, IMP
             element.setRelationId(relevantElementId.getRelationId());
             element.setApiData(apiData);
             this.matchedElements.put(osmId, element);
+            // Store original values for each updatable tag
+            for (String tagName : this.getUpdatableTagNames()) {
+                element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
+            }
         }
         return element;
     }
 
-    private void computeMatchingScores(ELEMENT element) {
+    protected void computeMatchingScores(ELEMENT element) {
         try {
             // Compute a matching score for each import matching the element
             for (AbstractImport imp : element.getMatchingImports()) {

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.flow;
 
 import javax.annotation.PostConstruct;
 
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component("BuildingUpdater") @Lazy
-public class BuildingUpdater extends AbstractUpdaterPlugin<BuildingElement, BuildingImport> {
+public class BuildingUpdaterFlow extends AbstractUpdaterFlow<BuildingElement, BuildingImport> {
 
     @Autowired
     private ParisBuildingImportParser parser;

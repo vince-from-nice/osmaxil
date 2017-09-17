@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.flow;
 
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
@@ -7,7 +7,7 @@ import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 
-public abstract class AbstractMakerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends _AbstractPlugin<ELEMENT, IMPORT> {
+public abstract class AbstractMakerImportFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends _AbstractImportFlow<ELEMENT, IMPORT> {
 
     // =========================================================================
     // Instance variables

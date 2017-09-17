@@ -1,31 +1,18 @@
 package org.openstreetmap.osmaxil.service.scorer;
 
-import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.dao.GenericRasterFile;
-import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.CloudPointImport;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component("BuildingPointCloudScorer") @Lazy
-public class BuildingPointCloudScorer {
+public class BuildingPointCloudScorer extends AbstractElementScorer<BuildingElement> {
 
-    @Autowired
-    protected OsmPostgisDB osmPostgis;
-    
-	@Autowired
-	protected GenericRasterFile genericRasterFile;
-	
-	static protected final Logger LOGGER = Logger.getLogger(Application.class);
-	
 	public float computeElementMatchingScore(BuildingElement element, int computingDistance, float toleranceDelta, float minMatchingScore) {
 		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
-
+	
 		// Compute altitude of the center of the building with the DTM 
 		Coordinates center = this.osmPostgis.getPolygonCenter(
 				(element.getRelationId() == null ? element.getOsmId() : - element.getRelationId()),
@@ -42,7 +29,7 @@ public class BuildingPointCloudScorer {
 			}
 		}
 		LOGGER.info("Max elevation is: " + max);
-
+	
 		// Decrement elevation from the max until a descent value is found.
 		// The goal is to find the *highest* elevation which has a valid score.
 		int elevation = max;
@@ -71,6 +58,5 @@ public class BuildingPointCloudScorer {
 		
 		return element.getMatchingScore();
 	}
-
 
 }

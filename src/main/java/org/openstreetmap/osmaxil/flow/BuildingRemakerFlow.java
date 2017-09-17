@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.flow;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 import com.vividsolutions.jts.geom.Point;
 
 @Component("BuildingRemaker") @Lazy
-public class BuildingRemaker extends AbstractRemakerPlugin<BuildingElement, BuildingImport> {
+public class BuildingRemakerFlow extends AbstractRemakerFlow<BuildingElement, BuildingImport> {
 
     // =========================================================================
     // Instance variables

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.flow;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component("TreeMaker") @Lazy
-public class TreeMaker extends AbstractMakerPlugin<TreeElement, TreeImport> {
+public class TreeMakerFlow extends AbstractMakerImportFlow<TreeElement, TreeImport> {
 
     @Autowired
     private NiceTreeImportParser2015 parser;

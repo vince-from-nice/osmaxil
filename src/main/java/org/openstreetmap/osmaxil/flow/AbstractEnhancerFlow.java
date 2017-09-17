@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.flow;
 
 import java.util.Collection;
 import java.util.List;
@@ -7,8 +7,8 @@ import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 
-public abstract class AbstractEnhancerPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
-		extends AbstractUpdaterPlugin<ELEMENT, IMPORT> {
+public abstract class AbstractEnhancerFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
+		extends AbstractUpdaterFlow<ELEMENT, IMPORT> {
 
 	/**
 	 * Existing elements which are inside the filtering areas.

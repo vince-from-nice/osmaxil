@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.openstreetmap.osmaxil.flow.AbstractUpdaterFlow;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +36,7 @@ public class CumulativeOnSameValueMatchingScoreSelector<Element extends Abstract
     public float computeElementMatchingScore(AbstractElement element) {
         if (this.matchingTagName == null) {
             LOGGER.error("Unable to compute element matching score since no matching tag name is defined.");
-            return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
+            return AbstractUpdaterFlow.MIN_MATCHING_SCORE;
         }
         this.dispatchMatchingImportsByTagValues(element, this.matchingTagName);
         this.computeTotalScoresByTagValues(element);  

@@ -13,7 +13,6 @@ import org.openstreetmap.osmaxil.model.xml.pss.PssXmlRoot;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
@@ -28,12 +27,6 @@ public class PssBuildingImportParser extends AbstractImportParser<BuildingImport
     int counter;
     
     PssXmlRoot data;
-
-    @Value("${plugins.pssBuildingParser.filePath}")
-    private String filePath;
-
-    @Value("${plugins.pssBuildingParser.srid}")
-    private int srid;
 
     @PostConstruct
     public void init() throws IOException {

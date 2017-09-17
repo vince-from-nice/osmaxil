@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
@@ -28,12 +27,6 @@ public class ParisBuildingImportParser extends AbstractImportParser<BuildingImpo
     long rowCount;
 
     boolean hasNext;
-    
-    @Value("${plugins.parisBuildingParser.filePath}")
-    private String filePath;
-    
-    @Value("${plugins.parisBuildingParser.srid}")
-    private int srid;
     
     static private final String GEOM_TOKEN = "\"\"coordinates\"\": ";
     

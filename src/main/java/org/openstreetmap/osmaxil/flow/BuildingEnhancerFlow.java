@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.flow;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,30 +23,30 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component("BuildingEnhancer") @Lazy
-public class BuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, CloudPointImport> {
+public class BuildingEnhancerFlow extends AbstractEnhancerFlow<BuildingElement, CloudPointImport> {
 
-	@Value("${plugins.buildingEnhancer.xyzFolderPath}")
+	@Value("${flow.buildingEnhancer.xyzFolderPath}")
 	private String xyzFolderPath;
 
-	@Value("${plugins.buildingEnhancer.xyzFileSrid}")
+	@Value("${flow.buildingEnhancer.xyzFileSrid}")
 	private String xyzFileSrid;
 
-	@Value("${plugins.buildingEnhancer.needToPreparePointCloudInDB}")
+	@Value("${flow.buildingEnhancer.needToPreparePointCloudInDB}")
 	private Boolean needToPreparePointCloudInDB;
 
-	@Value("${plugins.buildingEnhancer.pointCloudTableName}")
+	@Value("${flow.buildingEnhancer.pointCloudTableName}")
 	private String pointCloudTableName;
 	
-	@Value("${plugins.buildingEnhancer.minMatchingPoints}")
+	@Value("${flow.buildingEnhancer.minMatchingPoints}")
 	private int minMatchingPoints;
 	
-	@Value("${plugins.buildingEnhancer.computingDistance}")
+	@Value("${flow.buildingEnhancer.computingDistance}")
 	private int computingDistance;
 	
-	@Value("${plugins.buildingEnhancer.toleranceDelta}")
+	@Value("${flow.buildingEnhancer.toleranceDelta}")
 	private float toleranceDelta;
 	
-	@Value("${plugins.buildingEnhancer.shrinkRadius}")
+	@Value("${flow.buildingEnhancer.shrinkRadius}")
 	private int shrinkRadius;
 
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
@@ -55,7 +55,9 @@ public class BuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, Cl
 	protected GenericPostgisDB genericPostgis;
 	
 	@Autowired
-	protected BuildingPointCloudScorer buildingPointCloudScorer;
+	protected BuildingPointCloudScorer scorer;
+//	@Qualifier("${flow.buildingEnhancer.scorer}")
+//	protected AbstractElementScorer scorer;
 	
 	// =========================================================================
 	// Overrided methods
@@ -112,7 +114,7 @@ public class BuildingEnhancer extends AbstractEnhancerPlugin<BuildingElement, Cl
 	
 	@Override
 	protected void computeMatchingScores(BuildingElement element) {
-		this.buildingPointCloudScorer.computeElementMatchingScore(element, this.computingDistance, this.toleranceDelta, this.minMatchingScore);
+		this.scorer.computeElementMatchingScore(element, this.computingDistance, this.toleranceDelta, this.minMatchingScore);
 	}
 
 	@Override

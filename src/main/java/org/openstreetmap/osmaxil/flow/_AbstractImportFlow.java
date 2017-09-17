@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.plugin;
+package org.openstreetmap.osmaxil.flow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import com.vividsolutions.jts.geom.IntersectionMatrix;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
-public abstract class _AbstractPlugin<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> {
+public abstract class _AbstractImportFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> {
 
     // =========================================================================
     // Instance variables

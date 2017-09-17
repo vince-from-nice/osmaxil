@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 
 import org.openstreetmap.osmaxil.model.TreeImport;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
@@ -24,12 +23,6 @@ public class NiceTreeImportParser2014 extends AbstractImportParser<TreeImport> {
     long rowCount;
 
     boolean hasNext;
-    
-    @Value("${plugins.niceTreeParser.filePath}")
-    private String filePath;
-    
-    @Value("${plugins.niceTreeParser.srid}")
-    private int srid;
     
     static private final String GEOM_TOKEN = "\"coordinates\": [";
    

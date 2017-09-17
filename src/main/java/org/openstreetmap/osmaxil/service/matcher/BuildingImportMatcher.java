@@ -3,10 +3,10 @@ package org.openstreetmap.osmaxil.service.matcher;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openstreetmap.osmaxil.flow.AbstractUpdaterFlow;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
-import org.openstreetmap.osmaxil.plugin.AbstractUpdaterPlugin;
 import org.springframework.stereotype.Component;
 
 @Component(value="BuildingMatcher")
@@ -58,18 +58,18 @@ public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport>
    @Override
     public float computeMatchingImportScore(BuildingImport imp) {
         BuildingElement element = (BuildingElement) imp.getMatchingElement();
-        float result = AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
+        float result = AbstractUpdaterFlow.MIN_MATCHING_SCORE;
         if (imp.getArea() == null) {
             LOGGER.warn("Unable to compute score because building import has NO area");
-            return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
+            return AbstractUpdaterFlow.MIN_MATCHING_SCORE;
         }
         if (imp.getMatchingElement() == null) {
             LOGGER.warn("Unable to compute score because building import has NO element attached");
-            return AbstractUpdaterPlugin.MIN_MATCHING_SCORE;
+            return AbstractUpdaterFlow.MIN_MATCHING_SCORE;
         }
         // If no surface are available the maximum score is always returned
         if (!this.withSurfaces) {
-            return AbstractUpdaterPlugin.MAX_MATCHING_SCORE;
+            return AbstractUpdaterFlow.MAX_MATCHING_SCORE;
         }
         // Get element area
         int elementArea = element.getComputedArea();
