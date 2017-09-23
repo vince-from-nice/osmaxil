@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlMember;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlNd;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlNode;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRelation;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlTag;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlWay;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.model.ElementType;
 import org.openstreetmap.osmaxil.model.misc.ElementIdWithParentFlags;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlMember;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNd;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRelation;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlWay;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 

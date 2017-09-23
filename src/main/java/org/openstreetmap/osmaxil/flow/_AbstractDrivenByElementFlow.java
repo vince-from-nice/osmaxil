@@ -9,9 +9,9 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.scorer.AbstractElementScorer;
 import org.openstreetmap.osmaxil.plugin.selector.MatchingScoreStatsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;

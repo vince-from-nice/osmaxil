@@ -7,10 +7,10 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.openstreetmap.osmaxil.Exception;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.plugin.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.plugin.parser.AbstractImportParser;
 import org.openstreetmap.osmaxil.plugin.scorer.AbstractElementScorer;

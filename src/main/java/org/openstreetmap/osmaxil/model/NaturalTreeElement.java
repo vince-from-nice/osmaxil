@@ -2,7 +2,7 @@ package org.openstreetmap.osmaxil.model;
 
 import java.util.List;
 
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlTag;
 
 
 public class NaturalTreeElement extends AbstractElement {

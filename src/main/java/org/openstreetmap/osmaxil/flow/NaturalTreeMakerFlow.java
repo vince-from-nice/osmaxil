@@ -7,13 +7,13 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlNode;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlTag;
 import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.model.NaturalTreeElement;
 import org.openstreetmap.osmaxil.model.NaturalTreeImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlNode;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 import org.openstreetmap.osmaxil.plugin.matcher.TreeImportMatcher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;

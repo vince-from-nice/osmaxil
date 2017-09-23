@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.model.xml.pss;
+package org.openstreetmap.osmaxil.dao.xml.pss;
 
 import java.util.List;
 

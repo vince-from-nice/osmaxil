@@ -7,9 +7,9 @@ import java.io.IOException;
 import javax.annotation.PostConstruct;
 import javax.xml.transform.stream.StreamSource;
 
+import org.openstreetmap.osmaxil.dao.xml.pss.PssXmlBuilding;
+import org.openstreetmap.osmaxil.dao.xml.pss.PssXmlRoot;
 import org.openstreetmap.osmaxil.model.BuildingImport;
-import org.openstreetmap.osmaxil.model.xml.pss.PssXmlBuilding;
-import org.openstreetmap.osmaxil.model.xml.pss.PssXmlRoot;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

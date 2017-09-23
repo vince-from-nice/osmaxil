@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
+import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlTag;
 import org.openstreetmap.osmaxil.model.misc.MatchableObject;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 
 public abstract class AbstractElement extends MatchableObject {
 
