@@ -1,21 +1,15 @@
 package org.openstreetmap.osmaxil.flow;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.annotation.Obsolete;
-import org.openstreetmap.osmaxil.dao.GenericPostgisDB;
+import org.openstreetmap.osmaxil.dao.ElevationDatabase;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.CloudPointImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.openstreetmap.osmaxil.plugin.scorer.BuildingPointCloudScorer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -23,42 +17,17 @@ import org.springframework.stereotype.Component;
 @Lazy
 public class BuildingElevatorFlow extends _AbstractDrivenByElementFlow<BuildingElement, CloudPointImport> {
 
-	@Value("${flow.buildingEnhancer.xyzFolderPath}")
-	private String xyzFolderPath;
-
-	@Value("${flow.buildingEnhancer.xyzFileSrid}")
-	private String xyzFileSrid;
-
-	@Value("${flow.buildingEnhancer.pointCloudTableName}")
-	private String pointCloudTableName;
-
-	@Value("${flow.buildingEnhancer.shrinkRadius}")
-	private int shrinkRadius;
-
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
 
 	@Autowired
-	protected GenericPostgisDB genericPostgis;
+	protected ElevationDatabase elevationDatabase;
 
 	// =========================================================================
 	// Overrided methods
 	// =========================================================================
 
-	protected void prepareDatabase() {
-		LOGGER.info("Recreate the point cloud table from scratch.");
-		this.genericPostgis.recreatePointCloudTable(this.pointCloudTableName, this.xyzFileSrid);
-		File xyzFolder = new File(this.xyzFolderPath);
-		File[] xyzFiles = xyzFolder.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".xyz");
-			}
-		});
-		for (int i = 0; i < xyzFiles.length; i++) {
-			File xyzFile = xyzFiles[i];
-			LOGGER.info("Loading file " + xyzFile);
-			this.genericPostgis.copyPointCloudFromYXZFile(this.pointCloudTableName, xyzFile.getPath());
-		}
-		this.genericPostgis.finalizePointCloudTable(this.pointCloudTableName, this.xyzFileSrid);
+	protected void loadData() {
+		this.elevationDatabase.initializePointCloudTableFromXYZFiles();
 	}
 
 	protected List<BuildingElement> getTargetedElements() {
@@ -75,8 +44,7 @@ public class BuildingElevatorFlow extends _AbstractDrivenByElementFlow<BuildingE
 			LOGGER.warn("Unable to find matching imports because element has no geometry string");
 			return result;
 		}
-		data = this.genericPostgis.findPointByGeometry(element.getGeometryString(), element.getInnerGeometryString(),
-				shrinkRadius, srid);
+		data = this.elevationDatabase.findPointByGeometry(element.getGeometryString(), element.getInnerGeometryString(), srid);
 		// Create imports from results
 		for (Coordinates coordinates : data) {
 			CloudPointImport imp = new CloudPointImport(coordinates);
@@ -120,7 +88,7 @@ public class BuildingElevatorFlow extends _AbstractDrivenByElementFlow<BuildingE
 	public void displayProcessingStatistics() {
 		super.displayProcessingStatistics();
 		LOGGER_FOR_STATS.info("Specific settings of the plugin:");
-		LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
+		//LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
 		if (this.scorer instanceof BuildingPointCloudScorer) {
 			BuildingPointCloudScorer bdcs = (BuildingPointCloudScorer) this.scorer;
 			LOGGER_FOR_STATS.info(" - Minimum matching point is: " + bdcs.minMatchingPoints);

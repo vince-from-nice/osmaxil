@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenericRasterFile {
+public class ElevationRasterFile {
     
-    @Value("${genericDemFile.filePath}")
+    @Value("${elevationRasterFile.path}")
     private String filePath;
     
-    @Value("${genericDemFile.srid}")
+    @Value("${elevationRasterFile.srid}")
     private int srid;
     
     private Dataset dataset;

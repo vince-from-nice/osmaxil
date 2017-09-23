@@ -1,5 +1,7 @@
 package org.openstreetmap.osmaxil.dao;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,14 +17,26 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenericPostgisDB {
+public class ElevationDatabase {
 
     @Autowired
-    @Qualifier("genericPostgisJdbcTemplate")
+    @Qualifier("elevationPostgisJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
     
-    @Value("${genericPostgis.srid}")
+    @Value("${elevationDatabase.srid}")
     private int srid;
+
+	@Value("${elevationDatabase.xyzTableName}")
+	private String pointCloudTableName;
+	
+	@Value("${elevationDatabase.xyzFolderPath}")
+	private String xyzFolderPath;
+
+	@Value("${elevationDatabase.xyzFileSrid}")
+	private String xyzFileSrid;
+	
+	@Value("${elevationDatabase.shrinkRadius}")
+	private int shrinkRadius;
     
     static private final Logger LOGGER = Logger.getLogger(Application.class);
     
@@ -40,39 +54,28 @@ public class GenericPostgisDB {
     // Point cloud tables
     ////////////////////////////////////////////////////////////////////////////////
     
-    /**
-     * Recreate a point cloud table.
-     */
-    public void recreatePointCloudTable(String tableName, String fileSrid) {
-    	this.jdbcTemplate.execute("DROP TABLE IF EXISTS " + tableName);
-    	this.jdbcTemplate.execute("CREATE TABLE " + tableName + " (x numeric(11,3), y numeric(11,3), z numeric(11,3))");
-    }
-    
-    /**
-     * Fill a point cloud table by using the COPY statement (which much more efficient than INSERT).
-     */
-    public void copyPointCloudFromYXZFile(String tableName, String filePath) {
-    	this.jdbcTemplate.execute("COPY " + tableName + " (x, y, z) FROM '" + filePath + "' WITH DELIMITER AS ' '");    	
-    }
-    
-    /**
-     * Finalize a point cloud table by adding its geometry column and an spatial index.
-     */
-    public void finalizePointCloudTable(String tableName, String fileSrid) {
-    	LOGGER.info("Add geometry column to the point cloud table");
-    	this.jdbcTemplate.execute("SELECT AddGeometryColumn ('"+ tableName +"', 'geom', " + this.srid + ", 'POINT', 3)");
-    	LOGGER.info("Update the geometry column of the point cloud table");
-    	this.jdbcTemplate.execute("UPDATE " + tableName +
-    			" SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', " + fileSrid + "), " + this.srid + ")");
-    	LOGGER.info("Create an index on the geometry column of the point cloud table");
-    	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
+    public void initializePointCloudTableFromXYZFiles() {
+		LOGGER.info("Recreate the point cloud table from scratch.");
+		this.recreatePointCloudTable(this.pointCloudTableName, this.xyzFileSrid);
+		File xyzFolder = new File(this.xyzFolderPath);
+		File[] xyzFiles = xyzFolder.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.toLowerCase().endsWith(".xyz");
+			}
+		});
+		for (int i = 0; i < xyzFiles.length; i++) {
+			File xyzFile = xyzFiles[i];
+			LOGGER.info("Loading file " + xyzFile);
+			this.copyPointCloudFromYXZFile(this.pointCloudTableName, xyzFile.getPath());
+		}
+		this.finalizePointCloudTable(this.pointCloudTableName, this.xyzFileSrid);
     }
     
     /**
      * Find all points which intersect the including geometry and disjoint the excluding geometry (useful for multipolygon buildings with "hole").
      * That method use a radius as argument in order to skrink the including and excluding geometries.
      */
-    public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int shrinkRadius, int geomSrid) {
+    public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int geomSrid) {
     	final String includingGeom = "ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + ")";
     	String query = "SELECT x, y, z FROM point_cloud_of_nice";
     	String condition = "ST_Transform(ST_Buffer(" + includingGeom + ", -" + shrinkRadius + "), " + srid + ")";
@@ -132,6 +135,38 @@ public class GenericPostgisDB {
     	LOGGER.debug("Add point(" + x + " " + y + ") with z=" + z) ;
     	this.jdbcTemplate.execute("INSERT INTO " + tableName + " VALUES(" + id +
     			", ST_Transform(ST_GeomFromText('POINT(" + x + " " + y + " " + z + ")', " + fileSrid + "), " + this.srid + "))");
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    // Private methods
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Recreate a point cloud table.
+     */
+    private void recreatePointCloudTable(String tableName, String fileSrid) {
+    	this.jdbcTemplate.execute("DROP TABLE IF EXISTS " + tableName);
+    	this.jdbcTemplate.execute("CREATE TABLE " + tableName + " (x numeric(11,3), y numeric(11,3), z numeric(11,3))");
+    }
+    
+    /**
+     * Fill a point cloud table by using the COPY statement (which much more efficient than INSERT).
+     */
+    private void copyPointCloudFromYXZFile(String tableName, String filePath) {
+    	this.jdbcTemplate.execute("COPY " + tableName + " (x, y, z) FROM '" + filePath + "' WITH DELIMITER AS ' '");    	
+    }
+    
+    /**
+     * Finalize a point cloud table by adding its geometry column and an spatial index.
+     */
+    private void finalizePointCloudTable(String tableName, String fileSrid) {
+    	LOGGER.info("Add geometry column to the point cloud table");
+    	this.jdbcTemplate.execute("SELECT AddGeometryColumn ('"+ tableName +"', 'geom', " + this.srid + ", 'POINT', 3)");
+    	LOGGER.info("Update the geometry column of the point cloud table");
+    	this.jdbcTemplate.execute("UPDATE " + tableName +
+    			" SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', " + fileSrid + "), " + this.srid + ")");
+    	LOGGER.info("Create an index on the geometry column of the point cloud table");
+    	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
     }
     
 }

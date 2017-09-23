@@ -11,9 +11,6 @@ import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
-import org.openstreetmap.osmaxil.plugin.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.plugin.parser.AbstractImportParser;
-import org.openstreetmap.osmaxil.plugin.scorer.AbstractElementScorer;
 import org.openstreetmap.osmaxil.plugin.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +26,6 @@ public abstract class AbstractRemakerFlow<ELEMENT extends AbstractElement, IMPOR
     
     protected Map<Long, ELEMENT> remakableElements = new Hashtable<Long, ELEMENT>();
     
-    @Autowired
-    @Resource(name="${parser}")
-    protected AbstractImportParser<IMPORT> parser;
-
-    @Autowired
-    @Resource(name="${matcher}")
-    protected AbstractImportMatcher<IMPORT> matcher;
-   
     @Autowired
     @Resource(name="${selector}")
     protected AbstractMatchingScoreSelector<ELEMENT> selector;
@@ -148,8 +137,8 @@ public abstract class AbstractRemakerFlow<ELEMENT extends AbstractElement, IMPOR
     
     private void associateImportsWithElements(IMPORT imp) {
         // Find relevant element
-        List<MatchingElementId> matchingElementIds = this.getMatcher().findMatchingElements(imp,
-                this.getParser().getSrid());
+        List<MatchingElementId> matchingElementIds = this.matcher.findMatchingElements(imp,
+                this.parser.getSrid());
         if (matchingElementIds.size() > 0) {
             this.counterForMatchedImports++;
         }
@@ -202,7 +191,7 @@ public abstract class AbstractRemakerFlow<ELEMENT extends AbstractElement, IMPOR
         try {
             // Compute a matching score for each import matching the element
             for (AbstractImport imp : element.getMatchingImports()) {
-                imp.setMatchingScore(this.getMatcher().computeMatchingImportScore((IMPORT) imp));
+                imp.setMatchingScore(this.matcher.computeMatchingImportScore((IMPORT) imp));
             }
             // Compute a global matching score for the element
             element.setMatchingScore(selector.computeElementMatchingScore(element));
@@ -210,20 +199,5 @@ public abstract class AbstractRemakerFlow<ELEMENT extends AbstractElement, IMPOR
             LOGGER.error("Process of element " + element.getOsmId() + " has failed: ", e);
         }
         LOGGER.info(LOG_SEPARATOR);
-    }
-
-    @Override
-    public AbstractImportParser<IMPORT> getParser() {
-        return parser;
-    }
-
-    @Override
-    public AbstractImportMatcher<IMPORT> getMatcher() {
-        return this.matcher;
-    }
-
-    @Override
-    public AbstractElementScorer<ELEMENT> getScorer() {
-        return null;
     }
 }

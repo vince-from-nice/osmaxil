@@ -51,7 +51,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
     // Abstract methods
     // =========================================================================
 
-    abstract protected void prepareDatabase();
+    abstract protected void loadData();
     
 	abstract protected List<ELEMENT> getTargetedElements();
 	    
@@ -75,12 +75,12 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 			LOGGER.info("Skip the loading phase");
 			return;
 		}
-		this.prepareDatabase();
+		this.loadData();
 	}
 	
 	@Override
 	public void process() {
-		// Load all targeted elements
+		// Fetch all targeted elements
 		LOGGER.info("Looking in PostGIS for existing elements which are respecting the filtering areas");
 		this.targetedElement = this.getTargetedElements();
 		int i = 1;
@@ -108,6 +108,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	        }
 	        LOGGER.info(sb.append("]").toString());
 			// Check if the total of matching imports is fine
+	        // TODO fix confusion between minMatchingScore and minMatchingPoints !!
 			if (element.getMatchingImports().size() < this.minMatchingScore) {
 				LOGGER.info("Element has only " + element.getMatchingImports().size()
 						+ " matching imports, skipping it because minimum value is "

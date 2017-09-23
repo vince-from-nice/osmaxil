@@ -15,8 +15,6 @@ import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.plugin.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.plugin.parser.AbstractImportParser;
-import org.openstreetmap.osmaxil.plugin.scorer.AbstractElementScorer;
 import org.openstreetmap.osmaxil.plugin.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.plugin.selector.MatchingScoreStatsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +29,8 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 	// =========================================================================
 
 	@Autowired
-	@Resource(name = "${parser}")
-	protected AbstractImportParser<IMPORT> parser;
-
-	@Autowired
 	@Resource(name = "${matcher}")
 	protected AbstractImportMatcher<IMPORT> matcher;
-
-	@Autowired
-	@Resource(name = "${scorer}")
-	protected AbstractElementScorer<ELEMENT> scorer;
 
 	@Autowired
 	@Resource(name = "${selector}")
@@ -183,21 +173,6 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 		}
 	}
 
-	@Override
-	protected AbstractImportParser<IMPORT> getParser() {
-		return parser;
-	}
-
-	@Override
-	protected AbstractImportMatcher<IMPORT> getMatcher() {
-		return this.matcher;
-	}
-
-	@Override
-	protected AbstractElementScorer<ELEMENT> getScorer() {
-		return this.scorer;
-	}
-
 	// =========================================================================
 	// Private methods
 	// =========================================================================
@@ -212,8 +187,8 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 
 	private void associateImportsWithElements(IMPORT imp) {
 		// Find relevant elements
-		List<MatchingElementId> matchingElementIds = this.getMatcher().findMatchingElements(imp,
-				this.getParser().getSrid());
+		List<MatchingElementId> matchingElementIds = this.matcher.findMatchingElements(imp,
+				this.parser.getSrid());
 		if (matchingElementIds.size() > 0) {
 			this.counterForMatchedImports++;
 		}
@@ -271,7 +246,7 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 		try {
 			// Compute a matching score for each import matching the element
 			for (AbstractImport imp : element.getMatchingImports()) {
-				imp.setMatchingScore(this.getMatcher().computeMatchingImportScore((IMPORT) imp));
+				imp.setMatchingScore(this.matcher.computeMatchingImportScore((IMPORT) imp));
 			}
 			// Compute a global matching score for the element
 			element.setMatchingScore(this.selector.computeElementMatchingScore(element));

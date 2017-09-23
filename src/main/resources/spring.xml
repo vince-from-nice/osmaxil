@@ -54,20 +54,20 @@
 		<property name="dataSource" ref="osmPostgisDataSource" />
 	</bean>
 	
-	<!-- Generic PostGIS database (useful for point clouds) -->
+	<!-- Elevation PostGIS database (useful for point clouds) -->
 
-	<bean id="genericPostgisDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<bean id="elevationPostgisDataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver" />
-		<property name="url" value="${genericPostgis.url}" />
-		<property name="username" value="${genericPostgis.login}" />
-		<property name="password" value="${genericPostgis.password}" />
+		<property name="url" value="${elevationDatabase.url}" />
+		<property name="username" value="${elevationDatabase.login}" />
+		<property name="password" value="${elevationDatabase.password}" />
 		<property name="removeAbandoned" value="true" />
 		<property name="initialSize" value="1" />
 		<property name="maxActive" value="1" />
 	</bean>
 
-	<bean id="genericPostgisJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource" ref="genericPostgisDataSource" />
+	<bean id="elevationPostgisJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="elevationPostgisDataSource" />
 	</bean>
 
 	<!-- ******************************************************************************** -->
@@ -75,7 +75,7 @@
 	<!-- ******************************************************************************** -->
 
 	<oxm:jaxb2-marshaller id="osmMarshaller">
-		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot" />
+		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot" />
 	</oxm:jaxb2-marshaller>
 
 	<bean id="marshallingHttpMessageConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
@@ -98,7 +98,7 @@
 	<!-- ******************************************************************************** -->
 
 	<oxm:jaxb2-marshaller id="pssMarshaller">
-		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.model.xml.pss.PssXmlRoot" />
+		<oxm:class-to-be-bound name="org.openstreetmap.osmaxil.dao.xml.pss.PssXmlRoot" />
 	</oxm:jaxb2-marshaller>
 
 </beans>

@@ -1,19 +1,23 @@
 package org.openstreetmap.osmaxil.flow;
 
+import javax.annotation.Resource;
+
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.plugin.parser.AbstractImportParser;
-import org.openstreetmap.osmaxil.plugin.scorer.AbstractElementScorer;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class _AbstractDrivenByImportFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
 		extends _AbstractImportFlow<ELEMENT, IMPORT> {
 	
-    abstract protected AbstractImportParser<IMPORT> getParser();
-    
-    abstract protected AbstractImportMatcher<IMPORT> getMatcher();
+	@Autowired
+	@Resource(name = "${parser}")
+	protected AbstractImportParser<IMPORT> parser;
 
-    abstract protected AbstractElementScorer<ELEMENT> getScorer();
+	@Autowired
+	@Resource(name = "${matcher}")
+	protected AbstractImportMatcher<IMPORT> matcher;
     
     protected long counterForParsedImports;
 
@@ -27,9 +31,9 @@ public abstract class _AbstractDrivenByImportFlow<ELEMENT extends AbstractElemen
     
     @Override
     public void load() {
-        while (this.getParser().hasNext()) {
+        while (this.parser.hasNext()) {
             try {
-                IMPORT imp = this.getParser().next();
+                IMPORT imp = this.parser.next();
                 if (imp == null) {
                     LOGGER.warn("Import is null, skipping it...");
                     break;
