@@ -1,7 +1,7 @@
 package org.openstreetmap.osmaxil;
 
 import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.flow.BuildingEnhancerFlow;
+import org.openstreetmap.osmaxil.flow.BuildingElevatorFlow;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Application {
@@ -26,7 +26,7 @@ public class Application {
     public void run() {
         this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
         
-        BuildingEnhancerFlow plugin = (BuildingEnhancerFlow) this.applicationContext.getBean("BuildingEnhancer");        
+        BuildingElevatorFlow plugin = (BuildingElevatorFlow) this.applicationContext.getBean("BuildingEnhancer");        
         //PssBuildingUpdater plugin = (BuildingUpdater) this.applicationContext.getBean("BuildingUpdater");
         //ParisBuildingRemaker plugin = (BuildingRemaker) this.applicationContext.getBean("BuildingRemaker");
         //NiceTreeMaker plugin = (TreeMaker) this.applicationContext.getBean("TreeMaker");

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service.parser;
+package org.openstreetmap.osmaxil.plugin.parser;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
 
-import org.openstreetmap.osmaxil.model.TreeImport;
+import org.openstreetmap.osmaxil.model.NaturalTreeImport;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Repository @Lazy
-public class NiceTreeImportParser2014 extends AbstractImportParser<TreeImport> {
+public class NiceTreeImportParser2014 extends AbstractImportParser<NaturalTreeImport> {
 
     private CSVReader reader;
 
@@ -43,7 +43,7 @@ public class NiceTreeImportParser2014 extends AbstractImportParser<TreeImport> {
     }
     
     @Override
-    public TreeImport next() {
+    public NaturalTreeImport next() {
         String[] row = null;
         try {
             row = this.reader.readNext();
@@ -55,7 +55,7 @@ public class NiceTreeImportParser2014 extends AbstractImportParser<TreeImport> {
             return null;
         }
         this.rowCount++;
-        TreeImport tree = new TreeImport();
+        NaturalTreeImport tree = new NaturalTreeImport();
         tree.setId(this.rowCount);
         //tree.setGenus(row[3]);
         //tree.setSpecies(row[2]);

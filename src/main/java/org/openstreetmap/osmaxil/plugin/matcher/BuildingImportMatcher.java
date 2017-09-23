@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service.matcher;
+package org.openstreetmap.osmaxil.plugin.matcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,15 +7,11 @@ import org.openstreetmap.osmaxil.flow.AbstractUpdaterFlow;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.BuildingImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component(value="BuildingMatcher")
+@Component @Lazy
 public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport> {
-    
-    /**
-     * Boolean to define if the matcher is using surfaces of buildings (when computing matching scores)
-     */
-    private boolean withSurfaces = true;
  
    @Override
     public List<MatchingElementId> findMatchingElements(BuildingImport imp, int srid) {
@@ -68,7 +64,7 @@ public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport>
             return AbstractUpdaterFlow.MIN_MATCHING_SCORE;
         }
         // If no surface are available the maximum score is always returned
-        if (!this.withSurfaces) {
+        if (!this.useSurface) {
             return AbstractUpdaterFlow.MAX_MATCHING_SCORE;
         }
         // Get element area
@@ -157,11 +153,11 @@ public class BuildingImportMatcher extends AbstractImportMatcher<BuildingImport>
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     public boolean isWithSurfaces() {
-        return withSurfaces;
+        return useSurface;
     }
 
     public void setWithSurfaces(boolean withSurfaces) {
-        this.withSurfaces = withSurfaces;
+        this.useSurface = withSurfaces;
     }
         
 }

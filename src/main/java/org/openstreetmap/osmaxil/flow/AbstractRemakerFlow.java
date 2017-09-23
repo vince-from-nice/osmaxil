@@ -4,17 +4,22 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
-import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
+import org.openstreetmap.osmaxil.plugin.matcher.AbstractImportMatcher;
+import org.openstreetmap.osmaxil.plugin.parser.AbstractImportParser;
+import org.openstreetmap.osmaxil.plugin.scorer.AbstractElementScorer;
+import org.openstreetmap.osmaxil.plugin.selector.AbstractMatchingScoreSelector;
 import org.openstreetmap.osmaxil.util.IdIncrementor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractRemakerFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
-        extends _AbstractImportFlow<ELEMENT, IMPORT> {
+        extends _AbstractDrivenByImportFlow<ELEMENT, IMPORT> {
 
     // =========================================================================
     // Instance variables
@@ -23,6 +28,18 @@ public abstract class AbstractRemakerFlow<ELEMENT extends AbstractElement, IMPOR
     protected Map<Long, ELEMENT> matchedElements = new Hashtable<Long, ELEMENT>();
     
     protected Map<Long, ELEMENT> remakableElements = new Hashtable<Long, ELEMENT>();
+    
+    @Autowired
+    @Resource(name="${parser}")
+    protected AbstractImportParser<IMPORT> parser;
+
+    @Autowired
+    @Resource(name="${matcher}")
+    protected AbstractImportMatcher<IMPORT> matcher;
+   
+    @Autowired
+    @Resource(name="${selector}")
+    protected AbstractMatchingScoreSelector<ELEMENT> selector;
     
     protected OsmXmlRoot dataForCreation;
     
@@ -47,10 +64,6 @@ public abstract class AbstractRemakerFlow<ELEMENT extends AbstractElement, IMPOR
     abstract protected void buildDataForCreation();
     
     abstract protected void buildDataForDeletion();
-    
-    abstract protected AbstractImportMatcher<IMPORT> getMatcher();
-    
-    abstract protected AbstractMatchingScoreSelector<ELEMENT> getScorer();
     
     // =========================================================================
     // Public methods
@@ -192,11 +205,25 @@ public abstract class AbstractRemakerFlow<ELEMENT extends AbstractElement, IMPOR
                 imp.setMatchingScore(this.getMatcher().computeMatchingImportScore((IMPORT) imp));
             }
             // Compute a global matching score for the element
-            element.setMatchingScore(this.getScorer().computeElementMatchingScore(element));
+            element.setMatchingScore(selector.computeElementMatchingScore(element));
         } catch (java.lang.Exception e) {
             LOGGER.error("Process of element " + element.getOsmId() + " has failed: ", e);
         }
         LOGGER.info(LOG_SEPARATOR);
     }
 
+    @Override
+    public AbstractImportParser<IMPORT> getParser() {
+        return parser;
+    }
+
+    @Override
+    public AbstractImportMatcher<IMPORT> getMatcher() {
+        return this.matcher;
+    }
+
+    @Override
+    public AbstractElementScorer<ELEMENT> getScorer() {
+        return null;
+    }
 }

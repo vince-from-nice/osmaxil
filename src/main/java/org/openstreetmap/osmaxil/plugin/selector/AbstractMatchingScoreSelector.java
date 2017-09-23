@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service.selector;
+package org.openstreetmap.osmaxil.plugin.selector;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;

@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service.scorer;
+package org.openstreetmap.osmaxil.plugin.scorer;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;

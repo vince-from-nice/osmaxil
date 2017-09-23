@@ -18,13 +18,6 @@ import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRelation;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlTag;
 import org.openstreetmap.osmaxil.model.xml.osm.OsmXmlWay;
-import org.openstreetmap.osmaxil.service.matcher.AbstractImportMatcher;
-import org.openstreetmap.osmaxil.service.matcher.BuildingImportMatcher;
-import org.openstreetmap.osmaxil.service.parser.ParisBuildingImportParser;
-import org.openstreetmap.osmaxil.service.selector.AbstractMatchingScoreSelector;
-import org.openstreetmap.osmaxil.service.selector.CumulativeOnAnyValueMatchingScoreSelector;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -36,16 +29,6 @@ public class BuildingRemakerFlow extends AbstractRemakerFlow<BuildingElement, Bu
     // =========================================================================
     // Instance variables
     // =========================================================================
-
-    @Autowired
-    private ParisBuildingImportParser parser;
-
-    @Autowired
-    @Qualifier("BuildingMatcher")
-    private BuildingImportMatcher matcher;
-
-    @Autowired
-    private CumulativeOnAnyValueMatchingScoreSelector<BuildingElement> scorer;
 
     private Map<Long, OsmXmlRoot> newBuildingsByRemakableBuilding = new HashMap<>();
 
@@ -111,21 +94,6 @@ public class BuildingRemakerFlow extends AbstractRemakerFlow<BuildingElement, Bu
             }
         }
         this.dataForDeletion = root;
-    }
-
-    @Override
-    public ParisBuildingImportParser getParser() {
-        return parser;
-    }
-
-    @Override
-    public AbstractImportMatcher<BuildingImport> getMatcher() {
-        return this.matcher;
-    }
-
-    @Override
-    public AbstractMatchingScoreSelector<BuildingElement> getScorer() {
-        return this.scorer;
     }
 
     @Override

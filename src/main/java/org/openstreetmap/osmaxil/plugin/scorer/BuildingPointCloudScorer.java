@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service.scorer;
+package org.openstreetmap.osmaxil.plugin.scorer;
 
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;

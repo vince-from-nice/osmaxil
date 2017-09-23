@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service.matcher;
+package org.openstreetmap.osmaxil.plugin.matcher;
 
 import java.util.List;
 
@@ -8,11 +8,15 @@ import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 public abstract class AbstractImportMatcher<IMPORT extends AbstractImport> {
 
     @Autowired
     protected OsmPostgisDB osmPostgis;
+    
+	@Value("${matcher.useSurface}")
+    protected boolean useSurface;
     
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
     

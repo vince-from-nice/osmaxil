@@ -1,4 +1,4 @@
-package org.openstreetmap.osmaxil.service.selector;
+package org.openstreetmap.osmaxil.plugin.selector;
 
 import org.openstreetmap.osmaxil.flow.AbstractUpdaterFlow;
 import org.openstreetmap.osmaxil.model.AbstractElement;
