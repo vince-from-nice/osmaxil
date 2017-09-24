@@ -27,7 +27,7 @@ public class BuildingElevatorFlow extends _AbstractDrivenByElementFlow<BuildingE
 	// =========================================================================
 
 	protected void loadData() {
-		this.elevationDatabase.initializePointCloudTableFromXYZFiles();
+		this.elevationDatabase.createPointCloudTableFromXYZFiles();
 	}
 
 	protected List<BuildingElement> getTargetedElements() {
@@ -50,7 +50,7 @@ public class BuildingElevatorFlow extends _AbstractDrivenByElementFlow<BuildingE
 			CloudPointImport imp = new CloudPointImport(coordinates);
 			// Use the rounded value of 'z' as ID
 			imp.setId(Long.parseLong(coordinates.z.substring(0, coordinates.z.indexOf("."))));
-			// TODO transform lat/lon to the correct SRID ?
+			// TODO need to transform lat/lon to the correct SRID ?
 			imp.setLatitude(Double.parseDouble(coordinates.x));
 			imp.setLongitude(Double.parseDouble(coordinates.y));
 			result.add(imp);

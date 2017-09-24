@@ -132,7 +132,7 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 				if (needToSync) {
 					boolean success = false;
 					if ("api".equals(this.synchronizationMode)) {
-						success = this.osmStandardApi.writeElement(element, element.getType());
+						success = this.osmStandardApi.writeElement(element);
 					} else if ("gen".equals(this.synchronizationMode)) {
 						success = this.osmXmlFile.writeToFile("" + element.getOsmId(), element.getApiData());
 					}

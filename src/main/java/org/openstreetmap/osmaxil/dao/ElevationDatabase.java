@@ -27,7 +27,7 @@ public class ElevationDatabase {
     private int srid;
 
 	@Value("${elevationDatabase.xyzTableName}")
-	private String pointCloudTableName;
+	private String xyzTableName;
 	
 	@Value("${elevationDatabase.xyzFolderPath}")
 	private String xyzFolderPath;
@@ -54,9 +54,9 @@ public class ElevationDatabase {
     // Point cloud tables
     ////////////////////////////////////////////////////////////////////////////////
     
-    public void initializePointCloudTableFromXYZFiles() {
+    public void createPointCloudTableFromXYZFiles() {
 		LOGGER.info("Recreate the point cloud table from scratch.");
-		this.recreatePointCloudTable(this.pointCloudTableName, this.xyzFileSrid);
+		this.recreatePointCloudTable(this.xyzTableName, this.xyzFileSrid);
 		File xyzFolder = new File(this.xyzFolderPath);
 		File[] xyzFiles = xyzFolder.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
@@ -66,9 +66,9 @@ public class ElevationDatabase {
 		for (int i = 0; i < xyzFiles.length; i++) {
 			File xyzFile = xyzFiles[i];
 			LOGGER.info("Loading file " + xyzFile);
-			this.copyPointCloudFromYXZFile(this.pointCloudTableName, xyzFile.getPath());
+			this.copyPointCloudFromYXZFile(this.xyzTableName, xyzFile.getPath());
 		}
-		this.finalizePointCloudTable(this.pointCloudTableName, this.xyzFileSrid);
+		this.finalizePointCloudTable(this.xyzTableName, this.xyzFileSrid);
     }
     
     /**
@@ -77,7 +77,7 @@ public class ElevationDatabase {
      */
     public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int geomSrid) {
     	final String includingGeom = "ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + ")";
-    	String query = "SELECT x, y, z FROM point_cloud_of_nice";
+    	String query = "SELECT x, y, z FROM " + this.xyzTableName;
     	String condition = "ST_Transform(ST_Buffer(" + includingGeom + ", -" + shrinkRadius + "), " + srid + ")";
     	query += " WHERE ST_Intersects(geom, " + condition + ")";
     	// Do the same for excluding geom (need cleanup before)
@@ -106,7 +106,7 @@ public class ElevationDatabase {
      */
     public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float scaleFactor, int geomSrid) {
     	final String geom = "ST_Transform(ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + "), " + this.srid + ")";
-    	String query = "SELECT x, y, z FROM point_cloud_of_nice, " + geom + " as includingGeom";
+    	String query = "SELECT x, y, z FROM " + this.xyzTableName + ", " + geom + " as includingGeom";
     	String condition = "ST_Scale(includingGeom, " + scaleFactor + ", " + scaleFactor + ")";
 		condition = "ST_Translate(" + condition + ", " 
 				+ "-" + scaleFactor + "*(ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2 + ((ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2), "

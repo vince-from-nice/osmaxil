@@ -104,7 +104,7 @@ public class OsmStandardApi {
         return result;
     }
     
-    public boolean writeElement(AbstractElement element, ElementType type) {
+    public boolean writeElement(AbstractElement element) {
 //    	long osmId = (element.getOsmId() > 0 ? element.getOsmId() : - element.getOsmId());
 //    	String elementType = (element.getOsmId() > 0 ? type.getName() : ElementType.Relation.getName());
         LOGGER.info("Write element to OSM API with id=" + element.getOsmId() + " : ");
@@ -114,7 +114,7 @@ public class OsmStandardApi {
 //      this.marshaller.marshal(b.getData(), new StreamResult(out));
 //      String xml = out.toString();
         try {
-            this.restTemplate.put(this.url + type + "/" + element.getOsmId(), decorateData(element.getApiData()));
+            this.restTemplate.put(this.url + element.getType().getName() + "/" + element.getOsmId(), decorateData(element.getApiData()));
             this.counterForChangeset++;
             this.counterForWriteSuccess++;
         } catch (Exception e) {
