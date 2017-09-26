@@ -19,10 +19,21 @@ public class BuildingPointCloudScorer extends AbstractElementScorer<BuildingElem
 	
 	@Value("${scorer.buildingPointCloud.toleranceDelta}")
 	public float toleranceDelta;
-
-	public float computeElementMatchingScore(BuildingElement element/*, int computingDistance, float toleranceDelta*/, float minMatchingScore) {
+	
+	public float computeElementMatchingScore(BuildingElement element, float minMatchingScore) {
+		element.setMatchingScore(0);
+		
 		LOGGER.info("The number of total matching points is: " + element.getMatchingImports().size());
 	
+		// Check if the total of matching imports is fine
+        // TODO Move it to scorer
+		if (element.getMatchingImports().size() < this.minMatchingPoints) {
+			LOGGER.info("Element has only " + element.getMatchingImports().size()
+					+ " matching imports, skipping it because minimum value is "
+					+ this.minMatchingPoints);
+			return 0;
+		}
+		
 		// Compute altitude of the center of the building with the DTM 
 		Coordinates center = this.osmPostgis.getPolygonCenter(
 				(element.getRelationId() == null ? element.getOsmId() : - element.getRelationId()),
@@ -39,6 +50,12 @@ public class BuildingPointCloudScorer extends AbstractElementScorer<BuildingElem
 			}
 		}
 		LOGGER.info("Max elevation is: " + max);
+		
+		// Check the max elevation is not under the ground
+		if (max <= altitude) {
+			LOGGER.warn("Max elevation is less than altitude, aborting...");
+			return 0;
+		}
 	
 		// Decrement elevation from the max until a descent value is found.
 		// The goal is to find the *highest* elevation which has a valid score.
@@ -65,7 +82,7 @@ public class BuildingPointCloudScorer extends AbstractElementScorer<BuildingElem
 		// Store the final height of the building which is the elevation minus the altitude
 		element.setComputedHeight(new Integer(elevation - altitude));
 		LOGGER.info("Computed height is: " + element.getComputedHeight());
-		
+					
 		return element.getMatchingScore();
 	}
 

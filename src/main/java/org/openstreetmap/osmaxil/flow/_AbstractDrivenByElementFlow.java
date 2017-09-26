@@ -24,18 +24,18 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	 * Existing elements which are inside the filtering areas.
 	 */
 	protected List<ELEMENT> targetedElement;
-	
-    protected Map<Long, ELEMENT> matchedElements = new Hashtable<Long, ELEMENT>();
+    
+    protected Map<Long, ELEMENT> updatableElements = new Hashtable<Long, ELEMENT>();
 
+    protected Map<String, Integer> countersByTagName = new HashMap<String, Integer>();
+    
     protected int counterForMatchedImports;
-	
-	protected int counterForUpdatableElements = 0;
+    
+    protected int counterForMatchedElements;
 	
 	protected int counterForUpdatedElements;
 
-	protected Map<String, Integer> countersByTagName = new HashMap<String, Integer>();
-	
-	protected int limitForMatchedElements = 0;
+	protected int limitForUpdatableElements = 0;
 	
 	@Value("${osmaxil.skipLoading}")
 	protected Boolean skipLoading;
@@ -46,7 +46,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	
     @Autowired
     protected MatchingScoreStatsGenerator scoringStatsGenerator;
-	
+    
     // =========================================================================
     // Abstract methods
     // =========================================================================
@@ -94,7 +94,10 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	        // Find all matching imports
 			LOGGER.info("Find matching imports for element #" + element.getOsmId() + " <" + i++ + ">");
 	        List<IMPORT> matchingImports = this.findMatchingImports(element, this.osmPostgis.getSrid());
-	        this.counterForMatchedImports += matchingImports.size();
+	        if (matchingImports.size() > 0) {
+	        	this.counterForMatchedElements++;
+	        	this.counterForMatchedImports += matchingImports.size();
+	        }
 	        // Bind element with its matching imports (in both way)
 			element.getMatchingImports().addAll(matchingImports);
 	        for (IMPORT imp : matchingImports) {
@@ -107,16 +110,6 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	            sb.append(imp.getId() + " ");
 	        }
 	        LOGGER.info(sb.append("]").toString());
-			// Check if the total of matching imports is fine
-	        // TODO fix confusion between minMatchingScore and minMatchingPoints !!
-			if (element.getMatchingImports().size() < this.minMatchingScore) {
-				LOGGER.info("Element has only " + element.getMatchingImports().size()
-						+ " matching imports, skipping it because minimum value is "
-						+ this.minMatchingScore);
-				continue;
-			} else {
-	        	this.matchedElements.put(element.getOsmId(), element);
-	        }
         	// Compute matching score of the element
             LOGGER.info("Computing matching score for element #" + element.getOsmId());
             this.scorer.computeElementMatchingScore(element/*, this.computingDistance, this.toleranceDelta*/, this.minMatchingScore);
@@ -125,23 +118,22 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 				LOGGER.info("Element has a matching score of " + element.getMatchingScore()
 						+ ", skipping it because minimum value is " + this.minMatchingScore);
             	continue;
-            } else {
-            	this.counterForUpdatableElements++;
             }
             // Update its data from OSM API
         	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
             OsmXmlRoot apiData = this.osmStandardApi.readElement(element.getOsmId(), element.getType());
             if (apiData == null) {
                 LOGGER.error("Unable to fetch data from OSM API for element#" + element.getOsmId());
-            } else {
-    	        element.setApiData(apiData);        
-    	        // Store original values for each updatable tag
-    	        for (String tagName : this.getUpdatableTagNames()) {
-    	            element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
-    	        }
+                continue;
             }
+            element.setApiData(apiData);        
+	        // Store original values for each updatable tag
+	        for (String tagName : this.getUpdatableTagNames()) {
+	            element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
+	        }
+            this.updatableElements.put(element.getOsmId(), element);
             // Check limit (useful for debug) 
-			if (limitForMatchedElements > 0 && this.matchedElements.size() == limitForMatchedElements) {
+			if (limitForUpdatableElements > 0 && this.updatableElements.size() == limitForUpdatableElements) {
 				break;
 			}
 		}
@@ -151,15 +143,8 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	@Override
 	public void synchronize() {
 		int counter = 1;
-		for (ELEMENT element : this.matchedElements.values()) {
+		for (ELEMENT element : this.updatableElements.values()) {
 			LOGGER.info("Synchronizing element #" + element.getOsmId() + " <" + counter++ + ">");
-			// Check if its best matching score is enough
-			if (element.getMatchingScore() < this.minMatchingScore) {
-				LOGGER.info("Element cannot be synchronized because its matching score is " + element.getMatchingScore()
-						+ " (min=" + this.minMatchingScore + ")");
-				LOGGER.info(LOG_SEPARATOR);
-				continue;
-			}
 			boolean needToSync = false;
 			// Fore each updatable tags (in theory)
 			for (String updatableTagName : this.getUpdatableTagNames()) {
@@ -221,13 +206,13 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
     public void displayProcessingStatistics() {
         LOGGER_FOR_STATS.info("=== Processing statistics ===");
         LOGGER_FOR_STATS.info("Total of targeted elements (ie. which are inside filtering areas): " + this.targetedElement.size());
-        LOGGER_FOR_STATS.info("Total of matched elements (ie. which have at least one matching imports): " + this.matchedElements.size());
+        LOGGER_FOR_STATS.info("Total of matched elements (ie. which have at least one matching imports): " + this.counterForMatchedElements);
         LOGGER_FOR_STATS.info("Total of matching imports: " + this.counterForMatchedImports);
 		LOGGER_FOR_STATS.info("Average of matching imports for each element: "
-				+ (this.matchedElements.size() > 0 ? this.counterForMatchedImports / this.matchedElements.size() : "0"));
-        this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
+				+ (this.counterForMatchedElements > 0 ? this.counterForMatchedImports / counterForMatchedElements : "0"));
+        this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) this.updatableElements.values());
         LOGGER_FOR_STATS.info("Minimum matching score is: " + this.minMatchingScore);
-        LOGGER_FOR_STATS.info("Total of updatable elements: " + this.counterForUpdatableElements);
+        LOGGER_FOR_STATS.info("Total of updatable elements: " + this.updatableElements.size());
     }
     
 	// =========================================================================

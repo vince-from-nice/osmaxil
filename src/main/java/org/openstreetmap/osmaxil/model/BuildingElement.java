@@ -90,7 +90,7 @@ public class BuildingElement extends AbstractElement {
 		return computedHeight;
 	}
 
-	public void setComputedHeight(int computedHeight) {
+	public void setComputedHeight(Integer computedHeight) {
 		this.computedHeight = computedHeight;
 	}
 
