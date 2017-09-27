@@ -46,12 +46,6 @@ public abstract class _AbstractImportFlow<ELEMENT extends AbstractElement, IMPOR
     @Value("${osmaxil.syncMode}")
     protected String synchronizationMode;
 
-    @Value("${osmaxil.changesetSourceLabel}")
-    protected String changesetSourceLabel;
-    
-    @Value("${osmaxil.changesetComment}")
-    protected String changesetComment;
-
     @Value("${osmaxil.minMatchingScore}")
     protected float minMatchingScore;
     

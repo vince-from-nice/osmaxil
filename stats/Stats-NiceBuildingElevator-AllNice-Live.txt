@@ -1,0 +1,35 @@
+=== Loading statistics ===
+Sorry but there are not loading statistics for that plugin...
+=== Processing statistics ===
+Total of targeted elements (ie. which are inside filtering areas): 101799
+Total of matched elements (ie. which have at least one matching imports): 58174
+Total of matching imports: 8315657
+Average of matching imports for each element: 142
+Repartitions of elements by matching scores:
+ - score between 0% and 10% : 0 (0%) elements
+ - score between 10% and 20% : 0 (0%) elements
+ - score between 20% and 30% : 0 (0%) elements
+ - score between 30% and 40% : 9888 (18%) elements
+ - score between 40% and 50% : 9409 (17%) elements
+ - score between 50% and 60% : 6408 (12%) elements
+ - score between 60% and 70% : 6229 (11%) elements
+ - score between 70% and 80% : 4902 (9%) elements
+ - score between 80% and 90% : 4923 (9%) elements
+ - score between 90% and 100% : 10556 (20%) elements
+Minimum matching score is: 0.3
+Total of updatable elements: 52315
+Specific settings of the plugin:
+ - Minimum matching point is: 4
+ - Tolerance delta is: 1.0
+=== Synchronizing statistics ===
+Total of updated elements: 52310
+Total of updates by tag:
+	 - total of updates on the tag [height]: 52312
+=== Closing OSM XML service ===
+Total of writing successes: 0
+Total of writing failures: 0
+=== Closing OSM API service ===
+Total of read operations: success=52315 failure=3
+Total of write operations: success=52310 failure=2
+Total of changeset operations: open=53 close=53
+Job has been executed in 22181 seconds

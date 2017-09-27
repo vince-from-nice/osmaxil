@@ -24,8 +24,16 @@ public class OsmStandardApi {
     // Instance attributes
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    @Value("${osmApi.url}")
+    private String url = "http://api06.dev.openstreetmap.org/api/0.6/";
+    
+    @Value("${osmApi.maxUpdatesByChangeset}")
+    private int MAX_UPDATES_BY_CHANGESET;
+    
+    @Value("${osmApi.changesetSourceLabel}")
     private String changesetSourceLabel;
     
+    @Value("${osmApi.changesetComment}")
     private String changesetComment;
     
     private long currentChangesetID;
@@ -47,12 +55,6 @@ public class OsmStandardApi {
     @Autowired
     private RestTemplate restTemplate;
     
-    @Value("${osmApi.url}")
-    private String url = "http://api06.dev.openstreetmap.org/api/0.6/";
-    
-    @Value("${osmApi.maxUpdatesByChangeset}")
-    private int MAX_UPDATES_BY_CHANGESET;
-    
     static private final Logger LOGGER = Logger.getLogger(Application.class);
     
     static private final Logger LOGGER_FOR_STATS = Logger.getLogger("LoggerForStats");
@@ -60,13 +62,6 @@ public class OsmStandardApi {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Public methods
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void initForWriting(String changesetSourceLabel, String changesetComment) throws RestClientException {
-        this.counterForChangeset = 0;
-        this.currentChangesetID = 0;
-        this.changesetComment = changesetComment; 
-        this.changesetSourceLabel = changesetSourceLabel;
-    }
     
     @PreDestroy
     public void close() {
