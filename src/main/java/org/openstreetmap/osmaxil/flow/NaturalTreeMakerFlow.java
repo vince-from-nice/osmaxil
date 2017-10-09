@@ -14,7 +14,7 @@ import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.model.NaturalTreeElement;
 import org.openstreetmap.osmaxil.model.NaturalTreeImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
-import org.openstreetmap.osmaxil.plugin.matcher.TreeImportMatcher;
+import org.openstreetmap.osmaxil.plugin.matcher.NaturalTreeImportMatcher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -138,8 +138,8 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
 
     @PostConstruct
     private void init() {
-        ((TreeImportMatcher) this.matcher).setMatchingAreaRadius(MATCHING_BOX_RADIUS);
-        ((TreeImportMatcher) this.matcher).setMatchClosestOnly(false);
+        ((NaturalTreeImportMatcher) this.matcher).setMatchingAreaRadius(MATCHING_BOX_RADIUS);
+        ((NaturalTreeImportMatcher) this.matcher).setMatchClosestOnly(false);
     }
     
     private boolean isTreeInsideExistingBuilding(NaturalTreeImport imp) {

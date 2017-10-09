@@ -23,11 +23,17 @@ public abstract class AbstractElement extends MatchableObject {
     
     private String geometryString; 
     
-	// TODO move these attributes into AbstractUpdaterPlugin
     private List<AbstractImport> matchingImports;
+    
     private Map<String, String> originalValuesByTagNames;
 
+    private Integer computedHeight;
+
     static protected final Logger LOGGER = Logger.getLogger(Application.class);
+    
+	// =========================================================================
+	// Abstract methods
+	// =========================================================================
     
     abstract public ElementType getType();
     
@@ -36,6 +42,10 @@ public abstract class AbstractElement extends MatchableObject {
     abstract public List<OsmXmlTag> getTags();
     
     abstract public void setTags(List<OsmXmlTag> tags);
+    
+	// =========================================================================
+	// Public methods
+	// =========================================================================
     
     public AbstractElement(long osmId) {
         this.osmId = osmId;
@@ -75,6 +85,20 @@ public abstract class AbstractElement extends MatchableObject {
         this.getTags().add(tag);
         return false;
     }
+    
+    public Integer getHeight() {
+        try {
+            String s = (String) this.getTagValue(ElementTag.HEIGHT);
+            return (s != null ? Integer.parseInt(s) : null);
+        } catch (Exception e) {
+            LOGGER.warn("Unable to get levels for building import " + this.getOsmId() + " (" + e.getMessage()+ ")");
+            return null;
+        }
+    }
+
+    public boolean setHeight(Integer value) {
+        return this.setTagValue(ElementTag.HEIGHT, value.toString());
+    }
 
     @Override
     public String toString() {
@@ -85,8 +109,10 @@ public abstract class AbstractElement extends MatchableObject {
         return (String) this.getTagValue(ElementTag.NAME);
     }
     
-    // Getters & Setters
-
+	// =========================================================================
+	// Getters & Setters
+	// =========================================================================
+    
     public Long getOsmId() {
         return osmId;
     }
@@ -134,5 +160,12 @@ public abstract class AbstractElement extends MatchableObject {
 	public void setGeometryString(String geometryString) {
 		this.geometryString = geometryString;
 	}
+	
+	public Integer getComputedHeight() {
+		return computedHeight;
+	}
 
+	public void setComputedHeight(Integer computedHeight) {
+		this.computedHeight = computedHeight;
+	}
 }

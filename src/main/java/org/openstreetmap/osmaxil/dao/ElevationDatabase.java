@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ElevationDatabase {
+public class ElevationDatabase implements ElevationDataSource {
 
     @Autowired
     @Qualifier("elevationPostgisJdbcTemplate")
@@ -31,6 +31,9 @@ public class ElevationDatabase {
 	
 	@Value("${elevationDatabase.xyzFolderPath}")
 	private String xyzFolderPath;
+	
+	@Value("${elevationDatabase.xyzSeparator}")
+	private String xyzSeparator;
 
 	@Value("${elevationDatabase.xyzFileSrid}")
 	private String xyzFileSrid;
@@ -51,31 +54,21 @@ public class ElevationDatabase {
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    // Point cloud tables
+    // Public overrided methods
     ////////////////////////////////////////////////////////////////////////////////
     
-    public void createPointCloudTableFromXYZFiles() {
-		LOGGER.info("Recreate the point cloud table from scratch.");
-		this.recreatePointCloudTable(this.xyzTableName, this.xyzFileSrid);
-		File xyzFolder = new File(this.xyzFolderPath);
-		File[] xyzFiles = xyzFolder.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".xyz");
-			}
-		});
-		for (int i = 0; i < xyzFiles.length; i++) {
-			File xyzFile = xyzFiles[i];
-			LOGGER.info("Loading file " + xyzFile);
-			this.copyPointCloudFromYXZFile(this.xyzTableName, xyzFile.getPath());
-		}
-		this.finalizePointCloudTable(this.xyzTableName, this.xyzFileSrid);
-    }
-    
+	@Override
+	public double findElevationByCoordinates(double x, double y, int srid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
     /**
      * Find all points which intersect the including geometry and disjoint the excluding geometry (useful for multipolygon buildings with "hole").
      * That method use a radius as argument in order to skrink the including and excluding geometries.
      */
-    public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int geomSrid) {
+    @Override
+    public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int geomSrid) {
     	final String includingGeom = "ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + ")";
     	String query = "SELECT x, y, z FROM " + this.xyzTableName;
     	String condition = "ST_Transform(ST_Buffer(" + includingGeom + ", -" + shrinkRadius + "), " + srid + ")";
@@ -97,14 +90,23 @@ public class ElevationDatabase {
     	return results;
     }
     
+	@Override
+	public int getSrid() {
+		return this.srid;
+	}
+	
+    ////////////////////////////////////////////////////////////////////////////////
+    // Public (not overrided) methods
+    ////////////////////////////////////////////////////////////////////////////////
+    
     /**
      * Find all points which intersect the including geometry and disjoint the excluding geometry (useful for multipolygon buildings with "hole").
-     * That method use a factor as argument in order to scale/skrink the including and excluding geometries.
+     * That method use a factor as argument in order to scale the including and excluding geometries.
      * 
      * TODO: use JTS instead of PostGis functions (ST_Scale and ST_Translate) to perform the scale/skrink process because this implementation
      * is working but it takes 15 minutes to execute ! 
      */
-    public List<Coordinates> findPointByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float scaleFactor, int geomSrid) {
+    public List<Coordinates> findAllPointsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float scaleFactor, int geomSrid) {
     	final String geom = "ST_Transform(ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + "), " + this.srid + ")";
     	String query = "SELECT x, y, z FROM " + this.xyzTableName + ", " + geom + " as includingGeom";
     	String condition = "ST_Scale(includingGeom, " + scaleFactor + ", " + scaleFactor + ")";
@@ -136,6 +138,23 @@ public class ElevationDatabase {
     	this.jdbcTemplate.execute("INSERT INTO " + tableName + " VALUES(" + id +
     			", ST_Transform(ST_GeomFromText('POINT(" + x + " " + y + " " + z + ")', " + fileSrid + "), " + this.srid + "))");
     }
+	
+    public void createPointCloudTableFromXYZFiles() {
+		LOGGER.info("Recreate the point cloud table from scratch.");
+		this.recreatePointCloudTable(this.xyzTableName, this.xyzFileSrid);
+		File xyzFolder = new File(this.xyzFolderPath);
+		File[] xyzFiles = xyzFolder.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.toLowerCase().endsWith(".xyz");
+			}
+		});
+		for (int i = 0; i < xyzFiles.length; i++) {
+			File xyzFile = xyzFiles[i];
+			LOGGER.info("Loading file " + xyzFile);
+			this.copyPointCloudFromYXZFile(this.xyzTableName, xyzFile.getPath());
+		}
+		this.finalizePointCloudTable(this.xyzTableName, this.xyzFileSrid);
+    }
     
     ////////////////////////////////////////////////////////////////////////////////
     // Private methods
@@ -153,7 +172,7 @@ public class ElevationDatabase {
      * Fill a point cloud table by using the COPY statement (which much more efficient than INSERT).
      */
     private void copyPointCloudFromYXZFile(String tableName, String filePath) {
-    	this.jdbcTemplate.execute("COPY " + tableName + " (x, y, z) FROM '" + filePath + "' WITH DELIMITER AS ' '");    	
+    	this.jdbcTemplate.execute("COPY " + tableName + " (x, y, z) FROM '" + filePath + "' WITH DELIMITER AS '" + this.xyzSeparator + "'");    	
     }
     
     /**
@@ -166,7 +185,6 @@ public class ElevationDatabase {
     	this.jdbcTemplate.execute("UPDATE " + tableName +
     			" SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', " + fileSrid + "), " + this.srid + ")");
     	LOGGER.info("Create an index on the geometry column of the point cloud table");
-    	this.jdbcTemplate.execute("CREATE INDEX point_cloud_geom ON " + tableName + " USING GIST (geom)");   	
-    }
-    
+    	this.jdbcTemplate.execute("CREATE INDEX geom_idx_for_" + this.xyzTableName + " ON " + tableName + " USING GIST (geom)");   	
+    }   
 }

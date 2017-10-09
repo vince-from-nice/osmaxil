@@ -30,6 +30,11 @@ public abstract class _AbstractDrivenByImportFlow<ELEMENT extends AbstractElemen
 	// =========================================================================
     
     @Override
+    public void prepare() {
+    	// Usually imports driven by imports doesn't need the prepare phase
+    }
+
+    @Override
     public void load() {
         while (this.parser.hasNext()) {
             try {
@@ -54,7 +59,7 @@ public abstract class _AbstractDrivenByImportFlow<ELEMENT extends AbstractElemen
                 LOGGER.info(LOG_SEPARATOR);
             }
         }
-    }
+    }    
 
     @Override
     public void displayLoadingStatistics() {

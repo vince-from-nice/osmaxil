@@ -74,6 +74,8 @@ public abstract class _AbstractImportFlow<ELEMENT extends AbstractElement, IMPOR
     // Abstract methods
     // =========================================================================
 
+    abstract public void prepare();
+    
     abstract public void load();
     
     abstract public void process();

@@ -8,9 +8,7 @@ import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlTag;
 public class BuildingElement extends AbstractElement {
     
     private Integer computedArea;
-    
-    private Integer computedHeight;
-    
+        
 	private String innerGeometryString; // could be used by building which has a "hole" (multipolygon)
 	
     public BuildingElement(long osmId) {
@@ -50,20 +48,6 @@ public class BuildingElement extends AbstractElement {
         return "yes".equals(this.getTagValue(ElementTag.BUILDING_PART));
     }
     
-    public Integer getHeight() {
-        try {
-            String s = (String) this.getTagValue(ElementTag.HEIGHT);
-            return (s != null ? Integer.parseInt(s) : null);
-        } catch (Exception e) {
-            LOGGER.warn("Unable to get levels for building import " + this.getOsmId() + " (" + e.getMessage()+ ")");
-            return null;
-        }
-    }
-
-    public boolean setHeight(Integer value) {
-        return this.setTagValue(ElementTag.HEIGHT, value.toString());
-    }
-
     public Integer getLevels() {
         try {
             String s = (String) this.getTagValue(ElementTag.BUILDING_LEVELS);
@@ -85,14 +69,6 @@ public class BuildingElement extends AbstractElement {
     public void setComputedArea(int computedArea) {
         this.computedArea = computedArea;
     }
-
-	public Integer getComputedHeight() {
-		return computedHeight;
-	}
-
-	public void setComputedHeight(Integer computedHeight) {
-		this.computedHeight = computedHeight;
-	}
 
 	public String getInnerGeometryString() {
 		return innerGeometryString;

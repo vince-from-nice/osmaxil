@@ -15,7 +15,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.WKTWriter;
 
 @Component @Lazy
-public class TreeImportMatcher extends AbstractImportMatcher<NaturalTreeImport> {
+public class NaturalTreeImportMatcher extends AbstractImportMatcher<NaturalTreeImport> {
 
     private double matchingAreaRadius;
 

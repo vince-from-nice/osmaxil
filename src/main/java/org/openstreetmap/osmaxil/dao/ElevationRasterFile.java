@@ -9,11 +9,12 @@ import org.gdal.gdal.Dataset;
 import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconstConstants;
 import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ElevationRasterFile {
+public class ElevationRasterFile implements ElevationDataSource {
     
     @Value("${elevationRasterFile.path}")
     private String filePath;
@@ -52,7 +53,8 @@ public class ElevationRasterFile {
 		LOGGER.info("Pixel sizes are: " + this.xPixelSize + " " + this.yPixelSize);
     }
     
-    public double getValueByCoordinates(double x, double y, int srid) {
+    @Override
+    public double findElevationByCoordinates(double x, double y, int srid) {
     	if (this.bands == null) {
     		this.init();
     	}
@@ -63,6 +65,14 @@ public class ElevationRasterFile {
     	return result[0];
     }
     
+	@Override
+	public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT,
+			int geomSrid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+    @Override
     public int getSrid() {
 		return srid;
 	}

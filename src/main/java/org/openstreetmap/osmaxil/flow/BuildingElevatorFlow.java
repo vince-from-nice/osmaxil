@@ -3,32 +3,19 @@ package org.openstreetmap.osmaxil.flow;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.osmaxil.dao.ElevationDatabase;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.CloudPointImport;
-import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
-import org.openstreetmap.osmaxil.plugin.scorer.BuildingPointCloudScorer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component("BuildingEnhancer")
 @Lazy
-public class BuildingElevatorFlow extends _AbstractDrivenByElementFlow<BuildingElement, CloudPointImport> {
-
-	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
-
-	@Autowired
-	protected ElevationDatabase elevationDatabase;
+public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, CloudPointImport> {
 
 	// =========================================================================
 	// Overrided methods
 	// =========================================================================
-
-	protected void loadData() {
-		this.elevationDatabase.createPointCloudTableFromXYZFiles();
-	}
 
 	protected List<BuildingElement> getTargetedElements() {
 		return this.osmPostgis.findBuildingsByArea(this.includingAreaString, this.excludingAreaString,
@@ -44,7 +31,7 @@ public class BuildingElevatorFlow extends _AbstractDrivenByElementFlow<BuildingE
 			LOGGER.warn("Unable to find matching imports because element has no geometry string");
 			return result;
 		}
-		data = this.elevationDatabase.findPointByGeometry(element.getGeometryString(), element.getInnerGeometryString(), srid);
+		data = this.dsmDataSource.findAllElevationsByGeometry(element.getGeometryString(), element.getInnerGeometryString(), srid);
 		// Create imports from results
 		for (Coordinates coordinates : data) {
 			CloudPointImport imp = new CloudPointImport(coordinates);
@@ -59,53 +46,10 @@ public class BuildingElevatorFlow extends _AbstractDrivenByElementFlow<BuildingE
 	}
 
 	@Override
-	protected boolean isElementTagUpdatable(BuildingElement element, String tagName) {
-		// Building tags are updatable only if it doesn't have an original value
-		String originalValue = element.getOriginalValuesByTagNames().get(tagName);
-		if (originalValue != null) {
-			LOGGER.info("The tag " + tagName + " cannot be updated because it has an original value: " + originalValue);
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	protected boolean updateElementTag(BuildingElement element, String tagName) {
-		boolean updated = false;
-		if (ElementTag.HEIGHT.equals(tagName)) {
-			if (element.getComputedHeight() == null) {
-				LOGGER.error("Cannot update tag because computed height is null");
-				return false;
-			}
-			element.setHeight(element.getComputedHeight());
-			LOGGER.info("===> Updating height to [" + element.getHeight() + "]");
-			updated = true;
-		}
-		return updated;
-	}
-
-	@Override
-	public void displayProcessingStatistics() {
-		super.displayProcessingStatistics();
-		LOGGER_FOR_STATS.info("Specific settings of the plugin:");
-		//LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
-		if (this.scorer instanceof BuildingPointCloudScorer) {
-			BuildingPointCloudScorer bdcs = (BuildingPointCloudScorer) this.scorer;
-			LOGGER_FOR_STATS.info(" - Minimum matching point is: " + bdcs.minMatchingPoints);
-			LOGGER_FOR_STATS.info(" - Tolerance delta is: " + bdcs.toleranceDelta);
-		}
-	}
-
-	@Override
 	protected BuildingElement instanciateElement(long osmId) {
 		return new BuildingElement(osmId);
 	}
-
-	@Override
-	protected String[] getUpdatableTagNames() {
-		return UPDATABLE_TAG_NAMES;
-	}
-
+	
 	// =========================================================================
 	// Private methods
 	// =========================================================================

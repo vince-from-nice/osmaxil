@@ -1,5 +1,6 @@
 package org.openstreetmap.osmaxil.flow;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -23,7 +24,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	/**
 	 * Existing elements which are inside the filtering areas.
 	 */
-	protected List<ELEMENT> targetedElement;
+	protected List<ELEMENT> targetedElement = new ArrayList<ELEMENT>();
     
     protected Map<Long, ELEMENT> updatableElements = new Hashtable<Long, ELEMENT>();
 
@@ -37,8 +38,8 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 
 	protected int limitForUpdatableElements = 0;
 	
-	@Value("${osmaxil.skipLoading}")
-	protected Boolean skipLoading;
+	@Value("${osmaxil.skipPreparation}")
+	protected Boolean skipPreparation;
 	
 	@Autowired
 	@Resource(name="${scorer}")
@@ -51,8 +52,6 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
     // Abstract methods
     // =========================================================================
 
-    abstract protected void loadData();
-    
 	abstract protected List<ELEMENT> getTargetedElements();
 	    
     abstract protected List<IMPORT> findMatchingImports(ELEMENT element, int srid);
@@ -71,18 +70,12 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 
 	@Override
 	public void load() {
-		if (skipLoading) {
-			LOGGER.info("Skip the loading phase");
-			return;
-		}
-		this.loadData();
+		LOGGER.info("Looking in PostGIS for existing elements which are respecting the filtering areas");
+		this.targetedElement = this.getTargetedElements();
 	}
 	
 	@Override
 	public void process() {
-		// Fetch all targeted elements
-		LOGGER.info("Looking in PostGIS for existing elements which are respecting the filtering areas");
-		this.targetedElement = this.getTargetedElements();
 		int i = 1;
 		// For each targeted element, 
 		for (ELEMENT element : this.targetedElement) {
@@ -188,7 +181,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	@Override
 	public void displayLoadingStatistics() {
 		LOGGER_FOR_STATS.info("=== Loading statistics ===");
-		LOGGER_FOR_STATS.info("Sorry but there are not loading statistics for that plugin...");
+		LOGGER_FOR_STATS.info("Total of targeted elements (ie. which are inside filtering areas): " + this.targetedElement.size());
 	}
 	
 	@Override
@@ -205,7 +198,6 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
     @Override
     public void displayProcessingStatistics() {
         LOGGER_FOR_STATS.info("=== Processing statistics ===");
-        LOGGER_FOR_STATS.info("Total of targeted elements (ie. which are inside filtering areas): " + this.targetedElement.size());
         LOGGER_FOR_STATS.info("Total of matched elements (ie. which have at least one matching imports): " + this.counterForMatchedElements);
         LOGGER_FOR_STATS.info("Total of matching imports: " + this.counterForMatchedImports);
 		LOGGER_FOR_STATS.info("Average of matching imports for each element: "
