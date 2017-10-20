@@ -5,9 +5,9 @@ import java.util.List;
 import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlTag;
 
 
-public class NaturalTreeElement extends AbstractElement {
+public class VegetationElement extends AbstractElement {
 
-    public NaturalTreeElement(long osmId) {
+    public VegetationElement(long osmId) {
         super(osmId);
     }
 

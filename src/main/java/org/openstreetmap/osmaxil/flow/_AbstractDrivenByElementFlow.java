@@ -8,18 +8,16 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 
 import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
-import org.openstreetmap.osmaxil.plugin.scorer.AbstractElementScorer;
 import org.openstreetmap.osmaxil.plugin.selector.MatchingScoreStatsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
-		extends _AbstractImportFlow<ELEMENT, IMPORT> {
+		extends __AbstractImportFlow<ELEMENT, IMPORT> {
 
 	/**
 	 * Existing elements which are inside the filtering areas.
@@ -40,11 +38,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	
 	@Value("${osmaxil.skipPreparation}")
 	protected Boolean skipPreparation;
-	
-	@Autowired
-	@Resource(name="${scorer}")
-	protected AbstractElementScorer<ELEMENT> scorer;
-	
+		
     @Autowired
     protected MatchingScoreStatsGenerator scoringStatsGenerator;
     
@@ -56,9 +50,9 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	    
     abstract protected List<IMPORT> findMatchingImports(ELEMENT element, int srid);
     
+    abstract float computeElementMatchingScore(ELEMENT element, float minMatchingScore);
+    
 	abstract protected String[] getUpdatableTagNames();
-
-	abstract protected boolean isElementTagUpdatable(ELEMENT element, String tagName);
 
 	abstract protected boolean updateElementTag(ELEMENT element, String tagName);
 
@@ -105,7 +99,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	        LOGGER.info(sb.append("]").toString());
         	// Compute matching score of the element
             LOGGER.info("Computing matching score for element #" + element.getOsmId());
-            this.scorer.computeElementMatchingScore(element/*, this.computingDistance, this.toleranceDelta*/, this.minMatchingScore);
+            this.computeElementMatchingScore(element/*, this.computingDistance, this.toleranceDelta*/, this.minMatchingScore);
         	// Check if its matching score is fine
             if (element.getMatchingScore() < this.minMatchingScore) {
 				LOGGER.info("Element has a matching score of " + element.getMatchingScore()
@@ -217,6 +211,15 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 		for (String updatableTagName : this.getUpdatableTagNames()) {
 			this.countersByTagName.put(updatableTagName, 0);
 		}
+	}
+	
+	private boolean isElementTagUpdatable(ELEMENT element, String tagName) {
+		String originalValue = element.getOriginalValuesByTagNames().get(tagName);
+		if (originalValue != null) {
+			LOGGER.info("The tag " + tagName + " cannot be updated because it has an original value: " + originalValue);
+			return false;
+		}
+		return true;
 	}
 
 }

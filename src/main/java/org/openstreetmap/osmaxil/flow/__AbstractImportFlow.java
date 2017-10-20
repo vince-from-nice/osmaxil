@@ -22,7 +22,7 @@ import com.vividsolutions.jts.geom.IntersectionMatrix;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
-public abstract class _AbstractImportFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> {
+public abstract class __AbstractImportFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> {
 
     // =========================================================================
     // Instance variables

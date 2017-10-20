@@ -5,13 +5,25 @@ import org.openstreetmap.osmaxil.dao.ElevationDatabase;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
-import org.openstreetmap.osmaxil.plugin.scorer.BuildingElevationScorer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends _AbstractDrivenByElementFlow<ELEMENT, IMPORT> {
 
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
 
+	@Value("${elevator.minMatchingPoints}")
+	public int minMatchingPoints;
+	
+	@Value("${elevator.computingDistance}")
+	public int computingDistance;
+	
+	@Value("${elevator.toleranceDelta}")
+	public float toleranceDelta;
+	
+	@Autowired
+	protected ElevationDataSource dtmDataSource;
+	
 	@Autowired
 	protected ElevationDataSource dsmDataSource;
 
@@ -23,34 +35,6 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
     	if (this.dsmDataSource instanceof ElevationDatabase) {
     		((ElevationDatabase) this.dsmDataSource).createPointCloudTableFromXYZFiles();	
     	}    	
-	}
-
-	@Override
-	public void displayProcessingStatistics() {
-		super.displayProcessingStatistics();
-		LOGGER_FOR_STATS.info("Specific settings of the plugin:");
-		//LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
-		if (this.scorer instanceof BuildingElevationScorer) {
-			BuildingElevationScorer bdcs = (BuildingElevationScorer) this.scorer;
-			LOGGER_FOR_STATS.info(" - Minimum matching point is: " + bdcs.minMatchingPoints);
-			LOGGER_FOR_STATS.info(" - Tolerance delta is: " + bdcs.toleranceDelta);
-		}
-	}
-
-	@Override
-	protected String[] getUpdatableTagNames() {
-		return UPDATABLE_TAG_NAMES;
-	}
-	
-	@Override
-	protected boolean isElementTagUpdatable(ELEMENT element, String tagName) {
-		// Building tags are updatable only if it doesn't have an original value
-		String originalValue = element.getOriginalValuesByTagNames().get(tagName);
-		if (originalValue != null) {
-			LOGGER.info("The tag " + tagName + " cannot be updated because it has an original value: " + originalValue);
-			return false;
-		}
-		return true;
 	}
 
 	@Override
@@ -66,6 +50,20 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 			updated = true;
 		}
 		return updated;
+	}
+	
+	@Override
+	protected String[] getUpdatableTagNames() {
+		return UPDATABLE_TAG_NAMES;
+	}
+	
+	@Override
+	public void displayProcessingStatistics() {
+		super.displayProcessingStatistics();
+		LOGGER_FOR_STATS.info("Specific settings of the plugin:");
+		// LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
+		LOGGER_FOR_STATS.info(" - Minimum matching point is: " + minMatchingPoints);
+		LOGGER_FOR_STATS.info(" - Tolerance delta is: " + toleranceDelta);
 	}
 
 }

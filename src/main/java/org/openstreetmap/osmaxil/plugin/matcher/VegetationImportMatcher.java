@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
-import org.openstreetmap.osmaxil.model.NaturalTreeImport;
+import org.openstreetmap.osmaxil.model.VegetationImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.WKTWriter;
 
 @Component @Lazy
-public class NaturalTreeImportMatcher extends AbstractImportMatcher<NaturalTreeImport> {
+public class VegetationImportMatcher extends AbstractImportMatcher<VegetationImport> {
 
     private double matchingAreaRadius;
 
@@ -26,7 +26,7 @@ public class NaturalTreeImportMatcher extends AbstractImportMatcher<NaturalTreeI
     private WKTWriter ww = new WKTWriter();
 
     @Override
-    public List<MatchingElementId> findMatchingElements(NaturalTreeImport tree, int srid) {
+    public List<MatchingElementId> findMatchingElements(VegetationImport tree, int srid) {
         List<MatchingElementId> results = new ArrayList<>();
         String query = "SELECT osm_id, ST_Distance(way, ";
         Point point = gf.createPoint(new Coordinate(tree.getLongitude(), tree.getLatitude()));
@@ -66,7 +66,7 @@ public class NaturalTreeImportMatcher extends AbstractImportMatcher<NaturalTreeI
     }
 
     @Override
-    public float computeMatchingImportScore(NaturalTreeImport tree) {
+    public float computeMatchingImportScore(VegetationImport tree) {
         // TODO Auto-generated method stub
         return 0;
     }

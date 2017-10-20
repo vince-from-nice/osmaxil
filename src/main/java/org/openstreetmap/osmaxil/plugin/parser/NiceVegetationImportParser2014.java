@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
 
-import org.openstreetmap.osmaxil.model.NaturalTreeImport;
+import org.openstreetmap.osmaxil.model.VegetationImport;
 import org.openstreetmap.osmaxil.util.StringParsingHelper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Repository @Lazy
-public class NiceTreeImportParser2015 extends AbstractImportParser<NaturalTreeImport> {
+public class NiceVegetationImportParser2014 extends AbstractImportParser<VegetationImport> {
 
     private CSVReader reader;
 
@@ -26,6 +26,7 @@ public class NiceTreeImportParser2015 extends AbstractImportParser<NaturalTreeIm
     
     static private final String GEOM_TOKEN = "\"coordinates\": [";
    
+    
     @PostConstruct
     public void init() throws FileNotFoundException {
         LOGGER.info("Init of OpenDataParisCsvFileLoader");
@@ -42,7 +43,7 @@ public class NiceTreeImportParser2015 extends AbstractImportParser<NaturalTreeIm
     }
     
     @Override
-    public NaturalTreeImport next() {
+    public VegetationImport next() {
         String[] row = null;
         try {
             row = this.reader.readNext();
@@ -54,12 +55,12 @@ public class NiceTreeImportParser2015 extends AbstractImportParser<NaturalTreeIm
             return null;
         }
         this.rowCount++;
-        NaturalTreeImport tree = new NaturalTreeImport();
+        VegetationImport tree = new VegetationImport();
         tree.setId(this.rowCount);
-        //tree.setGenus(row[1]);
+        //tree.setGenus(row[3]);
         //tree.setSpecies(row[2]);
-        tree.setReference(row[0]);
-        String geom = row[3].substring(row[3].indexOf(GEOM_TOKEN) + GEOM_TOKEN.length());
+        tree.setReference(row[4]);
+        String geom = row[5].substring(row[5].indexOf(GEOM_TOKEN) + GEOM_TOKEN.length());
         geom = geom.substring(0, geom.length() - 2);
         String[] coords = geom.split(", ");
         tree.setLongitude(StringParsingHelper.parseDouble(coords[0], "lon"));

@@ -1,4 +1,8 @@
-﻿-- SRIDs
+﻿-- ------------------------------------------------------
+-- OSM2PGSQL
+-- ------------------------------------------------------
+
+-- SRIDs
 select * from spatial_ref_sys where srid = '900913';
 select srtext from spatial_ref_sys where srid = '900913';
 -- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +units=m +k=1.0 +nadgrids=@null +no_defs"
@@ -243,4 +247,15 @@ select * from planet_osm_rels where id = 1001349;
 select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = 63445806;
 select osm_id, ST_AsEWKT(way), * from planet_osm_polygon where osm_id = 63438024;
 
+-- ------------------------------------------------------
+-- Communes
+-- ------------------------------------------------------
 
+select *, ST_AsEWKT(geom) from osm_communes_of_france limit 10;
+select *, ST_AsEWKT(geom) from osm_communes_of_france where nom = 'Montpellier';
+select *, ST_AsEWKT(geom) from osm_communes_of_france where nom = 'Mandelieu-la-Napoule';
+select geom from osm_communes_of_france where nom = 'Mandelieu-la-Napoule';
+
+"MULTIPOLYGON(((0.272237770618972 49.5506582902647,0.274184150345074 49.5509333151362,0.274527486446664 49.5509580841999,0.273628362678789 49.5528386896785,0.272712350583572 49.5548325687551,0.275011678384805 49.5557808769606,0.273732926577861 49.5585349630 (...)"
+"MULTIPOLYGON(((6.87856919343964 43.5291738733283,6.8785937174469 43.529315791419,6.8786771709368 43.5294848031198,6.87888611907188 43.5298382607413,6.87895061810928 43.5299665652804,6.87900541534161 43.5302121016322,6.8791577696138 43.5306994590216,6.87924 (...)"
+"01060000000100000001030000000100000089040000AF6284A4A7831B40DCEB2FF8BBC345403D9F4B12AE831B4052B3AE9EC0C345404FA9C3F2C3831B4079907428C6C34540D44909B9FA831B40DA0679BDD1C345403C507EA10B841B4025EDC4F1D5C34540B598DFFE19841B401A3A7AFDDDC34540F20F32EF41841B405240 (...)"

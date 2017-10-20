@@ -1,7 +1,7 @@
 package org.openstreetmap.osmaxil.model;
 
 
-public class NaturalTreeImport extends AbstractImport {
+public class VegetationImport extends AbstractImport {
     
     private String genus;
     

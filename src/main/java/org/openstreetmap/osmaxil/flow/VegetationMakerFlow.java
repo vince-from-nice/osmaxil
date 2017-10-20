@@ -11,27 +11,27 @@ import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlNode;
 import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlTag;
 import org.openstreetmap.osmaxil.model.ElementTag;
-import org.openstreetmap.osmaxil.model.NaturalTreeElement;
-import org.openstreetmap.osmaxil.model.NaturalTreeImport;
+import org.openstreetmap.osmaxil.model.VegetationElement;
+import org.openstreetmap.osmaxil.model.VegetationImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
-import org.openstreetmap.osmaxil.plugin.matcher.NaturalTreeImportMatcher;
+import org.openstreetmap.osmaxil.plugin.matcher.VegetationImportMatcher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component("TreeMaker") @Lazy
-public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, NaturalTreeImport> {
+public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, VegetationImport> {
 
     private List<OsmXmlRoot> newTreesToCreate = new ArrayList<>();
 
-    private Map<Long, NaturalTreeElement> existingTreesById = new HashMap<Long, NaturalTreeElement>();
+    private Map<Long, VegetationElement> existingTreesById = new HashMap<Long, VegetationElement>();
     
     private Map<Long, Float> bestScoreByExistingTreeId = new HashMap<Long, Float>();
     
-    private Map<Long, NaturalTreeImport> bestImportedTreeByExistingTreeId = new HashMap<Long, NaturalTreeImport>();
+    private Map<Long, VegetationImport> bestImportedTreeByExistingTreeId = new HashMap<Long, VegetationImport>();
     
     private Map<Long, List<MatchingElementId>> matchingTreeIdsByImportTreeId = new HashMap<>();
     
-    private List<NaturalTreeImport> nonMakableImportedTrees = new ArrayList<NaturalTreeImport>();
+    private List<VegetationImport> nonMakableImportedTrees = new ArrayList<VegetationImport>();
     
     private int counterForMultiMatchingTrees;
     
@@ -50,7 +50,7 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
     // =========================================================================
 
     @Override
-    protected boolean isImportMakable(NaturalTreeImport imp) {
+    protected boolean isImportMakable(VegetationImport imp) {
         // Check if the imported tree is inside an existing building
         if (this.isTreeInsideExistingBuilding(imp)) {
             LOGGER.warn("Tree #" + imp.getId() + " is inside an existing building => it's not makable");
@@ -61,7 +61,7 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
     }
     
     @Override
-    protected void processImport(NaturalTreeImport importedTree) {
+    protected void processImport(VegetationImport importedTree) {
         List<MatchingElementId> matchingElementIds = this.getMatchingTreesByImportedTree(importedTree);
         // If there's no matching tree, create a new tree from the import
         if (matchingElementIds.isEmpty()) {
@@ -73,7 +73,7 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
             MatchingElementId bestMatchingElementId = matchingElementIds.get(0);
             long bestMatchingOsmId = bestMatchingElementId.getOsmId();
             LOGGER.info("Tree matches existing tree #" + bestMatchingOsmId);
-            NaturalTreeElement existingTree = this.existingTreesById.get(bestMatchingOsmId);
+            VegetationElement existingTree = this.existingTreesById.get(bestMatchingOsmId);
             // if the best existing tree was not yet used create it and keep it
             if (existingTree == null) {
                 existingTree = this.createNewTreeFromExistingTree(bestMatchingOsmId, importedTree);
@@ -102,7 +102,7 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
     @Override
     protected void buildDataForModification() {
         OsmXmlRoot root = new OsmXmlRoot();
-        for (NaturalTreeElement tree : this.existingTreesById.values()) {
+        for (VegetationElement tree : this.existingTreesById.values()) {
             root.nodes.add(tree.getApiData().nodes.get(0));
         }
         this.dataForModification = root;
@@ -115,7 +115,7 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
     @Override
     protected void buildDataForNonMakableElements() {
         OsmXmlRoot root = new OsmXmlRoot();
-        for (NaturalTreeImport importedTree : this.nonMakableImportedTrees) {
+        for (VegetationImport importedTree : this.nonMakableImportedTrees) {
             OsmXmlRoot xml = this.createNewTreeFromImport(importedTree);
             root.nodes.add(xml.nodes.get(0));
         }
@@ -138,11 +138,11 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
 
     @PostConstruct
     private void init() {
-        ((NaturalTreeImportMatcher) this.matcher).setMatchingAreaRadius(MATCHING_BOX_RADIUS);
-        ((NaturalTreeImportMatcher) this.matcher).setMatchClosestOnly(false);
+        ((VegetationImportMatcher) this.matcher).setMatchingAreaRadius(MATCHING_BOX_RADIUS);
+        ((VegetationImportMatcher) this.matcher).setMatchClosestOnly(false);
     }
     
-    private boolean isTreeInsideExistingBuilding(NaturalTreeImport imp) {
+    private boolean isTreeInsideExistingBuilding(VegetationImport imp) {
         String geom = "ST_GeomFromText('POINT(" + imp.getLongitude() + " " + imp.getLatitude() + ")', " + this.parser.getSrid() + ")";
         // Transform geometry if it's needed
         if (this.parser.getSrid() != this.osmPostgis.getSrid()) {
@@ -158,7 +158,7 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
         }
     }
 
-    private OsmXmlRoot createNewTreeFromImport(NaturalTreeImport tree) {
+    private OsmXmlRoot createNewTreeFromImport(VegetationImport tree) {
         OsmXmlRoot root = new OsmXmlRoot();
         OsmXmlNode node = new OsmXmlNode();
         node.id = -this.idGenerator.getId();
@@ -191,8 +191,8 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
         return root;
     }
 
-    private NaturalTreeElement createNewTreeFromExistingTree(long osmId, NaturalTreeImport importedTree) {
-        NaturalTreeElement tree = new NaturalTreeElement(osmId);
+    private VegetationElement createNewTreeFromExistingTree(long osmId, VegetationImport importedTree) {
+        VegetationElement tree = new VegetationElement(osmId);
         // Fetch data from the API
         tree.setApiData(this.osmStandardApi.readElement(tree.getOsmId(), tree.getType()));
         // Flag it as an element to modify
@@ -208,7 +208,7 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
     }
     
     
-    private void processMultiMatchingTree(NaturalTreeImport importedTree, int matchingElementIndex) {
+    private void processMultiMatchingTree(VegetationImport importedTree, int matchingElementIndex) {
         List<MatchingElementId> matchingElementIds = this.getMatchingTreesByImportedTree(importedTree);
         MatchingElementId matchingElementId = matchingElementIds.get(matchingElementIndex);
         LOGGER.info("Process multi matching tree for imported tree #" + importedTree.getId() + " with index="
@@ -226,8 +226,8 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
             }
             txt += " => can update it instead of create a new tree";
             LOGGER.info(txt); 
-            NaturalTreeImport previousBestImportedTree = this.bestImportedTreeByExistingTreeId.get(matchingOsmId);
-            NaturalTreeElement newExistingTree = this.createNewTreeFromExistingTree(matchingOsmId, importedTree);
+            VegetationImport previousBestImportedTree = this.bestImportedTreeByExistingTreeId.get(matchingOsmId);
+            VegetationElement newExistingTree = this.createNewTreeFromExistingTree(matchingOsmId, importedTree);
             this.existingTreesById.put(newExistingTree.getOsmId(), newExistingTree);
             this.bestScoreByExistingTreeId.put(newExistingTree.getOsmId(), matchingElementId.getScore());
             this.bestImportedTreeByExistingTreeId.put(newExistingTree.getOsmId(), importedTree);
@@ -255,7 +255,7 @@ public class NaturalTreeMakerFlow extends AbstractMakerFlow<NaturalTreeElement, 
         }
     }
     
-    private List<MatchingElementId> getMatchingTreesByImportedTree(NaturalTreeImport importedTree) {
+    private List<MatchingElementId> getMatchingTreesByImportedTree(VegetationImport importedTree) {
         List<MatchingElementId> matchingElementIds = this.matchingTreeIdsByImportTreeId.get(importedTree.getId());
         // If the matching tree has not yet been calculated for that imported tree do it
         if (matchingElementIds == null) {

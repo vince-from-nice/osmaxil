@@ -2,15 +2,15 @@ package org.openstreetmap.osmaxil.model;
 
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 
-public class CloudPointImport extends AbstractImport {
+public class ElevationImport extends AbstractImport {
 	
 	private Coordinates coordinates;
 	
-	public CloudPointImport(String x, String y, String z) {
+	public ElevationImport(String x, String y, String z) {
 		this.coordinates = new Coordinates(x, y , z);
 	}
 	
-	public CloudPointImport(Coordinates coordinates) {
+	public ElevationImport(Coordinates coordinates) {
 		this.coordinates = coordinates;
 	}
 

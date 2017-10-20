@@ -9,7 +9,7 @@ import org.openstreetmap.osmaxil.plugin.parser.AbstractImportParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class _AbstractDrivenByImportFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
-		extends _AbstractImportFlow<ELEMENT, IMPORT> {
+		extends __AbstractImportFlow<ELEMENT, IMPORT> {
 	
 	@Autowired
 	@Resource(name = "${parser}")
