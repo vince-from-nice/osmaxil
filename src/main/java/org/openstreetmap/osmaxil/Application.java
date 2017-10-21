@@ -38,7 +38,7 @@ public class Application {
         
         plugin.displayLoadingStatistics();
         plugin.displayProcessingStatistics();
-        plugin.displaySynchronizingStatistics();
+        //plugin.displaySynchronizingStatistics();
         
         this.applicationContext.close();
     }

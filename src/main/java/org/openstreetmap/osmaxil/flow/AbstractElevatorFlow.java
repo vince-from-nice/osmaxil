@@ -1,17 +1,22 @@
 package org.openstreetmap.osmaxil.flow;
 
+import javax.annotation.PostConstruct;
+
 import org.openstreetmap.osmaxil.dao.ElevationDataSource;
 import org.openstreetmap.osmaxil.dao.ElevationDatabase;
+import org.openstreetmap.osmaxil.dao.ElevationRasterFile;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends _AbstractDrivenByElementFlow<ELEMENT, IMPORT> {
 
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
 
+	@Value("${elevator.shrinkRadius}")
+	public int shrinkRadius;
+	
 	@Value("${elevator.minMatchingPoints}")
 	public int minMatchingPoints;
 	
@@ -21,11 +26,45 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 	@Value("${elevator.toleranceDelta}")
 	public float toleranceDelta;
 	
-	@Autowired
+	//@Autowired
 	protected ElevationDataSource dtmDataSource;
 	
-	@Autowired
+	//@Autowired
 	protected ElevationDataSource dsmDataSource;
+	
+	@Value("${elevator.dtm.type}")
+	public String dtmType;
+	
+	@Value("${elevator.dtm.source}")
+	public String dtmSource;
+	
+	@Value("${elevator.dtm.srid}")
+	public int dtmSrid;
+	
+	@Value("${elevator.dsm.type}")
+	public String dsmType;
+	
+	@Value("${elevator.dsm.source}")
+	public String dsmSource;
+	
+	@Value("${elevator.dsm.srid}")
+	public int dsmSrid;
+	
+	@PostConstruct
+	void init() {
+		if (dtmType.equals("db")) {
+			this.dtmDataSource = (ElevationDatabase) this.appContext.getBean("ElevationDatabase");
+		} else if (dtmType.equals("file")) {
+			this.dtmDataSource = (ElevationRasterFile) this.appContext.getBean("ElevationRasterFile");
+		}
+		this.dtmDataSource.init(this.dtmSource, this.dtmSrid);
+		if (dsmType.equals("db")) {
+			this.dsmDataSource = (ElevationDatabase) this.appContext.getBean("ElevationDatabase");
+		} else if (dtmType.equals("file")) {
+			this.dsmDataSource = (ElevationRasterFile) this.appContext.getBean("ElevationRasterFile");
+		}
+		this.dsmDataSource.init(this.dsmSource, this.dsmSrid);
+	}
 
     @Override
     public void prepare() {

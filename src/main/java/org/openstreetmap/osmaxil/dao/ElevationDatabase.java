@@ -12,11 +12,13 @@ import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("ElevationDatabase") @Lazy @Scope("prototype")
 public class ElevationDatabase implements ElevationDataSource {
 
     @Autowired
@@ -38,9 +40,6 @@ public class ElevationDatabase implements ElevationDataSource {
 	@Value("${elevationDatabase.xyzFileSrid}")
 	private String xyzFileSrid;
 	
-	@Value("${elevationDatabase.shrinkRadius}")
-	private int shrinkRadius;
-    
     static private final Logger LOGGER = Logger.getLogger(Application.class);
     
     public void beginTransaction() {
@@ -58,6 +57,11 @@ public class ElevationDatabase implements ElevationDataSource {
     ////////////////////////////////////////////////////////////////////////////////
     
 	@Override
+	public void init(String source, int srid) {
+		// TODO
+	}
+	
+	@Override
 	public double findElevationByCoordinates(double x, double y, int srid) {
 		// TODO Auto-generated method stub
 		return 0;
@@ -68,7 +72,7 @@ public class ElevationDatabase implements ElevationDataSource {
      * That method use a radius as argument in order to skrink the including and excluding geometries.
      */
     @Override
-    public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int geomSrid) {
+    public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int shrinkRadius, int geomSrid) {
     	final String includingGeom = "ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + ")";
     	String query = "SELECT x, y, z FROM " + this.xyzTableName;
     	String condition = "ST_Transform(ST_Buffer(" + includingGeom + ", -" + shrinkRadius + "), " + srid + ")";

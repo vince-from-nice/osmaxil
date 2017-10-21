@@ -14,6 +14,7 @@ import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -48,6 +49,9 @@ public abstract class __AbstractImportFlow<ELEMENT extends AbstractElement, IMPO
 
     @Value("${osmaxil.minMatchingScore}")
     protected float minMatchingScore;
+    
+    @Autowired
+    protected ApplicationContext appContext;
     
     @Autowired
     protected OsmPostgisDB osmPostgis;

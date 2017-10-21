@@ -10,29 +10,31 @@ import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconstConstants;
 import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("ElevationRasterFile") @Lazy @Scope("prototype")
 public class ElevationRasterFile implements ElevationDataSource {
-    
-    @Value("${elevationRasterFile.path}")
-    private String filePath;
-    
-    @Value("${elevationRasterFile.srid}")
-    private int srid;
-    
-    private Dataset dataset;
-    
+
+	private String filePath;
+
+	private int srid;
+
+	private Dataset dataset;
+
 	private double xUpperLeft, yUpperLeft;
-	
+
 	private double xPixelSize, yPixelSize;
-	
-    private List<Band> bands;
-    
-    static private final Logger LOGGER = Logger.getLogger(Application.class);
-    
-    void init() {
+
+	private List<Band> bands;
+
+	static private final Logger LOGGER = Logger.getLogger(Application.class);
+
+	@Override
+	public void init(String source, int srid) {
+		this.filePath = source;
+		this.srid = srid;
 		gdal.AllRegister();
 		LOGGER.info("Opening " + this.filePath);
 		this.dataset = gdal.Open(this.filePath, gdalconstConstants.GA_ReadOnly);
@@ -51,30 +53,27 @@ public class ElevationRasterFile implements ElevationDataSource {
 		this.xPixelSize = geotransform[1];
 		this.yPixelSize = Math.abs(geotransform[5]);
 		LOGGER.info("Pixel sizes are: " + this.xPixelSize + " " + this.yPixelSize);
-    }
-    
-    @Override
-    public double findElevationByCoordinates(double x, double y, int srid) {
-    	if (this.bands == null) {
-    		this.init();
-    	}
-    	int xFile = (int) Math.round((x - xUpperLeft) / this.xPixelSize);
-    	int yFile = (int) Math.round((yUpperLeft - y) / this.yPixelSize);
-    	double[] result = new double[1];
+	}
+
+	@Override
+	public double findElevationByCoordinates(double x, double y, int srid) {
+		int xFile = (int) Math.round((x - xUpperLeft) / this.xPixelSize);
+		int yFile = (int) Math.round((yUpperLeft - y) / this.yPixelSize);
+		double[] result = new double[1];
 		bands.get(0).ReadRaster(xFile, yFile, 1, 1, result);
-    	return result[0];
-    }
-    
+		return result[0];
+	}
+
 	@Override
 	public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT,
-			int geomSrid) {
+			int shrinkRadius, int geomSrid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-    @Override
-    public int getSrid() {
+
+	@Override
+	public int getSrid() {
 		return srid;
 	}
-    
+
 }
