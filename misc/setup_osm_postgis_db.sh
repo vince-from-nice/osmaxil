@@ -8,14 +8,17 @@
 #FILE_PATH=/home/geodata/OpenStreetMap/Extracts/france-latest.osm.pbf
 #FILE_PATH=/home/geodata/OpenStreetMap/Extracts/ile-de-france-latest.osm.pbf
 #FILE_PATH=/home/geodata/OpenStreetMap/Extracts/provence-alpes-cote-d-azur-latest.osm.pbf
-FILE_PATH=/e/Geodata/Global/OpenStreetMap/provence-alpes-cote-d-azur-2017-08-01.osm.pbf
+#FILE_PATH=/e/Geodata/Global/OpenStreetMap/provence-alpes-cote-d-azur-2017-08-01.osm.pbf
+FILE_PATH=/e/Geodata/Global/OpenStreetMap/languedoc-roussillon-latest.osm.pbf
+#FILE_PATH=/e/Geodata/Global/OpenStreetMap/france-latest.osm.pbf
 
 #DB_NAME=osm_apidb_paca
 #DB_NAME=osm_apidb_idf
-#DB_NAME=osm_osm2pgsql_test
-DB_NAME=osm_osm2pgsql_paca
-#DB_NAME=osm_osm2pgsql_idf
-#DB_NAME=osm_osm2pgsql_france
+#DB_NAME=osm2pgsql_test
+#DB_NAME=osm2pgsql_paca
+#DB_NAME=osm2pgsql_idf
+DB_NAME=osm2pgsql_languedoc
+#DB_NAME=osm2pgsql_france
 
 #POSTGIS_PATH=/usr/share/postgresql/9.1/contrib/postgis-1.5/
 POSTGIS_PATH="/e/Software/PostgreSQL 9.3/share/contrib/postgis-2.1/"

@@ -52,12 +52,14 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 	
 	@PostConstruct
 	void init() {
+		// Init of the DTM
 		if (dtmType.equals("db")) {
 			this.dtmDataSource = (ElevationDatabase) this.appContext.getBean("ElevationDatabase");
 		} else if (dtmType.equals("file")) {
 			this.dtmDataSource = (ElevationRasterFile) this.appContext.getBean("ElevationRasterFile");
 		}
 		this.dtmDataSource.init(this.dtmSource, this.dtmSrid);
+		// Init of the DSM
 		if (dsmType.equals("db")) {
 			this.dsmDataSource = (ElevationDatabase) this.appContext.getBean("ElevationDatabase");
 		} else if (dtmType.equals("file")) {
@@ -72,7 +74,8 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
     		return;
     	}
     	if (this.dsmDataSource instanceof ElevationDatabase) {
-    		((ElevationDatabase) this.dsmDataSource).createPointCloudTableFromXYZFiles();	
+    		// TODO
+    		//((ElevationDatabase) this.dsmDataSource).createPointCloudTableFromXYZFiles();	
     	}    	
 	}
 

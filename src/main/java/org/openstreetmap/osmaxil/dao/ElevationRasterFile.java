@@ -3,12 +3,10 @@ package org.openstreetmap.osmaxil.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.gdal.gdal.Band;
 import org.gdal.gdal.Dataset;
 import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconstConstants;
-import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
@@ -28,8 +26,6 @@ public class ElevationRasterFile implements ElevationDataSource {
 	private double xPixelSize, yPixelSize;
 
 	private List<Band> bands;
-
-	static private final Logger LOGGER = Logger.getLogger(Application.class);
 
 	@Override
 	public void init(String source, int srid) {

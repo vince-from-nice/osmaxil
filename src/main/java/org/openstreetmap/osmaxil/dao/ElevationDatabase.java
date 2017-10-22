@@ -1,13 +1,9 @@
 package org.openstreetmap.osmaxil.dao;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,27 +27,6 @@ public class ElevationDatabase implements ElevationDataSource {
 	@Value("${elevationDatabase.xyzTableName}")
 	private String xyzTableName;
 	
-	@Value("${elevationDatabase.xyzFolderPath}")
-	private String xyzFolderPath;
-	
-	@Value("${elevationDatabase.xyzSeparator}")
-	private String xyzSeparator;
-
-	@Value("${elevationDatabase.xyzFileSrid}")
-	private String xyzFileSrid;
-	
-    static private final Logger LOGGER = Logger.getLogger(Application.class);
-    
-    public void beginTransaction() {
-    	LOGGER.debug("BEGIN TRANSACTION") ;
-    	this.jdbcTemplate.execute("BEGIN TRANSACTION");
-    }
-    
-    public void commitTransaction() {
-    	LOGGER.debug("COMMIT TRANSACTION") ;
-    	this.jdbcTemplate.execute("COMMIT TRANSACTION");
-    }
-    
     ////////////////////////////////////////////////////////////////////////////////
     // Public overrided methods
     ////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +78,20 @@ public class ElevationDatabase implements ElevationDataSource {
     // Public (not overrided) methods
     ////////////////////////////////////////////////////////////////////////////////
     
+	public void executeSQL(String query) {
+		this.jdbcTemplate.execute(query);
+	}
+	
+    public void beginTransaction() {
+    	LOGGER.debug("BEGIN TRANSACTION") ;
+    	this.jdbcTemplate.execute("BEGIN TRANSACTION");
+    }
+    
+    public void commitTransaction() {
+    	LOGGER.debug("COMMIT TRANSACTION") ;
+    	this.jdbcTemplate.execute("COMMIT TRANSACTION");
+    }
+    
     /**
      * Find all points which intersect the including geometry and disjoint the excluding geometry (useful for multipolygon buildings with "hole").
      * That method use a factor as argument in order to scale the including and excluding geometries.
@@ -133,62 +122,6 @@ public class ElevationDatabase implements ElevationDataSource {
                 });
     	return results;
     }
-    
-    /**
-     * Obsolete method for point cloud table creation (COPY is so much faster compared to INSERT)
-     */
-    public void addPoint(String tableName, long id, String fileSrid, double x, double y, double z) {
-    	LOGGER.debug("Add point(" + x + " " + y + ") with z=" + z) ;
-    	this.jdbcTemplate.execute("INSERT INTO " + tableName + " VALUES(" + id +
-    			", ST_Transform(ST_GeomFromText('POINT(" + x + " " + y + " " + z + ")', " + fileSrid + "), " + this.srid + "))");
-    }
-	
-    public void createPointCloudTableFromXYZFiles() {
-		LOGGER.info("Recreate the point cloud table from scratch.");
-		this.recreatePointCloudTable(this.xyzTableName, this.xyzFileSrid);
-		File xyzFolder = new File(this.xyzFolderPath);
-		File[] xyzFiles = xyzFolder.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".xyz");
-			}
-		});
-		for (int i = 0; i < xyzFiles.length; i++) {
-			File xyzFile = xyzFiles[i];
-			LOGGER.info("Loading file " + xyzFile);
-			this.copyPointCloudFromYXZFile(this.xyzTableName, xyzFile.getPath());
-		}
-		this.finalizePointCloudTable(this.xyzTableName, this.xyzFileSrid);
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    // Private methods
-    ////////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * Recreate a point cloud table.
-     */
-    private void recreatePointCloudTable(String tableName, String fileSrid) {
-    	this.jdbcTemplate.execute("DROP TABLE IF EXISTS " + tableName);
-    	this.jdbcTemplate.execute("CREATE TABLE " + tableName + " (x numeric(11,3), y numeric(11,3), z numeric(11,3))");
-    }
-    
-    /**
-     * Fill a point cloud table by using the COPY statement (which much more efficient than INSERT).
-     */
-    private void copyPointCloudFromYXZFile(String tableName, String filePath) {
-    	this.jdbcTemplate.execute("COPY " + tableName + " (x, y, z) FROM '" + filePath + "' WITH DELIMITER AS '" + this.xyzSeparator + "'");    	
-    }
-    
-    /**
-     * Finalize a point cloud table by adding its geometry column and an spatial index.
-     */
-    private void finalizePointCloudTable(String tableName, String fileSrid) {
-    	LOGGER.info("Add geometry column to the point cloud table");
-    	this.jdbcTemplate.execute("SELECT AddGeometryColumn ('"+ tableName +"', 'geom', " + this.srid + ", 'POINT', 3)");
-    	LOGGER.info("Update the geometry column of the point cloud table");
-    	this.jdbcTemplate.execute("UPDATE " + tableName +
-    			" SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', " + fileSrid + "), " + this.srid + ")");
-    	LOGGER.info("Create an index on the geometry column of the point cloud table");
-    	this.jdbcTemplate.execute("CREATE INDEX geom_idx_for_" + this.xyzTableName + " ON " + tableName + " USING GIST (geom)");   	
-    }   
+   
+  
 }

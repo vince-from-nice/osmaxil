@@ -2,9 +2,13 @@ package org.openstreetmap.osmaxil.dao;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.openstreetmap.osmaxil.Application;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 
 public interface ElevationDataSource {
+	
+	static public final Logger LOGGER = Logger.getLogger(Application.class);
 	
 	abstract void init(String source, int srid);
 	
