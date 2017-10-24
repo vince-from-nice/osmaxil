@@ -1,6 +1,9 @@
 package org.openstreetmap.osmaxil.flow;
 
+import java.io.IOException;
+
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 import org.openstreetmap.osmaxil.dao.ElevationDataSource;
 import org.openstreetmap.osmaxil.dao.ElevationDatabase;
@@ -8,6 +11,8 @@ import org.openstreetmap.osmaxil.dao.ElevationRasterFile;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.ElementTag;
+import org.openstreetmap.osmaxil.plugin.loader.AbstractElevationDbLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends _AbstractDrivenByElementFlow<ELEMENT, IMPORT> {
@@ -50,6 +55,10 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 	@Value("${elevator.dsm.srid}")
 	public int dsmSrid;
 	
+	@Autowired
+	@Resource(name = "${elevator.dsm.loader}")
+	protected AbstractElevationDbLoader dsmLoader;
+	
 	@PostConstruct
 	void init() {
 		// Init of the DTM
@@ -70,12 +79,15 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 
     @Override
     public void prepare() {
-    	if (!this.skipPreparation) {
+    	if (this.skipPreparation) {
     		return;
     	}
-    	if (this.dsmDataSource instanceof ElevationDatabase) {
-    		// TODO
-    		//((ElevationDatabase) this.dsmDataSource).createPointCloudTableFromXYZFiles();	
+    	if (dsmType.equals("db")) {
+    		try {
+				this.dsmLoader.load((ElevationDatabase) this.dsmDataSource, this.dsmSource);
+			} catch (IOException e) {
+				LOGGER.error(e);
+			}
     	}    	
 	}
 

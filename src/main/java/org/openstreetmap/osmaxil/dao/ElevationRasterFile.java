@@ -63,8 +63,10 @@ public class ElevationRasterFile implements ElevationDataSource {
 	@Override
 	public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT,
 			int shrinkRadius, int geomSrid) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Coordinates> result = new ArrayList<>();
+		// TODO the task is not trivial:
+		// https://gis.stackexchange.com/questions/186483/how-to-get-the-pixels-from-a-geotiff-file-in-gdal-python-for-a-given-polygon
+		return result;
 	}
 
 	@Override

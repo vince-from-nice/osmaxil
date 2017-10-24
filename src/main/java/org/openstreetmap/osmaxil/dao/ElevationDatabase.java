@@ -7,7 +7,6 @@ import java.util.List;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,19 +20,18 @@ public class ElevationDatabase implements ElevationDataSource {
     @Qualifier("elevationPostgisJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
     
-    @Value("${elevationDatabase.srid}")
     private int srid;
 
-	@Value("${elevationDatabase.xyzTableName}")
-	private String xyzTableName;
+	private String tableName;
 	
     ////////////////////////////////////////////////////////////////////////////////
     // Public overrided methods
     ////////////////////////////////////////////////////////////////////////////////
     
 	@Override
-	public void init(String source, int srid) {
-		// TODO
+	public void init(String tableName, int srid) {
+		this.tableName = tableName;
+		this.srid = srid;				
 	}
 	
 	@Override
@@ -49,7 +47,7 @@ public class ElevationDatabase implements ElevationDataSource {
     @Override
     public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int shrinkRadius, int geomSrid) {
     	final String includingGeom = "ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + ")";
-    	String query = "SELECT x, y, z FROM " + this.xyzTableName;
+    	String query = "SELECT x, y, z FROM " + this.tableName;
     	String condition = "ST_Transform(ST_Buffer(" + includingGeom + ", -" + shrinkRadius + "), " + srid + ")";
     	query += " WHERE ST_Intersects(geom, " + condition + ")";
     	// Do the same for excluding geom (need cleanup before)
@@ -101,7 +99,7 @@ public class ElevationDatabase implements ElevationDataSource {
      */
     public List<Coordinates> findAllPointsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float scaleFactor, int geomSrid) {
     	final String geom = "ST_Transform(ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + "), " + this.srid + ")";
-    	String query = "SELECT x, y, z FROM " + this.xyzTableName + ", " + geom + " as includingGeom";
+    	String query = "SELECT x, y, z FROM " + this.tableName + ", " + geom + " as includingGeom";
     	String condition = "ST_Scale(includingGeom, " + scaleFactor + ", " + scaleFactor + ")";
 		condition = "ST_Translate(" + condition + ", " 
 				+ "-" + scaleFactor + "*(ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2 + ((ST_Xmin(includingGeom)+ST_XMax(includingGeom))/2), "

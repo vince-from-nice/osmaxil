@@ -33,7 +33,7 @@ public class Application {
         
         plugin.prepare();
         plugin.load();
-        //plugin.process();
+        plugin.process();
         //plugin.synchronize();
         
         plugin.displayLoadingStatistics();
