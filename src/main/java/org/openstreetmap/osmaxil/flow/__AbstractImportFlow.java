@@ -35,6 +35,14 @@ public abstract class __AbstractImportFlow<ELEMENT extends AbstractElement, IMPO
 
     private Geometry excludingArea;
     
+    protected GeometryFactory geometryFactory;
+
+    @Value("${osmaxil.syncMode}")
+    protected String synchronizationMode;
+    
+    @Value("${osmaxil.minMatchingScore}")
+    protected float minMatchingScore;
+    
 	@Value("${osmaxil.filteringArea.srid}")
 	protected int filteringAreaSrid;
 
@@ -43,12 +51,6 @@ public abstract class __AbstractImportFlow<ELEMENT extends AbstractElement, IMPO
 
     @Value("${osmaxil.filteringArea.excluding}")
     protected String excludingAreaString;
-
-    @Value("${osmaxil.syncMode}")
-    protected String synchronizationMode;
-
-    @Value("${osmaxil.minMatchingScore}")
-    protected float minMatchingScore;
     
     @Autowired
     protected ApplicationContext appContext;
@@ -61,8 +63,6 @@ public abstract class __AbstractImportFlow<ELEMENT extends AbstractElement, IMPO
 
     @Autowired
     protected OsmXmlFile osmXmlFile;
-
-    protected GeometryFactory geometryFactory;
 
     // =========================================================================
     // Static variables
@@ -77,8 +77,6 @@ public abstract class __AbstractImportFlow<ELEMENT extends AbstractElement, IMPO
     // =========================================================================
     // Abstract methods
     // =========================================================================
-
-    abstract public void prepare();
     
     abstract public void load();
     

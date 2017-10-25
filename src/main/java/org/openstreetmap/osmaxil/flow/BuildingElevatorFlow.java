@@ -10,7 +10,7 @@ import org.openstreetmap.osmaxil.model.misc.Coordinates;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component("BuildingEnhancer")
+@Component("BuildingElevator")
 @Lazy
 public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, ElevationImport> {
 
@@ -32,7 +32,7 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 			LOGGER.warn("Unable to find matching imports because element has no geometry string");
 			return result;
 		}
-		data = this.dsmDataSource.findAllElevationsByGeometry(element.getGeometryString(),
+		data = this.dsm.findAllElevationsByGeometry(element.getGeometryString(),
 				element.getInnerGeometryString(), this.shrinkRadius, srid);
 		// Create imports from results
 		for (Coordinates coordinates : data) {
@@ -63,8 +63,8 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 		// Compute altitude of the center of the building with the DTM
 		Coordinates center = this.osmPostgis.getPolygonCenter(
 				(element.getRelationId() == null ? element.getOsmId() : -element.getRelationId()),
-				this.dtmDataSource.getSrid());
-		int altitude = (int) Math.round(this.dtmDataSource.findElevationByCoordinates(Double.parseDouble(center.x),
+				this.dtm.getSrid());
+		int altitude = (int) Math.round(this.dtm.findElevationByCoordinates(Double.parseDouble(center.x),
 				Double.parseDouble(center.y), this.osmPostgis.getSrid()));
 		LOGGER.info("Computed altitude is: " + altitude);
 

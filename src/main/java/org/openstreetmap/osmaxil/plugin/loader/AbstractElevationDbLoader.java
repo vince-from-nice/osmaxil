@@ -47,6 +47,7 @@ public abstract class AbstractElevationDbLoader {
 	 * Recreate a point cloud table.
 	 */
 	protected void recreatePointCloudTable(String tableName) {
+		this.database.executeSQL("DROP INDEX IF EXISTS geom_idx_for_" + tableName);
 		this.database.executeSQL("DROP TABLE IF EXISTS " + tableName);
 		this.database.executeSQL("CREATE TABLE " + tableName + " (x numeric(11,3), y numeric(11,3), z numeric(11,3))");
 	}
@@ -84,7 +85,7 @@ public abstract class AbstractElevationDbLoader {
 			LOGGER.info("Exec: " + cmd);
 			Process p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
-			LOGGER.info("Process has returned " + p.exitValue());
+			LOGGER.info("Process has returned: " + p.exitValue());
 		} catch (Exception err) {
 			err.printStackTrace();
 		}

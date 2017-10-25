@@ -26,12 +26,11 @@ public class Application {
     public void run() {
         this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
         
-        BuildingElevatorFlow plugin = (BuildingElevatorFlow) this.applicationContext.getBean("BuildingEnhancer");        
+        BuildingElevatorFlow plugin = (BuildingElevatorFlow) this.applicationContext.getBean("BuildingElevator");        
         //PssBuildingUpdater plugin = (BuildingUpdater) this.applicationContext.getBean("BuildingUpdater");
         //ParisBuildingRemaker plugin = (BuildingRemaker) this.applicationContext.getBean("BuildingRemaker");
         //NiceTreeMaker plugin = (TreeMaker) this.applicationContext.getBean("TreeMaker");
         
-        plugin.prepare();
         plugin.load();
         plugin.process();
         //plugin.synchronize();

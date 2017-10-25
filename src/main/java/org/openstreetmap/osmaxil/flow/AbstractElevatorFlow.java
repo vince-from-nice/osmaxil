@@ -1,7 +1,5 @@
 package org.openstreetmap.osmaxil.flow;
 
-import java.io.IOException;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
@@ -14,81 +12,76 @@ import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.plugin.loader.AbstractElevationDbLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> extends _AbstractDrivenByElementFlow<ELEMENT, IMPORT> {
+public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
+		extends _AbstractDrivenByElementFlow<ELEMENT, IMPORT> {
 
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
 
 	@Value("${elevator.shrinkRadius}")
 	public int shrinkRadius;
-	
+
 	@Value("${elevator.minMatchingPoints}")
 	public int minMatchingPoints;
-	
+
 	@Value("${elevator.computingDistance}")
 	public int computingDistance;
-	
+
 	@Value("${elevator.toleranceDelta}")
 	public float toleranceDelta;
-	
-	//@Autowired
-	protected ElevationDataSource dtmDataSource;
-	
-	//@Autowired
-	protected ElevationDataSource dsmDataSource;
-	
+
+	// Digital Terrain Model (DTM)
+	protected ElevationDataSource dtm;
+
 	@Value("${elevator.dtm.type}")
 	public String dtmType;
-	
+
 	@Value("${elevator.dtm.source}")
 	public String dtmSource;
-	
+
 	@Value("${elevator.dtm.srid}")
 	public int dtmSrid;
-	
+
+	@Autowired
+	@Resource(name = "${elevator.dtm.loader}")
+	protected AbstractElevationDbLoader dtmLoader;
+
+	// Digital Surface Model (DSM)
+	protected ElevationDataSource dsm;
+
 	@Value("${elevator.dsm.type}")
 	public String dsmType;
-	
+
 	@Value("${elevator.dsm.source}")
 	public String dsmSource;
-	
+
 	@Value("${elevator.dsm.srid}")
 	public int dsmSrid;
-	
+
 	@Autowired
 	@Resource(name = "${elevator.dsm.loader}")
 	protected AbstractElevationDbLoader dsmLoader;
-	
+
 	@PostConstruct
+	// TODO redo that part with Spring IoC feature (warning: I had some issues with prototype scoped beans) 
 	void init() {
 		// Init of the DTM
-		if (dtmType.equals("db")) {
-			this.dtmDataSource = (ElevationDatabase) this.appContext.getBean("ElevationDatabase");
-		} else if (dtmType.equals("file")) {
-			this.dtmDataSource = (ElevationRasterFile) this.appContext.getBean("ElevationRasterFile");
-		}
-		this.dtmDataSource.init(this.dtmSource, this.dtmSrid);
+		if (dtmType.equals("db")) this.dtm = new ElevationDatabase(this.dtmSource, this.dtmSrid, (JdbcTemplate) this.appContext.getBean("elevationPostgisJdbcTemplate"));
+		if (dtmType.equals("file")) this.dtm = new ElevationRasterFile(this.dtmSource, this.dtmSrid);
 		// Init of the DSM
-		if (dsmType.equals("db")) {
-			this.dsmDataSource = (ElevationDatabase) this.appContext.getBean("ElevationDatabase");
-		} else if (dtmType.equals("file")) {
-			this.dsmDataSource = (ElevationRasterFile) this.appContext.getBean("ElevationRasterFile");
-		}
-		this.dsmDataSource.init(this.dsmSource, this.dsmSrid);
+		if (dsmType.equals("db")) this.dsm = new ElevationDatabase(this.dsmSource, this.dsmSrid, (JdbcTemplate) this.appContext.getBean("elevationPostgisJdbcTemplate"));
+		if (dsmType.equals("file")) this.dsm = new ElevationRasterFile(this.dtmSource, this.dtmSrid);
 	}
 
-    @Override
-    public void prepare() {
-    	if (this.skipPreparation) {
-    		return;
-    	}
-    	if (dsmType.equals("db")) {
-    		try {
-				this.dsmLoader.load((ElevationDatabase) this.dsmDataSource, this.dsmSource);
-			} catch (IOException e) {
-				LOGGER.error(e);
-			}
-    	}    	
+	@Override
+	public void load() {
+		try {
+			if (dtmType.equals("db")) this.dtmLoader.load((ElevationDatabase) this.dtm, this.dtmSource);
+			if (dsmType.equals("db")) this.dsmLoader.load((ElevationDatabase) this.dsm, this.dsmSource);
+		} catch (Exception e) {
+			LOGGER.error(e);
+		}
 	}
 
 	@Override
@@ -105,19 +98,20 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 		}
 		return updated;
 	}
-	
+
 	@Override
 	protected String[] getUpdatableTagNames() {
 		return UPDATABLE_TAG_NAMES;
 	}
-	
+
 	@Override
 	public void displayProcessingStatistics() {
 		super.displayProcessingStatistics();
 		LOGGER_FOR_STATS.info("Specific settings of the plugin:");
-		// LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
-		LOGGER_FOR_STATS.info(" - Minimum matching point is: " + minMatchingPoints);
-		LOGGER_FOR_STATS.info(" - Tolerance delta is: " + toleranceDelta);
+		LOGGER_FOR_STATS.info(" - Shrink radius is: " + this.shrinkRadius);
+		LOGGER_FOR_STATS.info(" - Minimum matching point is: " + this.minMatchingPoints);
+		LOGGER_FOR_STATS.info(" - Computing distance is: " + this.computingDistance);
+		LOGGER_FOR_STATS.info(" - Tolerance delta is: " + this.toleranceDelta);
 	}
 
 }

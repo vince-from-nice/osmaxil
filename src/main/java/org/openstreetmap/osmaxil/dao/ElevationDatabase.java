@@ -5,24 +5,23 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Service;
 
-@Service("ElevationDatabase") @Lazy @Scope("prototype")
+//@Service("ElevationDatabase") @Scope("prototype") @Lazy
 public class ElevationDatabase implements ElevationDataSource {
 
-    @Autowired
-    @Qualifier("elevationPostgisJdbcTemplate")
+    //@Autowired @Qualifier("elevationPostgisJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
     
-    private int srid;
+    public int srid;
 
 	private String tableName;
+	
+	public ElevationDatabase(String tableName, int srid, JdbcTemplate jdbcTemplate) {
+		this.init(tableName, srid);
+		this.jdbcTemplate = jdbcTemplate;
+	}
 	
     ////////////////////////////////////////////////////////////////////////////////
     // Public overrided methods
@@ -31,7 +30,7 @@ public class ElevationDatabase implements ElevationDataSource {
 	@Override
 	public void init(String tableName, int srid) {
 		this.tableName = tableName;
-		this.srid = srid;				
+		this.srid = srid;	
 	}
 	
 	@Override
@@ -77,6 +76,7 @@ public class ElevationDatabase implements ElevationDataSource {
     ////////////////////////////////////////////////////////////////////////////////
     
 	public void executeSQL(String query) {
+		LOGGER.debug("Exec: " + query) ;
 		this.jdbcTemplate.execute(query);
 	}
 	

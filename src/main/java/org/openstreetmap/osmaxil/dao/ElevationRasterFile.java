@@ -8,11 +8,8 @@ import org.gdal.gdal.Dataset;
 import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconstConstants;
 import org.openstreetmap.osmaxil.model.misc.Coordinates;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 
-@Service("ElevationRasterFile") @Lazy @Scope("prototype")
+//@Service("ElevationRasterFile") @Lazy @Scope("prototype")
 public class ElevationRasterFile implements ElevationDataSource {
 
 	private String filePath;
@@ -26,6 +23,10 @@ public class ElevationRasterFile implements ElevationDataSource {
 	private double xPixelSize, yPixelSize;
 
 	private List<Band> bands;
+	
+	public ElevationRasterFile(String source, int srid) {
+		this.init(source, srid);
+	}
 
 	@Override
 	public void init(String source, int srid) {

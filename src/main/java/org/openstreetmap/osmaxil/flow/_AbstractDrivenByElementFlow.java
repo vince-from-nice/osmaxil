@@ -14,7 +14,6 @@ import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.plugin.selector.MatchingScoreStatsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport>
 		extends __AbstractImportFlow<ELEMENT, IMPORT> {
@@ -36,9 +35,6 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 
 	protected int limitForUpdatableElements = 0;
 	
-	@Value("${osmaxil.skipPreparation}")
-	protected Boolean skipPreparation;
-		
     @Autowired
     protected MatchingScoreStatsGenerator scoringStatsGenerator;
     
@@ -61,15 +57,11 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	// =========================================================================
 	// Public and protected methods
 	// =========================================================================
-
-	@Override
-	public void load() {
-		LOGGER.info("Looking in PostGIS for existing elements which are respecting the filtering areas");
-		this.targetedElement = this.getTargetedElements();
-	}
 	
 	@Override
 	public void process() {
+		LOGGER.info("Looking in PostGIS for existing elements which are respecting the filtering areas");
+		this.targetedElement = this.getTargetedElements();
 		int i = 1;
 		// For each targeted element, 
 		for (ELEMENT element : this.targetedElement) {

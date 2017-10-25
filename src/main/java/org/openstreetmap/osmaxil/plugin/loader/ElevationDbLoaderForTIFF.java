@@ -31,21 +31,4 @@ public class ElevationDbLoaderForTIFF extends AbstractElevationDbLoader {
 		}
 	}
 
-	public void loadData2(String source) {
-		LOGGER.info("Recreate the point cloud table from scratch.");
-		this.recreatePointCloudTable(source);
-		File xyzFolder = new File(this.folderPath);
-		File[] xyzFiles = xyzFolder.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".xyz");
-			}
-		});
-		for (int i = 0; i < xyzFiles.length; i++) {
-			File xyzFile = xyzFiles[i];
-			LOGGER.info("Loading file " + xyzFile);
-			this.copyPointCloudFromXYZFile(source, xyzFile.getAbsolutePath());
-		}
-		this.finalizePointCloudTable(source);
-	}
-
 }
