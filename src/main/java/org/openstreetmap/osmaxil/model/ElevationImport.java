@@ -1,17 +1,16 @@
 package org.openstreetmap.osmaxil.model;
 
-import org.openstreetmap.osmaxil.model.misc.Coordinates;
-
 public class ElevationImport extends AbstractImport {
 	
-	private Coordinates coordinates;
+	//private Coordinates coordinates;
 	
-	public ElevationImport(String x, String y, String z) {
-		this.coordinates = new Coordinates(x, y , z);
-	}
-	
-	public ElevationImport(Coordinates coordinates) {
-		this.coordinates = coordinates;
+	public double x, y, z;
+
+	public ElevationImport(double x, double y, double z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.setId(Math.round(z));
 	}
 
 	@Override
@@ -19,24 +18,9 @@ public class ElevationImport extends AbstractImport {
 		return "Sorry, there is no tag for that type of import";
 	}
 	
-	public String getX() {
-		return this.coordinates.x;
-	}
-	
-	public String gety() {
-		return this.coordinates.y;
-	}
-
-	public String getZ() {
-		return this.coordinates.z;
-	}
-
-	public Coordinates getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(Coordinates coordinates) {
-		this.coordinates = coordinates;
-	}
+    @Override
+    public String toString() {
+        return "Elevation import with x=" + x + " y=" + y + " z=" + z;
+    }
 
 }

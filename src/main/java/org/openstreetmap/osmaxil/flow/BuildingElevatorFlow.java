@@ -14,10 +14,6 @@ import org.springframework.stereotype.Component;
 @Lazy
 public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, ElevationImport> {
 
-	// =========================================================================
-	// Overrided methods
-	// =========================================================================
-
 	protected List<BuildingElement> getTargetedElements() {
 		return this.osmPostgis.findBuildingsByArea(this.includingAreaString, this.excludingAreaString,
 				this.filteringAreaSrid);
@@ -25,26 +21,15 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 
 	@Override
 	protected List<ElevationImport> findMatchingImports(BuildingElement element, int srid) {
-		List<ElevationImport> result = new ArrayList<ElevationImport>();
-		List<Coordinates> data = new ArrayList<>();
+		List<ElevationImport> results = new ArrayList<ElevationImport>();
 		// Find in PostGIS all imports matching (ie. containing) the element
 		if (element.getGeometryString() == null) {
 			LOGGER.warn("Unable to find matching imports because element has no geometry string");
-			return result;
+			return results;
 		}
-		data = this.dsm.findAllElevationsByGeometry(element.getGeometryString(),
-				element.getInnerGeometryString(), this.shrinkRadius, srid);
-		// Create imports from results
-		for (Coordinates coordinates : data) {
-			ElevationImport imp = new ElevationImport(coordinates);
-			// Use the rounded value of 'z' as ID
-			imp.setId(Long.parseLong(coordinates.z.substring(0, coordinates.z.indexOf("."))));
-			// TODO need to transform lat/lon to the correct SRID ?
-			imp.setLatitude(Double.parseDouble(coordinates.x));
-			imp.setLongitude(Double.parseDouble(coordinates.y));
-			result.add(imp);
-		}
-		return result;
+		results = this.dsm.findAllElevationsByGeometry(element.getGeometryString(), element.getInnerGeometryString(),
+				this.dsmValueScale, this.shrinkRadius, srid);
+		return results;
 	}
 
 	@Override
@@ -62,16 +47,16 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 
 		// Compute altitude of the center of the building with the DTM
 		Coordinates center = this.osmPostgis.getPolygonCenter(
-				(element.getRelationId() == null ? element.getOsmId() : -element.getRelationId()),
-				this.dtm.getSrid());
-		int altitude = (int) Math.round(this.dtm.findElevationByCoordinates(Double.parseDouble(center.x),
-				Double.parseDouble(center.y), this.osmPostgis.getSrid()));
+				(element.getRelationId() == null ? element.getOsmId() : -element.getRelationId()), this.dtm.getSrid());
+		ElevationImport alt = this.dtm.findElevationByCoordinates(Double.parseDouble(center.x),
+				Double.parseDouble(center.y), this.dtmValueScale, this.osmPostgis.getSrid());
+		int altitude = (int) Math.round(alt.z);
 		LOGGER.info("Computed altitude is: " + altitude);
 
 		// Find the max of all points elevations
 		int max = 0;
 		for (AbstractImport imp : element.getMatchingImports()) {
-			int h = (int) Math.round(Double.parseDouble(((ElevationImport) imp).getZ()));
+			int h = (int) Math.round(((ElevationImport) imp).z);
 			if (h > max) {
 				max = h;
 			}
@@ -91,7 +76,7 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 			// Compute a matching score based on that elevation value
 			int numberOfClosedPoints = 0;
 			for (AbstractImport imp : element.getMatchingImports()) {
-				int z = (int) Double.parseDouble(((ElevationImport) imp).getZ());
+				int z = (int) Math.round(((ElevationImport) imp).z);
 				if (z >= elevation - toleranceDelta) {
 					numberOfClosedPoints++;
 				}
@@ -117,26 +102,6 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 	@Override
 	protected BuildingElement instanciateElement(long osmId) {
 		return new BuildingElement(osmId);
-	}
-
-	// =========================================================================
-	// Private methods
-	// =========================================================================
-
-	/**
-	 * Returns the geometry as WKT of the inner member of a multipolygon building.
-	 */
-	private String getInnerGeometryString(long relationId, String membersString) {
-		long innerMemberId = BuildingElement.getOuterOrInnerMemberIds(relationId, membersString, false).get(0);
-		String query = "SELECT osm_id, ST_AsText(way) AS geomAsWKT, 1 FROM planet_osm_polygon WHERE building <> '' AND osm_id="
-				+ innerMemberId;
-		LOGGER.debug("Used query is: " + query);
-		// Damned the inner member id is a key of the planet_osm_ways table which
-		// doesn't store the coordinates but only point IDs :(
-		// OsmPostgisDB.IdWithGeom[] innerMemberIdWithGeom =
-		// this.osmPostgis.findElementIdsWithGeomByQuery(query);
-		// Need to do another request to fetch points coordinates...
-		return null;
 	}
 
 }

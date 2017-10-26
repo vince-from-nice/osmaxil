@@ -7,7 +7,7 @@ import org.gdal.gdal.Band;
 import org.gdal.gdal.Dataset;
 import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconstConstants;
-import org.openstreetmap.osmaxil.model.misc.Coordinates;
+import org.openstreetmap.osmaxil.model.ElevationImport;
 
 //@Service("ElevationRasterFile") @Lazy @Scope("prototype")
 public class ElevationRasterFile implements ElevationDataSource {
@@ -53,18 +53,19 @@ public class ElevationRasterFile implements ElevationDataSource {
 	}
 
 	@Override
-	public double findElevationByCoordinates(double x, double y, int srid) {
+	public ElevationImport findElevationByCoordinates(double x, double y, float valueScale, int srid) {
 		int xFile = (int) Math.round((x - xUpperLeft) / this.xPixelSize);
 		int yFile = (int) Math.round((yUpperLeft - y) / this.yPixelSize);
-		double[] result = new double[1];
-		bands.get(0).ReadRaster(xFile, yFile, 1, 1, result);
-		return result[0];
+		double[] data = new double[1];
+		bands.get(0).ReadRaster(xFile, yFile, 1, 1, data);
+		ElevationImport result = new ElevationImport(x, y, data[0] * valueScale);
+		return result;
 	}
 
 	@Override
-	public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT,
-			int shrinkRadius, int geomSrid) {
-		List<Coordinates> result = new ArrayList<>();
+	public List<ElevationImport> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT,
+			float valueScale, int shrinkRadius, int geomSrid) {
+		List<ElevationImport> result = new ArrayList<>();
 		// TODO the task is not trivial:
 		// https://gis.stackexchange.com/questions/186483/how-to-get-the-pixels-from-a-geotiff-file-in-gdal-python-for-a-given-polygon
 		return result;

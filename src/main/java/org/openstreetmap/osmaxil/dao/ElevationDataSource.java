@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
-import org.openstreetmap.osmaxil.model.misc.Coordinates;
+import org.openstreetmap.osmaxil.model.ElevationImport;
 
 public interface ElevationDataSource {
 	
@@ -14,8 +14,8 @@ public interface ElevationDataSource {
 	
 	abstract public int getSrid();
 	
-	abstract public double findElevationByCoordinates(double x, double y, int srid);
+	abstract public ElevationImport findElevationByCoordinates(double x, double y, float valueScale, int srid);
 	
-	abstract public List<Coordinates> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, int shrinkRadius, int geomSrid);
+	abstract public List<ElevationImport> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float valueScale, int shrinkRadius, int geomSrid);
 
 }

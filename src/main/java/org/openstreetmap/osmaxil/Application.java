@@ -31,7 +31,7 @@ public class Application {
         //ParisBuildingRemaker plugin = (BuildingRemaker) this.applicationContext.getBean("BuildingRemaker");
         //NiceTreeMaker plugin = (TreeMaker) this.applicationContext.getBean("TreeMaker");
         
-        plugin.load();
+        //plugin.load();
         plugin.process();
         //plugin.synchronize();
         

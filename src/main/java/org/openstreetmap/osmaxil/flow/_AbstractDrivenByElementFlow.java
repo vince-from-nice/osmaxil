@@ -71,7 +71,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 				continue;
 			}
 	        // Find all matching imports
-			LOGGER.info("Find matching imports for element #" + element.getOsmId() + " <" + i++ + ">");
+			LOGGER.info("Find matching imports for element " + element.getOsmId() + " (#" + i++ + ")");
 	        List<IMPORT> matchingImports = this.findMatchingImports(element, this.osmPostgis.getSrid());
 	        if (matchingImports.size() > 0) {
 	        	this.counterForMatchedElements++;
@@ -90,7 +90,7 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	        }
 	        LOGGER.info(sb.append("]").toString());
         	// Compute matching score of the element
-            LOGGER.info("Computing matching score for element #" + element.getOsmId());
+            LOGGER.info("Computing matching score for element " + element.getOsmId());
             this.computeElementMatchingScore(element/*, this.computingDistance, this.toleranceDelta*/, this.minMatchingScore);
         	// Check if its matching score is fine
             if (element.getMatchingScore() < this.minMatchingScore) {
@@ -98,18 +98,6 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 						+ ", skipping it because minimum value is " + this.minMatchingScore);
             	continue;
             }
-            // Update its data from OSM API
-        	LOGGER.info("Update data of element #" + element.getOsmId() + " from OSM API");
-            OsmXmlRoot apiData = this.osmStandardApi.readElement(element.getOsmId(), element.getType());
-            if (apiData == null) {
-                LOGGER.error("Unable to fetch data from OSM API for element#" + element.getOsmId());
-                continue;
-            }
-            element.setApiData(apiData);        
-	        // Store original values for each updatable tag
-	        for (String tagName : this.getUpdatableTagNames()) {
-	            element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
-	        }
             this.updatableElements.put(element.getOsmId(), element);
             // Check limit (useful for debug) 
 			if (limitForUpdatableElements > 0 && this.updatableElements.size() == limitForUpdatableElements) {
@@ -123,11 +111,23 @@ public abstract class _AbstractDrivenByElementFlow<ELEMENT extends AbstractEleme
 	public void synchronize() {
 		int counter = 1;
 		for (ELEMENT element : this.updatableElements.values()) {
-			LOGGER.info("Synchronizing element #" + element.getOsmId() + " <" + counter++ + ">");
+			LOGGER.info("Synchronizing element " + element.getOsmId() + " (#" + counter++ + ")");
+            // Update its data from OSM API
+        	LOGGER.info("Update data of element " + element.getOsmId() + " from OSM API");
+            OsmXmlRoot apiData = this.osmStandardApi.readElement(element.getOsmId(), element.getType());
+            if (apiData == null) {
+                LOGGER.error("Unable to fetch data from OSM API for element#" + element.getOsmId());
+                continue;
+            }
+            element.setApiData(apiData);        
+	        // Store original values for each updatable tag
+	        for (String tagName : this.getUpdatableTagNames()) {
+	            element.getOriginalValuesByTagNames().put(tagName, element.getTagValue(tagName));
+	        }
 			boolean needToSync = false;
 			// Fore each updatable tags (in theory)
 			for (String updatableTagName : this.getUpdatableTagNames()) {
-				// Check if it's really updatable (data should have been update from live)
+				// Check if it's really updatable (data should have been updated from live)
 				if (this.isElementTagUpdatable(element, updatableTagName)) {
 					boolean updated = this.updateElementTag(element, updatableTagName);
 					if (updated) {

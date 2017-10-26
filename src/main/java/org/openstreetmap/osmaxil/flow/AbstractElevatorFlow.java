@@ -31,12 +31,24 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 	@Value("${elevator.toleranceDelta}")
 	public float toleranceDelta;
 
+	///////////////////////////////
 	// Digital Terrain Model (DTM)
+	///////////////////////////////
+	
 	protected ElevationDataSource dtm;
 
+	@Value("${elevator.dtm.valueScale}")
+	public float dtmValueScale;
+	
+	@Value("${elevator.dtm.minValue}")
+	public int dtmMinValue;
+	
+	@Value("${elevator.dtm.maxValue}")
+	public int dtmMaxValue;
+	
 	@Value("${elevator.dtm.type}")
 	public String dtmType;
-
+	
 	@Value("${elevator.dtm.source}")
 	public String dtmSource;
 
@@ -47,9 +59,21 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 	@Resource(name = "${elevator.dtm.loader}")
 	protected AbstractElevationDbLoader dtmLoader;
 
+	///////////////////////////////
 	// Digital Surface Model (DSM)
+	///////////////////////////////
+	
 	protected ElevationDataSource dsm;
 
+	@Value("${elevator.dsm.valueScale}")
+	public float dsmValueScale;
+	
+	@Value("${elevator.dsm.minValue}")
+	public int dsmMinValue;
+	
+	@Value("${elevator.dtm.maxValue}")
+	public int dsmMaxValue;
+	
 	@Value("${elevator.dsm.type}")
 	public String dsmType;
 
