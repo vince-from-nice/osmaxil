@@ -91,11 +91,11 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 	// TODO redo that part with Spring IoC feature (warning: I had some issues with prototype scoped beans) 
 	void init() {
 		// Init of the DTM
-		if (dtmType.equals("db")) this.dtm = new ElevationDatabase(this.dtmSource, this.dtmSrid, (JdbcTemplate) this.appContext.getBean("elevationPostgisJdbcTemplate"));
-		if (dtmType.equals("file")) this.dtm = new ElevationRasterFile(this.dtmSource, this.dtmSrid);
+		if (dtmType.equals(ElevationDataSource.Type.DB.name())) this.dtm = new ElevationDatabase(this.dtmSource, this.dtmSrid, (JdbcTemplate) this.appContext.getBean("elevationPostgisJdbcTemplate"));
+		if (dtmType.equals(ElevationDataSource.Type.FILE.name())) this.dtm = new ElevationRasterFile(this.dtmSource, this.dtmSrid);
 		// Init of the DSM
-		if (dsmType.equals("db")) this.dsm = new ElevationDatabase(this.dsmSource, this.dsmSrid, (JdbcTemplate) this.appContext.getBean("elevationPostgisJdbcTemplate"));
-		if (dsmType.equals("file")) this.dsm = new ElevationRasterFile(this.dtmSource, this.dtmSrid);
+		if (dsmType.equals(ElevationDataSource.Type.DB.name())) this.dsm = new ElevationDatabase(this.dsmSource, this.dsmSrid, (JdbcTemplate) this.appContext.getBean("elevationPostgisJdbcTemplate"));
+		if (dsmType.equals(ElevationDataSource.Type.FILE.name())) this.dsm = new ElevationRasterFile(this.dtmSource, this.dtmSrid);
 	}
 
 	@Override
@@ -136,6 +136,15 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 		LOGGER_FOR_STATS.info(" - Minimum matching point is: " + this.minMatchingPoints);
 		LOGGER_FOR_STATS.info(" - Computing distance is: " + this.computingDistance);
 		LOGGER_FOR_STATS.info(" - Tolerance delta is: " + this.toleranceDelta);
+	}
+	
+	protected boolean checkElevationValue(float value, ElevationDataSource.Use elevationType) {
+		if (ElevationDataSource.Use.DTM == elevationType) {
+			if (value > this.dtmMinValue && value < this.dtmMaxValue) return true;
+		} else if (ElevationDataSource.Use.DSM == elevationType) {
+			if (value > this.dsmMinValue && value < this.dsmMaxValue) return true;
+		}
+		return false;
 	}
 
 }

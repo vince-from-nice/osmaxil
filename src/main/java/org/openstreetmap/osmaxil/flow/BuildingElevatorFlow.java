@@ -3,6 +3,7 @@ package org.openstreetmap.osmaxil.flow;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openstreetmap.osmaxil.dao.ElevationDataSource;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.BuildingElement;
 import org.openstreetmap.osmaxil.model.ElevationImport;
@@ -51,7 +52,13 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 		ElevationImport alt = this.dtm.findElevationByCoordinates(Double.parseDouble(center.x),
 				Double.parseDouble(center.y), this.dtmValueScale, this.osmPostgis.getSrid());
 		int altitude = (int) Math.round(alt.z);
-		LOGGER.info("Computed altitude is: " + altitude);
+		LOGGER.info("Computed terrain elevation is: " + altitude);
+
+		// Check the DTM value is not outside the range of allowed values
+		if (!this.checkElevationValue(altitude, ElevationDataSource.Use.DTM)) {
+			LOGGER.warn("Skipping element because terrain elevation is outside the range of allowed values");
+			return 0;
+		}
 
 		// Find the max of all points elevations
 		int max = 0;
@@ -61,11 +68,11 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 				max = h;
 			}
 		}
-		LOGGER.info("Max elevation is: " + max);
+		LOGGER.info("Max surface elevation is: " + max);
 
 		// Check the max elevation is not under the ground
 		if (max <= altitude) {
-			LOGGER.warn("Max elevation is less than altitude, aborting...");
+			LOGGER.warn("Max surface elevation is less than altitude, aborting...");
 			return 0;
 		}
 
@@ -83,7 +90,7 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 			}
 			// The matching score is the coverage of closest points
 			element.setMatchingScore((float) numberOfClosedPoints / element.getMatchingImports().size());
-			LOGGER.info("For height=" + elevation + " the number of closed points is: " + numberOfClosedPoints
+			LOGGER.info("For elevation=" + elevation + " the number of closed points is: " + numberOfClosedPoints
 					+ " and the matching score is: " + element.getMatchingScore());
 			if (element.getMatchingScore() >= minMatchingScore) {
 				LOGGER.info("Ok it's enough, the value " + elevation + " can be used");
@@ -91,8 +98,13 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 			}
 		}
 
-		// Store the final height of the building which is the elevation minus the
-		// altitude
+		// Check the DSM value is not outside the range of allowed values
+		if (!this.checkElevationValue(altitude, ElevationDataSource.Use.DSM)) {
+			LOGGER.warn("Skipping element because surface elevation is outside the range of allowed values");
+			return 0;
+		}
+
+		// Store the final height of the building which is the elevation minus the altitude
 		element.setComputedHeight(new Integer(elevation - altitude));
 		LOGGER.info("Computed height is: " + element.getComputedHeight());
 

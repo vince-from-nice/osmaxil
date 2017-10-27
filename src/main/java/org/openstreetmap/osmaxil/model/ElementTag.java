@@ -26,7 +26,7 @@ public class ElementTag {
     public static final String BUILDING_PART = "building:part";
     
     // ==========================================
-    // Natural tags
+    // Vegetation tags
     // ==========================================
     
     public static final String NATURAL = "natural";

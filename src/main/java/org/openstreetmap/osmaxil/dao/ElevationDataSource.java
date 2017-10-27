@@ -8,6 +8,10 @@ import org.openstreetmap.osmaxil.model.ElevationImport;
 
 public interface ElevationDataSource {
 	
+	public enum Type {DB, FILE};
+	
+	public enum Use {DTM, DSM};
+	
 	static public final Logger LOGGER = Logger.getLogger(Application.class);
 	
 	abstract void init(String source, int srid);
