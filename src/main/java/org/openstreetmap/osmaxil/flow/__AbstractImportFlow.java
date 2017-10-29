@@ -25,102 +25,101 @@ import com.vividsolutions.jts.io.WKTReader;
 
 public abstract class __AbstractImportFlow<ELEMENT extends AbstractElement, IMPORT extends AbstractImport> {
 
-    // =========================================================================
-    // Instance variables
-    // =========================================================================
+	// =========================================================================
+	// Instance variables
+	// =========================================================================
 
-    protected List<IMPORT> loadedImports = new ArrayList<>();
+	protected List<IMPORT> loadedImports = new ArrayList<>();
 
-    private Geometry includingArea;
+	private Geometry includingArea;
 
-    private Geometry excludingArea;
-    
-    protected GeometryFactory geometryFactory;
+	private Geometry excludingArea;
 
-    @Value("${osmaxil.syncMode}")
-    protected String synchronizationMode;
-    
-    @Value("${osmaxil.minMatchingScore}")
-    protected float minMatchingScore;
-    
+	protected GeometryFactory geometryFactory;
+
+	@Value("${osmaxil.syncMode}")
+	protected String synchronizationMode;
+
+	@Value("${osmaxil.minMatchingScore}")
+	protected float minMatchingScore;
+
 	@Value("${osmaxil.filteringArea.srid}")
 	protected int filteringAreaSrid;
 
-    @Value("${osmaxil.filteringArea.including}")
-    protected String includingAreaString;
+	@Value("${osmaxil.filteringArea.including}")
+	protected String includingAreaString;
 
-    @Value("${osmaxil.filteringArea.excluding}")
-    protected String excludingAreaString;
-    
-    @Autowired
-    protected ApplicationContext appContext;
-    
-    @Autowired
-    protected OsmPostgisDB osmPostgis;
+	@Value("${osmaxil.filteringArea.excluding}")
+	protected String excludingAreaString;
 
-    @Autowired
-    protected OsmStandardApi osmStandardApi;
+	@Autowired
+	protected ApplicationContext appContext;
 
-    @Autowired
-    protected OsmXmlFile osmXmlFile;
+	@Autowired
+	protected OsmPostgisDB osmPostgis;
 
-    // =========================================================================
-    // Static variables
-    // =========================================================================
+	@Autowired
+	protected OsmStandardApi osmStandardApi;
 
-    static protected final Logger LOGGER = Logger.getLogger(Application.class);
+	@Autowired
+	protected OsmXmlFile osmXmlFile;
 
-    static protected final Logger LOGGER_FOR_STATS = Logger.getLogger("LoggerForStats");
+	// =========================================================================
+	// Static variables
+	// =========================================================================
 
-    static protected final String LOG_SEPARATOR = "==========================================================";
+	static protected final Logger LOGGER = Logger.getLogger(Application.class);
 
-    // =========================================================================
-    // Abstract methods
-    // =========================================================================
-    
-    abstract public void load();
-    
-    abstract public void process();
+	static protected final Logger LOGGER_FOR_STATS = Logger.getLogger("LoggerForStats");
 
-    abstract public void synchronize();
+	static protected final String LOG_SEPARATOR = "==========================================================";
 
-    abstract public void displayLoadingStatistics();
-    
-    abstract public void displayProcessingStatistics();
+	// =========================================================================
+	// Abstract methods
+	// =========================================================================
 
-    abstract public void displaySynchronizingStatistics();
-    
-    // =========================================================================
-    // Public and protected methods
-    // =========================================================================
+	abstract public void load() throws Exception;
 
-    protected boolean checkCoordinatesWithFilteringArea(double x, double y) {
-        Geometry geom = this.geometryFactory.createPoint(new Coordinate(x, y));
-        IntersectionMatrix includingMatrix = geom.relate(this.includingArea);
-        if (!includingMatrix.isWithin()) {
-            LOGGER.info("Coordinates (" + x + ", " + y + ") are outside the including area " + this.includingAreaString);
-            return false;
-        }
-        IntersectionMatrix excludingMatrix = geom.relate(this.excludingArea);
-        if (excludingMatrix.isWithin()) {
-            LOGGER.info("Coordinates (" + x + ", " + y + ") are inside the excluding area " + this.excludingAreaString);
-            return false;
-        }
-        return true;
-    }
+	abstract public void process();
 
-    // =========================================================================
-    // Private methods
-    // =========================================================================
+	abstract public void synchronize();
 
-    @PostConstruct
-    private void init() throws ParseException {
-        this.geometryFactory = new GeometryFactory();
-        WKTReader wktReader = new WKTReader();
-        // Build the including and excluding area
-        this.includingArea = wktReader.read(this.includingAreaString);
-        this.excludingArea = wktReader.read(this.excludingAreaString);
-    }
+	abstract public void displayLoadingStatistics();
 
+	abstract public void displayProcessingStatistics();
+
+	abstract public void displaySynchronizingStatistics();
+
+	// =========================================================================
+	// Public and protected methods
+	// =========================================================================
+
+	protected boolean checkCoordinatesWithFilteringArea(double x, double y) {
+		Geometry geom = this.geometryFactory.createPoint(new Coordinate(x, y));
+		IntersectionMatrix includingMatrix = geom.relate(this.includingArea);
+		if (!includingMatrix.isWithin()) {
+			LOGGER.info("Coordinates (" + x + ", " + y + ") are outside the including area " + this.includingAreaString);
+			return false;
+		}
+		IntersectionMatrix excludingMatrix = geom.relate(this.excludingArea);
+		if (excludingMatrix.isWithin()) {
+			LOGGER.info("Coordinates (" + x + ", " + y + ") are inside the excluding area " + this.excludingAreaString);
+			return false;
+		}
+		return true;
+	}
+
+	// =========================================================================
+	// Private methods
+	// =========================================================================
+
+	@PostConstruct
+	private void init() throws ParseException {
+		this.geometryFactory = new GeometryFactory();
+		WKTReader wktReader = new WKTReader();
+		// Build the including and excluding area
+		this.includingArea = wktReader.read(this.includingAreaString);
+		this.excludingArea = wktReader.read(this.excludingAreaString);
+	}
 
 }

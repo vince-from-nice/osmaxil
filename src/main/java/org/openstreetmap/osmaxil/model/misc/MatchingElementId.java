@@ -1,36 +1,35 @@
 package org.openstreetmap.osmaxil.model.misc;
 
 public class MatchingElementId {
-    
-    private long osmId;
-    
-    private long relationId;
-    
-    private float score;
 
-    public long getOsmId() {
-        return osmId;
-    }
+	private long osmId;
 
-    public void setOsmId(long osmId) {
-        this.osmId = osmId;
-    }
+	private long relationId;
 
-    public long getRelationId() {
-        return relationId;
-    }
+	private float score;
 
-    public void setRelationId(long relationId) {
-        this.relationId = relationId;
-    }
+	public long getOsmId() {
+		return osmId;
+	}
 
-    public float getScore() {
-        return score;
-    }
+	public void setOsmId(long osmId) {
+		this.osmId = osmId;
+	}
 
-    public void setScore(float score) {
-        this.score = score;
-    }
-    
+	public long getRelationId() {
+		return relationId;
+	}
+
+	public void setRelationId(long relationId) {
+		this.relationId = relationId;
+	}
+
+	public float getScore() {
+		return score;
+	}
+
+	public void setScore(float score) {
+		this.score = score;
+	}
 
 }

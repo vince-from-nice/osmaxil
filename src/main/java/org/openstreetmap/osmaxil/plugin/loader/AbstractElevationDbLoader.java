@@ -24,17 +24,20 @@ public abstract class AbstractElevationDbLoader {
 
 	abstract protected void loadData(String source) throws IOException;
 
-	public void load(ElevationDatabase dataSource, String source) throws IOException {
+	public void load(ElevationDatabase dataSource, String tableName) throws IOException {
 		this.database = dataSource;
-		LOGGER.info("Recreate the point cloud table from scratch.");
-		this.recreatePointCloudTable(source);
-		this.loadData(source);
-		this.finalizePointCloudTable(source);
+		if (this.database.testTableExistence(tableName)) {
+			LOGGER.info("A table named " + tableName + " already exists, skip loading...");
+			return;
+		}
+		LOGGER.info("Create the point cloud table from scratch.");
+		this.createPointCloudTable(tableName);
+		this.loadData(tableName);
+		this.finalizePointCloudTable(tableName);
 	}
 
 	/**
-	 * Obsolete method for point cloud table creation (COPY is so much faster
-	 * compared to INSERT)
+	 * Obsolete method for point cloud table creation (COPY is so much faster compared to INSERT)
 	 */
 	protected void addPoint(String tableName, long id, String fileSrid, double x, double y, double z) {
 		LOGGER.debug("Add point(" + x + " " + y + ") with z=" + z);
@@ -44,35 +47,30 @@ public abstract class AbstractElevationDbLoader {
 	}
 
 	/**
-	 * Recreate a point cloud table.
+	 * Create a point cloud table.
 	 */
-	protected void recreatePointCloudTable(String tableName) {
+	protected void createPointCloudTable(String tableName) {
 		this.database.executeSQL("DROP INDEX IF EXISTS geom_idx_for_" + tableName);
 		this.database.executeSQL("DROP TABLE IF EXISTS " + tableName);
 		this.database.executeSQL("CREATE TABLE " + tableName + " (x numeric(11,3), y numeric(11,3), z numeric(11,3))");
 	}
 
 	/**
-	 * Fill a point cloud table by using the COPY statement (which much more
-	 * efficient than INSERT).
+	 * Fill a point cloud table by using the COPY statement (which much more efficient than INSERT).
 	 */
 	protected void copyPointCloudFromXYZFile(String tableName, String filePath) {
-		this.database.executeSQL(
-				"COPY " + tableName + " (x, y, z) FROM '" + filePath + "' WITH DELIMITER AS '" + this.separator + "'");
+		this.database.executeSQL("COPY " + tableName + " (x, y, z) FROM '" + filePath + "' WITH DELIMITER AS '" + this.separator + "'");
 	}
 
 	/**
-	 * Finalize a point cloud table by adding its geometry column and an spatial
-	 * index.
+	 * Finalize a point cloud table by adding its geometry column and an spatial index.
 	 */
 	protected void finalizePointCloudTable(String tableName) {
 		LOGGER.info("Add geometry column to the point cloud table");
-		this.database.executeSQL(
-				"SELECT AddGeometryColumn ('" + tableName + "', 'geom', " + this.database.getSrid() + ", 'POINT', 3)");
+		this.database.executeSQL("SELECT AddGeometryColumn ('" + tableName + "', 'geom', " + this.database.getSrid() + ", 'POINT', 3)");
 		LOGGER.info("Update the geometry column of the point cloud table");
-		this.database.executeSQL(
-				"UPDATE " + tableName + " SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', "
-						+ this.srid + "), " + this.database.getSrid() + ")");
+		this.database.executeSQL("UPDATE " + tableName + " SET geom = ST_Transform(ST_GeomFromText('POINT('||x||' '||y||' '||z||')', " + this.srid
+				+ "), " + this.database.getSrid() + ")");
 		LOGGER.info("Create an index on the geometry column of the point cloud table");
 		this.database.executeSQL("CREATE INDEX geom_idx_for_" + tableName + " ON " + tableName + " USING GIST (geom)");
 	}

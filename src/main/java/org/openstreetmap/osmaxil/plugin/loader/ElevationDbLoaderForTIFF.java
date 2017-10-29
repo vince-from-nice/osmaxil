@@ -23,7 +23,8 @@ public class ElevationDbLoaderForTIFF extends AbstractElevationDbLoader {
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
 			LOGGER.info("Converting " + file + " to the XYZ format");
-			String xyzFilePath = file.getParentFile().getAbsolutePath() + File.separator + file.getName().substring(0, file.getName().length() - 4) + ".xyz";
+			String xyzFilePath = file.getParentFile().getAbsolutePath() + File.separator + file.getName().substring(0, file.getName().length() - 4)
+					+ ".xyz";
 			String cmd = "gdal_translate.exe -of XYZ " + file.getAbsolutePath() + " " + xyzFilePath;
 			executeCommand(cmd);
 			LOGGER.info("Loading " + xyzFilePath);

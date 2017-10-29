@@ -14,34 +14,33 @@ import org.springframework.web.client.RestTemplate;
 
 public class AuthentifiedRestClient extends RestTemplate {
 
-    @Value("${osmApi.login}")
-    private String login;
+	@Value("${osmApi.login}")
+	private String login;
 
-    @Value("${osmApi.password}")
-    private String password;
-    
-    @PostConstruct
-    public void init(/*String username, String password*/) {
-        CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(new AuthScope(null, -1),
-                new UsernamePasswordCredentials(this.login, this.password));
-        HttpClient httpClient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
-        setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
-    }
-    
-        public String getLogin() {
-        return login;
-    }
+	@Value("${osmApi.password}")
+	private String password;
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	@PostConstruct
+	public void init(/* String username, String password */) {
+		CredentialsProvider credsProvider = new BasicCredentialsProvider();
+		credsProvider.setCredentials(new AuthScope(null, -1), new UsernamePasswordCredentials(this.login, this.password));
+		HttpClient httpClient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
+		setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getLogin() {
+		return login;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

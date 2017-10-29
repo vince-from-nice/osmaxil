@@ -16,8 +16,7 @@ import org.springframework.stereotype.Component;
 public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, ElevationImport> {
 
 	protected List<BuildingElement> getTargetedElements() {
-		return this.osmPostgis.findBuildingsByArea(this.includingAreaString, this.excludingAreaString,
-				this.filteringAreaSrid);
+		return this.osmPostgis.findBuildingsByArea(this.includingAreaString, this.excludingAreaString, this.filteringAreaSrid);
 	}
 
 	@Override
@@ -28,8 +27,8 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 			LOGGER.warn("Unable to find matching imports because element has no geometry string");
 			return results;
 		}
-		results = this.dsm.findAllElevationsByGeometry(element.getGeometryString(), element.getInnerGeometryString(),
-				this.dsmValueScale, this.shrinkRadius, srid);
+		results = this.dsm.findAllElevationsByGeometry(element.getGeometryString(), element.getInnerGeometryString(), this.dsmValueScale,
+				this.shrinkRadius, srid);
 		return results;
 	}
 
@@ -41,16 +40,16 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 
 		// Check if the total of matching imports is fine
 		if (element.getMatchingImports().size() < this.minMatchingPoints) {
-			LOGGER.info("Element has only " + element.getMatchingImports().size()
-					+ " matching imports, skipping it because minimum value is " + this.minMatchingPoints);
+			LOGGER.info("Element has only " + element.getMatchingImports().size() + " matching imports, skipping it because minimum value is "
+					+ this.minMatchingPoints);
 			return 0;
 		}
 
 		// Compute altitude of the center of the building with the DTM
-		Coordinates center = this.osmPostgis.getPolygonCenter(
-				(element.getRelationId() == null ? element.getOsmId() : -element.getRelationId()), this.dtm.getSrid());
-		ElevationImport alt = this.dtm.findElevationByCoordinates(Double.parseDouble(center.x),
-				Double.parseDouble(center.y), this.dtmValueScale, this.osmPostgis.getSrid());
+		Coordinates center = this.osmPostgis.getPolygonCenter((element.getRelationId() == null ? element.getOsmId() : -element.getRelationId()),
+				this.dtm.getSrid());
+		ElevationImport alt = this.dtm.findElevationByCoordinates(Float.parseFloat(center.x), Float.parseFloat(center.y), this.dtmValueScale,
+				this.osmPostgis.getSrid());
 		int altitude = (int) Math.round(alt.z);
 		LOGGER.info("Computed terrain elevation is: " + altitude);
 
@@ -83,15 +82,15 @@ public class BuildingElevatorFlow extends AbstractElevatorFlow<BuildingElement, 
 			// Compute a matching score based on that elevation value
 			int numberOfClosedPoints = 0;
 			for (AbstractImport imp : element.getMatchingImports()) {
-				int z = (int) Math.round(((ElevationImport) imp).z);
+				float z = ((ElevationImport) imp).z;
 				if (z >= elevation - toleranceDelta) {
 					numberOfClosedPoints++;
 				}
 			}
 			// The matching score is the coverage of closest points
 			element.setMatchingScore((float) numberOfClosedPoints / element.getMatchingImports().size());
-			LOGGER.info("For elevation=" + elevation + " the number of closed points is: " + numberOfClosedPoints
-					+ " and the matching score is: " + element.getMatchingScore());
+			LOGGER.info("For elevation=" + elevation + " the number of closed points is " + numberOfClosedPoints + " and the matching score is "
+					+ element.getMatchingScore());
 			if (element.getMatchingScore() >= minMatchingScore) {
 				LOGGER.info("Ok it's enough, the value " + elevation + " can be used");
 				break;

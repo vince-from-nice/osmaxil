@@ -5,10 +5,10 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="buildings")
+@XmlRootElement(name = "buildings")
 public class PssXmlRoot {
 
-    @XmlElement (name="building")
-    public List<PssXmlBuilding> buildings;
-    
+	@XmlElement(name = "building")
+	public List<PssXmlBuilding> buildings;
+
 }

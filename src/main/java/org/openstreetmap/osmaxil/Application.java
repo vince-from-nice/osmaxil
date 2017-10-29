@@ -5,40 +5,44 @@ import org.openstreetmap.osmaxil.flow.BuildingElevatorFlow;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Application {
-    
-    public static final String NAME = "Osmaxil";
-    
-    private ClassPathXmlApplicationContext applicationContext;
-    
-    static private final Logger LOGGER = Logger.getLogger(Application.class);
-    
-    static protected final Logger LOGGER_FOR_STATS = Logger.getLogger("LoggerForStats");
 
-    public static void main(String[] args) {
-        Application app = new Application();
-        LOGGER.info("=== Starting Osmaxil ===");
-        long startTime = System.currentTimeMillis();
-        app.run();
-        LOGGER_FOR_STATS .info("Job has been executed in " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
-        LOGGER.info("=== Osmaxil has finished its job ===");
-    }
+	public static final String NAME = "Osmaxil";
 
-    public void run() {
-        this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
-        
-        BuildingElevatorFlow plugin = (BuildingElevatorFlow) this.applicationContext.getBean("BuildingElevator");        
-        //PssBuildingUpdater plugin = (BuildingUpdater) this.applicationContext.getBean("BuildingUpdater");
-        //ParisBuildingRemaker plugin = (BuildingRemaker) this.applicationContext.getBean("BuildingRemaker");
-        //NiceTreeMaker plugin = (TreeMaker) this.applicationContext.getBean("TreeMaker");
-        
-        //plugin.load();
-        plugin.process();
-        //plugin.synchronize();
-        
-        plugin.displayLoadingStatistics();
-        plugin.displayProcessingStatistics();
-        //plugin.displaySynchronizingStatistics();
-        
-        this.applicationContext.close();
-    }
+	private ClassPathXmlApplicationContext applicationContext;
+
+	static private final Logger LOGGER = Logger.getLogger(Application.class);
+
+	static protected final Logger LOGGER_FOR_STATS = Logger.getLogger("LoggerForStats");
+
+	public static void main(String[] args) {
+		Application app = new Application();
+		LOGGER.info("=== Starting Osmaxil ===");
+		long startTime = System.currentTimeMillis();
+		try {
+			app.run();
+		} catch (Exception e) {
+			LOGGER.error(e);
+		}
+		LOGGER_FOR_STATS.info("Job has been executed in " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
+		LOGGER.info("=== Osmaxil has finished its job ===");
+	}
+
+	public void run() throws Exception {
+		this.applicationContext = new ClassPathXmlApplicationContext("spring.xml");
+
+		BuildingElevatorFlow plugin = (BuildingElevatorFlow) this.applicationContext.getBean("BuildingElevator");
+		// PssBuildingUpdater plugin = (BuildingUpdater) this.applicationContext.getBean("BuildingUpdater");
+		// ParisBuildingRemaker plugin = (BuildingRemaker) this.applicationContext.getBean("BuildingRemaker");
+		// NiceTreeMaker plugin = (TreeMaker) this.applicationContext.getBean("TreeMaker");
+
+		plugin.load();
+		plugin.process();
+		plugin.synchronize();
+
+		plugin.displayLoadingStatistics();
+		plugin.displayProcessingStatistics();
+		// plugin.displaySynchronizingStatistics();
+
+		this.applicationContext.close();
+	}
 }

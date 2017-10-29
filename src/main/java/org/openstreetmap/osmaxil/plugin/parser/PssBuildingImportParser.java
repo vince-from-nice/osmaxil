@@ -17,68 +17,69 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
 
-@Repository @Lazy
+@Repository
+@Lazy
 public class PssBuildingImportParser extends AbstractImportParser<BuildingImport> {
 
-    @Autowired
-    @Qualifier(value = "pssMarshaller")
-    private Unmarshaller unmarshaller;
+	@Autowired
+	@Qualifier(value = "pssMarshaller")
+	private Unmarshaller unmarshaller;
 
-    int counter;
-    
-    PssXmlRoot data;
+	int counter;
 
-    @PostConstruct
-    public void init() throws IOException {
-        FileInputStream is = null;
-        BufferedInputStream bis = null;
-        try {
-            is = new FileInputStream(this.filePath);
-            bis = new BufferedInputStream(is);
-            this.data = (PssXmlRoot) this.unmarshaller.unmarshal(new StreamSource(bis));
-        } finally {
-            if (is != null) {
-                is.close();
-                bis.close();
-            }
-        }
-    }
+	PssXmlRoot data;
 
-    @Override
-    public boolean hasNext() {
-        return counter < data.buildings.size();
-    }
+	@PostConstruct
+	public void init() throws IOException {
+		FileInputStream is = null;
+		BufferedInputStream bis = null;
+		try {
+			is = new FileInputStream(this.filePath);
+			bis = new BufferedInputStream(is);
+			this.data = (PssXmlRoot) this.unmarshaller.unmarshal(new StreamSource(bis));
+		} finally {
+			if (is != null) {
+				is.close();
+				bis.close();
+			}
+		}
+	}
 
-    @Override
-    public BuildingImport next() {
-        BuildingImport result = null;
-        if (counter >= data.buildings.size()) {
-            return null;
-        }
-        PssXmlBuilding building = data.buildings.get(counter++);
-        result = new BuildingImport();
-        result.setId(this.counter);
-        result.setName(building.name);
-        String[] latlon = building.coordinates.split(",");
-        if (latlon.length == 2) {
-            result.setLatitude(StringParsingHelper.parseDouble(latlon[0], "latitude"));
-            result.setLongitude(StringParsingHelper.parseDouble(latlon[1], "longitude"));
-        }else {
-            LOGGER.warn("Unable to parse latlon");
-        }
-        result.setHeight(StringParsingHelper.parseFloat(building.height, "height"));
-        result.setUrl(building.url);
-        return result;
-    }
+	@Override
+	public boolean hasNext() {
+		return counter < data.buildings.size();
+	}
 
-    @Override
-    public void remove() {
-        // TODO Auto-generated method stub
-    }
-    
-    @Override
-    public int getSrid() {
-        return srid;
-    }
-    
+	@Override
+	public BuildingImport next() {
+		BuildingImport result = null;
+		if (counter >= data.buildings.size()) {
+			return null;
+		}
+		PssXmlBuilding building = data.buildings.get(counter++);
+		result = new BuildingImport();
+		result.setId(this.counter);
+		result.setName(building.name);
+		String[] latlon = building.coordinates.split(",");
+		if (latlon.length == 2) {
+			result.setLatitude(StringParsingHelper.parseDouble(latlon[0], "latitude"));
+			result.setLongitude(StringParsingHelper.parseDouble(latlon[1], "longitude"));
+		} else {
+			LOGGER.warn("Unable to parse latlon");
+		}
+		result.setHeight(StringParsingHelper.parseFloat(building.height, "height"));
+		result.setUrl(building.url);
+		return result;
+	}
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public int getSrid() {
+		return srid;
+	}
+
 }

@@ -13,19 +13,19 @@ import com.vividsolutions.jts.io.WKTReader;
 
 @Repository
 public abstract class AbstractImportParser<IMPORT extends AbstractImport> implements Iterator<IMPORT> {
-    
-    @Value("${parser.filePath}")
-    protected String filePath;
 
-    @Value("${parser.srid}")
-    protected int srid;
-    
-    protected GeometryFactory geometryFactory =  new GeometryFactory();
-    
-    protected WKTReader wktReader = new WKTReader();
+	@Value("${parser.filePath}")
+	protected String filePath;
 
-    static protected final Logger LOGGER = Logger.getLogger(Application.class);
-    
-    abstract public int getSrid();
-    
+	@Value("${parser.srid}")
+	protected int srid;
+
+	protected GeometryFactory geometryFactory = new GeometryFactory();
+
+	protected WKTReader wktReader = new WKTReader();
+
+	static protected final Logger LOGGER = Logger.getLogger(Application.class);
+
+	abstract public int getSrid();
+
 }

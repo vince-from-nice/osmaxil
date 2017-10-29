@@ -10,13 +10,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.openstreetmap.osmaxil.Exception;
+import org.openstreetmap.osmaxil.StatsGenerator;
 import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.model.AbstractElement;
 import org.openstreetmap.osmaxil.model.AbstractImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
 import org.openstreetmap.osmaxil.plugin.matcher.AbstractImportMatcher;
 import org.openstreetmap.osmaxil.plugin.selector.AbstractMatchingScoreSelector;
-import org.openstreetmap.osmaxil.plugin.selector.MatchingScoreStatsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +37,7 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 	protected AbstractMatchingScoreSelector<ELEMENT> selector;
 
 	@Autowired
-	protected MatchingScoreStatsGenerator scoringStatsGenerator;
+	protected StatsGenerator scoringStatsGenerator;
 
 	protected Map<Long, ELEMENT> updatableElements = new Hashtable<Long, ELEMENT>();
 
@@ -106,8 +106,8 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 			LOGGER.info("Synchronizing element #" + element.getOsmId() + " <" + counter++ + ">");
 			// Check if its best matching score is enough
 			if (element.getMatchingScore() < this.minMatchingScore) {
-				LOGGER.info("Element cannot be synchronized because its matching score is " + element.getMatchingScore()
-						+ " (min=" + this.minMatchingScore + ")");
+				LOGGER.info("Element cannot be synchronized because its matching score is " + element.getMatchingScore() + " (min="
+						+ this.minMatchingScore + ")");
 				LOGGER.info(LOG_SEPARATOR);
 				continue;
 			}
@@ -154,12 +154,10 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 	@Override
 	public void displayProcessingStatistics() {
 		LOGGER_FOR_STATS.info("=== Processing statistics ===");
-		LOGGER_FOR_STATS
-				.info("Total of imports which match one or more matching elements: " + this.counterForMatchedImports);
+		LOGGER_FOR_STATS.info("Total of imports which match one or more matching elements: " + this.counterForMatchedImports);
 		LOGGER_FOR_STATS.info("Total of missed imports: " + (counterForLoadedImports - this.counterForMatchedImports));
-		LOGGER_FOR_STATS
-				.info("Total of elements which have one or more matching imports: " + this.matchedElements.size());
-		this.scoringStatsGenerator.displayStatsByMatchingScore((Collection<AbstractElement>) matchedElements.values());
+		LOGGER_FOR_STATS.info("Total of elements which have one or more matching imports: " + this.matchedElements.size());
+		this.scoringStatsGenerator.displayRepartitionOfMatchingScore((Collection<AbstractElement>) matchedElements.values());
 	}
 
 	@Override
@@ -168,8 +166,7 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 		LOGGER_FOR_STATS.info("Total of updated elements: " + this.counterForUpdatedElements);
 		LOGGER_FOR_STATS.info("Total of updates by tag:");
 		for (String updatableTagName : this.getUpdatableTagNames()) {
-			LOGGER_FOR_STATS.info("\t - total of updates on the tag [" + updatableTagName + "]: "
-					+ this.countersByTagName.get(updatableTagName));
+			LOGGER_FOR_STATS.info("\t - total of updates on the tag [" + updatableTagName + "]: " + this.countersByTagName.get(updatableTagName));
 		}
 	}
 
@@ -187,8 +184,7 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 
 	private void associateImportsWithElements(IMPORT imp) {
 		// Find relevant elements
-		List<MatchingElementId> matchingElementIds = this.matcher.findMatchingElements(imp,
-				this.parser.getSrid());
+		List<MatchingElementId> matchingElementIds = this.matcher.findMatchingElements(imp, this.parser.getSrid());
 		if (matchingElementIds.size() > 0) {
 			this.counterForMatchedImports++;
 		}

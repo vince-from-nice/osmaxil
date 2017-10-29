@@ -89,8 +89,7 @@ public abstract class AbstractMakerFlow<ELEMENT extends AbstractElement, IMPORT 
 				success = success && this.osmXmlFile.writeToFile("genfile-for-deletion", this.dataForDeletion);
 			}
 			if (this.dataForNonMakableElements != null) {
-				success = success && this.osmXmlFile.writeToFile("genfile-for-non-makable-elements",
-						this.dataForNonMakableElements);
+				success = success && this.osmXmlFile.writeToFile("genfile-for-non-makable-elements", this.dataForNonMakableElements);
 			}
 		}
 		if (success) {
@@ -103,8 +102,7 @@ public abstract class AbstractMakerFlow<ELEMENT extends AbstractElement, IMPORT 
 	public void displayProcessingStatistics() {
 		LOGGER_FOR_STATS.info("=== Processing statistics ===");
 		LOGGER_FOR_STATS.info("Total of makable imports: " + this.counterForMakableImports);
-		LOGGER_FOR_STATS.info(
-				"Total of non makable imports: " + (this.counterForLoadedImports - this.counterForMakableImports));
+		LOGGER_FOR_STATS.info("Total of non makable imports: " + (this.counterForLoadedImports - this.counterForMakableImports));
 	}
 
 	@Override
