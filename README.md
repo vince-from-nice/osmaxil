@@ -10,12 +10,13 @@ There are 4 types of flows:
 * __maker__ : this flow modifies or deletes existing OSM elements and create new ones, the process is driven by imports
 * __remaker__ : this flow modifies or deletes existing OSM elements and create new ones, the process is driven by imports but new elements are added only in replacement of existing elements.
 
-For now the different imports which has been done was focused on buildings and trees:
-* _NiceBuildingElevator_ : its data source is OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org). It has already been applied on the live server on September 2017: 52k buildings of Nice has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Nice,_France/Buildings_Heights_Import) dedicated to the import.
-* _ParisBuildingRemaker_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It aims to provide a better building shape cutting (352k elements instead of 86k currently), it has been aborted but it should be restarted in the future.
-* _ParisBuildingUpdater_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It has already been applied on the live server on April 2015: 49k parisian buildings has been updated with their building:levels tag. More information are available on [the Wiki page](http://wiki.openstreetmap.org/wiki/Paris,_France/Buildings_Heights_Import) dedicated to the import.
-* _PssBuildingUpdater_ : its data source is the database of the PSS association (http://www.pss-archi.eu). It contains informations (including height and floors) about 47k buildings all over France but it cannot be applied for now because the PSS association publishes their database under the CC-BY-ND-NC licence wich is incompatible with the ODbL licence. It could be changed in the future (I hope). 
-* _NiceTreeMaker_ : its data source is the OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org/site/). It has already been applied on the live server on August 2015: 29411 new trees has been added and 835 existing trees has been updated. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Nice,_France/Trees_Import) dedicated to the import.
+For now the different imports which has been done was focused on buildings and vegetation:
+* _Import with BuildingElevator for Montpellier_ : its data source is OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org). It has already been applied on the live server on September 2017: 52k buildings of Nice has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Nice,_France/Buildings_Heights_Import) dedicated to the import.
+* _Import with BuildingElevator for Nice_ : its data source is OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org). It has already been applied on the live server on September 2017: 52k buildings of Nice has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Nice,_France/Buildings_Heights_Import) dedicated to the import.
+* _Import with BuildingRemaker for Paris_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It aims to provide a better building shape cutting (352k elements instead of 86k currently), it has been aborted but it should be restarted in the future.
+* _Import with BuildingUpdater for Paris_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It has already been applied on the live server on April 2015: 49k parisian buildings has been updated with their building:levels tag. More information are available on [the Wiki page](http://wiki.openstreetmap.org/wiki/Paris,_France/Buildings_Heights_Import) dedicated to the import.
+* _Import with BuildingUpdater for PSS_ : its data source is the database of the PSS association (http://www.pss-archi.eu). It contains informations (including height and floors) about 47k buildings all over France but it cannot be applied for now because the PSS association publishes their database under the CC-BY-ND-NC licence wich is incompatible with the ODbL licence. It could be changed in the future (I hope). 
+* _Import with VegetationMaker for Nice_ : its data source is the OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org/site/). It has already been applied on the live server on August 2015: 29411 new trees has been added and 835 existing trees has been updated. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Nice,_France/Trees_Import) dedicated to the import.
 
 ## How to run ##
 
@@ -26,6 +27,7 @@ In order to run the program you need to have :
 * Maven 
 * PostGIS
 * Osm2pgsql
+* GDAL / OGR (for elevator flows)
 
 ### Customize settings ###
 
@@ -41,7 +43,7 @@ You also need to create you own password.properties file in src/main/resources w
 
 The program use a local PostGIS database in order to match imports with existing OSM elements.
 
-So before to launch the program you need to populate your local PostGIS instance with OSM data related to the area you wan to update. 
+So before to launch the program you need to populate your local PostGIS instance with OSM data related to the area you want to update. 
 
 For Paris plugins you should download the OSM data of the Ile-de-France region (http://download.geofabrik.de/europe/france/ile-de-france-latest.osm.pbf).
 

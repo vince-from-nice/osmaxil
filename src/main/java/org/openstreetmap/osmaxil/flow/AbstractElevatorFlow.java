@@ -22,7 +22,7 @@ public abstract class AbstractElevatorFlow<ELEMENT extends AbstractElement, IMPO
 	private static final String UPDATABLE_TAG_NAMES[] = new String[] { ElementTag.HEIGHT };
 
 	@Value("${elevator.shrinkRadius}")
-	public int shrinkRadius;
+	public float shrinkRadius;
 
 	@Value("${elevator.minMatchingPoints}")
 	public int minMatchingPoints;

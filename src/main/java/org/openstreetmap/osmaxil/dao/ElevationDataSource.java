@@ -25,6 +25,6 @@ public interface ElevationDataSource {
 	abstract public ElevationImport findElevationByCoordinates(float x, float y, float valueScale, int srid);
 
 	abstract public List<ElevationImport> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float valueScale,
-			int shrinkRadius, int geomSrid);
+			float shrinkRadius, int geomSrid);
 
 }

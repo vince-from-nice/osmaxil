@@ -45,7 +45,7 @@ public class ElevationDatabase implements ElevationDataSource {
 	 * That method use a radius as argument in order to skrink the including and excluding geometries.
 	 */
 	@Override
-	public List<ElevationImport> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float valueScale, int shrinkRadius,
+	public List<ElevationImport> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float valueScale, float shrinkRadius,
 			int geomSrid) {
 		final String includingGeom = "ST_GeomFromText('" + includingGeomAsWKT + "', " + geomSrid + ")";
 		String query = "SELECT x, y, z FROM " + this.tableName;

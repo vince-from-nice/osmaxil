@@ -63,7 +63,7 @@ public class ElevationRasterFile implements ElevationDataSource {
 	}
 
 	@Override
-	public List<ElevationImport> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float valueScale, int shrinkRadius,
+	public List<ElevationImport> findAllElevationsByGeometry(String includingGeomAsWKT, String excludingGeomAsWKT, float valueScale, float shrinkRadius,
 			int geomSrid) {
 		List<ElevationImport> result = new ArrayList<>();
 		// TODO the task is not trivial:
