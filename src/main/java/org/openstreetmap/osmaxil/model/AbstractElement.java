@@ -73,6 +73,9 @@ public abstract class AbstractElement extends MatchableObject {
 	}
 
 	public boolean setTagValue(String key, String value) {
+		if (value == null) {
+			return removeTag(key);
+		}
 		for (OsmXmlTag tag : this.getTags()) {
 			if (tag.k.equals(key)) {
 				tag.v = value;
@@ -83,6 +86,16 @@ public abstract class AbstractElement extends MatchableObject {
 		tag.k = key;
 		tag.v = value;
 		this.getTags().add(tag);
+		return false;
+	}
+	
+	public boolean removeTag(String key) {
+		for (OsmXmlTag tag : this.getTags()) {
+			if (tag.k.equals(key)) {
+				this.getTags().remove(tag);
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -97,7 +110,7 @@ public abstract class AbstractElement extends MatchableObject {
 	}
 
 	public boolean setHeight(Integer value) {
-		return this.setTagValue(ElementTag.HEIGHT, value.toString());
+		return this.setTagValue(ElementTag.HEIGHT, (value != null ? value.toString(): null));
 	}
 
 	@Override

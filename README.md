@@ -27,7 +27,7 @@ In order to run the program you need to have :
 * Maven 
 * PostGIS
 * Osm2pgsql
-* GDAL / OGR (for elevator flows)
+* GDAL / OGR (for elevator flows only)
 
 ### Customize settings ###
 

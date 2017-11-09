@@ -18,7 +18,7 @@ import org.openstreetmap.osmaxil.plugin.matcher.VegetationImportMatcher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component("TreeMaker")
+@Component("VegetationMaker")
 @Lazy
 public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, VegetationImport> {
 

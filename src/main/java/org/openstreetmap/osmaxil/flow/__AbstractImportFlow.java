@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmaxil.Application;
+import org.openstreetmap.osmaxil.Exception;
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.dao.OsmStandardApi;
 import org.openstreetmap.osmaxil.dao.OsmXmlFile;
