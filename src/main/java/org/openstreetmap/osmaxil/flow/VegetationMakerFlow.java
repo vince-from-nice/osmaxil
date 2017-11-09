@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlNode;
 import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlRoot;
 import org.openstreetmap.osmaxil.dao.xml.osm.OsmXmlTag;
@@ -14,7 +12,7 @@ import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.model.VegetationElement;
 import org.openstreetmap.osmaxil.model.VegetationImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
-import org.openstreetmap.osmaxil.plugin.matcher.VegetationImportMatcher;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -36,14 +34,10 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 
 	private int counterForMultiMatchingTrees;
 
-	private boolean useReferenceCode = false; // apparently setting a tag for the internal reference is not a good thing (!)
-
-	/**
-	 * Size of the buffer around imported trees where existing trees (at least the closest one from imported trees) must be updated or deleted.
-	 */
-	private static final double MATCHING_BOX_RADIUS = 3.0;
-
-	private static final String REF_CODE_SUFFIX = ":FR:Nice:trees";
+	@Value("${matcher.areaRadius}")
+	private double matchingAreaRadius;
+	
+	//private static final String REF_CODE_SUFFIX = ":FR:Nice:trees";
 
 	// =========================================================================
 	// Overrided methods
@@ -125,7 +119,7 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 	@Override
 	public void displayProcessingStatistics() {
 		super.displayProcessingStatistics();
-		LOGGER_FOR_STATS.info("Matching area radius: " + MATCHING_BOX_RADIUS);
+		LOGGER_FOR_STATS.info("Matching area radius: " + this.matchingAreaRadius);
 		LOGGER_FOR_STATS.info("Total of created trees: " + this.newTreesToCreate.size());
 		LOGGER_FOR_STATS.info("Total of updated trees: " + this.existingTreesById.size());
 		LOGGER_FOR_STATS.info("Total of created or updated trees: " + (newTreesToCreate.size() + existingTreesById.size()));
@@ -136,11 +130,11 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 	// Private methods
 	// =========================================================================
 
-	@PostConstruct
-	private void init() {
-		((VegetationImportMatcher) this.matcher).setMatchingAreaRadius(MATCHING_BOX_RADIUS);
-		((VegetationImportMatcher) this.matcher).setMatchClosestOnly(false);
-	}
+//	@PostConstruct
+//	private void init() {
+//		((VegetationImportMatcher) this.matcher).setMatchingAreaRadius(MATCHING_BOX_RADIUS);
+//		((VegetationImportMatcher) this.matcher).setMatchClosestOnly(false);
+//	}
 
 	private boolean isTreeInsideExistingBuilding(VegetationImport imp) {
 		String geom = "ST_GeomFromText('POINT(" + imp.getLongitude() + " " + imp.getLatitude() + ")', " + this.parser.getSrid() + ")";
@@ -173,7 +167,7 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 		// Add the tag ref=*
 		if (this.useReferenceCode) {
 			tag = new OsmXmlTag();
-			tag.k = ElementTag.REF + REF_CODE_SUFFIX;
+			tag.k = ElementTag.REF + this.refCodeSuffix;
 			tag.v = tree.getReference();
 			node.tags.add(tag);
 		}
@@ -202,7 +196,7 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 		tree.setLongitude(importedTree.getLongitude());
 		// And add the reference tag
 		if (this.useReferenceCode) {
-			tree.setTagValue(ElementTag.REF + REF_CODE_SUFFIX, importedTree.getReference());
+			tree.setTagValue(ElementTag.REF + this.refCodeSuffix, importedTree.getReference());
 		}
 		return tree;
 	}

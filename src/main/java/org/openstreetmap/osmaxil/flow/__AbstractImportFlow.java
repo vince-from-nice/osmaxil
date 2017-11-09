@@ -43,7 +43,13 @@ public abstract class __AbstractImportFlow<ELEMENT extends AbstractElement, IMPO
 
 	@Value("${osmaxil.minMatchingScore}")
 	protected float minMatchingScore;
-
+	
+	@Value("${osmaxil.refCodeSuffix}")
+	protected String refCodeSuffix;
+	
+	@Value("${osmaxil.useRefCode}")
+	protected boolean useReferenceCode;
+	
 	@Value("${osmaxil.filteringArea.srid}")
 	protected int filteringAreaSrid;
 

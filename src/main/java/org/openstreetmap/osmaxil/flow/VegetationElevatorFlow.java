@@ -4,7 +4,11 @@ import java.util.List;
 
 import org.openstreetmap.osmaxil.model.VegetationElement;
 import org.openstreetmap.osmaxil.model.VegetationImport;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
+@Component("VegetationElevator")
+@Lazy
 public class VegetationElevatorFlow extends AbstractElevatorFlow<VegetationElement, VegetationImport> {
 
 	@Override
@@ -30,7 +34,4 @@ public class VegetationElevatorFlow extends AbstractElevatorFlow<VegetationEleme
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 }

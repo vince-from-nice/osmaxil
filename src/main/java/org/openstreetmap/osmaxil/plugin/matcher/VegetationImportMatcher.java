@@ -6,6 +6,7 @@ import java.util.List;
 import org.openstreetmap.osmaxil.dao.OsmPostgisDB;
 import org.openstreetmap.osmaxil.model.VegetationImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +19,13 @@ import com.vividsolutions.jts.io.WKTWriter;
 @Lazy
 public class VegetationImportMatcher extends AbstractImportMatcher<VegetationImport> {
 
-	private double matchingAreaRadius;
+	/**
+	 * Size of the buffer around imported trees where existing trees (at least the closest one from imported trees) must be updated or deleted.
+	 */
+	@Value("${matcher.areaRadius}")
+	public float matchingAreaRadius;
 
+	@Value("${matcher.closestOnly}")
 	private boolean matchClosestOnly;
 
 	private GeometryFactory gf = new GeometryFactory();
@@ -71,21 +77,4 @@ public class VegetationImportMatcher extends AbstractImportMatcher<VegetationImp
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	public double getMatchingAreaRadius() {
-		return matchingAreaRadius;
-	}
-
-	public void setMatchingAreaRadius(double matchingAreaWidth) {
-		this.matchingAreaRadius = matchingAreaWidth;
-	}
-
-	public boolean isMatchClosestOnly() {
-		return matchClosestOnly;
-	}
-
-	public void setMatchClosestOnly(boolean matchClosestOnly) {
-		this.matchClosestOnly = matchClosestOnly;
-	}
-
 }
