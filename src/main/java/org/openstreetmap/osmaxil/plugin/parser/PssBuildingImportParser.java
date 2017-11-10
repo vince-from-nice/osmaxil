@@ -77,9 +77,4 @@ public class PssBuildingImportParser extends AbstractImportParser<BuildingImport
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public int getSrid() {
-		return srid;
-	}
-
 }

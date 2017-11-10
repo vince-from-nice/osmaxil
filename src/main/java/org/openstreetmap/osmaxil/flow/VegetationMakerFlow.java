@@ -12,7 +12,7 @@ import org.openstreetmap.osmaxil.model.ElementTag;
 import org.openstreetmap.osmaxil.model.VegetationElement;
 import org.openstreetmap.osmaxil.model.VegetationImport;
 import org.openstreetmap.osmaxil.model.misc.MatchingElementId;
-import org.springframework.beans.factory.annotation.Value;
+import org.openstreetmap.osmaxil.plugin.matcher.VegetationImportMatcher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -33,11 +33,6 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 	private List<VegetationImport> nonMakableImportedTrees = new ArrayList<VegetationImport>();
 
 	private int counterForMultiMatchingTrees;
-
-	@Value("${matcher.areaRadius}")
-	private double matchingAreaRadius;
-	
-	//private static final String REF_CODE_SUFFIX = ":FR:Nice:trees";
 
 	// =========================================================================
 	// Overrided methods
@@ -119,7 +114,8 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 	@Override
 	public void displayProcessingStatistics() {
 		super.displayProcessingStatistics();
-		LOGGER_FOR_STATS.info("Matching area radius: " + this.matchingAreaRadius);
+		LOGGER_FOR_STATS.info("Matching area radius: " + ((VegetationImportMatcher) this.matcher).matchingAreaRadius);
+		LOGGER_FOR_STATS.info("Matching closest only: " + ((VegetationImportMatcher) this.matcher).matchClosestOnly);
 		LOGGER_FOR_STATS.info("Total of created trees: " + this.newTreesToCreate.size());
 		LOGGER_FOR_STATS.info("Total of updated trees: " + this.existingTreesById.size());
 		LOGGER_FOR_STATS.info("Total of created or updated trees: " + (newTreesToCreate.size() + existingTreesById.size()));

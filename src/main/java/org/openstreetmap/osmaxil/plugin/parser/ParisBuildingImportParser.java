@@ -95,11 +95,6 @@ public class ParisBuildingImportParser extends AbstractImportParser<BuildingImpo
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public int getSrid() {
-		return srid;
-	}
-
 	// TODO call it after the filtering (no need to spend time on filtered imports)
 	private void parseGeometry(BuildingImport building) throws ParseException {
 		String geom = building.getGeometryRawString();

@@ -73,9 +73,4 @@ public class NiceVegetationImportParser2015 extends AbstractImportParser<Vegetat
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public int getSrid() {
-		return srid;
-	}
-
 }

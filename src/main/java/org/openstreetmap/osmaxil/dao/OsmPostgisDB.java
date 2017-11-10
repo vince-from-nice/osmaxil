@@ -57,7 +57,7 @@ public class OsmPostgisDB {
 			public IdWithDouble mapRow(ResultSet rs, int rowNum) throws SQLException {
 				IdWithDouble idWithDouble = new IdWithDouble();
 				idWithDouble.id = Long.parseLong(rs.getString("osm_id"));
-				idWithDouble.d = Double.parseDouble(rs.getString("distance"));
+				idWithDouble.d = Double.parseDouble(rs.getString("score"));
 				return idWithDouble;
 			}
 		});

@@ -15,7 +15,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.WKTWriter;
 
-@Component
+@Component("VegetationImportMatcher")
 @Lazy
 public class VegetationImportMatcher extends AbstractImportMatcher<VegetationImport> {
 
@@ -26,7 +26,7 @@ public class VegetationImportMatcher extends AbstractImportMatcher<VegetationImp
 	public float matchingAreaRadius;
 
 	@Value("${matcher.closestOnly}")
-	private boolean matchClosestOnly;
+	public boolean matchClosestOnly;
 
 	private GeometryFactory gf = new GeometryFactory();
 
@@ -43,7 +43,7 @@ public class VegetationImportMatcher extends AbstractImportMatcher<VegetationImp
 		if (srid != this.osmPostgis.getSrid()) {
 			treeGeometry = "ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), " + this.osmPostgis.getSrid() + ")";
 		}
-		query += treeGeometry + ") AS distance ";
+		query += treeGeometry + ") AS score ";
 		query += "FROM planet_osm_point n WHERE n.natural = 'tree' AND way && ";
 		String boxGeometry = "St_Buffer(ST_Transform(ST_GeomFromText('" + wkt + "', " + srid + "), " + this.osmPostgis.getSrid() + "), "
 				+ this.matchingAreaRadius + ") ";

@@ -30,7 +30,7 @@ public class OsmStandardApi {
 	@Value("${osmApi.maxUpdatesByChangeset}")
 	private int MAX_UPDATES_BY_CHANGESET;
 
-	@Value("${osmApi.changeset.source.label}")
+	@Value("${osmApi.changeset.source}")
 	private String changesetSourceLabel;
 
 	@Value("${osmApi.changeset.comment}")

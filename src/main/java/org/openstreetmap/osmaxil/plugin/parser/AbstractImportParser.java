@@ -26,6 +26,8 @@ public abstract class AbstractImportParser<IMPORT extends AbstractImport> implem
 
 	static protected final Logger LOGGER = Logger.getLogger(Application.class);
 
-	abstract public int getSrid();
+	public int getSrid() {
+		return this.srid;
+	}
 
 }
