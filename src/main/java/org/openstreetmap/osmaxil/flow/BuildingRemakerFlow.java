@@ -155,16 +155,10 @@ public class BuildingRemakerFlow extends AbstractRemakerFlow<BuildingElement, Bu
 			part.version = 0;
 			part.uid = 0;
 			// Add the building:part tag
-			OsmXmlTag tag = new OsmXmlTag();
-			tag.k = "building:part";
-			tag.v = "yes";
-			part.tags.add(tag);
+			part.tags.add(new OsmXmlTag("building:part", "yes"));
 			// Add the building:level tag
-			tag = new OsmXmlTag();
-			tag.k = ElementTag.BUILDING_LEVELS;
 			Integer levels = bi.getLevels() + 1; // US way of levels counting
-			tag.v = levels.toString();
-			part.tags.add(tag);
+			part.tags.add(new OsmXmlTag(ElementTag.BUILDING_LEVELS, levels.toString()));
 			// Add member into the relation
 			OsmXmlMember member = new OsmXmlMember();
 			member.ref = part.id;

@@ -9,5 +9,12 @@ public class OsmXmlTag {
 
 	@XmlAttribute
 	public String k;
-
+	
+	public OsmXmlTag() {
+	}
+	
+	public OsmXmlTag(String v, String k) {
+		this.v = v;
+		this.k = k;
+	}
 }

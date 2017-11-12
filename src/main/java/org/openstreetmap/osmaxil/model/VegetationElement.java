@@ -49,7 +49,7 @@ public class VegetationElement extends AbstractElement {
 	@Override
 	public String toString() {
 		return "OSM tree has id=[" + this.getOsmId() + "], coords=[" + this.getLongitude() + " " + this.getLatitude() + "] genus=["
-				+ this.getTagValue(ElementTag.GENUS) + "], species=[" + this.getTagValue(ElementTag.SPECIFIES) + "], name=[" + this.getName() + "]";
+				+ this.getTagValue(ElementTag.GENUS) + "], species=[" + this.getTagValue(ElementTag.SPECIES) + "], name=[" + this.getName() + "]";
 	}
 
 }

@@ -1,5 +1,8 @@
 package org.openstreetmap.osmaxil.flow;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +43,13 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 
 	@Override
 	protected boolean isImportMakable(VegetationImport imp) {
-		// Check if the imported tree is inside an existing building
+		// Check if the imported tree is not inside an existing building
 		if (this.isTreeInsideExistingBuilding(imp)) {
 			LOGGER.warn("Tree #" + imp.getId() + " is inside an existing building => it's not makable");
 			this.nonMakableImportedTrees.add(imp);
 			return false;
 		}
+		// TODO Check if the imported tree is not on the sea 
 		return true;
 	}
 
@@ -126,12 +130,6 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 	// Private methods
 	// =========================================================================
 
-//	@PostConstruct
-//	private void init() {
-//		((VegetationImportMatcher) this.matcher).setMatchingAreaRadius(MATCHING_BOX_RADIUS);
-//		((VegetationImportMatcher) this.matcher).setMatchClosestOnly(false);
-//	}
-
 	private boolean isTreeInsideExistingBuilding(VegetationImport imp) {
 		String geom = "ST_GeomFromText('POINT(" + imp.getLongitude() + " " + imp.getLatitude() + ")', " + this.parser.getSrid() + ")";
 		// Transform geometry if it's needed
@@ -151,33 +149,15 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 	private OsmXmlRoot createNewTreeFromImport(VegetationImport tree) {
 		OsmXmlRoot root = new OsmXmlRoot();
 		OsmXmlNode node = new OsmXmlNode();
+		root.nodes.add(node);
 		node.id = -this.idGenerator.getId();
 		node.version = 0;
-		node.lat = tree.getLatitude().toString();
-		node.lon = tree.getLongitude().toString();
 		// Add the tag natural=*
-		OsmXmlTag tag = new OsmXmlTag();
-		tag.k = ElementTag.NATURAL;
-		tag.v = "tree";
-		node.tags.add(tag);
-		// Add the tag ref=*
-		if (this.useReferenceCode) {
-			tag = new OsmXmlTag();
-			tag.k = ElementTag.REF + this.refCodeSuffix;
-			tag.v = tree.getReference();
-			node.tags.add(tag);
-		}
-		// // Add the tag genus=*
-		// tag = new OsmXmlTag();
-		// tag.k = ElementTag.GENUS;
-		// tag.v = tree.getType();
-		// node.tags.add(tag);
-		// // Add the tag specifies=*
-		// tag = new OsmXmlTag();
-		// tag.k = ElementTag.SPECIFIES;
-		// tag.v = tree.getSubType();
-		// node.tags.add(tag);
-		root.nodes.add(node);
+		node.tags.add(new OsmXmlTag(ElementTag.NATURAL, "tree"));
+		// Fill all other tag values
+		VegetationElement element = new VegetationElement(node.id);
+		element.setApiData(root);
+		fillCoordsAndTagValuesIfNotExists(element, tree);
 		return root;
 	}
 
@@ -187,14 +167,35 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 		tree.setApiData(this.osmStandardApi.readElement(tree.getOsmId(), tree.getType()));
 		// Flag it as an element to modify
 		tree.getApiData().nodes.get(0).action = "modify";
-		// Move existing tree to the same position than the imported tree
-		tree.setLatitude(importedTree.getLatitude());
-		tree.setLongitude(importedTree.getLongitude());
-		// And add the reference tag
-		if (this.useReferenceCode) {
-			tree.setTagValue(ElementTag.REF + this.refCodeSuffix, importedTree.getReference());
-		}
+		// Move existing tree to the same position than the imported tree and "merge" the other attributes
+		fillCoordsAndTagValuesIfNotExists(tree, importedTree);
 		return tree;
+	}
+	
+	private void fillCoordsAndTagValuesIfNotExists(VegetationElement treeElement, VegetationImport treeImport) {
+		// Set coordinates
+		treeElement.setLatitude(treeImport.getLatitude());
+		treeElement.setLongitude(treeImport.getLongitude());
+		// Add the tag ref=*
+		if (this.useReferenceCode) {
+			treeElement.setTagValue(ElementTag.REF + this.refCodeSuffix, treeImport.getReference());
+		}
+		// Add the tag height=*
+		if (treeElement.getTagValue(ElementTag.HEIGHT) == null && treeImport.getHeight() != null && treeImport.getHeight() > 0) {
+			treeElement.setTagValue(ElementTag.HEIGHT, treeImport.getHeight().toString());
+		}
+		// Add the tag genus=*
+		if (isBlank(treeElement.getTagValue(ElementTag.GENUS)) && isNotBlank(treeImport.getGenus())) {
+			treeElement.setTagValue(ElementTag.GENUS, treeImport.getGenus());
+		}
+		// Add the tag species=*
+		if (isBlank(treeElement.getTagValue(ElementTag.SPECIES)) && isNotBlank(treeImport.getSpecies())) {
+			treeElement.setTagValue(ElementTag.SPECIES, treeImport.getSpecies());
+		}
+		// Add the tag circumference=*
+		if (treeElement.getTagValue(ElementTag.CIRCUMFERENCE) == null && treeImport.getCircumference() != null && treeImport.getCircumference() > 0) {
+			treeElement.setTagValue(ElementTag.CIRCUMFERENCE, treeImport.getCircumference().toString());
+		}
 	}
 
 	private void processMultiMatchingTree(VegetationImport importedTree, int matchingElementIndex) {

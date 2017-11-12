@@ -191,8 +191,7 @@ public abstract class AbstractUpdaterFlow<ELEMENT extends AbstractElement, IMPOR
 		// For each matching elements
 		for (MatchingElementId matchingElementId : matchingElementIds) {
 			long osmId = matchingElementId.getOsmId();
-			// Skip negative IDs (ie. multipolygon relations whose outer member has not been
-			// found)
+			// Skip negative IDs (ie. multipolygon relations whose outer member has not been found)
 			if (osmId < 0) {
 				break;
 			}

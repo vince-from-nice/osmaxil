@@ -33,7 +33,7 @@ public class ElementTag {
 
 	public static final String GENUS = "genus";
 
-	public static final String SPECIFIES = "specifies";
+	public static final String SPECIES = "species";
 
 	public static final String CIRCUMFERENCE = "circumference";
 

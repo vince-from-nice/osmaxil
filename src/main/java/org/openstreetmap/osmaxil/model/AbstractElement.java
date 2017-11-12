@@ -82,10 +82,7 @@ public abstract class AbstractElement extends MatchableObject {
 				return true;
 			}
 		}
-		OsmXmlTag tag = new OsmXmlTag();
-		tag.k = key;
-		tag.v = value;
-		this.getTags().add(tag);
+		this.getTags().add(new OsmXmlTag(key, value));
 		return false;
 	}
 	

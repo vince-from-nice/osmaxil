@@ -86,6 +86,9 @@ public class GrenobleVegetationImportParser extends AbstractImportParser<Vegetat
 		result.setReference(String.valueOf(p.ELEM_POINT_ID));
 		result.setGenus(p.GENRE_BOTA);
 		result.setSpecies(p.ESPECE);
+		if (p.DIAMETREARBRE != null) {
+			result.setCircumference(Float.parseFloat(p.DIAMETREARBRE));
+		}
 		result.setLongitude(f.geometry.coordinates[0]);
 		result.setLatitude(f.geometry.coordinates[1]);
 		this.count++;

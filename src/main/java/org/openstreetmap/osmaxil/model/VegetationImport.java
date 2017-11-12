@@ -9,12 +9,14 @@ public class VegetationImport extends AbstractImport {
 	private String reference;
 
 	private Integer height;
+	
+	private Float circumference;
 
 	@Override
 	public String getValueByTagName(String tagName) {
 		if (ElementTag.GENUS.equals(tagName)) {
 			return this.genus.toString();
-		} else if (ElementTag.SPECIFIES.equals(tagName)) {
+		} else if (ElementTag.SPECIES.equals(tagName)) {
 			return this.species.toString();
 		}
 		return null;
@@ -22,8 +24,8 @@ public class VegetationImport extends AbstractImport {
 
 	@Override
 	public String toString() {
-		return "Tree with id=[" + this.id + "], coords=[" + this.latitude + ", " + this.longitude + "], genus=[" + this.genus + "], species=["
-				+ this.species + "], height=[" + this.height + "], ref=[" + this.reference + "]";
+		return "VegetationImport with id=[" + this.id + "], coords=[" + this.latitude + ", " + this.longitude + "], genus=[" + this.genus + "], species=["
+				+ this.species + "], height=[" + this.height + "], circumference=[" + this.circumference + "] ref=[" + this.reference + "]";
 	}
 
 	public String getReference() {
@@ -57,5 +59,12 @@ public class VegetationImport extends AbstractImport {
 	public void setHeight(Integer height) {
 		this.height = height;
 	}
+	
+	public Float getCircumference() {
+		return circumference;
+	}
 
+	public void setCircumference(Float circumference) {
+		this.circumference = circumference;
+	}
 }
