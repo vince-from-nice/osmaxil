@@ -13,8 +13,8 @@ public class OsmXmlTag {
 	public OsmXmlTag() {
 	}
 	
-	public OsmXmlTag(String v, String k) {
-		this.v = v;
-		this.k = k;
+	public OsmXmlTag(String key, String value) {
+		this.k = key;
+		this.v = value;
 	}
 }
