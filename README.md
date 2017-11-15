@@ -11,7 +11,7 @@ There are 4 types of flows:
 * __remaker__ : this flow modifies or deletes existing OSM elements and create new ones, the process is driven by imports but new elements are added only in replacement of existing elements.
 
 For now the different imports which has been done was focused on buildings and vegetation:
-* _Import with BuildingElevator in Montpellier_ : its data source is Open Data de Montpellier Mediterranee Metropole (http://data.montpellier3m.fr). It has already been applied on the live server on September 2017: 60k buildings of Montpellier has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Montpellier,_France/Buildings_Heights_Import) dedicated to the import.
+* _Import with BuildingElevator in Montpellier_ : its data source is Open Data de Montpellier Mediterranee Metropole (http://data.montpellier3m.fr). It has already been applied on the live server on November 2017: 55k buildings of Montpellier has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Montpellier,_France/Buildings_Heights_Import) dedicated to the import.
 * _Import with BuildingElevator in Nice_ : its data source is OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org). It has already been applied on the live server on September 2017: 52k buildings of Nice has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Nice,_France/Buildings_Heights_Import) dedicated to the import.
 * _Import with BuildingRemaker in Paris_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It aims to provide a better building shape cutting (352k elements instead of 86k currently), it has been aborted but it should be restarted in the future.
 * _Import with BuildingUpdater for Paris_ : its data source is OpenData portal of Paris (http://opendata.paris.fr). It has already been applied on the live server on April 2015: 49k parisian buildings has been updated with their building:levels tag. More information are available on [the Wiki page](http://wiki.openstreetmap.org/wiki/Paris,_France/Buildings_Heights_Import) dedicated to the import.
@@ -60,6 +60,8 @@ The process is divided in separate phases :
 * Element processing
 * Element synchronization
 * Statistics generation
+
+<span style="color:blue">The following lines are focused on the BuildingUpdater flow only.</span>
 
 ### Imports loading ###
 
