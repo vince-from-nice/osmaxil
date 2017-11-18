@@ -1,0 +1,13 @@
+2017-11-11 23:07:40  INFO === Loading statistics ===
+2017-11-11 23:07:40  INFO Total of parsed imports: 30850
+2017-11-11 23:07:40  INFO Total of filtered out imports: 62
+2017-11-11 23:07:40  INFO Total of loaded imports: 30788
+2017-11-11 23:07:40  INFO === Processing statistics ===
+2017-11-11 23:07:40  INFO Total of makable imports: 30737
+2017-11-11 23:07:40  INFO Total of non makable imports: 51
+2017-11-11 23:07:40  INFO Matching area radius: 2.0
+2017-11-11 23:07:40  INFO Matching closest only: true
+2017-11-11 23:07:40  INFO Total of created trees: 25415
+2017-11-11 23:07:40  INFO Total of updated trees: 5322
+2017-11-11 23:07:40  INFO Total of created or updated trees: 30737
+2017-11-11 23:07:40  INFO Total of multi matching trees: 176

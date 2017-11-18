@@ -1,6 +1,7 @@
 package org.openstreetmap.osmaxil.plugin.parser;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -58,7 +59,7 @@ public class GrenobleVegetationImportParser extends AbstractImportParser<Vegetat
 				int ANNEEDEPLANTATION;
 				String RAISONDEPLANTATION;
 				String TRAITEMENTCHENILLES;
-				String DIAMETREARBRE;
+				float DIAMETREARBRE;
 			}
 		}
 	}
@@ -66,7 +67,7 @@ public class GrenobleVegetationImportParser extends AbstractImportParser<Vegetat
 	@PostConstruct
 	public void init() throws IOException {
 		LOGGER.info("Init of GrenobleVegetationImportParser");
-		String fileContent = new String(Files.readAllBytes(Paths.get(this.filePath)));
+		String fileContent = new String(Files.readAllBytes(Paths.get(this.filePath)), Charset.forName("UTF-8"));
 		Gson gson = new Gson();
 		this.json = gson.fromJson(fileContent, File.class);
 		LOGGER.info("Ok " + json.features.length + " has been loaded");
@@ -84,13 +85,22 @@ public class GrenobleVegetationImportParser extends AbstractImportParser<Vegetat
 		File.Feature.Properties p = f.properties;
 		result.setId(this.count + 1);
 		result.setReference(String.valueOf(p.ELEM_POINT_ID));
-		result.setGenus(p.GENRE_BOTA);
-		result.setSpecies(p.GENRE_BOTA + " " + p.ESPECE);
-		if (p.DIAMETREARBRE != null) {
-			result.setCircumference(Float.parseFloat(p.DIAMETREARBRE));
-		}
 		result.setLongitude(f.geometry.coordinates[0]);
 		result.setLatitude(f.geometry.coordinates[1]);
+		result.setGenus(p.GENRE_BOTA);
+		if (p.ESPECE != null) {
+			if (p.GENRE_BOTA != null) {
+				result.setSpecies(p.GENRE_BOTA + " " + p.ESPECE);
+			} else {
+				result.setSpecies(p.ESPECE);
+			}
+		}		
+		if (p.DIAMETREARBRE > 0) {
+			result.setCircumference(p.DIAMETREARBRE);
+		}
+		if (p.ANNEEDEPLANTATION > 0) {
+			result.setPlantingYear(p.ANNEEDEPLANTATION);
+		}
 		this.count++;
 		return result;
 	}

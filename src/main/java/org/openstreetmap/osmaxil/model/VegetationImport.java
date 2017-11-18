@@ -11,6 +11,8 @@ public class VegetationImport extends AbstractImport {
 	private Integer height;
 	
 	private Float circumference;
+	
+	private Integer plantingYear;
 
 	@Override
 	public String getValueByTagName(String tagName) {
@@ -66,5 +68,13 @@ public class VegetationImport extends AbstractImport {
 
 	public void setCircumference(Float circumference) {
 		this.circumference = circumference;
+	}
+
+	public Integer getPlantingYear() {
+		return plantingYear;
+	}
+
+	public void setPlantingYear(Integer plantingYear) {
+		this.plantingYear = plantingYear;
 	}
 }

@@ -173,28 +173,27 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 	}
 	
 	private void fillCoordsAndTagValuesIfNotExists(VegetationElement treeElement, VegetationImport treeImport) {
-		// Set coordinates
+		// Set the coordinates
 		treeElement.setLatitude(treeImport.getLatitude());
 		treeElement.setLongitude(treeImport.getLongitude());
-		// Add the tag ref=*
+		// Set the tag values
 		if (this.useReferenceCode) {
 			treeElement.setTagValue(ElementTag.REF + this.refCodeSuffix, treeImport.getReference());
 		}
-		// Add the tag height=*
 		if (treeElement.getTagValue(ElementTag.HEIGHT) == null && treeImport.getHeight() != null && treeImport.getHeight() > 0) {
 			treeElement.setTagValue(ElementTag.HEIGHT, treeImport.getHeight().toString());
 		}
-		// Add the tag genus=*
 		if (isBlank(treeElement.getTagValue(ElementTag.GENUS)) && isNotBlank(treeImport.getGenus())) {
 			treeElement.setTagValue(ElementTag.GENUS, treeImport.getGenus());
 		}
-		// Add the tag species=*
 		if (isBlank(treeElement.getTagValue(ElementTag.SPECIES)) && isNotBlank(treeImport.getSpecies())) {
 			treeElement.setTagValue(ElementTag.SPECIES, treeImport.getSpecies());
 		}
-		// Add the tag circumference=*
 		if (treeElement.getTagValue(ElementTag.CIRCUMFERENCE) == null && treeImport.getCircumference() != null && treeImport.getCircumference() > 0) {
 			treeElement.setTagValue(ElementTag.CIRCUMFERENCE, treeImport.getCircumference().toString());
+		}
+		if (treeElement.getTagValue(ElementTag.START_DATE) == null && treeImport.getPlantingYear() != null && treeImport.getPlantingYear() > 0) {
+			treeElement.setTagValue(ElementTag.START_DATE, treeImport.getPlantingYear().toString());
 		}
 	}
 
