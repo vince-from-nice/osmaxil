@@ -11,7 +11,7 @@ There are 4 types of flows:
 * __remaker__ : this flow modifies or deletes existing OSM elements and create new ones, the process is driven by imports but new elements are added only in replacement of existing elements.
 
 The flows works with OSM elements and for now two kinds of elements can be supported:
-* __buildings__
+* __building__
 * __vegetation__
 
 Here are all the imports which has been performed for now:
@@ -74,7 +74,7 @@ TODO
 
 TODO
 
-#### Updater flow ####
+### Updater flow ###
 
 #### Imports loading ####
 
