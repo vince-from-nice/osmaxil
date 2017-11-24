@@ -10,7 +10,11 @@ There are 4 types of flows:
 * __maker__ : this flow modifies or deletes existing OSM elements and create new ones, the process is driven by imports
 * __remaker__ : this flow modifies or deletes existing OSM elements and create new ones, the process is driven by imports but new elements are added only in replacement of existing elements.
 
-For now the different imports which has been done was focused on buildings and vegetation:
+The flows works with OSM elements and for now two kinds of elements can be supported:
+* __buildings__
+* __vegetation__
+
+Here are all the imports which has been performed for now:
 * _Import with VegetationMaker in Grenoble_ : its data source is Open Data de Grenoble (http://data.metropolegrenoble.fr). It has already been applied on the live server on November 2017: 55k buildings of Montpellier has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Grenoble,_France/Trees_Import) dedicated to the import.
 * _Import with BuildingElevator in Montpellier_ : its data source is Open Data de Montpellier Mediterranee Metropole (http://data.montpellier3m.fr). It has already been applied on the live server on November 2017: 55k buildings of Montpellier has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Montpellier,_France/Buildings_Heights_Import) dedicated to the import.
 * _Import with BuildingElevator in Nice_ : its data source is OpenData portal of Nice Cote d'Azur (http://opendata.nicecotedazur.org). It has already been applied on the live server on September 2017: 52k buildings of Nice has been updated with their building:height tag. More information are available on [the Wiki page](https://wiki.openstreetmap.org/wiki/Nice,_France/Buildings_Heights_Import) dedicated to the import.
@@ -62,9 +66,17 @@ The process is divided in separate phases :
 * Element synchronization
 * Statistics generation
 
-<span style="color:blue">The following lines are focused on the BuildingUpdater flow only.</span>
+### Elevator flow ###
 
-### Imports loading ###
+TODO
+
+### Maker flow ###
+
+TODO
+
+#### Updater flow ####
+
+#### Imports loading ####
 
 It loads all imports from a source whose type is depending on the actived plugin (for example the OpenDataParis plugin uses a CSV file).
 
@@ -72,7 +84,7 @@ For each loaded import, the program looks for matching OSM element. The notion o
 
 At the end of that phase all matching OSM elements are loaded into a map (see the ElementCache class) and linked to their matching imports (see the AbstractElement class).
 
-### Element processing ###
+#### Element processing ####
 
 The goal of that phase is depending on the type of the plugin.
 
@@ -98,7 +110,7 @@ The tag value (level=8) is the same for both method, BUT:
 - with the old basic method the best matching score for the building is only 0.45 (score of the building B)
 - with the new complex method the best matching score for the building is 0.87 (score of A + score of B) which reflects more correctly the predominance of the tag value of 8 levels.
 
-### Element synchronization ###
+#### Element synchronization ####
 
 This phase eventually writes OSM elements. Depending on the type of the plugin (updater or remaker), *writing* means *updating* or *remaking*.
 
