@@ -10,10 +10,12 @@ public class ElementTag {
 	public static final String NAME = "name";
 
 	public static final String SOURCE = "source";
-
+	
 	public static final String REF = "ref";
-
+	
 	public static final String URL = "url";
+	
+	public static final String WEBSITE = "website";
 
 	public static final String HEIGHT = "height";
 	

@@ -66,8 +66,8 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 			MatchingElementId bestMatchingElementId = matchingElementIds.get(0);
 			long bestMatchingOsmId = bestMatchingElementId.getOsmId();
 			LOGGER.info("Tree matches existing tree #" + bestMatchingOsmId);
+			// If the best existing tree was not yet used create it and keep it
 			VegetationElement existingTree = this.existingTreesById.get(bestMatchingOsmId);
-			// if the best existing tree was not yet used create it and keep it
 			if (existingTree == null) {
 				existingTree = this.createNewTreeFromExistingTree(bestMatchingOsmId, importedTree);
 				this.existingTreesById.put(existingTree.getOsmId(), existingTree);
@@ -157,7 +157,7 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 		// Fill all other tag values
 		VegetationElement element = new VegetationElement(node.id);
 		element.setApiData(root);
-		fillCoordsAndTagValuesIfNotExists(element, tree);
+		setCoordsAndFillTagValuesIfNotExists(element, tree);
 		return root;
 	}
 
@@ -168,26 +168,32 @@ public class VegetationMakerFlow extends AbstractMakerFlow<VegetationElement, Ve
 		// Flag it as an element to modify
 		tree.getApiData().nodes.get(0).action = "modify";
 		// Move existing tree to the same position than the imported tree and "merge" the other attributes
-		fillCoordsAndTagValuesIfNotExists(tree, importedTree);
+		setCoordsAndFillTagValuesIfNotExists(tree, importedTree);
 		return tree;
 	}
 	
-	private void fillCoordsAndTagValuesIfNotExists(VegetationElement treeElement, VegetationImport treeImport) {
+	private void setCoordsAndFillTagValuesIfNotExists(VegetationElement treeElement, VegetationImport treeImport) {
 		// Set the coordinates
 		treeElement.setLatitude(treeImport.getLatitude());
 		treeElement.setLongitude(treeImport.getLongitude());
-		// Set the tag values
+		// Remove the source tag !
+		if (treeElement.getTagValue(ElementTag.SOURCE) != null) {
+			treeElement.removeTag(ElementTag.SOURCE);
+		}
+		// Set the tag values only if they don't exist yet
 		if (this.useReferenceCode) {
 			treeElement.setTagValue(ElementTag.REF + this.refCodeSuffix, treeImport.getReference());
 		}
 		if (treeElement.getTagValue(ElementTag.HEIGHT) == null && treeImport.getHeight() != null && treeImport.getHeight() > 0) {
 			treeElement.setTagValue(ElementTag.HEIGHT, treeImport.getHeight().toString());
 		}
-		if (isBlank(treeElement.getTagValue(ElementTag.GENUS)) && isNotBlank(treeImport.getGenus())) {
-			treeElement.setTagValue(ElementTag.GENUS, treeImport.getGenus());
-		}
 		if (isBlank(treeElement.getTagValue(ElementTag.SPECIES)) && isNotBlank(treeImport.getSpecies())) {
 			treeElement.setTagValue(ElementTag.SPECIES, treeImport.getSpecies());
+		}
+		// Don't set tag for genus if there is a already tag for species 
+		if (isBlank(treeElement.getTagValue(ElementTag.GENUS)) && isNotBlank(treeImport.getGenus())
+				&& isBlank(treeElement.getTagValue(ElementTag.SPECIES))) {
+			treeElement.setTagValue(ElementTag.GENUS, treeImport.getGenus());
 		}
 		if (treeElement.getTagValue(ElementTag.CIRCUMFERENCE) == null && treeImport.getCircumference() != null && treeImport.getCircumference() > 0) {
 			treeElement.setTagValue(ElementTag.CIRCUMFERENCE, treeImport.getCircumference().toString());
